@@ -158,7 +158,7 @@ DelegatingSink *Registry::delegating_sink_() {
 // Helper for file name and line number formatting
 // ---------------------------------------------------------------------------
 
-std::string FormatFileAndLine(char const *file, char const *line) {
+std::string ASAP_COMMON_API FormatFileAndLine(char const *file, char const *line) {
   constexpr static int FILE_MAX_LENGTH = 70;
   std::ostringstream ostr;
   std::string fstr(file);

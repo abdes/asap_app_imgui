@@ -9,6 +9,7 @@
 #include <string>  // for std::string
 #include <thread>  // for std::mutex
 
+#include <common/asap_common_api.h>
 #include <common/non_copiable.h>
 #include <spdlog/fmt/ostr.h>  // for user defined objects logging
 #include <spdlog/spdlog.h>
@@ -27,7 +28,7 @@ namespace logging {
  * Apart from this use case, the rest of the logging macros only use
  * logger names.
  */
-enum class Id {
+enum class ASAP_COMMON_API Id {
   MISC,
   TESTING,
   COMMON,
@@ -42,7 +43,7 @@ enum class Id {
 /**
  * @brief Logger wrapper for a spdlog logger.
  */
-class Logger : private asap::NonCopiable {
+class ASAP_COMMON_API Logger : private asap::NonCopiable {
  public:
   /* This is simple mapping between Logger severity levels and spdlog severity
    * levels. The only reason for this mapping is to go around the fact that
@@ -164,7 +165,7 @@ class Logger : private asap::NonCopiable {
  *
  * The DelegatingSink class supports switching its delegate at any time.
  */
-class DelegatingSink : public spdlog::sinks::base_sink<std::mutex>,
+class ASAP_COMMON_API DelegatingSink : public spdlog::sinks::base_sink<std::mutex>,
                        private NonCopiable {
  public:
   /*!
@@ -261,7 +262,7 @@ class DelegatingSink : public spdlog::sinks::base_sink<std::mutex>,
  *
  * @todo TODO: Add Init() method with format, sinks and level
  */
-class Registry {
+class ASAP_COMMON_API Registry {
  public:
   /*!
    * @brief Sets the minimum log severity required to print messages.
@@ -354,7 +355,7 @@ class Registry {
  * particular ID.
  */
 template <Id ID>
-class Loggable {
+class ASAP_COMMON_API  Loggable {
  protected:
   /*!
    * @brief Do not use this directly, use macros defined below.
