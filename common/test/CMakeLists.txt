@@ -37,6 +37,8 @@ set(source_path "${CMAKE_CURRENT_SOURCE_DIR}")
 set(public_headers)
 
 set(sources
+  "assert_test.cpp"
+  "logging_test.cpp"
   "main.cpp"
   ${public_headers}
 )
@@ -67,7 +69,7 @@ set(compile_options)
 # Libraries
 # ------------------------------------------------------------------------------
 
-set(libraries asap::common)
+set(libraries asap::common Catch2)
 
 # ------------------------------------------------------------------------------
 # Create targets

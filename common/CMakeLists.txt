@@ -35,11 +35,15 @@ set(include_path "${CMAKE_CURRENT_SOURCE_DIR}/include/common")
 set(source_path "${CMAKE_CURRENT_SOURCE_DIR}/src")
 
 set(public_headers
-  "include/common/common.h"
+  "include/common/platform.h"
+  "include/common/assert.h"
+  "include/common/non_copiable.h"
+  "include/common/logging.h"
   )
 
 set(sources
-  "src/common.cpp"
+  "src/assert.cpp"
+  "src/logging.cpp"
   ${public_headers}
   )
 
@@ -63,14 +67,14 @@ set(private_include_dirs)
 # Compile definitions / options
 # ------------------------------------------------------------------------------
 
-set(private_compile_definitions HELLO_WORLD)
+set(private_compile_definitions)
 set(private_compile_options)
 
 # ------------------------------------------------------------------------------
 # Libraries
 # ------------------------------------------------------------------------------
 
-set(public_libraries)
+set(public_libraries spdlog Boost::boost)
 if (WIN32)
   list(APPEND public_libraries dbghelp)
 endif (WIN32)
