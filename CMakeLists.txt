@@ -20,15 +20,19 @@ endif ()
 # List of directories specifying a search path for CMake modules to be loaded by
 # the the include() or find_package() commands before checking the default modules
 # that come with CMake.
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/common/cmake)
-list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/common/cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # Register general cmake commands
 include(GenerateExportHeader)
 include(WriteCompilerDetectionHeader)
+include(ExternalProject)
+find_package(Git REQUIRED)
 
 # Register custom cmake commands
 include(GetGitRevisionDescription)
+include(DownloadProject)
+include(BuildHelpers)
 
 
 # ------------------------------------------------------------------------------
@@ -59,4 +63,172 @@ set(META_CMAKE_INIT_SHA      "${GIT_REV}")
 string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} META_PROJECT_ID)
 string(TOUPPER ${META_PROJECT_ID} META_PROJECT_ID)
 
-message(STATUS "META_NAME_VERSION : ${META_NAME_VERSION}")
+message(STATUS "Project : ${META_NAME_VERSION}")
+
+
+
+# ------------------------------------------------------------------------------
+# Project configuration options
+# ------------------------------------------------------------------------------
+
+# Project options
+option(BUILD_SHARED_LIBS     "Build shared instead of static libraries."              ON)
+option(OPTION_SELF_CONTAINED "Create a self-contained install with all dependencies." OFF)
+option(OPTION_BUILD_TESTS    "Build tests."                                           ON)
+option(OPTION_BUILD_DOCS     "Build documentation."                                   OFF)
+option(OPTION_BUILD_EXAMPLES "Build examples."                                        OFF)
+
+# The default build type provided by CMake is to include no compiler flags for
+# optimization. For some projects you may want to set a default build type so
+# that you do not have to remember to set it.
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+  message("STATUS Setting build type to 'RelWithDebInfo' as none was specified.")
+  set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Choose the type of build." FORCE)
+  # Set the possible values of build type for cmake-gui
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
+    "MinSizeRel" "RelWithDebInfo")
+endif()
+
+
+# ------------------------------------------------------------------------------
+# Project Declaration
+# ------------------------------------------------------------------------------
+
+# Generate folders for IDE targets (e.g., VisualStudio solutions)
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set(IDE_FOLDER "${META_PROJECT_NAME}")
+
+# Declare project
+project(${META_PROJECT_NAME} VERSION ${META_VERSION} LANGUAGES C CXX)
+
+# Set output directories
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+
+# Create version file
+file(WRITE "${PROJECT_BINARY_DIR}/VERSION" "${META_NAME_VERSION}")
+
+
+# ------------------------------------------------------------------------------
+# Compiler settings and options
+# ------------------------------------------------------------------------------
+
+include(CompileOptions)
+
+# ------------------------------------------------------------------------------
+# Top level code generation
+# ------------------------------------------------------------------------------
+
+# Generate version-header
+configure_file(
+  templates/version.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME}/${META_PROJECT_NAME}-version.h
+)
+
+# Generate feature-header
+set(feature_file "${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME}/${META_PROJECT_NAME}-features.h")
+write_compiler_detection_header(
+  FILE ${feature_file}
+  PREFIX ${META_PROJECT_ID}
+  COMPILERS AppleClang Clang GNU MSVC
+  FEATURES cxx_alignas cxx_alignof cxx_constexpr cxx_final cxx_noexcept cxx_nullptr cxx_sizeof_member cxx_thread_local
+  VERSION 3.2
+)
+
+# ------------------------------------------------------------------------------
+# Deployment/installation setup
+# ------------------------------------------------------------------------------
+
+# enable CTest.  This will set BUILD_TESTING to ON unless otherwise specified
+# on the command line
+include(CTest)
+enable_testing()
+
+
+# ------------------------------------------------------------------------------
+# Deployment/installation setup
+# ------------------------------------------------------------------------------
+
+# Get project name
+set(project ${META_PROJECT_NAME})
+
+# Check for system dir install
+set(SYSTEM_DIR_INSTALL FALSE)
+if("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr" OR "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr/local")
+  set(SYSTEM_DIR_INSTALL TRUE)
+endif()
+
+# Installation paths
+if(UNIX AND SYSTEM_DIR_INSTALL)
+  # Install into the system (/usr/bin or /usr/local/bin)
+  set(INSTALL_ROOT      "share/${project}")       # /usr/[local]/share/<project>
+  set(INSTALL_CMAKE     "share/${project}/cmake") # /usr/[local]/share/<project>/cmake
+  set(INSTALL_EXAMPLES  "share/${project}")       # /usr/[local]/share/<project>
+  set(INSTALL_DATA      "share/${project}")       # /usr/[local]/share/<project>
+  set(INSTALL_BIN       "bin")                    # /usr/[local]/bin
+  set(INSTALL_SHARED    "lib")                    # /usr/[local]/lib
+  set(INSTALL_LIB       "lib")                    # /usr/[local]/lib
+  set(INSTALL_INCLUDE   "include")                # /usr/[local]/include
+  set(INSTALL_DOC       "share/doc/${project}")   # /usr/[local]/share/doc/<project>
+  set(INSTALL_SHORTCUTS "share/applications")     # /usr/[local]/share/applications
+  set(INSTALL_ICONS     "share/pixmaps")          # /usr/[local]/share/pixmaps
+  set(INSTALL_INIT      "/etc/init")              # /etc/init (upstart init scripts)
+else()
+  # Install into local directory
+  set(INSTALL_ROOT      ".")                      # ./
+  set(INSTALL_CMAKE     "cmake")                  # ./cmake
+  set(INSTALL_EXAMPLES  ".")                      # ./
+  set(INSTALL_DATA      ".")                      # ./
+  set(INSTALL_BIN       ".")                      # ./
+  set(INSTALL_SHARED    "lib")                    # ./lib
+  set(INSTALL_LIB       "lib")                    # ./lib
+  set(INSTALL_INCLUDE   "include")                # ./include
+  set(INSTALL_DOC       "doc")                    # ./doc
+  set(INSTALL_SHORTCUTS "misc")                   # ./misc
+  set(INSTALL_ICONS     "misc")                   # ./misc
+  set(INSTALL_INIT      "misc")                   # ./misc
+endif()
+
+# Set runtime path
+set(CMAKE_SKIP_BUILD_RPATH            FALSE) # Add absolute path to all dependencies for BUILD
+set(CMAKE_BUILD_WITH_INSTALL_RPATH    FALSE) # Use CMAKE_INSTALL_RPATH for INSTALL
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE) # Do NOT add path to dependencies for INSTALL
+
+if(NOT SYSTEM_DIR_INSTALL)
+  # Find libraries relative to binary
+  if(APPLE)
+    set(CMAKE_INSTALL_RPATH "@loader_path/../../../${INSTALL_LIB}")
+  else()
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/${INSTALL_LIB}")
+  endif()
+endif()
+
+
+# ------------------------------------------------------------------------------
+# Project modules
+# ------------------------------------------------------------------------------
+
+add_subdirectory(common)
+
+
+# ------------------------------------------------------------------------------
+# Deployment (global project files)
+# ------------------------------------------------------------------------------
+
+# Install version file
+install(FILES "${PROJECT_BINARY_DIR}/VERSION" DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
+
+# Deploy generated top level headers
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME} DESTINATION include COMPONENT dev)
+
+# Install cmake find script for the project
+install(FILES ${META_PROJECT_NAME}-config.cmake DESTINATION ${INSTALL_ROOT} COMPONENT dev)
+
+# Install the project meta files
+install(FILES AUTHORS   DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
+install(FILES LICENSE   DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
+install(FILES README.md DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
+
+# Install runtime data
+install(DIRECTORY ${PROJECT_SOURCE_DIR}/data DESTINATION ${INSTALL_DATA} COMPONENT runtime)
