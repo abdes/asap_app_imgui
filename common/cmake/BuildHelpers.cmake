@@ -35,13 +35,13 @@ function(source_group_by_path PARENT_PATH REGEX GROUP)
 endfunction(source_group_by_path)
 
 
-# create a library in the asap namespace
+# create a library in the project namespace
 #
 # parameters
 # SOURCES : sources files for the library
 # PUBLIC_LIBRARIES: targets and flags for linking phase
 # PRIVATE_COMPILE_FLAGS: compile flags for the library. Will not be exported.
-# EXPORT_NAME: export name for the asap:: target export
+# EXPORT_NAME: export name for the project namespace target export
 # TARGET: target name
 #
 # create a target associated to <NAME>
