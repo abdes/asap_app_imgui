@@ -85,7 +85,7 @@ endif (WIN32)
 
 asap_library(
   TARGET
-  asap_common
+  ${target}
   EXPORT_NAME
   common
   SOURCES
@@ -110,6 +110,14 @@ asap_library(
 if (OPTION_BUILD_TESTS)
   add_subdirectory(test)
 endif()
+
+
+# ------------------------------------------------------------------------------
+# Code analysis
+# ------------------------------------------------------------------------------
+
+enable_cppcheck()
+tidy_target(${target})
 
 
 # ------------------------------------------------------------------------------

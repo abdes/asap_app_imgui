@@ -77,6 +77,12 @@ option(OPTION_SELF_CONTAINED "Create a self-contained install with all dependenc
 option(OPTION_BUILD_TESTS    "Build tests."                                           ON)
 option(OPTION_BUILD_DOCS     "Build documentation."                                   OFF)
 option(OPTION_BUILD_EXAMPLES "Build examples."                                        OFF)
+option(OPTION_CLANG_TIDY     "Analyze code with clang-tidy."                          OFF)
+option(OPTION_CPPCHECK       "Analyze code with CppCheck."                            OFF)
+option(OPTION_GOOGLE_ASAN    "Instrument code with address sanitizer"                 OFF)
+option(OPTION_GOOGLE_USAN    "Instrument code with memory sanitizer"                  OFF)
+option(OPTION_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
+
 
 # The default build type provided by CMake is to include no compiler flags for
 # optimization. For some projects you may want to set a default build type so
@@ -111,10 +117,28 @@ file(WRITE "${PROJECT_BINARY_DIR}/VERSION" "${META_NAME_VERSION}")
 
 
 # ------------------------------------------------------------------------------
+# Third party modules
+# ------------------------------------------------------------------------------
+
+add_subdirectory(third_party)
+
+
+# ------------------------------------------------------------------------------
 # Compiler settings and options
 # ------------------------------------------------------------------------------
 
 include(CompileOptions)
+
+
+# ------------------------------------------------------------------------------
+# Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
+# ------------------------------------------------------------------------------
+
+include(ClangTidy)
+include(CppCheck)
+include(GoogleSanitizers)
+include(Valgrind)
+
 
 # ------------------------------------------------------------------------------
 # Top level code generation
@@ -213,13 +237,6 @@ if(NOT SYSTEM_DIR_INSTALL)
     set(CMAKE_INSTALL_RPATH "$ORIGIN/${INSTALL_LIB}")
   endif()
 endif()
-
-
-# ------------------------------------------------------------------------------
-# Third party modules
-# ------------------------------------------------------------------------------
-
-add_subdirectory(third_party)
 
 
 # ------------------------------------------------------------------------------
