@@ -37,7 +37,6 @@ set(source_path "${CMAKE_CURRENT_SOURCE_DIR}")
 set(public_headers)
 
 set(sources
-  "assert_test.cpp"
   "logging_test.cpp"
   "main.cpp"
   ${public_headers}

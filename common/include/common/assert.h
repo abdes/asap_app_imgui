@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <common/asap_common_api.h>
 #include <common/platform.h>
 
 #ifndef ASAP_USE_ASSERTS
@@ -55,13 +56,9 @@ void print_backtrace(char* out, int len, int max_depth = 0,
 // clang-format on
 
 namespace asap {
-// declarations of the two functions
 
 // internal
-void assert_print(char const* fmt, ...) ASAP_FORMAT(1, 2);
-
-// internal
-void assert_fail(const char* expr, int line, char const* file,
+void ASAP_COMMON_API assert_fail(const char* expr, int line, char const* file,
                  char const* function, char const* val, int kind = 0);
 
 }  // namespace asap

@@ -19,7 +19,79 @@
 #include <string>   // for strstr, strchr
 
 #if ASAP_USE_EXECINFO
+
+// __has_include is currently supported by GCC and Clang. However GCC 4.9 may have issues and
+// returns 1 for 'defined( __has_include )', while '__has_include' is actually not supported:
+// https://gcc.gnu.org/bugzilla/show_bug.cgi?id=63662
+#if defined( __has_include ) && (!ASAP_COMPILER_IS_GNU || (__GNUC__ + 0) >= 5)
+# if __has_include(<cxxabi.h>)
+#  define ASAP_HAS_CXXABI_H
+# endif
+#elif defined( __GLIBCXX__ ) || defined( __GLIBCPP__ )
+# define ASAP_CORE_HAS_CXXABI_H
+#endif
+
 #include <execinfo.h>
+#if defined( ASAP_HAS_CXXABI_H )
+# include <cxxabi.h>
+// For some architectures (mips, mips64, x86, x86_64) cxxabi.h in Android NDK is implemented by gabi++ library
+// (https://android.googlesource.com/platform/ndk/+/master/sources/cxx-stl/gabi++/), which does not implement
+// abi::__cxa_demangle(). We detect this implementation by checking the include guard here.
+# if defined( __GABIXX_CXXABI_H__ )
+#  undef ASAP_HAS_CXXABI_H
+# else
+#  include <cstdlib>
+#  include <cstddef>
+# endif
+#endif
+
+namespace {
+inline char const *demangle_alloc(char const *name) BOOST_NOEXCEPT;
+inline void demangle_free(char const *name) BOOST_NOEXCEPT;
+
+class scoped_demangled_name {
+ private:
+  char const *m_p;
+
+ public:
+  explicit scoped_demangled_name(char const *name) BOOST_NOEXCEPT :
+      m_p(demangle_alloc(name)) {
+  }
+
+  ~scoped_demangled_name() BOOST_NOEXCEPT {
+    demangle_free(m_p);
+  }
+
+  char const *get() const BOOST_NOEXCEPT {
+    return m_p;
+  }
+
+  BOOST_DELETED_FUNCTION(scoped_demangled_name(scoped_demangled_name const& ))
+  BOOST_DELETED_FUNCTION(scoped_demangled_name &operator=(scoped_demangled_name const &))
+};
+
+
+inline char const * demangle_alloc( char const * name ) BOOST_NOEXCEPT
+{
+    int status = 0;
+    std::size_t size = 0;
+    return abi::__cxa_demangle( name, NULL, &size, &status );
+}
+
+inline void demangle_free( char const * name ) BOOST_NOEXCEPT
+{
+    std::free( const_cast< char* >( name ) );
+}
+
+inline std::string demangle( char const * name )
+{
+    scoped_demangled_name demangled_name( name );
+    char const * p = demangled_name.get();
+    if( !p )
+        p = name;
+    return p;
+}
+}
 
 namespace asap {
 
@@ -30,7 +102,7 @@ void print_backtrace(char* out, int len, int max_depth, void*) {
 
   for (int i = 1; i < size && len > 0; ++i) {
     int ret = std::snprintf(out, std::size_t(len), "%d: %s\n", i,
-                            boost::core::demangle(symbols[i]).c_str());
+                            demangle(symbols[i]).c_str());
     out += ret;
     len -= ret;
     if (i - 1 == max_depth && max_depth > 0) break;
@@ -158,17 +230,15 @@ void print_backtrace(char* out, int len, int /*max_depth*/, void* /* ctx */) {
 
 }  // namespace asap
 
-#endif
+#endif // OS/Platform
 
-#endif
-
-namespace asap {
+#endif // ASAP_USE_ASSERTS
 
 #if ASAP_USE_ASSERTS
-
+namespace {
 ASAP_FORMAT(1, 2)
-void assert_print(char const* fmt, ...) {
-  FILE* out = stderr;
+void assert_print(char const *fmt, ...) {
+  FILE *out = stderr;
   va_list va;
   va_start(va, fmt);
   std::vfprintf(out, fmt, va);
@@ -178,6 +248,12 @@ void assert_print(char const* fmt, ...) {
   if (out != stderr) fclose(out);
 #endif
 }
+}  // namespace
+#endif // ASAP_USE_ASSERTS
+
+namespace asap {
+
+#if ASAP_USE_ASSERTS
 
 // we deliberately don't want asserts to be marked as no-return, since that
 // would trigger warnings in debug builds of any code coming after the assert
@@ -198,14 +274,13 @@ void assert_fail(char const* expr, int line, char const* file,
   print_backtrace(stack, sizeof(stack), 0);
 
   char const* message =
-      "Assertion failed. Please file a bugreport at "
-      "https://github.com/xxxxxxxxxxx/issues\n";
+      "Assertion failed.\n";
 
   switch (kind) {
     case 1:
       message =
-          "A precondition of a asap function has been violated.\n"
-          "This indicates a bug in the client application using asap\n";
+          "A precondition of a function has been violated.\n"
+          "This indicates a bug in the client application.\n";
   }
 
   assert_print(
@@ -236,9 +311,9 @@ void assert_fail(char const* expr, int line, char const* file,
 #else
   // send SIGINT to the current process
   // to break into the debugger
-  ::raise(SIGABRT);
+  //::raise(SIGABRT);
 #endif
-  ::abort();
+  //::abort();
 #endif
 }
 
@@ -256,6 +331,6 @@ void assert_print(char const*, ...) {}
 void assert_fail(char const*, int, char const*, char const*, char const*, int) {
 }
 
-#endif
+#endif // ASAP_USE_ASSERTS
 
 }  // namespace asap
