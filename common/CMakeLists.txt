@@ -110,3 +110,14 @@ asap_library(
 if (OPTION_BUILD_TESTS)
   add_subdirectory(test)
 endif()
+
+
+# ------------------------------------------------------------------------------
+# Documentation
+# ------------------------------------------------------------------------------
+
+configure_doxyfile(CommonLib
+  "\"Common Module\""
+  "\"A module to provide the absolute minimum required building blocks for the other modules such as portability, logging, assertions, etc...\""
+  "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
+add_doxygen_target(CommonLib)

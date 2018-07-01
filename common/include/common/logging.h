@@ -22,13 +22,13 @@ namespace logging {
 // ---------------------------------------------------------------------------
 
 /*!
- * @brief Exhaustive list of logger ids that can be used in declaring
- * Loggable<ID> classes.
+ * @enum asap::logging::Id
+ * @brief Exhaustive list of logger ids.
  *
- * Apart from this use case, the rest of the logging macros only use
- * logger names.
+ * Used in declaring Loggable<ID> classes. Apart from this use case, the rest
+ * of the logging macros only use logger names.
  */
-enum class ASAP_COMMON_API Id {
+enum class Id {
   MISC,
   TESTING,
   COMMON,
@@ -48,8 +48,7 @@ class ASAP_COMMON_API Logger : private asap::NonCopiable {
   /* This is simple mapping between Logger severity levels and spdlog severity
    * levels. The only reason for this mapping is to go around the fact that
    * spdlog defines level as err but the method to log at err level is called
-   * LOGGER.error not LOGGER.err. All other level are fine spdlog::info
-   * corresponds to LOGGER.info method.
+   * LOGGER.error not LOGGER.err. All other level are fine.
    */
   enum class Level {
     trace = spdlog::level::trace,
@@ -394,7 +393,7 @@ std::string FormatFileAndLine(char const *file, char const *line);
 
 #define ASLOG_COMP_LEVEL(LOGGER, LEVEL)    \
   (static_cast<spdlog::level::level_enum>( \
-       asap::logging::Logger::Level::LEVEL) >= LOGGER.level())
+       asap::logging::Logger::Level::LEVEL) >= (LOGGER.level()))
 
 // Compare levels before invoking logger. This is an optimization to avoid
 // executing expressions computing log contents when they would be suppressed.
