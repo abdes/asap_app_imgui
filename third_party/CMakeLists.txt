@@ -4,7 +4,8 @@ set(BOOST_URL_SHA256 2684c972994ee57fc5632e03bf044746f6eb45d4920c343937a465fd67a
 add_subdirectory(boost-cmake)
 
 # Catch2
-add_subdirectory(catch2)
+# EXCLUDE_FROM_ALL to not have it install its files during install
+add_subdirectory(catch2 EXCLUDE_FROM_ALL)
 
 # spdlog
 SET(SPDLOG_BUILD_TESTING OFF CACHE BOOL "Build spdlog tests")
