@@ -1,7 +1,11 @@
 
-include(GenerateTemplateExportHeader)
+# ------------------------------------------------------------------------------
+# Build Helpers to simplify target creation.
+# ------------------------------------------------------------------------------
 
 include(CMakeParseArguments)
+include(GenerateTemplateExportHeader)
+
 
 # Set policy if policy is available
 function(set_policy POL VAL)
@@ -13,11 +17,15 @@ function(set_policy POL VAL)
 endfunction(set_policy)
 
 
-# Define function "source_group_by_path with three mandatory arguments (PARENT_PATH, REGEX, GROUP, ...)
-# to group source files in folders (e.g. for MSVC solutions).
+# Define function "source_group_by_path with three mandatory arguments
+# (PARENT_PATH, REGEX, GROUP, ...) to group source files in folders (e.g. for
+# MSVC solutions).
 #
 # Example:
-# source_group_by_path("${CMAKE_CURRENT_SOURCE_DIR}/src" "\\\\.h$|\\\\.inl$|\\\\.cpp$|\\\\.c$|\\\\.ui$|\\\\.qrc$" "Source Files" ${sources})
+# source_group_by_path("${CMAKE_CURRENT_SOURCE_DIR}/src"
+#   "\\\\.h$|\\\\.inl$|\\\\.cpp$|\\\\.c$|\\\\.ui$|\\\\.qrc$"
+#   "Source Files" ${sources})
+#
 function(source_group_by_path PARENT_PATH REGEX GROUP)
 
   foreach (FILENAME ${ARGN})
@@ -35,18 +43,10 @@ function(source_group_by_path PARENT_PATH REGEX GROUP)
 endfunction(source_group_by_path)
 
 
-# create a library in the project namespace
-#
-# parameters
-# SOURCES : sources files for the library
-# PUBLIC_LIBRARIES: targets and flags for linking phase
-# PRIVATE_COMPILE_FLAGS: compile flags for the library. Will not be exported.
-# EXPORT_NAME: export name for the project namespace target export
-# TARGET: target name
-#
-# create a target associated to <NAME>
-# libraries are installed under CMAKE_INSTALL_FULL_LIBDIR by default
-#
+# ------------------------------------------------------------------------------
+# Add a library to the project.
+# ------------------------------------------------------------------------------
+
 function(asap_library)
   set(options)
   set(oneValueArgs TARGET EXPORT_NAME)
@@ -195,9 +195,10 @@ function(asap_library)
 endfunction()
 
 
-#
-# header only virtual target creation
-#
+# ------------------------------------------------------------------------------
+# Add a Header-Only library to the project.
+# ------------------------------------------------------------------------------
+
 function(asap_header_library)
   set(options)
   set(oneValueArgs TARGET EXPORT_NAME)
@@ -306,9 +307,10 @@ function(asap_header_library)
 endfunction()
 
 
-#
-#
-#
+# ------------------------------------------------------------------------------
+# Add an application executable program to the project.
+# ------------------------------------------------------------------------------
+
 function(asap_executable)
   set(options)
   set(oneValueArgs TARGET)
@@ -390,9 +392,10 @@ function(asap_executable)
 endfunction()
 
 
-#
-#
-#
+# ------------------------------------------------------------------------------
+# Add a test program to the project.
+# ------------------------------------------------------------------------------
+
 function(asap_test_executable)
   set(options)
   set(oneValueArgs TARGET)

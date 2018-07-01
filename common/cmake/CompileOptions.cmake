@@ -1,4 +1,9 @@
 
+# ------------------------------------------------------------------------------
+# Common/Default compiler options and flags, applied to all modules.
+# ------------------------------------------------------------------------------
+
+
 # 
 # Platform and architecture setup
 # 
@@ -139,7 +144,5 @@ set(DEFAULT_LINKER_OPTIONS)
 
 # Use pthreads on mingw and linux
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
-  set(DEFAULT_LINKER_OPTIONS
-    -pthread
-    )
+  set(DEFAULT_LINKER_OPTIONS -pthread)
 endif ()

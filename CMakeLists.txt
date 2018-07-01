@@ -11,7 +11,7 @@
 # We require 3.1 for the use of CXX_STANDARD in our targets.
 # We require 3.6 for CXX_CLANG_TIDY
 # We require 3.10 for CMAKE_CXX_CPPCHECK
-if (ENABLE_CPPCHECK)
+if (OPTION_CPPCHECK)
   cmake_minimum_required(VERSION 3.10)
 else ()
   cmake_minimum_required(VERSION 3.6)
@@ -176,7 +176,7 @@ enable_testing()
 # ------------------------------------------------------------------------------
 
 include(FindDoxygen)
-set(DOXROOT "${CMAKE_BINARY_DIR}/dox")
+set(dox_root "${CMAKE_BINARY_DIR}/dox")
 include (DoxGeneration)
 
 

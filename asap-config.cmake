@@ -1,3 +1,8 @@
+
+# ------------------------------------------------------------------------------
+# CMake config script for the project, used to locate all of its modules.
+# ------------------------------------------------------------------------------
+
 # This config script tries to locate the project either in its source tree
 # or from an install location.
 #
@@ -7,7 +12,7 @@
 # List of modules
 set(MODULE_NAMES
   common
-  )
+)
 
 
 # Macro to search for a specific module

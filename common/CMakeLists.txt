@@ -22,6 +22,7 @@ set(IDE_FOLDER "Libraries")
 
 # Target name
 set(target asap_common)
+set(target_export common)
 
 # Exit here if required dependencies are not met
 message(STATUS "Lib ${target}")
@@ -87,7 +88,7 @@ asap_library(
   TARGET
   ${target}
   EXPORT_NAME
-  common
+  ${target_export}
   SOURCES
   ${sources}
   PUBLIC_INCLUDE_DIRS
@@ -121,11 +122,18 @@ tidy_target(${target})
 
 
 # ------------------------------------------------------------------------------
-# Documentation
+# API Documentation
 # ------------------------------------------------------------------------------
 
-configure_doxyfile(CommonLib
+configure_doxyfile(${target}
   "\"Common Module\""
   "\"A module to provide the absolute minimum required building blocks for the other modules such as portability, logging, assertions, etc...\""
   "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
-add_doxygen_target(CommonLib)
+
+add_doxygen_target(${target})
+
+install(
+  DIRECTORY ${dox_root}/${target}
+  DESTINATION ${INSTALL_DOC}
+  COMPONENT docs
+)

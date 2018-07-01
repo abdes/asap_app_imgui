@@ -1,9 +1,9 @@
 
 # ------------------------------------------------------------------------------
 # Valgrind
-#
-# run tests with: ctest -T memcheck --output-on-failure
 # ------------------------------------------------------------------------------
+
+# run tests with: ctest -T memcheck --output-on-failure
 
 find_program( MEMORYCHECK_COMMAND valgrind )
 set(MEMORYCHECK_COMMAND_OPTIONS "${MEMORYCHECK_COMMAND_OPTIONS} --leak-check=full")
