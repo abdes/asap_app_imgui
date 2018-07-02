@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <common/asap_common_api.h>
+
 namespace asap {
 
 //  Private copy constructor and copy assignment ensure classes derived from
@@ -12,7 +14,7 @@ namespace asap {
 
 namespace noncopyable_  // protection from unintended ADL
 {
-class NonCopiable {
+class ASAP_COMMON_API NonCopiable {
  public:
   NonCopiable(const NonCopiable &) = delete;
   NonCopiable &operator=(const NonCopiable &) = delete;

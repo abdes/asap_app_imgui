@@ -164,7 +164,7 @@ class ASAP_COMMON_API Logger : private asap::NonCopiable {
  *
  * The DelegatingSink class supports switching its delegate at any time.
  */
-class ASAP_COMMON_API DelegatingSink : public spdlog::sinks::base_sink<std::mutex>,
+class DelegatingSink : public spdlog::sinks::base_sink<std::mutex>,
                        private NonCopiable {
  public:
   /*!
@@ -354,7 +354,7 @@ class ASAP_COMMON_API Registry {
  * particular ID.
  */
 template <Id ID>
-class ASAP_COMMON_API  Loggable {
+class ASAP_COMMON_TEMPLATE_API Loggable {
  protected:
   /*!
    * @brief Do not use this directly, use macros defined below.
@@ -372,7 +372,7 @@ class ASAP_COMMON_API  Loggable {
 #define STRINGIZE(x) #x
 #define LINE_STRING DO_STRINGIZE(__LINE__)
 #ifndef NDEBUG
-std::string FormatFileAndLine(char const *file, char const *line);
+std::string ASAP_COMMON_API FormatFileAndLine(char const *file, char const *line);
 //#define LOG_PREFIX "[" __FILE__ ":" LINE_STRING "] "
 //#define LOG_PREFIX " "
 #define LOG_PREFIX asap::logging::FormatFileAndLine(__FILE__, LINE_STRING)
