@@ -46,8 +46,8 @@ inline constexpr const char *LoggerName(Id id) {
     case Id::COMMON:   return "common  ";
     case Id::MAIN:     return "main    ";
     case Id::INVALID_: return "__DO_NOT_USE__";
-      // clang-format on
-      // omit default case to trigger compiler warning for missing cases
+    // omit default case to trigger compiler warning for missing cases
+    // clang-format on
   };
   return "__INVALID__";
 }

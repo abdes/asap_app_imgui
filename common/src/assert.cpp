@@ -276,11 +276,10 @@ void assert_fail(char const* expr, int line, char const* file,
   char const* message =
       "Assertion failed.\n";
 
-  switch (kind) {
-    case 1:
-      message =
-          "A precondition of a function has been violated.\n"
-          "This indicates a bug in the client application.\n";
+  if (kind == 1) {
+    message =
+        "A precondition of a function has been violated.\n"
+        "This indicates a bug in the client application.\n";
   }
 
   assert_print(
