@@ -438,6 +438,7 @@ function(asap_test_executable)
     ${DEFAULT_LIBRARIES}
     ${ASAP_TEST_LIBRARIES}
     ${DEFAULT_LINKER_OPTIONS}
+    Catch2
     )
 
   #
@@ -463,6 +464,10 @@ function(asap_test_executable)
     FOLDER "${IDE_FOLDER}"
     )
 
+if (TARGET Catch2)
+  catch_discover_tests(${_NAME})
+else ()
   add_test(${_NAME} ${PROJECT_BINARY_DIR}/${_NAME})
+endif ()
 
 endfunction()

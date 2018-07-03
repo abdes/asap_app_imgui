@@ -168,6 +168,7 @@ write_compiler_detection_header(
 # enable CTest.  This will set BUILD_TESTING to ON unless otherwise specified
 # on the command line
 include(CTest)
+include(third_party/catch2/contrib/Catch.cmake)
 enable_testing()
 
 

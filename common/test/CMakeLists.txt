@@ -68,7 +68,7 @@ set(compile_options)
 # Libraries
 # ------------------------------------------------------------------------------
 
-set(libraries ${META_PROJECT_NAME}::common Catch2)
+set(libraries ${META_PROJECT_NAME}::common)
 
 # ------------------------------------------------------------------------------
 # Create targets

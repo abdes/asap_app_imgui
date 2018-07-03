@@ -3,8 +3,6 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-#include <boost/core/demangle.hpp>
-
 #include <common/assert.h>
 
 #if ASAP_USE_ASSERTS
@@ -46,39 +44,39 @@
 #endif
 
 namespace {
-inline char const *demangle_alloc(char const *name) BOOST_NOEXCEPT;
-inline void demangle_free(char const *name) BOOST_NOEXCEPT;
+inline char const *demangle_alloc(char const *name) noexcept;
+inline void demangle_free(char const *name) noexcept;
 
 class scoped_demangled_name {
  private:
   char const *m_p;
 
  public:
-  explicit scoped_demangled_name(char const *name) BOOST_NOEXCEPT :
+  explicit scoped_demangled_name(char const *name) noexcept :
       m_p(demangle_alloc(name)) {
   }
 
-  ~scoped_demangled_name() BOOST_NOEXCEPT {
+  ~scoped_demangled_name() noexcept {
     demangle_free(m_p);
   }
 
-  char const *get() const BOOST_NOEXCEPT {
+  char const *get() const noexcept {
     return m_p;
   }
 
-  BOOST_DELETED_FUNCTION(scoped_demangled_name(scoped_demangled_name const& ))
-  BOOST_DELETED_FUNCTION(scoped_demangled_name &operator=(scoped_demangled_name const &))
+  scoped_demangled_name(scoped_demangled_name const& ) = delete;
+  scoped_demangled_name &operator=(scoped_demangled_name const &) = delete;
 };
 
 
-inline char const * demangle_alloc( char const * name ) BOOST_NOEXCEPT
+inline char const * demangle_alloc( char const * name ) noexcept
 {
     int status = 0;
     std::size_t size = 0;
     return abi::__cxa_demangle( name, NULL, &size, &status );
 }
 
-inline void demangle_free( char const * name ) BOOST_NOEXCEPT
+inline void demangle_free( char const * name ) noexcept
 {
     std::free( const_cast< char* >( name ) );
 }
