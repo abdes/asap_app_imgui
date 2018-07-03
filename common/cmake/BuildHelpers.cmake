@@ -366,7 +366,7 @@ function(asap_executable)
     ${PROJECT_BINARY_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_BINARY_DIR}/include
-    ${ASAP_EXE_PRIVATE_INCLUDE_DIRS}
+    ${ASAP_EXE_INCLUDE_DIRS}
     )
 
 
@@ -450,7 +450,7 @@ function(asap_test_executable)
     ${PROJECT_BINARY_DIR}/include
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_CURRENT_BINARY_DIR}/include
-    ${ASAP_TEST_PRIVATE_INCLUDE_DIRS}
+    ${ASAP_TEST_INCLUDE_DIRS}
     )
 
 
