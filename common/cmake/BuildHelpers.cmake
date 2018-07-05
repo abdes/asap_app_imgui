@@ -157,8 +157,6 @@ function(asap_library)
 
   if (ASAP_LIB_EXPORT_NAME)
     add_library(${META_PROJECT_NAME}::${ASAP_LIB_EXPORT_NAME} ALIAS ${_NAME})
-    # Export library for downstream projects
-    export(TARGETS ${_NAME} NAMESPACE ${META_PROJECT_NAME}:: FILE ${PROJECT_BINARY_DIR}/cmake/${_NAME}/${_NAME}-export.cmake)
   endif ()
 
   #
@@ -277,8 +275,6 @@ function(asap_header_library)
 
   if (ASAP_HO_EXPORT_NAME)
     add_library(${META_PROJECT_NAME}::${ASAP_HO_EXPORT_NAME} ALIAS ${_NAME})
-    # Export library for downstream projects
-    export(TARGETS ${_NAME} NAMESPACE ${META_PROJECT_NAME}:: FILE ${PROJECT_BINARY_DIR}/cmake/${_NAME}/${_NAME}-export.cmake)
   endif ()
 
   #
