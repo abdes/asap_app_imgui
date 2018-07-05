@@ -284,10 +284,12 @@ function(asap_header_library)
   #
 
   # Header files
-  install(DIRECTORY
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/${ASAP_LIB_EXPORT_NAME} DESTINATION ${INSTALL_INCLUDE}
-    COMPONENT dev
-    )
+  if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/include/${ASAP_LIB_EXPORT_NAME})
+    install(DIRECTORY
+      ${CMAKE_CURRENT_SOURCE_DIR}/include/${ASAP_LIB_EXPORT_NAME} DESTINATION ${INSTALL_INCLUDE}
+      COMPONENT dev
+      )
+  endif ()
 
   # Generated header files
   install(DIRECTORY
