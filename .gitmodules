@@ -7,3 +7,6 @@
 [submodule "imgui"]
 	path = imgui
 	url = https://gitlab.com/absassi/asap_imgui.git
+[submodule "third_party/glfw"]
+	path = third_party/glfw
+	url = https://github.com/glfw/glfw.git

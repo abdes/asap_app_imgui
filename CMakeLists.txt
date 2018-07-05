@@ -245,6 +245,7 @@ endif()
 # ------------------------------------------------------------------------------
 
 add_subdirectory(common)
+add_subdirectory(imgui)
 
 # For packaging
 add_subdirectory(deploy)
