@@ -4,9 +4,9 @@
 # ------------------------------------------------------------------------------
 
 
-# 
+#
 # Platform and architecture setup
-# 
+#
 
 # Get upper case system name
 string(TOUPPER ${CMAKE_SYSTEM_NAME} SYSTEM_NAME_UPPER)
@@ -18,37 +18,41 @@ if (CMAKE_SIZEOF_VOID_P EQUAL 8)
 endif ()
 
 
-# 
+#
 # Project options
-# 
+#
 
 set(DEFAULT_PROJECT_OPTIONS
   DEBUG_POSTFIX "d"
   CXX_STANDARD 14
   LINKER_LANGUAGE "CXX"
-  POSITION_INDEPENDENT_CODE ON
-  CXX_VISIBILITY_PRESET "hidden"
   CXX_EXTENSIONS Off
   )
 
+if (BUILD_SHARED_LIBS)
+  list(APPEND DEFAULT_PROJECT_OPTIONS
+    POSITION_INDEPENDENT_CODE ON
+    CXX_VISIBILITY_PRESET "hidden"
+    )
+endif ()
 
-# 
+#
 # Include directories
-# 
+#
 
 set(DEFAULT_INCLUDE_DIRECTORIES)
 
 
-# 
+#
 # Libraries
-# 
+#
 
 set(DEFAULT_LIBRARIES)
 
 
-# 
+#
 # Compile definitions
-# 
+#
 
 set(DEFAULT_COMPILE_DEFINITIONS
   SYSTEM_${SYSTEM_NAME_UPPER}
@@ -66,9 +70,9 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
 endif ()
 
 
-# 
+#
 # Compile options
-# 
+#
 
 set(DEFAULT_COMPILE_OPTIONS)
 
@@ -135,13 +139,13 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCH
 endif ()
 
 
-# 
+#
 # Linker options
-# 
+#
 
 set(DEFAULT_LINKER_OPTIONS)
 
 # Use pthreads on mingw and linux
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
-  set(DEFAULT_LINKER_OPTIONS -pthread)
+  list(APPEND DEFAULT_LINKER_OPTIONS -pthread)
 endif ()

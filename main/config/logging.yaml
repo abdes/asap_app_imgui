@@ -1,0 +1,13 @@
+logging:
+  loggers:
+    - {name: "misc    ", id: 0, level: 0}
+    - {name: "testing ", id: 1, level: 0}
+    - {name: "common  ", id: 2, level: 0}
+    - {name: "main    ", id: 3, level: 0}
+  format:
+    show-time: true
+    show-thread: true
+    show-level: true
+    show-logger: true
+  scroll-lock: false
+  soft-wrap: false

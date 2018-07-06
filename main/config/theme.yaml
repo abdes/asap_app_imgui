@@ -1,0 +1,74 @@
+theme:
+  style:
+    Alpha: 1  # Global alpha applies to everything in ImGui.
+    WindowPadding: [5, 5]  # Padding within a window.
+    WindowRounding: 0  # Radius of window corners rounding. Set to 0.0f to have rectangular windows.
+    WindowBorderSize: 1  # Thickness of border around windows. Generally set to 0.0f or 1.0f. (Other values are not well tested and more CPU/GPU costly).
+    WindowMinSize: [32, 32]  # Minimum window size. This is a global setting. If you want to constraint individual windows, use SetNextWindowSizeConstraints().
+    WindowTitleAlign: [0, 0.5]  # Alignment for title bar text. Defaults to (0.0f,0.5f) for left-aligned,vertically centered.
+    ChildRounding: 0  # Radius of child window corners rounding. Set to 0.0f to have rectangular windows.
+    ChildBorderSize: 1  # Thickness of border around child windows. Generally set to 0.0f or 1.0f. (Other values are not well tested and more CPU/GPU costly).
+    PopupRounding: 0  # Radius of popup window corners rounding. (Note that tooltip windows use WindowRounding)
+    PopupBorderSize: 1  # Thickness of border around popup/tooltip windows. Generally set to 0.0f or 1.0f. (Other values are not well tested and more CPU/GPU costly).
+    FramePadding: [5, 5]  # Padding within a framed rectangle (used by most widgets).
+    FrameRounding: 3  # Radius of frame corners rounding. Set to 0.0f to have rectangular frame (used by most widgets).
+    FrameBorderSize: 0  # Thickness of border around frames. Generally set to 0.0f or 1.0f. (Other values are not well tested and more CPU/GPU costly).
+    ItemSpacing: [12, 5]  # Horizontal and vertical spacing between widgets/lines.
+    ItemInnerSpacing: [5, 5]  # Horizontal and vertical spacing between within elements of a composed widget (e.g. a slider and its label).
+    TouchExtraPadding: [0, 0]  # Expand reactive bounding box for touch-based system where touch position is not accurate enough. Unfortunately we don't sort widgets so priority on overlap will always be given to the first widget. So don't grow this too much!
+    IndentSpacing: 25  # Horizontal indentation when e.g. entering a tree node. Generally == (FontSize + FramePadding.x*2).
+    ColumnsMinSpacing: 6  # Minimum horizontal spacing between two columns.
+    ScrollbarSize: 15  # Width of the vertical scrollbar, Height of the horizontal scrollbar.
+    ScrollbarRounding: 9  # Radius of grab corners for scrollbar.
+    GrabMinSize: 5  # Minimum width/height of a grab box for slider/scrollbar.
+    GrabRounding: 3  # Radius of grabs corners rounding. Set to 0.0f to have rectangular slider grabs.
+    ButtonTextAlign: [0.5, 0.5]  # Alignment of button text when button is larger than text. Defaults to (0.5f,0.5f) for horizontally+vertically centered.
+    DisplayWindowPadding: [20, 20]  # Window positions are clamped to be visible within the display area by at least this amount. Only covers regular windows.
+    DisplaySafeAreaPadding: [3, 3]  # If you cannot see the edges of your screen (e.g. on a TV) increase the safe area padding. Apply to popups/tooltips as well regular windows. NB: Prefer configuring your TV sets correctly!
+    MouseCursorScale: 1  # Scale software rendered mouse cursor (when io.MouseDrawCursor is enabled). May be removed later.
+    AntiAliasedLines: true  # Enable anti-aliasing on lines/borders. Disable if you are really tight on CPU/GPU.
+    AntiAliasedFill: true  # Enable anti-aliasing on filled shapes (rounded rectangles, circles, etc.)
+
+  colors:
+    ImGuiCol_Text: [0.91, 0.91, 0.91, 1]
+    ImGuiCol_TextDisabled: [0.4, 0.4, 0.4, 1]
+    ImGuiCol_WindowBg: [0.1, 0.1, 0.1, 1]  # Background of normal windows
+    ImGuiCol_ChildBg: [0, 0, 0, 0]  # Background of child windows
+    ImGuiCol_PopupBg: [0, 0, 0, 0.94]  # Background of popups, menus, tooltips windows
+    ImGuiCol_Border: [0, 0, 0, 0.39]
+    ImGuiCol_BorderShadow: [1, 1, 1, 0.1]
+    ImGuiCol_FrameBg: [0.06, 0.06, 0.06, 1]  # Background of checkbox, radio button, plot, slider, text input
+    ImGuiCol_FrameBgHovered: [0.75, 0.42, 0.02, 0.4]
+    ImGuiCol_FrameBgActive: [0.9039312, 0.05375797, 0.04279101, 0.67]
+    ImGuiCol_TitleBg: [0.04, 0.04, 0.04, 1]
+    ImGuiCol_TitleBgActive: [0.18, 0.18, 0.18, 1]
+    ImGuiCol_TitleBgCollapsed: [0, 0, 0, 0.51]
+    ImGuiCol_MenuBarBg: [0.15, 0.15, 0.15, 1]
+    ImGuiCol_ScrollbarBg: [0.02, 0.02, 0.02, 0.53]
+    ImGuiCol_ScrollbarGrab: [0.31, 0.31, 0.31, 0.8]
+    ImGuiCol_ScrollbarGrabHovered: [0.49, 0.49, 0.49, 0.8]
+    ImGuiCol_ScrollbarGrabActive: [0.49, 0.49, 0.49, 1]
+    ImGuiCol_CheckMark: [0.75, 0.42, 0.02, 1]
+    ImGuiCol_SliderGrab: [0.75, 0.42, 0.02, 0.78]
+    ImGuiCol_SliderGrabActive: [0.75, 0.42, 0.02, 1]
+    ImGuiCol_Button: [0.75, 0.42, 0.02, 0.4]
+    ImGuiCol_ButtonHovered: [0.75, 0.42, 0.02, 1]
+    ImGuiCol_ButtonActive: [0.94, 0.47, 0.02, 1]
+    ImGuiCol_Header: [0.75, 0.42, 0.02, 0.31]
+    ImGuiCol_HeaderHovered: [0.75, 0.42, 0.02, 0.8]
+    ImGuiCol_HeaderActive: [0.75, 0.42, 0.02, 1]
+    ImGuiCol_Separator: [0.61, 0.61, 0.61, 1]
+    ImGuiCol_SeparatorHovered: [0.75, 0.42, 0.02, 0.78]
+    ImGuiCol_SeparatorActive: [0.75, 0.42, 0.02, 1]
+    ImGuiCol_ResizeGrip: [0.22, 0.22, 0.22, 1]
+    ImGuiCol_ResizeGripHovered: [0.75, 0.42, 0.02, 0.67]
+    ImGuiCol_ResizeGripActive: [0.75, 0.42, 0.02, 0.95]
+    ImGuiCol_PlotLines: [0.61, 0.61, 0.61, 1]
+    ImGuiCol_PlotLinesHovered: [0, 0.57, 0.65, 1]
+    ImGuiCol_PlotHistogram: [0.1, 0.3, 1, 1]
+    ImGuiCol_PlotHistogramHovered: [0, 0.4, 1, 1]
+    ImGuiCol_TextSelectedBg: [0.75, 0.42, 0.02, 0.35]
+    ImGuiCol_ModalWindowDarkening: [0.06, 0.06, 0.06, 0.35]  # Darken/colorize entire screen behind a modal window, when one is active
+    ImGuiCol_DragDropTarget: [1, 1, 0, 0.9]
+    ImGuiCol_NavHighlight: [0.26, 0.59, 0.98, 1]  # Gamepad/keyboard: current highlighted item
+    ImGuiCol_NavWindowingHighlight: [1, 1, 1, 0.7]  # Gamepad/keyboard: when holding NavMenu to focus/move/resize windows
