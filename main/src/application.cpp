@@ -20,7 +20,16 @@ bool Application::Draw() {
 
       glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer_);
       // Define the viewport dimensions
-      glViewport(0, 0, 1280, 760);
+      glBindTexture(GL_TEXTURE_2D, texColorBuffer_);
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, wsize.x, wsize.y, 0, GL_RGB, GL_UNSIGNED_BYTE,
+                   NULL);
+      glBindTexture(GL_TEXTURE_2D, 0);
+      glViewport(0, 0, wsize.x, wsize.y);
+
+      // now that we actually created the framebuffer and added all attachments we
+      // want to check if it is actually complete now
+      if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+        ASLOG(error, "ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 
       // Render
       // Clear the colorbuffer
@@ -94,8 +103,10 @@ void Application::AfterInit() {
   // generate texture
   glGenTextures(1, &texColorBuffer_);
   glBindTexture(GL_TEXTURE_2D, texColorBuffer_);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1280, 760, 0, GL_RGB, GL_UNSIGNED_BYTE,
-               NULL);
+  // We'll set the texture size just before the draw happens based on the window
+  // size.
+  //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1280, 760, 0, GL_RGB, GL_UNSIGNED_BYTE,
+  //               NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glBindTexture(GL_TEXTURE_2D, 0);
@@ -103,11 +114,6 @@ void Application::AfterInit() {
   // attach it to currently bound framebuffer object
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
                          texColorBuffer_, 0);
-
-  // now that we actually created the framebuffer and added all attachments we
-  // want to check if it is actually complete now
-  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    ASLOG(error, "ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
