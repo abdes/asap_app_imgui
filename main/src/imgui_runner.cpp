@@ -79,8 +79,8 @@ void ImGuiRunner::InitGraphics() {
 }
 
 void ImGuiRunner::SetupContext() {
-  ASAP_ASSERT(window != nullptr);
-  glfwMakeContextCurrent(window);
+  ASAP_ASSERT(window_ != nullptr);
+  glfwMakeContextCurrent(window_);
   gladLoadGL((GLADloadfunc) glfwGetProcAddress);
   ASLOG(debug, "  context setup done");
 }
@@ -95,7 +95,7 @@ void ImGuiRunner::InitImGui() {
   // Keyboard Controls io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
   // // Enable Gamepad Controls
 
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
+  ImGui_ImplGlfw_InitForOpenGL(window_, true);
   ImGui_ImplOpenGL3_Init();
   ASLOG(debug, "  ImGui init done");
 }
@@ -110,12 +110,12 @@ void ImGuiRunner::Windowed(int width, int height, char const *title) {
   windowed_ = true;
   full_screen_ = false;
 
-  if (!window) {
+  if (!window_) {
     ASLOG(debug, "  starting in 'Windowed' mode: w={}, h={}, t='{}'", width,
           height, title);
     glfwWindowHint(GLFW_SAMPLES, MultiSample());  // multisampling
-    window = glfwCreateWindow(width, height, title, nullptr, nullptr);
-    if (!window) {
+    window_ = glfwCreateWindow(width, height, title, nullptr, nullptr);
+    if (!window_) {
       glfwTerminate();
       exit(EXIT_FAILURE);
     }
@@ -126,9 +126,9 @@ void ImGuiRunner::Windowed(int width, int height, char const *title) {
     ASLOG(debug, "setting 'Windowed' mode: w={}, h={}, t={}", width, height,
           title);
     // Restore the window position when you switch to windowed mode
-    glfwSetWindowMonitor(window, nullptr, saved_position_[0],
+    glfwSetWindowMonitor(window_, nullptr, saved_position_[0],
                          saved_position_[1], width, height, 60);
-    glfwSetWindowTitle(window, title);
+    glfwSetWindowTitle(window_, title);
   }
 }
 
@@ -161,7 +161,7 @@ void ImGuiRunner::FullScreenWindowed(char const *title, int monitor) {
 
   GLFWmonitor *the_monitor = GetMonitorByNumber(monitor);
   const GLFWvidmode *mode = glfwGetVideoMode(the_monitor);
-  if (!window) {
+  if (!window_) {
     ASLOG(debug,
           "  starting in 'Full Screen Windowed' mode: w={}, h={}, r={}, "
           "t='{}', m={}",
@@ -171,9 +171,9 @@ void ImGuiRunner::FullScreenWindowed(char const *title, int monitor) {
     glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
     glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
     glfwWindowHint(GLFW_SAMPLES, MultiSample());  // multisampling
-    window = glfwCreateWindow(mode->width, mode->height, title, the_monitor,
+    window_ = glfwCreateWindow(mode->width, mode->height, title, the_monitor,
                               nullptr);
-    if (!window) {
+    if (!window_) {
       glfwTerminate();
       exit(EXIT_FAILURE);
     }
@@ -189,9 +189,9 @@ void ImGuiRunner::FullScreenWindowed(char const *title, int monitor) {
     // Save the window position
     GetWindowPosition(saved_position_);
 
-    glfwSetWindowMonitor(window, the_monitor, 0, 0, mode->width, mode->height,
+    glfwSetWindowMonitor(window_, the_monitor, 0, 0, mode->width, mode->height,
                          mode->refreshRate);
-    glfwSetWindowTitle(window, title);
+    glfwSetWindowTitle(window_, title);
   }
 }
 void ImGuiRunner::FullScreen(int width, int height, char const *title,
@@ -201,14 +201,14 @@ void ImGuiRunner::FullScreen(int width, int height, char const *title,
   full_screen_ = true;
 
   GLFWmonitor *the_monitor = GetMonitorByNumber(monitor);
-  if (!window) {
+  if (!window_) {
     ASLOG(debug,
           "  starting in 'Full Screen' mode: w={}, h={}, t='{}', m={}, r={}",
           width, height, title, monitor, refresh_rate);
     glfwWindowHint(GLFW_REFRESH_RATE, refresh_rate);
     glfwWindowHint(GLFW_SAMPLES, MultiSample());  // multisampling
-    window = glfwCreateWindow(width, height, title, the_monitor, nullptr);
-    if (!window) {
+    window_ = glfwCreateWindow(width, height, title, the_monitor, nullptr);
+    if (!window_) {
       glfwTerminate();
       exit(EXIT_FAILURE);
     }
@@ -222,9 +222,9 @@ void ImGuiRunner::FullScreen(int width, int height, char const *title,
     // Save the window position
     GetWindowPosition(saved_position_);
 
-    glfwSetWindowMonitor(window, the_monitor, 0, 0, width, height,
+    glfwSetWindowMonitor(window_, the_monitor, 0, 0, width, height,
                          refresh_rate);
-    glfwSetWindowTitle(window, title);
+    glfwSetWindowTitle(window_, title);
   }
 }
 
@@ -240,7 +240,7 @@ void ImGuiRunner::CleanUp() {
   ImGui::DestroyContext();
 
   ASLOG(debug, "  destroy window");
-  glfwDestroyWindow(window);
+  glfwDestroyWindow(window_);
   ASLOG(debug, "  terminate GLFW");
   glfwTerminate();
 
@@ -255,7 +255,7 @@ void ImGuiRunner::Run() {
   // Main loop
   bool interrupted = false;
   bool sleep_when_inactive = true;
-  while (!glfwWindowShouldClose(window) && !interrupted) {
+  while (!glfwWindowShouldClose(window_) && !interrupted) {
     signals_->async_wait(
         [this, &interrupted](boost::system::error_code /*ec*/, int /*signo*/) {
           ASLOG(info, "Signal caught");
@@ -265,7 +265,7 @@ void ImGuiRunner::Run() {
           io_context_->stop();
         });
 
-    if (sleep_when_inactive && !glfwGetWindowAttrib(window, GLFW_FOCUSED)) {
+    if (sleep_when_inactive && !glfwGetWindowAttrib(window_, GLFW_FOCUSED)) {
       static float wanted_fps = 5.0f;
       float current_fps = ImGui::GetIO().Framerate;
       float frame_time = 1000 / current_fps;
@@ -305,15 +305,15 @@ void ImGuiRunner::Run() {
     // Rendering
     ImGui::Render();
     int display_w, display_h;
-    glfwMakeContextCurrent(window);
-    glfwGetFramebufferSize(window, &display_w, &display_h);
+    glfwMakeContextCurrent(window_);
+    glfwGetFramebufferSize(window_, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(0, 0, 0, 255);
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    glfwMakeContextCurrent(window);
-    glfwSwapBuffers(window);
+    glfwMakeContextCurrent(window_);
+    glfwSwapBuffers(window_);
   }
 
   SaveSetting();
@@ -332,25 +332,25 @@ void ImGuiRunner::MultiSample(int samples) {
 }
 std::string const &ImGuiRunner::GetWindowTitle() const { return window_title_; }
 void ImGuiRunner::SetWindowTitle(char const *title) {
-  if (window) {
+  if (window_) {
     window_title_ = title;
-    glfwSetWindowTitle(window, title);
+    glfwSetWindowTitle(window_, title);
   } else {
     ASLOG(error, "call SetWindowTitle() only after the window is created");
   }
 }
 GLFWmonitor *ImGuiRunner::GetMonitor() const {
-  ASAP_ASSERT(window && "don't call GetMonitor() before the window is created");
-  return glfwGetWindowMonitor(window);
+  ASAP_ASSERT(window_ && "don't call GetMonitor() before the window is created");
+  return glfwGetWindowMonitor(window_);
 }
 void ImGuiRunner::GetWindowSize(int size[2]) const {
-  ASAP_ASSERT(window &&
+  ASAP_ASSERT(window_ &&
                   "don't call GetWindowSize() before the window is created");
-  glfwGetWindowSize(window, &size[0], &size[1]);
+  glfwGetWindowSize(window_, &size[0], &size[1]);
 }
 void ImGuiRunner::GetWindowPosition(int position[2]) const {
-  ASAP_ASSERT(window && "don't call GetMonitor() before the window is created");
-  glfwGetWindowPos(window, &position[0], &position[1]);
+  ASAP_ASSERT(window_ && "don't call GetMonitor() before the window is created");
+  glfwGetWindowPos(window_, &position[0], &position[1]);
 }
 
 int ImGuiRunner::RefreshRate() const {

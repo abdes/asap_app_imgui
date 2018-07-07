@@ -62,7 +62,7 @@ class ImGuiRunner : public RunnerBase {
   void InitImGui();
   void CleanUp();
 
-  GLFWwindow *window{nullptr};
+  GLFWwindow *window_{nullptr};
 
   boost::asio::io_context *io_context_;
   /// The signal_set is used to register for process termination notifications.
