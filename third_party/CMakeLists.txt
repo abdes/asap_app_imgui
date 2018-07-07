@@ -22,6 +22,9 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build the GLFW test programs")
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation")
 add_subdirectory(glfw)
 
+# GLM
+add_subdirectory(glm)
+
 # Boost
 add_subdirectory(asap_boost)
 

@@ -44,6 +44,7 @@ list(APPEND headers
   src/imgui_runner.h
   src/application.h
   src/config.h
+  src/shader.h
   )
 
 set(sources
@@ -75,7 +76,7 @@ set(sources
   src/ui/style/theme.cpp
   #
   src/main.cpp
-  ${public_headers}
+  ${headers}
   )
 
 # Group source files
@@ -105,6 +106,7 @@ set(compile_options)
 # ------------------------------------------------------------------------------
 
 set(libraries
+  glm
   asap::imgui
   asap::common
   yaml-cpp

@@ -5,7 +5,11 @@
 
 #pragma once
 
+#include <glad/gl.h>
+
 #include <ui/application_base.h>
+
+class Shader;
 
 namespace asap {
 
@@ -23,10 +27,16 @@ namespace asap {
   bool Draw() final;
 
  protected:
-  void AfterInit() override {}
+  void AfterInit() override;
   void DrawInsideMainMenu() override {}
   void DrawInsideStatusBar(float /*width*/, float /*height*/) override {}
-  void BeforeShutDown() override {}
-};
+  void BeforeShutDown() override;
+
+  private:
+   GLuint VBO, VAO = 0;
+   GLuint frameBuffer_ = 0;
+   GLuint texColorBuffer_ = 0;
+   Shader *ourShader_{nullptr};
+ };
 
 }  // namespace asap

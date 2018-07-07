@@ -19,3 +19,6 @@
 [submodule "third_party/date"]
 	path = third_party/date
 	url = https://github.com/HowardHinnant/date.git
+[submodule "third_party/glm"]
+	path = third_party/glm
+	url = https://github.com/g-truc/glm.git

@@ -16,7 +16,7 @@ namespace ui {
 
 class ApplicationBase : public AbstractApplication,
                         asap::NonCopiable,
-                        asap::logging::Loggable<asap::logging::Id::MAIN> {
+                        protected asap::logging::Loggable<asap::logging::Id::MAIN> {
  public:
   ApplicationBase() = default;
 
