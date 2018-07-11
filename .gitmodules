@@ -22,3 +22,6 @@
 [submodule "third_party/glm"]
 	path = third_party/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "common"]
+	path = common
+	url = https://gitlab.com/absassi/asap_common.git
