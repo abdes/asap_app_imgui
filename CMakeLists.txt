@@ -156,7 +156,7 @@ write_compiler_detection_header(
   FILE ${feature_file}
   PREFIX ${META_PROJECT_ID}
   COMPILERS AppleClang Clang GNU MSVC
-  FEATURES cxx_alignof cxx_constexpr cxx_final cxx_noexcept cxx_nullptr cxx_sizeof_member cxx_thread_local
+  FEATURES cxx_constexpr cxx_final cxx_noexcept cxx_nullptr cxx_sizeof_member cxx_thread_local
 )
 
 
