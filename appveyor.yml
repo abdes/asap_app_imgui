@@ -31,6 +31,7 @@ init:
 
 before_build:
 - cmd: |-
+    git submodule update --init --recursive
     mkdir _build
     cmake --version
 build:
