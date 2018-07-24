@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/abdes/asap.svg?branch=master)](https://travis-ci.org/abdes/asap)
+[![Build status](https://ci.appveyor.com/api/projects/status/fbqox338lae708fq?svg=true)](https://ci.appveyor.com/project/abdes/asap)
 
 # Starter project with minimum necessary functionality
   - use cmake for the build system
