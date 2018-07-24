@@ -12,7 +12,6 @@
 # List of modules
 set(MODULE_NAMES
   common
-  imgui
 )
 
 
