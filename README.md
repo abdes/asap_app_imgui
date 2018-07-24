@@ -1,4 +1,5 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/fbqox338lae708fq?svg=true)](https://ci.appveyor.com/project/abdes/asap)
+[![pipeline status](https://gitlab.com/absassi/asap/badges/master/pipeline.svg)](https://gitlab.com/absassi/asap/commits/master)
 
 # Starter project with minimum necessary functionality
   - use cmake for the build system
