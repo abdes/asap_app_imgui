@@ -2,7 +2,6 @@ version: '{build}'
 #branches:
 #  only:
 #  - master
-clone_folder: c:\projects\cryptopp-cmake
 image:
 - Visual Studio 2013
 - Visual Studio 2015
