@@ -46,6 +46,7 @@ build:ubuntu:trusty:gcc-6:
   <<: *build_definition
   image: ubuntu:trusty
   before_script:
+    - apt-get install software-properties-common python-software-properties
     - add-apt-repository ppa:ubuntu-toolchain-r/test
     - apt-get update -qq
     - apt-get install -y -qq build-essential gcc-6 g++-6
