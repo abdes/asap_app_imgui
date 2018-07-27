@@ -244,6 +244,7 @@ endif()
 # ------------------------------------------------------------------------------
 
 add_subdirectory(common)
+add_subdirectory(filesystem)
 
 # For packaging
 add_subdirectory(deploy)
