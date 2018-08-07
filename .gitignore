@@ -7,7 +7,9 @@
 
 # Build directories
 build/
+build-*/
 _build/
+_build-*/
 cmake-build*/
 
 # Mac garbage
