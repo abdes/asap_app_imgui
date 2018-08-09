@@ -11,12 +11,18 @@
   - common facilities (common module) for platform specifics, assertions
     support, logging
   - unit testing with Catch2
-  - 
+  - Optional Modules:
+    - backported C++17 filesystem implementation (will be portable across Linux, Mac
+      and Windows)
+
+Any optional submodule that is not needed can be simply removed from the git submodules
+and from the master CMakeLists.txt (`add_subdirectory()`).
+
 TODO: More Documentation
 
 ## Getting the code
 ```
-git clone --recurse-submodules https://gitlab.com/absassi/asap.git
+git clone --recurse-submodules -j4 https://gitlab.com/absassi/asap.git
 ```
 
 ## Building
