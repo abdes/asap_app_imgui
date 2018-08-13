@@ -63,7 +63,7 @@ set(META_CMAKE_INIT_SHA      "${GIT_REV}")
 string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} META_PROJECT_ID)
 string(TOUPPER ${META_PROJECT_ID} META_PROJECT_ID)
 
-message(STATUS "Project : ${META_NAME_VERSION}")
+message("=> Project : ${META_NAME_VERSION}")
 
 
 
@@ -151,6 +151,7 @@ configure_file(
 )
 
 # Generate feature-header
+message(STATUS "Generating compiler feature detection header...")
 set(feature_file "${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME}/${META_PROJECT_NAME}-features.h")
 write_compiler_detection_header(
   FILE ${feature_file}
