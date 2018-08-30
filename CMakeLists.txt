@@ -49,11 +49,13 @@ endif()
 # Meta information about the project
 set(META_PROJECT_NAME        "asap")
 set(META_PROJECT_DESCRIPTION "Instantly start with a fully loaded CMake project")
-set(META_AUTHOR_ORGANIZATION "OpenSource")
+set(META_AUTHOR_ORGANIZATION "The Authors")
+set(META_GITHUB_USER         "abdes")
+set(META_GITHUB_REPO         "asap")
 set(META_AUTHOR_DOMAIN       "https://github.com/abdes/asap")
-set(META_AUTHOR_MAINTAINER   "abde.sassi@gmail.com")
+set(META_AUTHOR_MAINTAINER   "Abdessattar Sassi (abde.sassi gmail account)")
 set(META_VERSION_MAJOR       "0")
-set(META_VERSION_MINOR       "0")
+set(META_VERSION_MINOR       "1")
 set(META_VERSION_PATCH       "1")
 set(META_VERSION_REVISION    "${GIT_REV}")
 set(META_VERSION             "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
@@ -173,12 +175,23 @@ enable_testing()
 
 
 # ------------------------------------------------------------------------------
-# Documentation - doxygen
+# Documentation - doxygen, sphinx/breathe/exhale
 # ------------------------------------------------------------------------------
 
+## Doxygen
 include(FindDoxygen)
-set(dox_root "${CMAKE_BINARY_DIR}/dox")
+set(DOXYGEN_BUILD_DIR "${CMAKE_BINARY_DIR}/dox")
 include (DoxGeneration)
+
+## Sphinx/breathe/exhale
+include(FindSphinx)
+# sphinx build dir
+set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx")
+# Sphinx cache with pickled ReST documents
+set(SPHINX_CACHE_DIR "${SPHINX_BUILD_DIR}/_doctrees")
+# HTML output directory
+set(SPHINX_HTML_DIR "${SPHINX_BUILD_DIR}/html")
+include (SphinxGeneration)
 
 
 # ------------------------------------------------------------------------------
@@ -271,3 +284,4 @@ install(FILES README.md DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
 
 # Install runtime data
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/data DESTINATION ${INSTALL_DATA} COMPONENT runtime)
+
