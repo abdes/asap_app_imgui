@@ -33,7 +33,7 @@
 
 macro(configure_doxyfile TARGET_NAME TARGET_TITLE TARGET_BRIEF
     TARGET_INPUT_PATH)
-  if (EXISTS "${CMAKE_SOURCE_DIR}/doc/doxygen/Doxyfile.in")
+  if (EXISTS "${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in")
     set(DOXY_TARGET_OUTPUT_DIR "${TARGET_NAME}")
     set(DOXY_TARGET_ROOT_DIR "") # ${DOXTOSRCDIR} - set(DOXTOSRCDIR "../src")
     set(DOXY_TARGET_NAME "${TARGET_NAME}")
@@ -45,9 +45,9 @@ macro(configure_doxyfile TARGET_NAME TARGET_TITLE TARGET_BRIEF
     if (NOT EXISTS "${DOXYGEN_BUILD_DIR}/${DOXY_TARGET_OUTPUT_DIR}")
       file(MAKE_DIRECTORY "${DOXYGEN_BUILD_DIR}/${DOXY_TARGET_OUTPUT_DIR}")
     endif ()
-    configure_file("${CMAKE_SOURCE_DIR}/doc/doxygen/Doxyfile.in" "${DOXYGEN_BUILD_DIR}/${TARGET_NAME}_Doxyfile" @ONLY)
+    configure_file("${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in" "${DOXYGEN_BUILD_DIR}/${TARGET_NAME}_Doxyfile" @ONLY)
   else ()
-    message(STATUS "WARNING: The '${CMAKE_SOURCE_DIR}/doc/doxygen/Doxyfile.in' file does not exist!")
+    message(STATUS "WARNING: The '${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in' file does not exist!")
   endif ()
 endmacro(configure_doxyfile)
 
