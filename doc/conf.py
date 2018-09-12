@@ -26,13 +26,15 @@ author = u'Abdessattar Sassi (abde.sassi gmail account)'
 # The short X.Y version
 version = u'0.1.1'
 # The full version, including alpha/beta/rc tags
-release = u'0.1.1 (807cf1c5d3a9)'
+release = u'0.1.1 (18a75a734b89)'
 
 rst_prolog = """
 .. |version| replace:: {0}
 .. |release| replace:: {1}
 """.format(version, release)
 
+intersphinx_mapping = {'common': ('/home/abdes/asap/_build/sphinx/asap_common/html',
+    '/home/abdes/asap/_build/sphinx/asap_common/html/objects.inv')}
 
 # -- General configuration ---------------------------------------------------
 

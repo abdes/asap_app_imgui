@@ -33,6 +33,8 @@ rst_prolog = """
 .. |release| replace:: {1}
 """.format(version, release)
 
+intersphinx_mapping = {'common': ('@SPHINX_BUILD_DIR@/asap_common/html',
+    '@SPHINX_BUILD_DIR@/asap_common/html/objects.inv')}
 
 # -- General configuration ---------------------------------------------------
 

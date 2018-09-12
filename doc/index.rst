@@ -11,6 +11,7 @@ Welcome to asap's documentation!
 
 Blah blah
 
+:ref:`common <common:usage>`
 
 Indices and tables
 ==================
