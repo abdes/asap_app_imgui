@@ -193,6 +193,8 @@ set(SPHINX_CACHE_DIR "${SPHINX_BUILD_DIR}/_doctrees")
 set(SPHINX_HTML_DIR "${SPHINX_BUILD_DIR}/html")
 include (SphinxGeneration)
 
+add_sphinx_target("master")
+
 
 # ------------------------------------------------------------------------------
 # Deployment/installation setup

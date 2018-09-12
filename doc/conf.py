@@ -19,14 +19,19 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u'@META_PROJECT_NAME@'
-copyright = u'2018, @META_AUTHOR_ORGANIZATION@'
-author = u'META_AUTHOR_MAINTAINER@'
+project = u'asap'
+copyright = u'2018, The Authors'
+author = u'Abdessattar Sassi (abde.sassi gmail account)'
 
 # The short X.Y version
-version = u'@META_VERSION@'
+version = u'0.1.1'
 # The full version, including alpha/beta/rc tags
-release = u'@META_VERSION@ @META_VERSION_REVISION@'
+release = u'0.1.1 (807cf1c5d3a9)'
+
+rst_prolog = """
+.. |version| replace:: {0}
+.. |release| replace:: {1}
+""".format(version, release)
 
 
 # -- General configuration ---------------------------------------------------
@@ -39,39 +44,17 @@ release = u'@META_VERSION@ @META_VERSION_REVISION@'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-  'breathe',
-  'exhale'
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.coverage',
+    'sphinx.ext.viewcode'
 ]
-
-# Setup the breathe extension
-breathe_projects = {
-    "asap_common": "@DOXYGEN_BUILD_DIR@/asap_common/xml",
-    "asap_filesystem": "@DOXYGEN_BUILD_DIR@/asap_filesystem/xml",
-    "master": "@DOXYGEN_BUILD_DIR@/master/xml"
-}
-
-# Setup the exhale extension
-exhale_args = {
-    # These arguments are required
-    "containmentFolder":     "api",
-    "rootFileName":          "library_root.rst",
-    "rootFileTitle":         "@EXHALE_TARGET_TITLE@",
-    "doxygenStripFromPath":  "..",
-    # Suggested optional arguments
-    "createTreeView":        True,
-    # TIP: if using the
-    # sphinx-bootstrap-theme, you need
-    # "treeViewIsBootstrap": True,
-    #"exhaleExecutesDoxygen": True,
-    #"exhaleDoxygenStdin": "INPUT = ../include"
-}
 
 # Tell sphinx what the primary language being documented is.
 primary_domain = 'cpp'
 
 # Tell sphinx what the pygments highlight language should be.
 highlight_language = 'cpp'
-
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -113,9 +96,9 @@ html_theme = 'alabaster'
 # documentation.
 #
 html_theme_options = {
-    'description': '@META_PROJECT_DESCRIPTION@',
-    'github_user': '@META_GITHUB_USER@',
-    'github_repo': '@META_GITHUB_REPO@',
+    'description': 'Instantly start with a fully loaded CMake project',
+    'github_user': 'abdes',
+    'github_repo': 'asap',
     'github_button': 'true',
     'github_banner': 'true',
     #'badge_branch': 'master',
@@ -136,17 +119,18 @@ html_static_path = ['_static']
 # 'searchbox.html']``.
 #
 html_sidebars = {
-    '**': [
-        'about.html',
-        'navigation.html',
-        'searchbox.html',
-    ]
+  '**': [
+    'about.html',
+    'navigation.html',
+    'relations.html',
+    'searchbox.html',
+  ]
 }
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'ASAPdoc'
+htmlhelp_basename = 'asapdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -173,7 +157,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ASAP.tex', u'ASAP Documentation',
+    (master_doc, 'asap.tex', u'asap\\_common Documentation',
      u'Abdessattar Sassi', 'manual'),
 ]
 
@@ -183,7 +167,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'asap', u'ASAP Documentation',
+    (master_doc, 'asap', u'asap Documentation',
      [author], 1)
 ]
 
@@ -194,7 +178,20 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ASAP', u'ASAP Documentation',
-     author, 'ASAP', 'One line description of project.',
+    (master_doc, 'asap', u'asap Documentation',
+     author, 'asap', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+
+# -- Extension configuration -------------------------------------------------
+
+# -- Options for intersphinx extension ---------------------------------------
+
+# Example configuration for intersphinx: refer to the Python standard library.
+#intersphinx_mapping = {'https://docs.python.org/': None}
+
+# -- Options for todo extension ----------------------------------------------
+
+# If true, `todo` and `todoList` produce output, else they produce nothing.
+todo_include_todos = True

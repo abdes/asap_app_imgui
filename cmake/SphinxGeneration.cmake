@@ -53,39 +53,21 @@ if (SPHINX_FOUND)
   #    WORKING_DIRECTORY "${SPHINX_BUILD_DIR}" VERBATIM)
 
   # The macro to add a submodule as a sphinx target.
-  macro(add_sphinx_target TARGET_NAME TARGET_TITLE)
+  macro(add_sphinx_target TARGET_NAME)
     # Setup work directory for the target module
-    set(EXHALE_TARGET_WORKDIR "${SPHINX_BUILD_DIR}/${TARGET_NAME}")
-    if (NOT EXISTS "${EXHALE_TARGET_WORKDIR}")
-      file(MAKE_DIRECTORY "${EXHALE_TARGET_WORKDIR}")
+    set(SPHINX_TARGET_WORKDIR "${SPHINX_BUILD_DIR}/${TARGET_NAME}")
+    if (NOT EXISTS "${SPHINX_TARGET_WORKDIR}")
+      file(MAKE_DIRECTORY "${SPHINX_TARGET_WORKDIR}")
     endif ()
-    # Do @ substitutions and copy the sphinx config files for the module
-    set(EXHALE_TARGET_NAME "${TARGET_NAME}")
-    set(EXHALE_TARGET_TITLE "${TARGET_TITLE}")
-    configure_file("${CMAKE_SOURCE_DIR}/doc/common_conf.py.in"
-      "${EXHALE_TARGET_WORKDIR}/common_conf.py" @ONLY)
-    configure_file("${CMAKE_SOURCE_DIR}/doc/module_conf.py.in"
-      "${EXHALE_TARGET_WORKDIR}/conf.py" @ONLY)
+    # Do @ substitutions in the sphinx config file for the module
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/doc/conf.py.in"
+      "${CMAKE_CURRENT_SOURCE_DIR}/doc/conf.py" @ONLY)
 
-    # Copy any reST documents from the module's doc directory to the sphinx
-    # work dir. We'll do this as a custom dependency target to allow for
-    # smoother automatic cycles of change/build/result when working on these
-    # documents
-    add_custom_target(${TARGET_NAME}_copyrst)
-    file(GLOB_RECURSE target_documentation_pages CONFIGURE_DEPENDS
-      "${CMAKE_CURRENT_SOURCE_DIR}/doc/*.rst")
-    foreach(rstfile ${target_documentation_pages})
-      add_custom_command(TARGET ${TARGET_NAME}_copyrst PRE_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${rstfile}
-        ${EXHALE_TARGET_WORKDIR})
-    endforeach(rstfile)
-    # Add a target for building the sphinx documentation of the module and which
-    # also depends on the previous copyrst target
+    # Add a target for building the sphinx documentation of the module
     add_custom_target(${TARGET_NAME}_sphinx
-      ${SPHINX_EXECUTABLE} -q -b html -c "${EXHALE_TARGET_WORKDIR}" -d
-      "${SPHINX_CACHE_DIR}" "${EXHALE_TARGET_WORKDIR}" "${EXHALE_TARGET_WORKDIR}/html"
-      WORKING_DIRECTORY "${SPHINX_BUILD_DIR}" VERBATIM)
-    add_dependencies(${TARGET_NAME}_sphinx ${TARGET_NAME}_copyrst)
+      ${SPHINX_EXECUTABLE} -b html -c "${EXHALE_TARGET_WORKDIR}" -d
+      "${SPHINX_CACHE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/doc" "${SPHINX_TARGET_WORKDIR}/html"
+      WORKING_DIRECTORY "${SPHINX_TARGET_WORKDIR}" VERBATIM)
     # Finally add the module sphinx target as a dependency for the overall
     # sphinx target
     add_dependencies(sphinx ${TARGET_NAME}_sphinx)
