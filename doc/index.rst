@@ -6,12 +6,13 @@ Welcome to asap's documentation!
    :hidden:
    
    Usage <usage>
+   Modules <modules>
    License <license>
    Version <version>
 
 Blah blah
 
-:ref:`common <common:usage>`
+:doc:`common <common:usage>`
 
 Indices and tables
 ==================
