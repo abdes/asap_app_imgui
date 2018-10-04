@@ -65,7 +65,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
     #_CRT_SECURE_NO_WARNINGS  # Calling any one of the potentially unsafe methods in the CRT Library
     NOMINMAX
     WIN32_LEAN_AND_MEAN=1
-    _WIN32_WINNT=0x0501
+    _WIN32_WINNT=0x0600
     )
 endif ()
 

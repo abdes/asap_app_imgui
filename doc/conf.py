@@ -26,7 +26,7 @@ author = u'Abdessattar Sassi (abde.sassi gmail account)'
 # The short X.Y version
 version = u'0.1.1'
 # The full version, including alpha/beta/rc tags
-release = u'0.1.1 (47510bd5dc21)'
+release = u'0.1.1 (60ca8f40220a)'
 
 rst_prolog = """
 .. |version| replace:: {0}
@@ -35,11 +35,11 @@ rst_prolog = """
 
 intersphinx_mapping = {
     'common': (
-        '/home/abdes/asap/_build/sphinx/asap_common/html',
-        '/home/abdes/asap/_build/sphinx/asap_common/html/objects.inv'),
+        'E:/Projects/asap/_build/sphinx/asap_common/html',
+        'E:/Projects/asap/_build/sphinx/asap_common/html/objects.inv'),
     'filesystem': (
-        '/home/abdes/asap/_build/sphinx/asap_filesystem/html',
-        '/home/abdes/asap/_build/sphinx/asap_filesystem/html/objects.inv'),
+        'E:/Projects/asap/_build/sphinx/asap_filesystem/html',
+        'E:/Projects/asap/_build/sphinx/asap_filesystem/html/objects.inv'),
 }
 
 # -- General configuration ---------------------------------------------------
