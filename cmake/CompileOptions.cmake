@@ -145,6 +145,13 @@ endif ()
 
 set(DEFAULT_LINKER_OPTIONS)
 
+# MSVC compiler options
+if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+  if(CMAKE_BUILD_TYPE MATCHES "Release")
+    list(APPEND DEFAULT_LINKER_OPTIONS /LTCG)
+  endif()
+endif()
+
 # Use pthreads on mingw and linux
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
   list(APPEND DEFAULT_LINKER_OPTIONS -pthread)

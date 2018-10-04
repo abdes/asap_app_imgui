@@ -121,6 +121,12 @@ function(asap_library)
     INTERFACE
     )
 
+  #
+  # Linker flags
+  #
+
+  set_target_properties(${_NAME} PROPERTIES LINK_FLAGS "${DEFAULT_LINKER_OPTIONS}")
+
 
   #
   # Include directories
@@ -356,8 +362,14 @@ function(asap_executable)
     PRIVATE
     ${DEFAULT_LIBRARIES}
     ${ASAP_EXE_LIBRARIES}
-    ${DEFAULT_LINKER_OPTIONS}
     )
+
+  #
+  # Linker flags
+  #
+
+  set_target_properties(${_NAME} PROPERTIES LINK_FLAGS "${DEFAULT_LINKER_OPTIONS}")
+
 
   #
   # Include directories
@@ -439,9 +451,15 @@ function(asap_test_executable)
     PRIVATE
     ${DEFAULT_LIBRARIES}
     ${ASAP_TEST_LIBRARIES}
-    ${DEFAULT_LINKER_OPTIONS}
     Catch2
     )
+
+  #
+  # Linker flags
+  #
+
+  set_target_properties(${_NAME} PROPERTIES LINK_FLAGS "${DEFAULT_LINKER_OPTIONS}")
+
 
   #
   # Include directories
