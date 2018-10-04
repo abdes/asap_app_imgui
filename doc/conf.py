@@ -26,7 +26,7 @@ author = u'Abdessattar Sassi (abde.sassi gmail account)'
 # The short X.Y version
 version = u'0.1.1'
 # The full version, including alpha/beta/rc tags
-release = u'0.1.1 (381a3312bf8a)'
+release = u'0.1.1 (059df08829c2)'
 
 rst_prolog = """
 .. |version| replace:: {0}
