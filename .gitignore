@@ -2,6 +2,7 @@
 # Build directories
 build/
 build-*/
+*-build/
 _build/
 _build-*/
 cmake-build*/
