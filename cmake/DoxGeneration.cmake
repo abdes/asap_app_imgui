@@ -61,6 +61,7 @@ if (DOXYGEN_FOUND)
       COMMAND ${DOXYGEN_EXECUTABLE} "${TARGET_NAME}_Doxyfile.out"
       COMMAND ${CMAKE_COMMAND} -E remove -f "${TARGET_NAME}_Doxyfile.out"
       WORKING_DIRECTORY "${DOXYGEN_BUILD_DIR}" VERBATIM)
+    set_target_properties(${TARGET_NAME}_dox PROPERTIES EXCLUDE_FROM_ALL TRUE)
     add_dependencies(dox ${TARGET_NAME}_dox)
   endmacro()
   set_target_properties(dox PROPERTIES EXCLUDE_FROM_ALL TRUE)

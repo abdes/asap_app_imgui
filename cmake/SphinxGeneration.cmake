@@ -68,6 +68,7 @@ if (SPHINX_FOUND)
       ${SPHINX_EXECUTABLE} -b html -c "${EXHALE_TARGET_WORKDIR}" -d
       "${SPHINX_CACHE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/doc" "${SPHINX_TARGET_WORKDIR}/html"
       WORKING_DIRECTORY "${SPHINX_TARGET_WORKDIR}" VERBATIM)
+    set_target_properties(${TARGET_NAME}_sphinx PROPERTIES EXCLUDE_FROM_ALL TRUE)
     # Finally add the module sphinx target as a dependency for the overall
     # sphinx target
     add_dependencies(sphinx ${TARGET_NAME}_sphinx)
