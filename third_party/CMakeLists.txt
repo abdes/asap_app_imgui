@@ -14,10 +14,6 @@ message("=> [third-party modules]")
 # EXCLUDE_FROM_ALL to not have it install its files during install
 add_subdirectory(catch2 EXCLUDE_FROM_ALL)
 
-# fmt
-option(FMT_INSTALL "Generate the install target." ON)
-add_subdirectory(fmt)
-
 # spdlog
 SET(SPDLOG_BUILD_TESTING OFF CACHE BOOL "Build spdlog tests")
 add_subdirectory(spdlog)
