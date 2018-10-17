@@ -37,7 +37,7 @@ variables:
     - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=ON -DOPTION_SELF_CONTAINED=ON -DCMAKE_INSTALL_PREFIX=./asap-install ..
     - make -j 2
     - make install
-    - ctest -C $BUILD_TYPE
+    - ctest -C $BUILD_TYPE --output-on-failure
 
 build:ubuntu:trusty:gcc-6:
   <<: *build_definition
