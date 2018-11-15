@@ -193,8 +193,6 @@ set(SPHINX_CACHE_DIR "${SPHINX_BUILD_DIR}/_doctrees")
 set(SPHINX_HTML_DIR "${SPHINX_BUILD_DIR}/html")
 include (SphinxGeneration)
 
-add_sphinx_target("master")
-
 
 # ------------------------------------------------------------------------------
 # Deployment/installation setup
@@ -264,6 +262,10 @@ add_subdirectory(filesystem)
 
 # For packaging
 add_subdirectory(deploy)
+
+# Setup sphinx doc master target and add other submodules as dependencies
+add_sphinx_target("master")
+add_dependencies(master_sphinx asap_common_sphinx asap_filesystem_sphinx)
 
 
 # ------------------------------------------------------------------------------
