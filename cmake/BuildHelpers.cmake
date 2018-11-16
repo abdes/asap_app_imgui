@@ -480,7 +480,7 @@ function(asap_test_executable)
     )
 
 if (TARGET Catch2)
-  catch_discover_tests(${_NAME})
+  catch_discover_tests(${_NAME} TEST_PREFIX "${_NAME}::")
 else ()
   add_test(${_NAME} ${PROJECT_BINARY_DIR}/${_NAME})
 endif ()
