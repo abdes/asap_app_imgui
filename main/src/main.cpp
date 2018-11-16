@@ -5,14 +5,13 @@
 
 #include <iostream>
 
-#include <boost/program_options.hpp>
+#include <cxxopts.hpp>
 
+#include <asap/asap-version.h>
 #include <common/logging.h>
 #include <imgui_runner.h>
 #include <config.h>
 #include <application.h>
-
-namespace bpo = boost::program_options;
 
 
 using asap::ImGuiRunner;
@@ -24,22 +23,35 @@ int main(int argc, char **argv) {
   asap::fs::CreateDirectories();
 
   try {
-    // Command line arguments
-    bpo::options_description desc("Allowed options");
-    // clang-format off
-    desc.add_options()
-        ("help", "show the help message");
-    // clang-format on
+    //
+    // Handle program options
+    //
+    // TODO: UTF-8 to be tested on Windows
+    cxxopts::Options options(ASAP_PROJECT_NAME, ASAP_PROJECT_DESCRIPTION);
+    options.add_options()
+      ("v,version", "Show version")
+      ("h,help", "Show usage information")
+      ("t,test", "Test option with value", cxxopts::value<std::string>())
+      ("c,chinese", "中文帮助文本", cxxopts::value<std::string>())
+      ;
+    auto result = options.parse(argc, argv);
 
-    bpo::variables_map bpo_vm;
-    bpo::store(bpo::parse_command_line(argc, argv, desc), bpo_vm);
-
-    if (bpo_vm.count("help")) {
-      std::cout << desc << std::endl;
-      return 0;
+    if (result.count("help")) {
+      std::cout << options.help({}) << std::endl;
+      exit(0);
     }
 
-    bpo::notify(bpo_vm);
+    if (result.count("version")) {
+      std::cout << ASAP_NAME_VERSION << std::endl;
+      exit(0);
+    }
+
+    // Test code for the option with value
+    if (result.count("test")) {
+      std::cout << "test = " << result["test"].as<std::string>() << std::endl;
+    }
+    // End Test code
+
 
     ASLOG_TO_LOGGER(logger, info, "starting ImGui application...");
     asap::Application app;

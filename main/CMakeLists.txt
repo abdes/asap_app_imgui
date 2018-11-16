@@ -106,12 +106,12 @@ set(compile_options)
 # ------------------------------------------------------------------------------
 
 set(libraries
+  asap::common
+  cxxopts
   glm
   asap::imgui
-  asap::common
   yaml-cpp
   date_interface
-  Boost::program_options
   Boost::filesystem
   Boost::system
   )

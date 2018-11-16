@@ -28,12 +28,16 @@ add_subdirectory(glm)
 # Boost
 add_subdirectory(asap_boost)
 
-# yaml-cpp
+# cxxopts - used to parse command line arguments
+SET(CXXOPTS_BUILD_EXAMPLES OFF CACHE BOOL "Build cxxopts examples")
+add_subdirectory(cxxopts)
+
+# yaml-cpp - used to save/load the docking configuration
 set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "Enable testing" FORCE)
 set(YAML_CPP_BUILD_CONTRIB OFF CACHE BOOL "Enable contrib stuff in library")
 add_subdirectory(yaml-cpp)
 
-# date
+# date - used for time formatting in the logging widget
 SET(USE_SYSTEM_TZ_DB ON CACHE BOOL "Use system TZ db for date library" FORCE)
 SET(ENABLE_DATE_TESTING OFF CACHE BOOL "Build tests for the date library" FORCE)
 set(CMAKE_CXX_STANDARD 14 CACHE STRING "The C++ standard whose features are requested.")
