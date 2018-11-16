@@ -36,9 +36,9 @@ class ImGuiLogSink : public spdlog::sinks::base_sink<std::mutex>,
   void SaveSettings();
 
  protected:
-  void _sink_it(const spdlog::details::log_msg &msg) override;
+  void sink_it_(const spdlog::details::log_msg &msg) override;
 
-  void _flush() override;
+  void flush_() override;
 
  private:
   static const ImVec4 COLOR_WARN;

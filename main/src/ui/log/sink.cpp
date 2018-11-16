@@ -59,7 +59,7 @@ void ImGuiLogSink::ShowLogLevelsPopup() {
   for (auto &a_logger : asap::logging::Registry::Loggers()) {
     levels.push_back(a_logger.GetLevel());
     auto format = std::string("%u (")
-                      .append(spdlog::level::to_str(a_logger.GetLevel()))
+                      .append(spdlog::level::to_c_str(a_logger.GetLevel()))
                       .append(")");
     if (ImGui::SliderInt(a_logger.Name().c_str(), &levels.back(), 0, 6,
                          format.c_str())) {
@@ -279,7 +279,7 @@ void ImGuiLogSink::Draw(const char *title, bool *open) {
   }
 }
 
-void ImGuiLogSink::_sink_it(const spdlog::details::log_msg &msg) {
+void ImGuiLogSink::sink_it_(const spdlog::details::log_msg &msg) {
   auto ostr = std::ostringstream();
   std::size_t color_range_start = 0;
   std::size_t color_range_end = 0;
@@ -294,7 +294,7 @@ void ImGuiLogSink::_sink_it(const spdlog::details::log_msg &msg) {
   }
   if (show_level_) {
     color_range_start = static_cast<std::size_t>(ostr.tellp());
-    ostr << "[" << spdlog::level::to_short_str(msg.level) << "] ";
+    ostr << "[" << spdlog::level::to_short_c_str(msg.level) << "] ";
     color_range_end = static_cast<std::size_t>(ostr.tellp());
   }
   if (show_logger_) {
@@ -303,7 +303,7 @@ void ImGuiLogSink::_sink_it(const spdlog::details::log_msg &msg) {
   auto properties = ostr.str();
 
   // Strip the filename:line from the message and put it in a separate string
-  auto msg_str = msg.raw.str();
+  auto msg_str = std::string(msg.raw.data());
   auto skip_to = msg_str.begin();
   if (*skip_to == '[') {
     // skip spaces
@@ -382,7 +382,7 @@ void ImGuiLogSink::_sink_it(const spdlog::details::log_msg &msg) {
   scroll_to_bottom_ = true;
 }
 
-void ImGuiLogSink::_flush() {
+void ImGuiLogSink::flush_() {
   // Your code here
 }
 

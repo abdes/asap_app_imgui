@@ -1,5 +1,3 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/fbqox338lae708fq?svg=true)](https://ci.appveyor.com/project/abdes/asap)
-[![pipeline status](https://gitlab.com/absassi/asap/badges/master/pipeline.svg)](https://gitlab.com/absassi/asap/commits/master)
 
 # Starter project with minimum necessary functionality
   - use cmake for the build system
@@ -21,8 +19,24 @@ TODO: More Documentation
 
 ## Getting the code
 ```
-git clone --recurse-submodules -j4 https://gitlab.com/absassi/asap_app_imgui.git
+git clone --shallow-submodules --recurse-submodules -j4 https://gitlab.com/absassi/asap_app_imgui.git
 ```
+
+NOTES:
+  - --shallow-submodules makes git clone all submodules with a depth of 1. This will have 
+    the effect of significantly accelerating the cloning of the project by not downloading
+    the entire history of third party libraries.
+  - -j4 requests git to parallelize cloning of repos
+  - both options need a relatively recent version of git. If that is not available, simply
+    do not use them.
+
+## Requirements
+Make sure you have a C++ compiler with C++-14 capabilities at least. Gnu, Clang and MSVC
+all can do that with a recent version.
+
+Make sure you have the development package for X11 on Linux systems. That would usually
+come with the xorg-dev package on Ubuntu and derivatives.
+
 
 ## Building
 ```
