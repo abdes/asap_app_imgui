@@ -12,7 +12,7 @@ if(OPTION_CPPCHECK)
   ExternalProject_Add(
     cppcheck
     GIT_REPOSITORY      https://github.com/danmar/cppcheck.git
-    GIT_TAG             1.84
+    GIT_TAG             1.85
     GIT_SHALLOW         1
     CMAKE_ARGS          ${CPPCHECK_CMAKE_ARGS}
     PREFIX              ${CMAKE_BINARY_DIR}/external/cppcheck/prefix
