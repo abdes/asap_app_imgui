@@ -18,7 +18,6 @@
 #include <common/logging.h>
 #include <config.h>
 
-namespace bfs = boost::filesystem;
 
 namespace YAML {
 
@@ -432,7 +431,7 @@ void ImGuiLogSink::LoadSettings() {
   YAML::Node config;
   auto log_settings = asap::fs::GetPathFor(asap::fs::Location::F_LOG_SETTINGS);
   auto has_config = false;
-  if (bfs::exists(log_settings)) {
+  if (asap::filesystem::exists(log_settings)) {
     try {
       config = YAML::LoadFile(log_settings.string());
       ASLOG(info, "settings loaded from {}", log_settings);

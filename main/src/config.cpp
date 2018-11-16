@@ -5,16 +5,15 @@
 
 #include <config.h>
 
-namespace bfs = boost::filesystem;
 
 namespace asap {
 namespace fs {
 
 
-bfs::path GetPathFor(Location id) {
+asap::filesystem::path GetPathFor(Location id) {
   switch (id) {
     case Location::D_USER_CONFIG: {
-      auto p = bfs::current_path();
+      auto p = asap::filesystem::current_path();
       p /= ".asap";
       return p;
     }
@@ -40,11 +39,11 @@ bfs::path GetPathFor(Location id) {
     }
   }
   // Worakround only for MSVC complaining
-  return bfs::current_path().append("__unreachable__");
+  return asap::filesystem::current_path().append("__unreachable__");
 }
 
 void CreateDirectories() {
-  bfs::create_directories(GetPathFor(Location::D_USER_CONFIG));
+  asap::filesystem::create_directories(GetPathFor(Location::D_USER_CONFIG));
 }
 
 }  // namespace fs

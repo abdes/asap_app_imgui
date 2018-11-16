@@ -3,11 +3,14 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+#include <csignal>  // for signal handling
+#include <chrono>   // for sleep timeout
+#include <thread>   // for access to this thread
+
 #include <imgui_runner.h>
 
 #include <fstream>
 
-#include <boost/asio.hpp>
 
 // clang-format off
 // Include order is important
@@ -25,13 +28,19 @@
 #include <application.h>
 #include <config.h>
 
-namespace bfs = boost::filesystem;
 
 namespace {
 void glfw_error_callback(int error, const char *description) {
   auto &logger = asap::logging::Registry::GetLogger(asap::logging::Id::MAIN);
   ASLOG_TO_LOGGER(logger, critical, "Glfw Error {}: {}", error, description);
 }
+
+volatile std::sig_atomic_t gSignalInterrupt_;
+
+void SignalHandler(int signal) {
+  gSignalInterrupt_ = signal;
+}
+
 }  // namespace
 
 namespace asap {
@@ -39,26 +48,10 @@ namespace asap {
 ImGuiRunner::ImGuiRunner(AbstractApplication &app,
                          RunnerBase::shutdown_function_type func)
     : RunnerBase(app, std::move(func)) {
-  SetupSignalHandler();
   InitGraphics();
 }
 
 ImGuiRunner::~ImGuiRunner() {
-  if (!io_context_->stopped()) io_context_->stop();
-  delete signals_;
-  delete io_context_;
-}
-
-void ImGuiRunner::SetupSignalHandler() {
-  ASLOG(info, "Setup termination signal handlers");
-  // Set signal handler
-  io_context_ = new boost::asio::io_context(1);
-  signals_ = new boost::asio::signal_set(*io_context_);
-  // Register to handle the signals that indicate when the server should exit.
-  // It is safe to register for the same signal multiple times in a program,
-  // provided all registration for the specified signal is made through Asio.
-  signals_->add(SIGINT);
-  signals_->add(SIGTERM);
 }
 
 void ImGuiRunner::InitGraphics() {
@@ -250,31 +243,25 @@ void ImGuiRunner::CleanUp() {
 }
 
 void ImGuiRunner::Run() {
+  // Register to handle the signals that indicate when the server should exit.
+  // It is safe to register for the same signal multiple times in a program,
+  // provided all registration for the specified signal is made through Asio.
+  std::signal(SIGINT, SignalHandler);
+  std::signal(SIGTERM, SignalHandler);
+
   app_.Init(this);
 
   // Main loop
-  bool interrupted = false;
   bool sleep_when_inactive = true;
-  while (!glfwWindowShouldClose(window_) && !interrupted) {
-    signals_->async_wait(
-        [this, &interrupted](boost::system::error_code /*ec*/, int /*signo*/) {
-          ASLOG(info, "Signal caught");
-          // Once all operations have finished the io_context::run() call will
-          // exit.
-          interrupted = true;
-          io_context_->stop();
-        });
-
+  while (!glfwWindowShouldClose(window_) && (gSignalInterrupt_ == 0)) {
     if (sleep_when_inactive && !glfwGetWindowAttrib(window_, GLFW_FOCUSED)) {
       static float wanted_fps = 5.0f;
       float current_fps = ImGui::GetIO().Framerate;
       float frame_time = 1000 / current_fps;
       auto wait_time = std::lround(1000 / wanted_fps - frame_time);
       if (wanted_fps < current_fps) {
-        io_context_->run_for(std::chrono::milliseconds(wait_time));
+        std::this_thread::sleep_for(std::chrono::milliseconds(wait_time));
       }
-    } else {
-      io_context_->poll_one();
     }
 
     // Poll and handle events (inputs, window resize, etc.)
@@ -434,7 +421,7 @@ void ImGuiRunner::LoadSetting() {
   auto display_settings =
       asap::fs::GetPathFor(asap::fs::Location::F_DISPLAY_SETTINGS);
   auto has_config = false;
-  if (bfs::exists(display_settings)) {
+  if (asap::filesystem::exists(display_settings)) {
     try {
       config = YAML::LoadFile(display_settings.string());
       ASLOG(info, "display settings loaded from {}",

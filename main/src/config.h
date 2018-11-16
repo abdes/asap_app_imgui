@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <boost/filesystem.hpp>
+#include <filesystem/filesystem.h>
 
 namespace asap {
 namespace fs {
@@ -19,7 +19,7 @@ enum class Location {
   F_THEME_SETTINGS
 };
 
-boost::filesystem::path GetPathFor(Location id);
+asap::filesystem::path GetPathFor(Location id);
 
 void CreateDirectories();
 

@@ -27,9 +27,6 @@ add_subdirectory(glfw)
 # GLM
 add_subdirectory(glm)
 
-# Boost
-add_subdirectory(asap_boost)
-
 # cxxopts - used to parse command line arguments
 SET(CXXOPTS_BUILD_EXAMPLES OFF CACHE BOOL "Build cxxopts examples")
 add_subdirectory(cxxopts)

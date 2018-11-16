@@ -18,7 +18,6 @@
 #include <ui/style/theme.h>
 #include <config.h>
 
-namespace bfs = boost::filesystem;
 
 namespace YAML {
 
@@ -744,7 +743,7 @@ void Theme::LoadStyle() {
   auto theme_settings =
       asap::fs::GetPathFor(asap::fs::Location::F_THEME_SETTINGS);
   auto has_config = false;
-  if (bfs::exists(theme_settings)) {
+  if (asap::filesystem::exists(theme_settings)) {
     try {
       config = YAML::LoadFile(theme_settings.string());
       ASLOG_TO_LOGGER(logger, info, "theme settings loaded from {}",

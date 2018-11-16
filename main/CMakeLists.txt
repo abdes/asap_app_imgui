@@ -107,13 +107,12 @@ set(compile_options)
 
 set(libraries
   asap::common
+  asap::filesystem
   cxxopts
   glm
   asap::imgui
   yaml-cpp
   date_interface
-  Boost::filesystem
-  Boost::system
   )
 
 
