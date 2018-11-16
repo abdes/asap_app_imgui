@@ -160,6 +160,8 @@ write_compiler_detection_header(
   PREFIX ${META_PROJECT_ID}
   COMPILERS AppleClang Clang GNU MSVC
   FEATURES cxx_constexpr cxx_final cxx_noexcept cxx_nullptr cxx_sizeof_member cxx_thread_local
+  ALLOW_UNKNOWN_COMPILERS
+  ALLOW_UNKNOWN_COMPILER_VERSIONS
 )
 
 
@@ -266,10 +268,11 @@ add_subdirectory(main)
 add_subdirectory(deploy)
 
 # Setup sphinx doc master target and add other submodules as dependencies
-if (SPHINX_FOUND)
+if(SPHINX_FOUND)
   add_sphinx_target("master")
   add_dependencies(master_sphinx asap_common_sphinx asap_filesystem_sphinx)
 endif()
+
 
 # ------------------------------------------------------------------------------
 # Deployment (global project files)

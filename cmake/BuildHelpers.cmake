@@ -83,13 +83,11 @@ function(asap_library)
 
   target_compile_definitions(${_NAME}
     PRIVATE
-    ${ASAP_LIB_PRIVATE_COMPILE_DEFINITIONS}
+      ${ASAP_LIB_PRIVATE_COMPILE_DEFINITIONS}
 
     PUBLIC
-    $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:${target_id}_STATIC_DEFINE>
-    ${DEFAULT_COMPILE_DEFINITIONS}
-
-    INTERFACE
+      ${DEFAULT_COMPILE_DEFINITIONS}
+      $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:${target_id}_STATIC_DEFINE>
     )
 
 
@@ -99,12 +97,10 @@ function(asap_library)
 
   target_compile_options(${_NAME}
     PRIVATE
-    ${ASAP_LIB_PRIVATE_COMPILE_OPTIONS}
+      ${ASAP_LIB_PRIVATE_COMPILE_OPTIONS}
 
     PUBLIC
-    ${DEFAULT_COMPILE_OPTIONS}
-
-    INTERFACE
+      ${DEFAULT_COMPILE_OPTIONS}
     )
 
   #
@@ -115,10 +111,8 @@ function(asap_library)
     PRIVATE
 
     PUBLIC
-    ${DEFAULT_LIBRARIES}
-    ${ASAP_LIB_PUBLIC_LIBRARIES}
-
-    INTERFACE
+      ${DEFAULT_LIBRARIES}
+      ${ASAP_LIB_PUBLIC_LIBRARIES}
     )
 
   #
@@ -134,18 +128,19 @@ function(asap_library)
 
   target_include_directories(${_NAME}
     PRIVATE
-    ${PROJECT_BINARY_DIR}/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-    ${CMAKE_CURRENT_BINARY_DIR}/include
-    ${ASAP_LIB_PRIVATE_INCLUDE_DIRS}
+      # Those are build requirements, only used to build the library itselfi, and are not 
+      # to be exported as part of the usage requirements.
+      ${ASAP_LIB_PRIVATE_INCLUDE_DIRS}
 
     PUBLIC
-    ${DEFAULT_INCLUDE_DIRECTORIES}
-
-    INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
-    $<INSTALL_INTERFACE:include>
+      # The fiollowing are both build and usage requirements
+      ${DEFAULT_INCLUDE_DIRECTORIES}
+      # Adapt to the scenarios of the library being used from the build tree vs. from the
+      # install location.
+      $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+      $<INSTALL_INTERFACE:include>
   )
 
 
@@ -485,7 +480,7 @@ function(asap_test_executable)
     )
 
 if (TARGET Catch2)
-  catch_discover_tests(${_NAME})
+  catch_discover_tests(${_NAME} TEST_PREFIX "${_NAME}::")
 else ()
   add_test(${_NAME} ${PROJECT_BINARY_DIR}/${_NAME})
 endif ()
