@@ -25,6 +25,7 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation")
 add_subdirectory(glfw)
 
 # GLM
+set(GLM_TEST_ENABLE OFF CACHE BOOL "Build GLM tests")
 add_subdirectory(glm)
 
 # cxxopts - used to parse command line arguments
