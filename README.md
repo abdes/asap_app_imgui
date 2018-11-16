@@ -11,18 +11,17 @@
   - common facilities (common module) for platform specifics, assertions
     support, logging
   - unit testing with Catch2
-  - Optional Modules:
-    - backported C++17 filesystem implementation (will be portable across Linux, Mac
-      and Windows)
+  - backported C++17 filesystem implementation (will be portable across Linux, Mac
+    and Windows)
+  - imgui with docking
+  - persistence of imgui and docks configuration
 
-Any optional submodule that is not needed can be simply removed from the git submodules
-and from the master CMakeLists.txt (`add_subdirectory()`).
 
 TODO: More Documentation
 
 ## Getting the code
 ```
-git clone --recurse-submodules -j4 https://gitlab.com/absassi/asap.git
+git clone --recurse-submodules -j4 https://gitlab.com/absassi/asap_app_imgui.git
 ```
 
 ## Building
@@ -47,3 +46,13 @@ option(OPTION_GOOGLE_TSAN    "Instrument code with thread sanitizer"            
 
 The code is portable across Linux (g++ and clang), OS X and Visual Studio 2017.
 
+## Running the demo
+
+1. Copy the shaders from the source directory (main/src/shaders) to the build 
+   directory.
+2. Run the app from within the build directory (./asap_app)
+3. Drag and drop the frames to dock them to whichever side you want.
+4. Edit the settings as you wish
+4. When the app is closed, the settings, docks, loggers, etc are saved into 
+   the .asap directory under the build directory. Some files saved by imgui
+   are still under the build directory directly (work in progress)
