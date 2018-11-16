@@ -10,21 +10,28 @@
 [submodule "third_party/spdlog"]
 	path = third_party/spdlog
 	url = https://github.com/gabime/spdlog.git
+	shallow = true
 [submodule "third_party/catch2"]
 	path = third_party/catch2
 	url = https://github.com/catchorg/Catch2.git
+	shallow = true
 [submodule "third_party/glfw"]
 	path = third_party/glfw
 	url = https://github.com/glfw/glfw.git
+	shallow = true
 [submodule "third_party/yaml-cpp"]
 	path = third_party/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+	shallow = true
 [submodule "third_party/date"]
 	path = third_party/date
 	url = https://github.com/HowardHinnant/date.git
+	shallow = true
 [submodule "third_party/glm"]
 	path = third_party/glm
 	url = https://github.com/g-truc/glm.git
+	shallow = true
 [submodule "third_party/cxxopts"]
 	path = third_party/cxxopts
 	url = https://github.com/jarro2783/cxxopts.git
+	shallow = true
