@@ -254,14 +254,17 @@ void ImGuiRunner::Run() {
   // Main loop
   bool sleep_when_inactive = true;
   while (!glfwWindowShouldClose(window_) && (gSignalInterrupt_ == 0)) {
+    static float wanted_fps;
     if (sleep_when_inactive && !glfwGetWindowAttrib(window_, GLFW_FOCUSED)) {
-      static float wanted_fps = 5.0f;
-      float current_fps = ImGui::GetIO().Framerate;
-      float frame_time = 1000 / current_fps;
-      auto wait_time = std::lround(1000 / wanted_fps - frame_time);
-      if (wanted_fps < current_fps) {
-        std::this_thread::sleep_for(std::chrono::milliseconds(wait_time));
-      }
+      wanted_fps = 20.0f;
+    } else {
+      wanted_fps = 90.0f;
+    }
+    float current_fps = ImGui::GetIO().Framerate;
+    float frame_time = 1000 / current_fps;
+    auto wait_time = std::lround(1000 / wanted_fps - frame_time);
+    if (wanted_fps < current_fps) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(wait_time));
     }
 
     // Poll and handle events (inputs, window resize, etc.)
