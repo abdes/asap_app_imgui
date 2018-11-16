@@ -160,6 +160,8 @@ write_compiler_detection_header(
   PREFIX ${META_PROJECT_ID}
   COMPILERS AppleClang Clang GNU MSVC
   FEATURES cxx_constexpr cxx_final cxx_noexcept cxx_nullptr cxx_sizeof_member cxx_thread_local
+  ALLOW_UNKNOWN_COMPILERS
+  ALLOW_UNKNOWN_COMPILER_VERSIONS
 )
 
 
