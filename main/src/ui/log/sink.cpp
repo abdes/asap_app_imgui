@@ -34,7 +34,7 @@ YAML::Emitter &operator<<(YAML::Emitter &out,
         << static_cast<typename std::underlying_type<asap::logging::Id>::type>(
                log.Id());
     out << YAML::Key << "level";
-    out << YAML::Value << log.Level();
+    out << YAML::Value << log.GetLevel();
   }
   out << YAML::EndMap;
   return out;
@@ -58,13 +58,13 @@ void ImGuiLogSink::ShowLogLevelsPopup() {
 
   std::vector<int> levels;
   for (auto &a_logger : asap::logging::Registry::Loggers()) {
-    levels.push_back(a_logger.Level());
+    levels.push_back(a_logger.GetLevel());
     auto format = std::string("%u (")
-                      .append(spdlog::level::to_str(a_logger.Level()))
+                      .append(spdlog::level::to_str(a_logger.GetLevel()))
                       .append(")");
     if (ImGui::SliderInt(a_logger.Name().c_str(), &levels.back(), 0, 6,
                          format.c_str())) {
-      a_logger.Level(spdlog::level::level_enum(levels.back()));
+      a_logger.SetLevel(spdlog::level::level_enum(levels.back()));
     }
   }
 }

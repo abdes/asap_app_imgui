@@ -49,11 +49,13 @@ endif()
 # Meta information about the project
 set(META_PROJECT_NAME        "asap")
 set(META_PROJECT_DESCRIPTION "Instantly start with a fully loaded CMake project")
-set(META_AUTHOR_ORGANIZATION "OpenSource")
+set(META_AUTHOR_ORGANIZATION "The Authors")
+set(META_GITHUB_USER         "abdes")
+set(META_GITHUB_REPO         "asap")
 set(META_AUTHOR_DOMAIN       "https://github.com/abdes/asap")
-set(META_AUTHOR_MAINTAINER   "abde.sassi@gmail.com")
+set(META_AUTHOR_MAINTAINER   "Abdessattar Sassi (abde.sassi gmail account)")
 set(META_VERSION_MAJOR       "0")
-set(META_VERSION_MINOR       "0")
+set(META_VERSION_MINOR       "1")
 set(META_VERSION_PATCH       "1")
 set(META_VERSION_REVISION    "${GIT_REV}")
 set(META_VERSION             "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
@@ -63,7 +65,7 @@ set(META_CMAKE_INIT_SHA      "${GIT_REV}")
 string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} META_PROJECT_ID)
 string(TOUPPER ${META_PROJECT_ID} META_PROJECT_ID)
 
-message(STATUS "Project : ${META_NAME_VERSION}")
+message("=> Project : ${META_NAME_VERSION}")
 
 
 
@@ -88,7 +90,7 @@ option(OPTION_GOOGLE_TSAN    "Instrument code with thread sanitizer"            
 # optimization. For some projects you may want to set a default build type so
 # that you do not have to remember to set it.
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message("STATUS Setting build type to 'RelWithDebInfo' as none was specified.")
+  message(STATUS "Setting build type to 'RelWithDebInfo' as none was specified.")
   set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING "Choose the type of build." FORCE)
   # Set the possible values of build type for cmake-gui
   set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
@@ -151,13 +153,13 @@ configure_file(
 )
 
 # Generate feature-header
+message(STATUS "Generating compiler feature detection header...")
 set(feature_file "${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME}/${META_PROJECT_NAME}-features.h")
 write_compiler_detection_header(
   FILE ${feature_file}
   PREFIX ${META_PROJECT_ID}
   COMPILERS AppleClang Clang GNU MSVC
-  FEATURES cxx_alignas cxx_alignof cxx_constexpr cxx_final cxx_noexcept cxx_nullptr cxx_sizeof_member cxx_thread_local
-  VERSION 3.2
+  FEATURES cxx_constexpr cxx_final cxx_noexcept cxx_nullptr cxx_sizeof_member cxx_thread_local
 )
 
 
@@ -173,12 +175,23 @@ enable_testing()
 
 
 # ------------------------------------------------------------------------------
-# Documentation - doxygen
+# Documentation - doxygen, sphinx/breathe/exhale
 # ------------------------------------------------------------------------------
 
+## Doxygen
 include(FindDoxygen)
-set(dox_root "${CMAKE_BINARY_DIR}/dox")
+set(DOXYGEN_BUILD_DIR "${CMAKE_BINARY_DIR}/dox")
 include (DoxGeneration)
+
+## Sphinx/breathe/exhale
+include(FindSphinx)
+# sphinx build dir
+set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx")
+# Sphinx cache with pickled ReST documents
+set(SPHINX_CACHE_DIR "${SPHINX_BUILD_DIR}/_doctrees")
+# HTML output directory
+set(SPHINX_HTML_DIR "${SPHINX_BUILD_DIR}/html")
+include (SphinxGeneration)
 
 
 # ------------------------------------------------------------------------------
@@ -245,11 +258,16 @@ endif()
 # ------------------------------------------------------------------------------
 
 add_subdirectory(common)
+add_subdirectory(filesystem)
 add_subdirectory(imgui)
 add_subdirectory(main)
 
 # For packaging
 add_subdirectory(deploy)
+
+# Setup sphinx doc master target and add other submodules as dependencies
+add_sphinx_target("master")
+add_dependencies(master_sphinx asap_common_sphinx asap_filesystem_sphinx)
 
 
 # ------------------------------------------------------------------------------

@@ -1,12 +1,18 @@
+[submodule "common"]
+	path = common
+	url = https://gitlab.com/absassi/asap_common.git
+[submodule "filesystem"]
+	path = filesystem
+	url = https://gitlab.com/absassi/asap_filesystem.git
+	[submodule "imgui"]
+		path = imgui
+		url = https://gitlab.com/absassi/asap_imgui.git
 [submodule "third_party/spdlog"]
 	path = third_party/spdlog
 	url = https://github.com/gabime/spdlog.git
 [submodule "third_party/catch2"]
 	path = third_party/catch2
 	url = https://github.com/catchorg/Catch2.git
-[submodule "imgui"]
-	path = imgui
-	url = https://gitlab.com/absassi/asap_imgui.git
 [submodule "third_party/glfw"]
 	path = third_party/glfw
 	url = https://github.com/glfw/glfw.git
@@ -22,9 +28,6 @@
 [submodule "third_party/glm"]
 	path = third_party/glm
 	url = https://github.com/g-truc/glm.git
-[submodule "common"]
-	path = common
-	url = https://gitlab.com/absassi/asap_common.git
 [submodule "third_party/cxxopts"]
 	path = third_party/cxxopts
 	url = https://github.com/jarro2783/cxxopts.git
