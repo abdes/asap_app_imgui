@@ -40,9 +40,16 @@ come with the xorg-dev package on Ubuntu and derivatives.
 
 ## Building
 ```
-mkdir _build && cd _build && cmake --build ..
+mkdir _build && cd _build && cmake .. && cmake --build .
 ```
 You can also use any of the cmake options, generators, etc...
+
+By default the build will create shared libraries. If you want static libraries, pass
+-DBUILD_SHARED_LIBS=OFF to cmake during configuration:
+```
+cmake -DBUILD_SHARED_LIBS=OFF ..
+```
+
 
 ```
 # Project options
@@ -70,3 +77,7 @@ The code is portable across Linux (g++ and clang), OS X and Visual Studio 2017.
 4. When the app is closed, the settings, docks, loggers, etc are saved into 
    the .asap directory under the build directory. Some files saved by imgui
    are still under the build directory directly (work in progress)
+
+You need to have a graphics system capable of providing OpenGL 3.2 to properly run the 
+demo.
+
