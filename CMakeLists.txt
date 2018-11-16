@@ -266,9 +266,10 @@ add_subdirectory(main)
 add_subdirectory(deploy)
 
 # Setup sphinx doc master target and add other submodules as dependencies
-add_sphinx_target("master")
-add_dependencies(master_sphinx asap_common_sphinx asap_filesystem_sphinx)
-
+if (SPHINX_FOUND)
+  add_sphinx_target("master")
+  add_dependencies(master_sphinx asap_common_sphinx asap_filesystem_sphinx)
+endif()
 
 # ------------------------------------------------------------------------------
 # Deployment (global project files)
