@@ -1,9 +1,11 @@
 [submodule "third_party/spdlog"]
 	path = third_party/spdlog
-	url = https://github.com/gabime/spdlog.git
+  url = https://github.com/gabime/spdlog.git
+  shallow = true
 [submodule "third_party/catch2"]
 	path = third_party/catch2
-	url = https://github.com/catchorg/Catch2.git
+  url = https://github.com/catchorg/Catch2.git
+  shallow = true
 [submodule "common"]
 	path = common
 	url = https://gitlab.com/absassi/asap_common.git
