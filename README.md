@@ -22,14 +22,39 @@ TODO: More Documentation
 
 ## Getting the code
 ```
-git clone --recurse-submodules -j4 https://gitlab.com/absassi/asap.git
+git clone --shallow-submodules --recurse-submodules -j4 https://gitlab.com/absassi/asap_app_imgui.git
 ```
+
+NOTES:
+  - --shallow-submodules makes git clone all submodules with a depth of 1. This will have
+    the effect of significantly accelerating the cloning of the project by not downloading
+    the entire history of third party libraries.
+  - -j4 requests git to parallelize cloning of repos
+  - both options need a relatively recent version of git. If that is not available, simply
+    do not use them.
+
+## Requirements
+Make sure you have a C++ compiler with C++-14 capabilities at least. Gnu, Clang and MSVC
+all can do that with a recent version.
+
+Make sure you have the development package for X11 on Linux systems. That would usually
+come with the xorg-dev package on Ubuntu and derivatives.
+
 
 ## Building
 ```
-mkdir _build && cd _build && cmake --build ..
+mkdir _build && cd _build && cmake .. && cmake --build .
 ```
 You can also use any of the cmake options, generators, etc...
+
+By default the build will create shared libraries. If you want static libraries, pass
+-DBUILD_SHARED_LIBS=OFF to cmake during configuration:
+```
+cmake -DBUILD_SHARED_LIBS=OFF ..
+```
+
+You can also use any of the cmake options, generators, etc...
+
 
 ```
 # Project options
