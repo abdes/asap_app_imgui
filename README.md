@@ -35,8 +35,6 @@
 Any optional submodule that is not needed can be simply removed from the git submodules
 and from the master CMakeLists.txt (`add_subdirectory()`).
 
-TODO: More Documentation
-
 ## Getting the code
 ```
 git clone --shallow-submodules --recurse-submodules -j4 https://gitlab.com/absassi/asap_app_imgui.git
@@ -53,10 +51,6 @@ NOTES:
 ## Requirements
 Make sure you have a C++ compiler with C++-14 capabilities at least. Gnu, Clang and MSVC
 all can do that with a recent version.
-
-Make sure you have the development package for X11 on Linux systems. That would usually
-come with the xorg-dev package on Ubuntu and derivatives.
-
 
 ## Building
 ```
@@ -88,4 +82,3 @@ option(OPTION_GOOGLE_TSAN    "Instrument code with thread sanitizer"            
 ```
 
 The code is portable across Linux (g++ and clang), OS X and Visual Studio 2017.
-
