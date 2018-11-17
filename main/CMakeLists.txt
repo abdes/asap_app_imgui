@@ -165,7 +165,7 @@ configure_doxyfile(${target}
 add_doxygen_target(${target})
 
 install(
-  DIRECTORY ${dox_root}/${target}
+  DIRECTORY ${DOXYGEN_BUILD_DIR}/${target}
   DESTINATION ${INSTALL_DOC}
   COMPONENT docs
 )
