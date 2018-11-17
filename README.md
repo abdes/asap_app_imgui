@@ -3,7 +3,7 @@
   - use cmake for the build system
   - modular structure with each module self-contained in a subdirectory within
     the project
-  - build helpers in common/cmake to facilitate declaration of library, exe, 
+  - build helpers in common/cmake to facilitate declaration of library, exe,
     test modules, for the end-to-end lifecycle including doc generation, test,
     packaging etc...
   - common facilities (common module) for platform specifics, assertions
@@ -23,7 +23,7 @@ git clone --shallow-submodules --recurse-submodules -j4 https://gitlab.com/absas
 ```
 
 NOTES:
-  - --shallow-submodules makes git clone all submodules with a depth of 1. This will have 
+  - --shallow-submodules makes git clone all submodules with a depth of 1. This will have
     the effect of significantly accelerating the cloning of the project by not downloading
     the entire history of third party libraries.
   - -j4 requests git to parallelize cloning of repos
@@ -42,6 +42,14 @@ come with the xorg-dev package on Ubuntu and derivatives.
 ```
 mkdir _build && cd _build && cmake .. && cmake --build .
 ```
+You can also use any of the cmake options, generators, etc...
+
+By default the build will create shared libraries. If you want static libraries, pass
+-DBUILD_SHARED_LIBS=OFF to cmake during configuration:
+```
+cmake -DBUILD_SHARED_LIBS=OFF ..
+```
+
 You can also use any of the cmake options, generators, etc...
 
 By default the build will create shared libraries. If you want static libraries, pass
@@ -69,15 +77,14 @@ The code is portable across Linux (g++ and clang), OS X and Visual Studio 2017.
 
 ## Running the demo
 
-1. Copy the shaders from the source directory (main/src/shaders) to the build 
+1. Copy the shaders from the source directory (main/src/shaders) to the build
    directory.
 2. Run the app from within the build directory (./asap_app)
 3. Drag and drop the frames to dock them to whichever side you want.
 4. Edit the settings as you wish
-4. When the app is closed, the settings, docks, loggers, etc are saved into 
+4. When the app is closed, the settings, docks, loggers, etc are saved into
    the .asap directory under the build directory. Some files saved by imgui
    are still under the build directory directly (work in progress)
 
-You need to have a graphics system capable of providing OpenGL 3.2 to properly run the 
+You need to have a graphics system capable of providing OpenGL 3.2 to properly run the
 demo.
-
