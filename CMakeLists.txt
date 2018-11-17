@@ -13,9 +13,11 @@
 # We require 3.10 for CMAKE_CXX_CPPCHECK
 if (OPTION_CPPCHECK)
   cmake_minimum_required(VERSION 3.10)
-else ()
+elseif(OPTION_CLANG_TIDY)
   cmake_minimum_required(VERSION 3.6)
-endif ()
+else()
+  cmake_minimum_required(VERSION 3.5)
+endif()
 
 # List of directories specifying a search path for CMake modules to be loaded by
 # the the include() or find_package() commands before checking the default modules
