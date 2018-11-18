@@ -37,7 +37,7 @@ and from the master CMakeLists.txt (`add_subdirectory()`).
 
 ## Getting the code
 ```
-git clone --shallow-submodules --recurse-submodules -j4 https://gitlab.com/absassi/asap_app_imgui.git
+git clone --shallow-submodules --recurse-submodules -j4 https://gitlab.com/absassi/asap.git
 ```
 
 NOTES:
