@@ -14,7 +14,7 @@
 
 // clang-format off
 // Include order is important
-#include <glad/gl.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <imgui/imgui.h>
@@ -74,7 +74,7 @@ void ImGuiRunner::InitGraphics() {
 void ImGuiRunner::SetupContext() {
   ASAP_ASSERT(window_ != nullptr);
   glfwMakeContextCurrent(window_);
-  gladLoadGL((GLADloadfunc) glfwGetProcAddress);
+  gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
   ASLOG(debug, "  context setup done");
 }
 
