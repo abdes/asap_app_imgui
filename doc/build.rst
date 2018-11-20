@@ -16,6 +16,7 @@ chmod +x cmake-3.12.4-Linux-x86_64.sh
 sudo ./cmake-3.12.4-Linux-x86_64.sh --skip-license --prefix=/opt --include-subdir
 sudo ln -s /opt/cmake-3.12.4-Linux-x86_64 /opt/cmake
 
+add /opt/cmake/bin to the PATH environment variable.
 
 GNU compilers 7
 ---------------
