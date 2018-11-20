@@ -21,16 +21,12 @@ TODO: More Documentation
 
 ## Getting the code
 ```
-git clone --shallow-submodules --recurse-submodules -j4 https://gitlab.com/absassi/asap_app_imgui.git
+git clone --recurse-submodules -j4 https://gitlab.com/absassi/asap_app_imgui.git
 ```
 
 NOTES:
-  - --shallow-submodules makes git clone all submodules with a depth of 1. This will have
-    the effect of significantly accelerating the cloning of the project by not downloading
-    the entire history of third party libraries.
-  - -j4 requests git to parallelize cloning of repos
-  - both options need a relatively recent version of git. If that is not available, simply
-    do not use them.
+  - -j4 requests git to parallelize cloning of repos. Needs a relatively recent version 
+    of git. If that is not available, simply do not use this option.
 
 ## Requirements
 Make sure you have a C++ compiler with C++-14 capabilities at least. Gnu, Clang and MSVC
