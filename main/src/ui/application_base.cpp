@@ -3,14 +3,16 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+#include <ui/application_base.h>
+
 #include <cmath>  // for rounding frame rate
 #include <sstream>
 
 #include <GLFW/glfw3.h>
-#include <imgui/imgui.h>
 
+#include <imgui/imgui.h>
 #include <dock/imgui_dock.h>
-#include <ui/application_base.h>
+
 #include <ui/fonts/material_design_icons.h>
 #include <ui/log/sink.h>
 #include <ui/style/theme.h>
