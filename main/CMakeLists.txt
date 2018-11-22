@@ -98,10 +98,7 @@ set(include_dirs ${include_path})
 # Compile definitions / options
 # ------------------------------------------------------------------------------
 
-set(compile_definitions
-  PRIVATE
-    $<$<BOOL:${BUILD_SHARED_LIBS}>:YAML_CPP_DLL>
-)
+set(compile_definitions)
 set(compile_options)
 
 # ------------------------------------------------------------------------------
@@ -114,7 +111,7 @@ set(libraries
   cxxopts
   glm
   asap::imgui
-  yaml-cpp
+  cpptoml
   date_interface
   )
 
