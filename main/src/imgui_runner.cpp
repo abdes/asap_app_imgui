@@ -542,6 +542,9 @@ void ImGuiRunner::SaveSetting() {
       display_settings->insert("size", size_settings);
     }
   }
+  display_settings->insert("multi-sampling", MultiSample());
+  display_settings->insert("vsync", Vsync());
+  
   root->insert("display", display_settings);
 
   auto settings_path =
