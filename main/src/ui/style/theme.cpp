@@ -494,8 +494,8 @@ void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
 #define EMIT_TOML_STYLE_IMVEC2(FIELD)            \
   {                                              \
     auto float_array = cpptoml::make_array();    \
-    float_array->push_back(style.##FIELD##.x);   \
-    float_array->push_back(style.##FIELD##.y);   \
+    float_array->push_back(style.FIELD.x);   \
+    float_array->push_back(style.FIELD.y);   \
     style_settings->insert(#FIELD, float_array); \
   }
 
