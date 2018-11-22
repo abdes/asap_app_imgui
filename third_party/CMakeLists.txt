@@ -40,5 +40,6 @@ add_subdirectory(date)
 
 # cpptoml - used to save/load the configuration files
 set(CPPTOML_BUILD_EXAMPLES OFF CACHE BOOL "Build examples" FORCE)
+set(ENABLE_LIBCXX OFF CACHE BOOL "Use libc++ for the C++ standard library" FORCE)
 add_subdirectory(cpptoml)
 
