@@ -47,7 +47,7 @@ class ApplicationBase : public AbstractApplication,
   void DrawImGuiDemos();
 
  private:
-  bool show_docks_debug_{true};
+  bool show_docks_debug_{false};
   bool show_logs_{true};
   bool show_settings_{true};
   bool show_imgui_metrics_{false};

@@ -6,7 +6,6 @@
 #include <application.h>
 #include <shader.h>
 
-#include <dock/imgui_dock.h>
 #include <imgui/imgui.h>
 
 namespace asap {
@@ -15,7 +14,7 @@ bool Application::Draw() {
   bool sleep_when_inactive = ApplicationBase::Draw();
 
   if (ImGui::GetIO().DisplaySize.y > 0) {
-    if (ImGui::BeginDock("OpenGL Render")) {
+    if (ImGui::Begin("OpenGL Render")) {
       auto wsize = ImGui::GetWindowSize();
 
       glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer_);
@@ -55,7 +54,7 @@ bool Application::Draw() {
           (ImTextureID)texColorBuffer_, pos, ImVec2(pos.x + wsize.x, pos.y + wsize.y),
           ImVec2(0, 1), ImVec2(1, 0));
     }
-    ImGui::EndDock();
+    ImGui::End();
   }
 
   return sleep_when_inactive;

@@ -11,16 +11,17 @@
 #include <GLFW/glfw3.h>
 
 #include <imgui/imgui.h>
-#include <dock/imgui_dock.h>
 
+#include <imgui_runner.h>
 #include <ui/fonts/material_design_icons.h>
 #include <ui/log/sink.h>
 #include <ui/style/theme.h>
-#include <imgui_runner.h>
 
 namespace asap {
 namespace ui {
 
+// TODO: cleanup this from a c== point of view
+static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
 
 void ApplicationBase::Init(ImGuiRunner *runner) {
   runner_ = runner;
@@ -31,8 +32,6 @@ void ApplicationBase::Init(ImGuiRunner *runner) {
 
   ASLOG(debug, "Initializing UI theme");
   Theme::Init();
-
-  ImGui::LoadDock();
 
   // Call for custom init operations from derived class
   AfterInit();
@@ -52,21 +51,61 @@ void ApplicationBase::ShutDown() {
   //  - Docks
   sink_->SaveSettings();
   Theme::SaveStyle();
-
-  ImGui::SaveDock();
-
-  ImGui::ShutdownDock();
 }
 
 bool ApplicationBase::Draw() {
-  if (ImGui::GetIO().DisplaySize.y > 0) {
-	auto menu_height = DrawMainMenu();
-	auto pos = ImVec2(0, menu_height);
-    auto size = ImGui::GetIO().DisplaySize;
-    size.y -= pos.y;
-    ImGui::RootDock(pos, ImVec2(size.x, size.y - 16.0f));
+  static bool opt_fullscreen_persistant = true;
+  ImGuiViewport *viewport = ImGui::GetMainViewport();
 
-    DrawStatusBar(size.x, 16.0f, 0.0f, size.y);
+  if (ImGui::GetIO().DisplaySize.y > 0) {
+    auto menu_height = DrawMainMenu();
+
+    bool opt_fullscreen = opt_fullscreen_persistant;
+    // We are using the ImGuiWindowFlags_NoDocking flag to make the parent
+    // window not dockable into, because it would be confusing to have two
+    // docking targets within each others.
+    ImGuiWindowFlags window_flags =
+        ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    if (opt_fullscreen) {
+      auto dockSpaceSize = viewport->Size;
+      dockSpaceSize.y -= 16.0f;  // remove the status bar
+      ImGui::SetNextWindowPos(viewport->Pos);
+      ImGui::SetNextWindowSize(dockSpaceSize);
+      ImGui::SetNextWindowViewport(viewport->ID);
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+      window_flags |= ImGuiWindowFlags_NoTitleBar |
+                      ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+                      ImGuiWindowFlags_NoMove;
+      window_flags |=
+          ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+    }
+
+    // When using ImGuiDockNodeFlags_PassthruDockspace, DockSpace() will render
+    // our background and handle the pass-thru hole, so we ask Begin() to not
+    // render a background.
+    if (opt_flags & ImGuiDockNodeFlags_PassthruDockspace)
+      window_flags |= ImGuiWindowFlags_NoBackground;
+
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::Begin("DockSpace Demo", nullptr, window_flags);
+    ImGui::PopStyleVar();
+
+    if (opt_fullscreen) ImGui::PopStyleVar(2);
+
+    // Dockspace
+    ImGuiIO &io = ImGui::GetIO();
+    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+      ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
+      ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), opt_flags);
+    } else {
+      // TODO: emit a log message
+    }
+
+	//
+	// Status bar
+	//
+    DrawStatusBar(viewport->Size.x, 16.0f, 0.0f, viewport->Size.y - menu_height);
 
     if (show_logs_) DrawLogView();
     if (show_settings_) DrawSettings();
@@ -75,6 +114,8 @@ bool ApplicationBase::Draw() {
     if (show_imgui_demos_) DrawImGuiDemos();
   }
 
+  ImGui::End();
+
   // Return true to indicate that we are not doing any calculation and we can
   // sleep if the application window is not focused.
   return true;
@@ -82,17 +123,42 @@ bool ApplicationBase::Draw() {
 
 float ApplicationBase::DrawMainMenu() {
   auto menu_height = 0.0f;
+
   if (ImGui::BeginMainMenuBar()) {
     // Call the derived class to draw the application specific menus inside the
     // menu bar
     DrawInsideMainMenu();
 
-    // Last menu is the Debug menu
+    // Last menu bar items are the ones we create as baseline (i.e. the docking
+    // control menu and the debug menu)
+
+    if (ImGui::BeginMenu("Docking")) {
+      // Disabling fullscreen would allow the window to be moved to the front of
+      // other windows, which we can't undo at the moment without finer window
+      // depth/z control.
+      // ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+
+      if (ImGui::MenuItem("Flag: NoSplit", "",
+                          (opt_flags & ImGuiDockNodeFlags_NoSplit) != 0))
+        opt_flags ^= ImGuiDockNodeFlags_NoSplit;
+      if (ImGui::MenuItem(
+              "Flag: NoDockingInCentralNode", "",
+              (opt_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))
+        opt_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
+      if (ImGui::MenuItem(
+              "Flag: PassthruDockspace", "",
+              (opt_flags & ImGuiDockNodeFlags_PassthruDockspace) != 0))
+        opt_flags ^= ImGuiDockNodeFlags_PassthruDockspace;
+
+      ImGui::EndMenu();
+    }
+
     if (ImGui::BeginMenu("Debug")) {
       if (ImGui::MenuItem("Show Logs", "CTRL+SHIFT+L", &show_logs_)) {
         DrawLogView();
       }
-      if (ImGui::MenuItem("Show Docks Debug", "CTRL+SHIFT+D", &show_docks_debug_)) {
+      if (ImGui::MenuItem("Show Docks Debug", "CTRL+SHIFT+D",
+                          &show_docks_debug_)) {
         DrawDocksDebug();
       }
       if (ImGui::MenuItem("Show Settings", "CTRL+SHIFT+S", &show_settings_)) {
@@ -101,10 +167,12 @@ float ApplicationBase::DrawMainMenu() {
 
       ImGui::Separator();
 
-      if (ImGui::MenuItem("Show ImGui Metrics", "CTRL+SHIFT+M", &show_imgui_metrics_)) {
+      if (ImGui::MenuItem("Show ImGui Metrics", "CTRL+SHIFT+M",
+                          &show_imgui_metrics_)) {
         DrawImGuiMetrics();
       }
-      if (ImGui::MenuItem("Show ImGui Demos", "CTRL+SHIFT+G", &show_imgui_demos_)) {
+      if (ImGui::MenuItem("Show ImGui Demos", "CTRL+SHIFT+G",
+                          &show_imgui_demos_)) {
         DrawImGuiDemos();
       }
 
@@ -142,19 +210,17 @@ void ApplicationBase::DrawStatusBar(float width, float height, float pos_x,
 }
 
 void ApplicationBase::DrawLogView() {
-  if (ImGui::BeginDock("Logs", &show_logs_)) {
+  if (ImGui::Begin("Logs", &show_logs_)) {
     // Draw the log view docked
     sink_->Draw();
   }
-  ImGui::EndDock();
+  ImGui::End();
 }
 
-void ApplicationBase::DrawImGuiMetrics() {
-  ImGui::ShowMetricsWindow();
-}
+void ApplicationBase::DrawImGuiMetrics() { ImGui::ShowMetricsWindow(); }
 
 void ApplicationBase::DrawImGuiDemos() {
-    ImGui::ShowDemoWindow(&show_imgui_demos_);
+  ImGui::ShowDemoWindow(&show_imgui_demos_);
 }
 
 namespace {
@@ -172,7 +238,7 @@ bool DrawDisplaySettingsMode(int &display_mode) {
   static const char *mode_items[] = {"Windowed", "Full Screen",
                                      "Full Screen Windowed"};
   auto changed = ImGui::Combo("Display Mode", &display_mode, mode_items,
-                      IM_ARRAYSIZE(mode_items));
+                              IM_ARRAYSIZE(mode_items));
   return changed;
 }
 
@@ -202,8 +268,8 @@ bool DrawDisplaySettingsWindowSize(ImGuiRunner *runner, int size[2]) {
   auto input_changed = ImGui::InputInt2("Size", size);
   int current_pos[2];
   runner->GetWindowSize(current_pos);
-  auto changed = input_changed || (current_pos[0] != size[0])
-      || (current_pos[1] != size[1]);
+  auto changed = input_changed || (current_pos[0] != size[0]) ||
+                 (current_pos[1] != size[1]);
   return changed;
 }
 
@@ -291,14 +357,12 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {5.0f, 2.0f});
   ImGui::PushStyleColor(
       ImGuiCol_ChildWindowBg,
-      (pending_changes) ?
-      ImGui::GetStyleColorVec4(ImGuiCol_PlotLinesHovered) :
-      ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
+      (pending_changes) ? ImGui::GetStyleColorVec4(ImGuiCol_PlotLinesHovered)
+                        : ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
 
   ImGui::BeginChild("Display Settings Toolbar",
                     {ImGui::GetContentRegionAvailWidth(), 20}, true,
-                    ImGuiWindowFlags_NoTitleBar |
-                        ImGuiWindowFlags_NoScrollbar |
+                    ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar |
                         ImGuiWindowFlags_NoScrollWithMouse);
 
   Font font(Font::FAMILY_PROPORTIONAL);
@@ -331,10 +395,10 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
           break;
         case 1:
           runner->FullScreen(resolution->width, resolution->height, title,
-                             GetMonitorIndex(monitor),
-                             resolution->refreshRate);
+                             GetMonitorIndex(monitor), resolution->refreshRate);
           break;
-        case 2:runner->FullScreenWindowed(title, GetMonitorIndex(monitor));
+        case 2:
+          runner->FullScreenWindowed(title, GetMonitorIndex(monitor));
           break;
         default:;
       }
@@ -383,7 +447,6 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
   if (ImGui::SliderInt("Multi-sampling", &samples, -1, 4, "%d")) {
     pending_changes = true;
   }
-
 }
 
 void ShowStyleSettings() {
@@ -442,7 +505,7 @@ void ShowStyleSettings() {
 }  // namespace
 
 void ApplicationBase::DrawSettings() {
-  if (ImGui::BeginDock("Settings", &show_settings_)) {
+  if (ImGui::Begin("Settings", &show_settings_)) {
     static bool first_time = true;
     if (first_time) {
       ImGui::SetNextTreeNodeOpen(true);
@@ -458,13 +521,18 @@ void ApplicationBase::DrawSettings() {
       ShowStyleSettings();
     }
   }
-  ImGui::EndDock();
+  ImGui::End();
 }
+
 void ApplicationBase::DrawDocksDebug() {
-  if (ImGui::BeginDock("Docks", &show_docks_debug_)) {
-    ImGui::PrintDocks();  // print docking information
+  if (ImGui::Begin("Docks", &show_docks_debug_)) {
+    ImGui::LabelText(
+        "TODO",
+        "Get docking information from ImGui and populate this once the ImGui "
+        "programmatic access to docking is published as a stable API");
+    // TODO: generate docking information
   }
-  ImGui::EndDock();
+  ImGui::End();
 }
 
 #if 0
