@@ -56,11 +56,20 @@ void ImGuiRunner::InitGraphics() {
   if (!glfwInit()) {
     throw std::runtime_error("Failed to initialize GLFW");
   }
+
+  // Decide GL version
+#if __APPLE__
+  // GL 3.2
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#if __APPLE__
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);  // Required on Mac
+#else
+  // GL 3.0
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+  // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+
+  // only glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // 3.0+ only
 #endif
 
   ASLOG(debug, "  GLFW init done");
@@ -79,12 +88,35 @@ void ImGuiRunner::InitImGui() {
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
   (void)io;
-  // io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable
-  // Keyboard Controls io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
-  // // Enable Gamepad Controls
+
+  //
+  // Various flags controling ImGui IO behavior
+  //
+
+  // Enable Keyboard Controls
+  io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+  // Enable Gamepad Controls
+  // io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+  // Enable Docking
+  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+  // Enable Multi-Viewport
+  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+  // NOTE: Platform Windows
+  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoTaskBarIcons;
+  // io.ConfigFlags |= ImGuiConfigFlags_ViewportsNoMerge;
 
   ImGui_ImplGlfw_InitForOpenGL(window_, true);
-  ImGui_ImplOpenGL3_Init();
+
+  // Decide GLSL version
+#if __APPLE__
+  // GLSL 150
+  const char *glsl_version = "#version 150";
+#else
+  // GLSL 130
+  const char *glsl_version = "#version 130";
+#endif
+  ImGui_ImplOpenGL3_Init(glsl_version);
+
   ASLOG(debug, "  ImGui init done");
 }
 
@@ -297,6 +329,12 @@ void ImGuiRunner::Run() {
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+    // Update and Render additional Platform Windows
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+      ImGui::UpdatePlatformWindows();
+      ImGui::RenderPlatformWindowsDefault();
+    }
+
     glfwMakeContextCurrent(window_);
     glfwSwapBuffers(window_);
   }
@@ -450,6 +488,8 @@ void ImGuiRunner::LoadSetting() {
     ASLOG(info, "file {} does not exist", display_settings);
   }
 
+  int width = 800;
+  int height = 600;
   if (has_config) {
     ConfigSanityChecks(config);
 
@@ -459,8 +499,6 @@ void ImGuiRunner::LoadSetting() {
     }
     auto mode =
         display->get_as<std::string>("mode").value_or("Full Screen Windowed");
-    int width = 800;
-    int height = 600;
     if (mode == "Full Screen") {
       auto size = display->get_table("size");
       if (size) {
@@ -497,13 +535,13 @@ void ImGuiRunner::LoadSetting() {
                    .value_or("ASAP Application")
                    .c_str());
     } else {
-      FullScreenWindowed("ASAP Application", 0);
+      Windowed(width, height, "ASAP Application");
     }
     if (display->contains("vsync")) {
       EnableVsync(*(display->get_as<bool>("vsync")));
     }
   } else {
-    FullScreenWindowed("ASAP Application", 0);
+    Windowed(width, height, "ASAP Application");
   }
 }
 
@@ -544,7 +582,7 @@ void ImGuiRunner::SaveSetting() {
   }
   display_settings->insert("multi-sampling", MultiSample());
   display_settings->insert("vsync", Vsync());
-  
+
   root->insert("display", display_settings);
 
   auto settings_path =
