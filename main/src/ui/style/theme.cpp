@@ -47,13 +47,17 @@ ImFont *MergeIcons(float size) {
   // so ensure it is available for duration of font usage
   static const ImWchar icons_ranges[] = {ICON_MIN_MDI, ICON_MAX_MDI, 0};
 
-  ImFontConfig icons_config;
-  icons_config.MergeMode = true;
-  icons_config.PixelSnapH = true;
+  ImFontConfig fontConfig;
+  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times smaller.
+  // See https://github.com/ocornut/imgui/issues/1527
+  fontConfig.OversampleH = 1;
+  fontConfig.OversampleV = 1;
+  fontConfig.MergeMode = true;
+  fontConfig.PixelSnapH = true;
   auto font = io.Fonts->AddFontFromMemoryCompressedTTF(
       asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_DATA,
       asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE, size,
-      &icons_config, icons_ranges);
+      &fontConfig, icons_ranges);
   // use FONT_ICON_FILE_NAME_FAR if you want regular instead of solid
 
   return font;
@@ -63,6 +67,10 @@ ImFont *LoadRobotoFont(std::string const &name, Font::Weight weight,
                        Font::Style style, Font::Size size) {
   ImGuiIO &io = ImGui::GetIO();
   ImFontConfig fontConfig;
+  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times smaller.
+  // See https://github.com/ocornut/imgui/issues/1527
+  fontConfig.OversampleH = 1;
+  fontConfig.OversampleV = 1;
   fontConfig.MergeMode = false;
   std::strncpy(fontConfig.Name, name.c_str(), 40);
   ImFont *font = nullptr;
@@ -134,6 +142,10 @@ ImFont *LoadInconsolataFont(std::string const &name, Font::Weight weight,
                             Font::Style style, Font::Size size) {
   ImGuiIO &io = ImGui::GetIO();
   ImFontConfig fontConfig;
+  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times smaller.
+  // See https://github.com/ocornut/imgui/issues/1527
+  fontConfig.OversampleH = 1;
+  fontConfig.OversampleV = 1;
   fontConfig.MergeMode = false;
   std::strncpy(fontConfig.Name, name.c_str(), 40);
   ImFont *font = nullptr;
@@ -171,6 +183,10 @@ ImFont *LoadInconsolataFont(std::string const &name, Font::Weight weight,
 ImFont *LoadIconsFont(float size) {
   ImGuiIO &io = ImGui::GetIO();
   ImFontConfig fontConfig;
+  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times smaller.
+  // See https://github.com/ocornut/imgui/issues/1527
+  fontConfig.OversampleH = 1;
+  fontConfig.OversampleV = 1;
   fontConfig.MergeMode = false;
   std::strncpy(fontConfig.Name, "Material Design Icons", 40);
   ImFont *font = nullptr;
