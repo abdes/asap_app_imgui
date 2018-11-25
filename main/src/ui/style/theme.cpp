@@ -344,12 +344,22 @@ void Theme::Init() {
 }
 
 void Theme::LoadDefaultFonts() {
-  std::array<Font::Weight, 3> font_weights{
-      {Font::Weight::LIGHT, Font::Weight::REGULAR, Font::Weight::BOLD}};
+  // There is currently an issue with too many fonts being loaded by ImGui that
+  // cause a problems on certain platforms.
+  // To decrease the chances of people running into this problem (usually a blank 
+  // screen for ImGui), we are only loading a minimal number of variations.
+  // On systems with pretty decent 3D graphics, all variations can be loaded with
+  // no issues.
+
+  std::array<Font::Weight, 2> font_weights{
+      {Font::Weight::REGULAR, Font::Weight::BOLD}};
+  // std::array<Font::Weight, 3> font_weights{
+  //     {Font::Weight::LIGHT, Font::Weight::REGULAR, Font::Weight::BOLD}};
   std::array<Font::Style, 2> font_styles{
       {Font::Style::NORMAL, Font::Style::ITALIC}};
-  std::array<Font::Size, 4> font_sizes{{Font::Size::SMALL, Font::Size::MEDIUM,
-                                        Font::Size::LARGE, Font::Size::LARGER}};
+  std::array<Font::Size, 2> font_sizes{{Font::Size::SMALL, Font::Size::MEDIUM}};
+  // std::array<Font::Size, 4> font_sizes{{Font::Size::SMALL, Font::Size::MEDIUM,
+  //                                       Font::Size::LARGE, Font::Size::LARGER}};
   for (auto size : font_sizes) {
     for (auto weight : font_weights) {
       for (auto style : font_styles) {
