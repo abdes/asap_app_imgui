@@ -21,10 +21,22 @@ TODO: More Documentation
 
 ## Getting the code
 ```
-git clone --recurse-submodules -j4 https://gitlab.com/absassi/asap_app_imgui.git
+# Use the one you prefer :-)
+# git clone --recurse-submodules -j4 https://gitlab.com/absassi/asap_app_imgui.git
+# git clone --recurse-submodules -j4 https://github.com/abdes/asap_app_imgui.git
+
+# The develop branch carries the ongoing feature development
+# the master branch carries stable releases only
+git checkout develop
+
+git submodule update --recursive
 ```
 
 NOTES:
+  - most of the cutting edge stuff will be in the 'develop' branch. The master branch 
+    carries the stable releases only. As many changes are currently being made to ImGui
+    for docking and viewports, it is recommended you checkout the develop branch for 
+    the latest features.
   - -j4 requests git to parallelize cloning of repos. Needs a relatively recent version 
     of git. If that is not available, simply do not use this option.
 
