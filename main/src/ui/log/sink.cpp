@@ -289,7 +289,7 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
     auto properties = ostr.str();
 
     // Strip the filename:line from the message and put it in a separate string
-    auto msg_str = std::string(msg.raw.data());
+    auto msg_str =fmt::to_string(msg.raw);
     auto skip_to = msg_str.begin();
     if (*skip_to == '[') {
       // skip spaces
