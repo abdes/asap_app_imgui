@@ -245,9 +245,13 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
             if (wrap_) ImGui::PopTextWrapPos();
           }
           ImGui::EndGroup();
+#ifndef NDEBUG
+          // We only show the tooltip with the source location if in debug build. The source
+          // location information is not produced in the logs in non-debug builds.
           if (ImGui::IsItemHovered()) {
             ImGui::SetTooltip("%s", record.source_.c_str());
           }
+#endif // NDEBUG
 
           ImGui::PopFont();
         }
@@ -305,9 +309,13 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
         if (*skip_to == ':') skip_to = ++saved_skip_to;  // Add one space
       }
     }
+    // Source location will be found only in non-debug builds.
+#ifndef NDEBUG
     // Ignore the '[' and ']'
     auto source = msg_str.substr(1, skip_to - msg_str.begin() - 3);
-
+#else
+    auto source = std::string();
+#endif // NDEBUG
     // Select display color and colored text range based on level
     switch (msg.level) {
       case spdlog::level::trace:
