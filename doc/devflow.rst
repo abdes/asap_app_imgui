@@ -140,7 +140,7 @@ git-flow tools are not used.  Instead, either the git commands are used directly
 from the command line or via the web interface of github/gitlab.
 
 Start a new feature
-^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
 .. code-block:: bash
 
    $ git checkout -b feature/MYFEATURE develop
@@ -175,6 +175,7 @@ Release Process
 ---------------
 A key element of the release approach for the project is that there is NO
 release branch.  Instead, the process is:
+
   * Once the ``develop`` branch has the right set of features and is stable,
   * Changes to ``develop`` are “closed” for the interim,
   * The release process is followed (see table below),

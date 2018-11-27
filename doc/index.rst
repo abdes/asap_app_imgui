@@ -43,13 +43,13 @@ project*
 project*
 
 :doc:`Development workflow <devflow>`
-------------------------------------
+-------------------------------------
 *refer to this part of the documentation to understand the build system
 specifics for this project, the development workflow, coding and unit testing
 guidelines*
 
 :doc:`Modules <modules>`
-------------------------------
+------------------------
 *check this out to explore the different modules part of this project. From
 there, you can also jump to the detailed API documentation of each of those
 modules.*
