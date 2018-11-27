@@ -48,8 +48,8 @@ ImFont *MergeIcons(float size) {
   static const ImWchar icons_ranges[] = {ICON_MIN_MDI, ICON_MAX_MDI, 0};
 
   ImFontConfig fontConfig;
-  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times smaller.
-  // See https://github.com/ocornut/imgui/issues/1527
+  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times
+  // smaller. See https://github.com/ocornut/imgui/issues/1527
   fontConfig.OversampleH = 1;
   fontConfig.OversampleV = 1;
   fontConfig.MergeMode = true;
@@ -67,12 +67,13 @@ ImFont *LoadRobotoFont(std::string const &name, Font::Weight weight,
                        Font::Style style, Font::Size size) {
   ImGuiIO &io = ImGui::GetIO();
   ImFontConfig fontConfig;
-  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times smaller.
-  // See https://github.com/ocornut/imgui/issues/1527
+  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times
+  // smaller. See https://github.com/ocornut/imgui/issues/1527
   fontConfig.OversampleH = 1;
   fontConfig.OversampleV = 1;
   fontConfig.MergeMode = false;
-  std::strncpy(fontConfig.Name, name.c_str(), 40);
+  std::strncpy(fontConfig.Name, name.c_str(), sizeof(fontConfig.Name) - 1);
+  fontConfig.Name[sizeof(fontConfig.Name) - 1] = 0;
   ImFont *font = nullptr;
   switch (weight) {
     case Font::Weight::LIGHT:
@@ -142,12 +143,13 @@ ImFont *LoadInconsolataFont(std::string const &name, Font::Weight weight,
                             Font::Style style, Font::Size size) {
   ImGuiIO &io = ImGui::GetIO();
   ImFontConfig fontConfig;
-  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times smaller.
-  // See https://github.com/ocornut/imgui/issues/1527
+  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times
+  // smaller. See https://github.com/ocornut/imgui/issues/1527
   fontConfig.OversampleH = 1;
   fontConfig.OversampleV = 1;
   fontConfig.MergeMode = false;
-  std::strncpy(fontConfig.Name, name.c_str(), 40);
+  std::strncpy(fontConfig.Name, name.c_str(), sizeof(fontConfig.Name) - 1);
+  fontConfig.Name[sizeof(fontConfig.Name) - 1] = 0;
   ImFont *font = nullptr;
   switch (weight) {
     case Font::Weight::LIGHT:
@@ -183,12 +185,14 @@ ImFont *LoadInconsolataFont(std::string const &name, Font::Weight weight,
 ImFont *LoadIconsFont(float size) {
   ImGuiIO &io = ImGui::GetIO();
   ImFontConfig fontConfig;
-  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times smaller.
-  // See https://github.com/ocornut/imgui/issues/1527
+  // Set Oversamping parameters to 1 on both axis, the texture will be 6 times
+  // smaller. See https://github.com/ocornut/imgui/issues/1527
   fontConfig.OversampleH = 1;
   fontConfig.OversampleV = 1;
   fontConfig.MergeMode = false;
-  std::strncpy(fontConfig.Name, "Material Design Icons", 40);
+  std::strncpy(fontConfig.Name, "Material Design Icons",
+               sizeof(fontConfig.Name) - 1);
+  fontConfig.Name[sizeof(fontConfig.Name) - 1] = 0;
   ImFont *font = nullptr;
   font = io.Fonts->AddFontFromMemoryCompressedTTF(
       asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_DATA,
@@ -362,10 +366,10 @@ void Theme::Init() {
 void Theme::LoadDefaultFonts() {
   // There is currently an issue with too many fonts being loaded by ImGui that
   // cause a problems on certain platforms.
-  // To decrease the chances of people running into this problem (usually a blank 
-  // screen for ImGui), we are only loading a minimal number of variations.
-  // On systems with pretty decent 3D graphics, all variations can be loaded with
-  // no issues.
+  // To decrease the chances of people running into this problem (usually a
+  // blank screen for ImGui), we are only loading a minimal number of
+  // variations. On systems with pretty decent 3D graphics, all variations can
+  // be loaded with no issues.
 
   std::array<Font::Weight, 2> font_weights{
       {Font::Weight::REGULAR, Font::Weight::BOLD}};
@@ -374,8 +378,10 @@ void Theme::LoadDefaultFonts() {
   std::array<Font::Style, 2> font_styles{
       {Font::Style::NORMAL, Font::Style::ITALIC}};
   std::array<Font::Size, 2> font_sizes{{Font::Size::SMALL, Font::Size::MEDIUM}};
-  // std::array<Font::Size, 4> font_sizes{{Font::Size::SMALL, Font::Size::MEDIUM,
-  //                                       Font::Size::LARGE, Font::Size::LARGER}};
+  // std::array<Font::Size, 4> font_sizes{{Font::Size::SMALL,
+  // Font::Size::MEDIUM,
+  //                                       Font::Size::LARGE,
+  //                                       Font::Size::LARGER}};
   for (auto size : font_sizes) {
     for (auto weight : font_weights) {
       for (auto style : font_styles) {
@@ -520,8 +526,8 @@ void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
 #define EMIT_TOML_STYLE_IMVEC2(FIELD)            \
   {                                              \
     auto float_array = cpptoml::make_array();    \
-    float_array->push_back(style.FIELD.x);   \
-    float_array->push_back(style.FIELD.y);   \
+    float_array->push_back(style.FIELD.x);       \
+    float_array->push_back(style.FIELD.y);       \
     style_settings->insert(#FIELD, float_array); \
   }
 
