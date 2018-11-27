@@ -1,7 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 // Suppress compiler warnings from GLM header
 #define GLM_FORCE_SILENT_WARNINGS
 #include <glm/glm.hpp>
