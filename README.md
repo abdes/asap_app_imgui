@@ -17,8 +17,6 @@
   - persistence of imgui and docks configuration
 
 
-TODO: More Documentation
-
 ## Getting the code
 ```
 # Use the one you prefer :-)
@@ -43,10 +41,6 @@ NOTES:
 ## Requirements
 Make sure you have a C++ compiler with C++-14 capabilities at least. Gnu, Clang and MSVC
 all can do that with a recent version.
-
-Make sure you have the development package for X11 on Linux systems. That would usually
-come with the xorg-dev package on Ubuntu and derivatives.
-
 
 ## Building
 ```

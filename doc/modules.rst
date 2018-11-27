@@ -11,9 +11,7 @@ Modules
 *******
 
 :doc:`common <common:api>`
+==========================
 
 :doc:`filesystem <filesystem:api>`
-
-:cpp:class:`Loggable <asap::logging::Loggable>`
-
-
+==================================
