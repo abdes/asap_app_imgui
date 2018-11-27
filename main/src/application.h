@@ -33,7 +33,7 @@ namespace asap {
   void BeforeShutDown() override;
 
   private:
-   GLuint VBO, VAO = 0;
+   GLuint VBO = 0, VAO = 0;
    GLuint frameBuffer_ = 0;
    GLuint texColorBuffer_ = 0;
    Shader *ourShader_{nullptr};

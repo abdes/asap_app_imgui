@@ -20,13 +20,15 @@ bool Application::Draw() {
       glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer_);
       // Define the viewport dimensions
       glBindTexture(GL_TEXTURE_2D, texColorBuffer_);
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, wsize.x, wsize.y, 0, GL_RGB, GL_UNSIGNED_BYTE,
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(wsize.x),
+                   static_cast<GLsizei>(wsize.y), 0, GL_RGB, GL_UNSIGNED_BYTE,
                    NULL);
       glBindTexture(GL_TEXTURE_2D, 0);
-      glViewport(0, 0, wsize.x, wsize.y);
+      glViewport(0, 0, static_cast<GLsizei>(wsize.x),
+                 static_cast<GLsizei>(wsize.y));
 
-      // now that we actually created the framebuffer and added all attachments we
-      // want to check if it is actually complete now
+      // now that we actually created the framebuffer and added all attachments
+      // we want to check if it is actually complete now
       if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         ASLOG(error, "ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
 
@@ -48,11 +50,12 @@ bool Application::Draw() {
       // pass the texture of the FBO
       // window.getRenderTexture() is the texture of the FBO
       // the next parameter is the upper left corner for the uvs to be applied
-      // at the third parameter is the lower right corner the last two parameters
-      // are the UVs they have to be flipped (normally they would be (0,0);(1,1)
+      // at the third parameter is the lower right corner the last two
+      // parameters are the UVs they have to be flipped (normally they would be
+      // (0,0);(1,1)
       ImGui::GetWindowDrawList()->AddImage(
-          (ImTextureID)texColorBuffer_, pos, ImVec2(pos.x + wsize.x, pos.y + wsize.y),
-          ImVec2(0, 1), ImVec2(1, 0));
+          (ImTextureID)texColorBuffer_, pos,
+          ImVec2(pos.x + wsize.x, pos.y + wsize.y), ImVec2(0, 1), ImVec2(1, 0));
     }
     ImGui::End();
   }
@@ -104,8 +107,8 @@ void Application::AfterInit() {
   glBindTexture(GL_TEXTURE_2D, texColorBuffer_);
   // We'll set the texture size just before the draw happens based on the window
   // size.
-  //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1280, 760, 0, GL_RGB, GL_UNSIGNED_BYTE,
-  //               NULL);
+  //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1280, 760, 0, GL_RGB,
+  //  GL_UNSIGNED_BYTE, NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glBindTexture(GL_TEXTURE_2D, 0);
