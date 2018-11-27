@@ -11,11 +11,11 @@
 | Windows | [![Windows][21]][0] |
 
 [0]: https://travis-ci.org/abdes/asap_app_imgui
-[9]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/9
-[10]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/10
-[11]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/11
-[12]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/12
-[13]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/13
+[9]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/9
+[10]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/10
+[11]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/11
+[12]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/12
+[13]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/13
 [21]: https://ci.appveyor.com/api/projects/status/fbqox338lae708fq?svg=true
 
 # Starter project with minimum necessary functionality
