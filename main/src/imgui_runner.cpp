@@ -45,6 +45,7 @@ ImGuiRunner::ImGuiRunner(AbstractApplication &app,
                          RunnerBase::shutdown_function_type func)
     : RunnerBase(app, std::move(func)) {
   InitGraphics();
+  LoadSetting();
 }
 
 ImGuiRunner::~ImGuiRunner() {}
@@ -84,8 +85,12 @@ void ImGuiRunner::InitGraphics() {
 void ImGuiRunner::SetupContext() {
   ASAP_ASSERT(window_ != nullptr);
   glfwMakeContextCurrent(window_);
-  gladLoadGL((GLADloadfunc)glfwGetProcAddress);
-  ASLOG(debug, "  context setup done");
+  if (!gladLoadGL((GLADloadfunc)glfwGetProcAddress)) {
+    ASLOG(error, "  failed to initialize OpenGL context!");
+    throw std::runtime_error("failed to initialize OpenGL context");
+  } else {
+    ASLOG(debug, "  context setup done");
+  }
 }
 
 void ImGuiRunner::InitImGui() {
