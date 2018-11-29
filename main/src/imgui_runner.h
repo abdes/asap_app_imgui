@@ -7,13 +7,6 @@
 
 #include <runner_base.h>
 
-namespace boost {
-namespace asio {
-class io_context;
-class signal_set;
-}  // namespace asio
-}  // namespace boost
-
 struct GLFWwindow;
 struct GLFWmonitor;
 
@@ -56,17 +49,12 @@ class ImGuiRunner : public RunnerBase {
 
 
  private:
-  void SetupSignalHandler();
   void InitGraphics();
   void SetupContext();
   void InitImGui();
   void CleanUp();
 
   GLFWwindow *window_{nullptr};
-
-  boost::asio::io_context *io_context_;
-  /// The signal_set is used to register for process termination notifications.
-  boost::asio::signal_set *signals_;
 
   std::string window_title_;
   bool full_screen_{false};
