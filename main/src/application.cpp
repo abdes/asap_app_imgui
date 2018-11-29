@@ -3,6 +3,8 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+#include <stdint.h> // for unitptr_t
+
 #include <application.h>
 #include <shader.h>
 
@@ -54,7 +56,7 @@ bool Application::Draw() {
       // parameters are the UVs they have to be flipped (normally they would be
       // (0,0);(1,1)
       ImGui::GetWindowDrawList()->AddImage(
-          (ImTextureID)texColorBuffer_, pos,
+          (ImTextureID)(uintptr_t)texColorBuffer_, pos,
           ImVec2(pos.x + wsize.x, pos.y + wsize.y), ImVec2(0, 1), ImVec2(1, 0));
     }
     ImGui::End();
