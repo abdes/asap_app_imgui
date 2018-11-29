@@ -47,14 +47,14 @@ class ApplicationBase : public AbstractApplication,
   void DrawImGuiDemos();
 
  private:
-  bool show_docks_debug_{true};
+  bool show_docks_debug_{false};
   bool show_logs_{true};
   bool show_settings_{true};
   bool show_imgui_metrics_{false};
   bool show_imgui_demos_{false};
 
   std::shared_ptr<ImGuiLogSink> sink_;
-  ImGuiRunner *runner_; // TODO: convert to weak_ptr?
+  ImGuiRunner *runner_ = nullptr; // TODO: convert to weak_ptr?
 };
 
 }  // namespace ui

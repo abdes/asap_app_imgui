@@ -5,10 +5,8 @@
 
 #include <config.h>
 
-
 namespace asap {
 namespace fs {
-
 
 asap::filesystem::path GetPathFor(Location id) {
   switch (id) {
@@ -19,22 +17,22 @@ asap::filesystem::path GetPathFor(Location id) {
     }
     case Location::F_DISPLAY_SETTINGS: {
       auto p = GetPathFor(Location::D_USER_CONFIG);
-      p /= "display.yaml";
+      p /= "display.toml";
       return p;
     }
     case Location::F_LOG_SETTINGS: {
       auto p = GetPathFor(Location::D_USER_CONFIG);
-      p /= "logging.yaml";
+      p /= "logging.toml";
       return p;
     }
-    case Location::F_DOCK_SETTINGS: {
+    case Location::F_IMGUI_SETTINGS: {
       auto p = GetPathFor(Location::D_USER_CONFIG);
-      p /= "docks.yaml";
+      p /= "imgui.ini";
       return p;
     }
     case Location::F_THEME_SETTINGS: {
       auto p = GetPathFor(Location::D_USER_CONFIG);
-      p /= "theme.yaml";
+      p /= "theme.toml";
       return p;
     }
   }

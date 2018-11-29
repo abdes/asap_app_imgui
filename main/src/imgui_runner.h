@@ -7,13 +7,6 @@
 
 #include <runner_base.h>
 
-namespace boost {
-namespace asio {
-class io_context;
-class signal_set;
-}  // namespace asio
-}  // namespace boost
-
 struct GLFWwindow;
 struct GLFWmonitor;
 
@@ -23,7 +16,7 @@ class ImGuiRunner : public RunnerBase {
  public:
   ImGuiRunner(AbstractApplication &app, shutdown_function_type func);
 
-  ~ImGuiRunner() override;
+  ~ImGuiRunner() override = default;
   ImGuiRunner(const ImGuiRunner &) = delete;
   ImGuiRunner &operator=(const ImGuiRunner &) = delete;
 
@@ -44,7 +37,6 @@ class ImGuiRunner : public RunnerBase {
   std::string const &GetWindowTitle() const;
   bool IsFullScreen() const { return full_screen_; };
   bool IsWindowed() const { return windowed_; };
-  bool IsFullScreenWindowed() const { return windowed_ && full_screen_; };
   GLFWmonitor *GetMonitor() const;
   int GetMonitorId() const;
   int RefreshRate() const;
@@ -54,19 +46,13 @@ class ImGuiRunner : public RunnerBase {
   bool Vsync() const { return vsync_; };
   int MultiSample() const { return samples_; }
 
-
  private:
-  void SetupSignalHandler();
   void InitGraphics();
   void SetupContext();
   void InitImGui();
   void CleanUp();
 
   GLFWwindow *window_{nullptr};
-
-  boost::asio::io_context *io_context_;
-  /// The signal_set is used to register for process termination notifications.
-  boost::asio::signal_set *signals_;
 
   std::string window_title_;
   bool full_screen_{false};

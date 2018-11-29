@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <glad/glad.h>
+#include <glad/gl.h>
 
 #include <ui/application_base.h>
 
@@ -33,7 +33,7 @@ namespace asap {
   void BeforeShutDown() override;
 
   private:
-   GLuint VBO, VAO = 0;
+   GLuint VBO = 0, VAO = 0;
    GLuint frameBuffer_ = 0;
    GLuint texColorBuffer_ = 0;
    Shader *ourShader_{nullptr};

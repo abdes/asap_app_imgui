@@ -1,0 +1,9 @@
+[display]
+	vsync = true
+	multi-sampling = 1
+	mode = "Windowed"
+	title = "ASAP Application"
+	[display.size]
+		height = 800
+		width = 1200
+
