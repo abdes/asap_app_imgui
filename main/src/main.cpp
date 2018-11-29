@@ -62,7 +62,6 @@ int main(int argc, char **argv) {
       // Shutdown
       ASLOG_TO_LOGGER(logger, info, "shutdown complete");
     });
-    runner.LoadSetting();
     runner.Run();
   } catch (std::exception &e) {
     ASLOG_TO_LOGGER(logger, error, "Error: {}", e.what());
