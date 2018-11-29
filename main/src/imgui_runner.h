@@ -16,7 +16,7 @@ class ImGuiRunner : public RunnerBase {
  public:
   ImGuiRunner(AbstractApplication &app, shutdown_function_type func);
 
-  ~ImGuiRunner() override;
+  ~ImGuiRunner() override = default;
   ImGuiRunner(const ImGuiRunner &) = delete;
   ImGuiRunner &operator=(const ImGuiRunner &) = delete;
 
@@ -37,7 +37,6 @@ class ImGuiRunner : public RunnerBase {
   std::string const &GetWindowTitle() const;
   bool IsFullScreen() const { return full_screen_; };
   bool IsWindowed() const { return windowed_; };
-  bool IsFullScreenWindowed() const { return windowed_ && full_screen_; };
   GLFWmonitor *GetMonitor() const;
   int GetMonitorId() const;
   int RefreshRate() const;
@@ -46,7 +45,6 @@ class ImGuiRunner : public RunnerBase {
 
   bool Vsync() const { return vsync_; };
   int MultiSample() const { return samples_; }
-
 
  private:
   void InitGraphics();
