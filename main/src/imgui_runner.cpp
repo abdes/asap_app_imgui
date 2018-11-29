@@ -48,8 +48,6 @@ ImGuiRunner::ImGuiRunner(AbstractApplication &app,
   LoadSetting();
 }
 
-ImGuiRunner::~ImGuiRunner() {}
-
 void ImGuiRunner::InitGraphics() {
   ASLOG(info, "Initialize graphical subsystem...");
   // Setup window
@@ -69,14 +67,15 @@ void ImGuiRunner::InitGraphics() {
   // GL 3.0 (as per ImGui demo)
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-  // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // 3.0+ only
+  // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+
+  // only
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);  // 3.0+ only
 #else
   // GL 3.2
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // 3.0+ only
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
 #endif
 
   ASLOG(debug, "  GLFW init done");
@@ -98,10 +97,12 @@ void ImGuiRunner::InitImGui() {
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
   ImGuiIO &io = ImGui::GetIO();
-  (void)io;
+  static auto imguiSettingsPath =
+      asap::fs::GetPathFor(asap::fs::Location::F_IMGUI_SETTINGS).string();
+  io.IniFilename = imguiSettingsPath.c_str();
 
   //
-  // Various flags controling ImGui IO behavior
+  // Various flags controlling ImGui IO behavior
   //
 
   // Enable Keyboard Controls
