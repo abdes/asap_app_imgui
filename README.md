@@ -8,7 +8,7 @@
 | Linux Clang 5 | [![Linux Clang 5][11]][0] |
 | XCode 8.3 - OS X 10.12 | [![XCode 8.3 - OS X 10.12][12]][0] |
 | XCode 9.4 - OS X 10.13 | [![XCode 9.4 - OS X 10.13][13]][0] |
-| Windows | [![Windows][21]][0] |
+| Windows | [![Windows][21]][20] |
 
 [0]: https://travis-ci.org/abdes/asap
 [9]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/master/9
@@ -16,7 +16,8 @@
 [11]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/master/11
 [12]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/master/12
 [13]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/master/13
-[21]: https://ci.appveyor.com/api/projects/status/fbqox338lae708fq?svg=true
+[20]: https://ci.appveyor.com/project/abdes/asap
+[21]: https://ci.appveyor.com/api/projects/status/fbqox338lae708fq/branch/master?svg=true
 
 # Starter project with minimum necessary functionality
   - use cmake for the build system
