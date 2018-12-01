@@ -69,8 +69,6 @@ matrix:
       - |
         if [[ -s dox/doxygen_warnings.txt ]]; then
           echo "You must fix doxygen before submitting a pull request"
-          echo ""
-          cat dox/doxygen_warnings.txt
           exit -1
         fi
   #
