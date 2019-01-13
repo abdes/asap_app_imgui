@@ -44,7 +44,7 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
     for (auto &a_logger : asap::logging::Registry::Loggers()) {
       levels.push_back(a_logger.GetLevel());
       auto format = std::string("%u (")
-                        .append(spdlog::level::to_c_str(a_logger.GetLevel()))
+                        .append(spdlog::level::to_string_view(a_logger.GetLevel()).data())
                         .append(")");
       if (ImGui::SliderInt(a_logger.Name().c_str(), &levels.back(), 0, 6,
                            format.c_str())) {
@@ -293,7 +293,7 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
     auto properties = ostr.str();
 
     // Strip the filename:line from the message and put it in a separate string
-    auto msg_str =fmt::to_string(msg.raw);
+    auto msg_str =fmt::to_string(msg.payload.data());
     auto skip_to = msg_str.begin();
     if (*skip_to == '[') {
       // skip spaces

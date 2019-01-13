@@ -32,7 +32,7 @@
 
 
 macro(configure_doxyfile TARGET_NAME TARGET_TITLE TARGET_BRIEF
-    TARGET_INPUT_PATH)
+  TARGET_INPUT_PATH)
   if (EXISTS "${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in")
     set(DOXY_TARGET_OUTPUT_DIR "${TARGET_NAME}")
     set(DOXY_TARGET_ROOT_DIR "") # ${DOXTOSRCDIR} - set(DOXTOSRCDIR "../src")
@@ -56,7 +56,8 @@ if (DOXYGEN_FOUND)
   add_custom_target(dox)
   macro(add_doxygen_target TARGET_NAME)
     add_custom_target(${TARGET_NAME}_dox
-      ${CMAKE_COMMAND} -E remove -f "${TARGET_NAME}_Doxyfile.out"
+      COMMAND ${CMAKE_COMMAND} -E echo "Building doxygen dox for ${TARGET_NAME}"
+      COMMAND ${CMAKE_COMMAND} -E remove -f "${TARGET_NAME}_Doxyfile.out"
       COMMAND ${CMAKE_COMMAND} -E copy "${TARGET_NAME}_Doxyfile" "${TARGET_NAME}_Doxyfile.out"
       COMMAND ${DOXYGEN_EXECUTABLE} "${TARGET_NAME}_Doxyfile.out"
       COMMAND ${CMAKE_COMMAND} -E remove -f "${TARGET_NAME}_Doxyfile.out"
@@ -65,6 +66,26 @@ if (DOXYGEN_FOUND)
     add_dependencies(dox ${TARGET_NAME}_dox)
   endmacro()
   set_target_properties(dox PROPERTIES EXCLUDE_FROM_ALL TRUE)
+  set(COLLECT_WARNINGS_SCRIPT "${DOXYGEN_BUILD_DIR}/collect_warnings.cmake")
+  file(WRITE "${COLLECT_WARNINGS_SCRIPT}" " \
+  # Collect warnings from submodules into the consolidated warnings file\n \
+  file(WRITE \"${DOXYGEN_BUILD_DIR}/${TARGET_NAME}/doxygen_warnings.txt\" \"\")\n \
+  file(GLOB_RECURSE DOX_MODULES \"module_warnings.txt\")\n \
+  foreach(MODULE \${DOX_MODULES})\n \
+    message(\"  collecting doxygen warnings from \${MODULE}\")\n \
+    file(READ \"\${MODULE}\" MODULE_WARNINGS)\n \
+    file(APPEND \"${DOXYGEN_BUILD_DIR}/doxygen_warnings.txt\" \"\${MODULE_WARNINGS}\")\n \
+  endforeach(MODULE)\n \
+  file(READ \"${DOXYGEN_BUILD_DIR}/doxygen_warnings.txt\" ALL_WARNINGS)\n \
+  string(COMPARE NOTEQUAL \"\${ALL_WARNINGS}\" \"\" DOXYGEN_HAD_WARNINGS)\n \
+  if(DOXYGEN_HAD_WARNINGS)\n \
+    # Print the warnings\n \
+    message(\"\${ALL_WARNINGS}\")\n \
+  endif(DOXYGEN_HAD_WARNINGS)\n")
+  add_custom_command(TARGET dox POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E echo "Running post-build command for dox"
+    COMMAND ${CMAKE_COMMAND} -P "${COLLECT_WARNINGS_SCRIPT}"
+    WORKING_DIRECTORY "${DOXYGEN_BUILD_DIR}")
 else ()
   message(STATUS "WARNING: Doxygen package is not available on this system!")
   macro(add_doxygen_target TARGET_NAME)
