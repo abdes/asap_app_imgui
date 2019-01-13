@@ -29,7 +29,7 @@
 
 namespace {
 void glfw_error_callback(int error, const char *description) {
-  auto &logger = asap::logging::Registry::GetLogger(asap::logging::Id::MAIN);
+  auto &logger = asap::logging::Registry::GetLogger("main");
   ASLOG_TO_LOGGER(logger, critical, "Glfw Error {}: {}", error, description);
 }
 
@@ -175,7 +175,7 @@ GLFWmonitor *GetMonitorByNumber(int monitor) {
     if (monitor >= 0 && monitor < count)
       the_monitor = monitors[monitor];
     else {
-      auto &logger = logging::Registry::GetLogger(logging::Id::MAIN);
+      auto &logger = logging::Registry::GetLogger("main");
       ASLOG_TO_LOGGER(
           logger, error,
           "requested monitor {} is not connected, using primary monitor");
@@ -409,7 +409,7 @@ int ImGuiRunner::GetMonitorId() const {
 
 namespace {
 void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
-  auto &logger = asap::logging::Registry::GetLogger(asap::logging::Id::MAIN);
+  auto &logger = asap::logging::Registry::GetLogger("main");
 
   auto display = config->get_table("display");
   if (!display) {

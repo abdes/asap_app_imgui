@@ -16,7 +16,7 @@ namespace ui {
 
 class ApplicationBase : public AbstractApplication,
                         asap::NonCopiable,
-                        protected asap::logging::Loggable<asap::logging::Id::MAIN> {
+                        protected asap::logging::Loggable<ApplicationBase> {
  public:
   ApplicationBase() = default;
 
@@ -30,6 +30,8 @@ class ApplicationBase : public AbstractApplication,
   void Init(ImGuiRunner *runner) final;
   bool Draw() override;
   void ShutDown() final;
+
+  static const char * LOGGER_NAME;
 
  protected:
   virtual void AfterInit() {}

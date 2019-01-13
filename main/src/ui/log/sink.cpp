@@ -26,8 +26,10 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
 #include <common/logging.h>
 #include <config.h>
 
-        namespace asap {
+namespace asap {
   namespace ui {
+
+  const char *ImGuiLogSink::LOGGER_NAME = "main";
 
   const ImVec4 ImGuiLogSink::COLOR_WARN{0.9f, 0.7f, 0.0f, 1.0f};
   const ImVec4 ImGuiLogSink::COLOR_ERROR{1.0f, 0.0f, 0.0f, 1.0f};
@@ -42,13 +44,13 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
 
     std::vector<int> levels;
     for (auto &a_logger : asap::logging::Registry::Loggers()) {
-      levels.push_back(a_logger.GetLevel());
+      levels.push_back(a_logger.second.GetLevel());
       auto format = std::string("%u (")
-                        .append(spdlog::level::to_string_view(a_logger.GetLevel()).data())
+                        .append(spdlog::level::to_string_view(a_logger.second.GetLevel()).data())
                         .append(")");
-      if (ImGui::SliderInt(a_logger.Name().c_str(), &levels.back(), 0, 6,
+      if (ImGui::SliderInt(a_logger.second.Name().c_str(), &levels.back(), 0, 6,
                            format.c_str())) {
-        a_logger.SetLevel(spdlog::level::level_enum(levels.back()));
+        a_logger.second.SetLevel(spdlog::level::level_enum(levels.back()));
       }
     }
   }
@@ -293,7 +295,7 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
     auto properties = ostr.str();
 
     // Strip the filename:line from the message and put it in a separate string
-    auto msg_str =fmt::to_string(msg.payload.data());
+    auto msg_str = std::string(msg.payload.data(), msg.payload.size());
     auto skip_to = msg_str.begin();
     if (*skip_to == '[') {
       // skip spaces
@@ -382,9 +384,9 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
 
   namespace {
   void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
-    auto &logger = asap::logging::Registry::GetLogger(asap::logging::Id::MAIN);
+    auto &logger = asap::logging::Registry::GetLogger("main");
 
-    auto loggers = config->get_table("loggers");
+    auto loggers = config->get_table_array("loggers");
     if (!loggers) {
       ASLOG_TO_LOGGER(logger, warn, "missing 'loggers' in config");
     }
@@ -422,11 +424,11 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
     if (asap::filesystem::exists(log_settings)) {
       try {
         config = cpptoml::parse_file(log_settings.string());
-        ASLOG(info, "settings loaded from {}", log_settings);
+        ASLOG(info, "settings loaded from {}", log_settings.string());
         has_config = true;
       } catch (std::exception const &ex) {
         ASLOG(error, "error () while loading settings from {}", ex.what(),
-              log_settings);
+              log_settings.string());
       }
     } else {
       ASLOG(info, "file {} does not exist", log_settings);
@@ -438,13 +440,11 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
       auto loggers = config->get_table_array("loggers");
       if (loggers) {
         for (auto const &logger_settings : *loggers) {
-          ASLOG(debug, "logger '{}' with id '{}' will have level '{}'",
+          ASLOG(debug, "logger '{}' will have level '{}'",
                 *(logger_settings->get_as<std::string>("name")),
-                *(logger_settings->get_as<int>("id")),
                 *(logger_settings->get_as<int>("level")));
           auto &logger =
-              asap::logging::Registry::GetLogger(static_cast<asap::logging::Id>(
-                  *(logger_settings->get_as<int>("id"))));
+              asap::logging::Registry::GetLogger(*(logger_settings->get_as<std::string>("name")));
           logger.set_level(static_cast<spdlog::level::level_enum>(
               *(logger_settings->get_as<int>("level"))));
         }
@@ -478,20 +478,19 @@ __pragma(warning(push)) __pragma(warning(disable : 4127))
   void ImGuiLogSink::SaveSettings() {
     std::shared_ptr<cpptoml::table> root = cpptoml::make_table();
 
-    auto loggers = cpptoml::make_table();
+    auto loggers = cpptoml::make_table_array();
 
     for (auto &log : logging::Registry::Loggers()) {
       auto logcfg = cpptoml::make_table();
       logcfg->insert(
-          "id",
-          static_cast<typename std::underlying_type<asap::logging::Id>::type>(
-              log.Id()));
+          "name",
+          log.second.Name());
       logcfg->insert(
           "level",
           static_cast<
               typename std::underlying_type<spdlog::level::level_enum>::type>(
-              log.GetLevel()));
-      loggers->insert(log.Name(), logcfg);
+              log.second.GetLevel()));
+      loggers->push_back(logcfg);
     }
 
     root->insert("loggers", loggers);

@@ -12,7 +12,7 @@
 
 namespace asap {
 
-class RunnerBase : public asap::logging::Loggable<asap::logging::Id::MAIN> {
+class RunnerBase : public asap::logging::Loggable<RunnerBase> {
  public:
   using shutdown_function_type = std::function<void()>;
 
@@ -22,6 +22,8 @@ class RunnerBase : public asap::logging::Loggable<asap::logging::Id::MAIN> {
   virtual ~RunnerBase() = default;
 
   virtual void Run() = 0;
+
+  static const char * LOGGER_NAME;
 
  protected:
   AbstractApplication &app_;

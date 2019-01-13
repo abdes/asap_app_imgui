@@ -23,6 +23,8 @@ namespace ui {
 // TODO: cleanup this from a c== point of view
 static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
 
+const char *ApplicationBase::LOGGER_NAME = "main";
+
 void ApplicationBase::Init(ImGuiRunner *runner) {
   runner_ = runner;
   sink_ = std::make_shared<asap::ui::ImGuiLogSink>();
