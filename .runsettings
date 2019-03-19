@@ -11,7 +11,7 @@
   <!-- Adapter Specific sections -->
   <!-- https://github.com/JohnnyHendriks/TestAdapter_Catch2/blob/master/Docs/Settings.md -->
   <Catch2Adapter>
-    <DiscoverCommandLine>--list-tests *</DiscoverCommandLine>
+    <DiscoverCommandLine>--verbosity high --list-tests *</DiscoverCommandLine>
     <DiscoverTimeout>500</DiscoverTimeout>
     <!-- Milliseconds -->
     <FilenameFilter>_test</FilenameFilter>
