@@ -81,6 +81,9 @@ option(OPTION_GOOGLE_TSAN    "Instrument code with thread sanitizer"            
 The code is portable across Linux (g++ and clang), OS X and Visual Studio 2017.
 
 ## Special Thanks
-[![JetBrains](https://en.wikipedia.org/wiki/File:JetBrains_Logo_2016.svg)](https://www.jetbrains.com/) 
-for providing a free license for the development of this project and for 
-supporting OpenSource development.
+[<img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/JetBrains_Logo_2016.svg" width="128" height="128">](https://www.jetbrains.com/)
+ 
+[JetBrains](https://www.jetbrains.com/) provides a free license of 
+[CLion](https://www.jetbrains.com/clion/) for the development of this project.
+CLion is an excellent platform independent IDE for C++ that saves me a lot of 
+time and allows me to concentrate on problem solving and coding.
