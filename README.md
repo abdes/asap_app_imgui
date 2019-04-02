@@ -79,3 +79,8 @@ option(OPTION_GOOGLE_TSAN    "Instrument code with thread sanitizer"            
 ```
 
 The code is portable across Linux (g++ and clang), OS X and Visual Studio 2017.
+
+## Special Thanks
+[![JetBrains](https://en.wikipedia.org/wiki/File:JetBrains_Logo_2016.svg)](https://www.jetbrains.com/) 
+for providing a free license for the development of this project and for 
+supporting OpenSource development.
