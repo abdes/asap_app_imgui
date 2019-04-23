@@ -18,7 +18,7 @@ namespace asap {
 namespace ui {
 
 class ImGuiLogSink : public spdlog::sinks::base_sink<std::mutex>,
-                     asap::logging::Loggable<asap::logging::Id::MAIN> {
+                     asap::logging::Loggable<ImGuiLogSink> {
  public:
   void Clear();
 
@@ -34,6 +34,8 @@ class ImGuiLogSink : public spdlog::sinks::base_sink<std::mutex>,
 
   void LoadSettings();
   void SaveSettings();
+
+  static const char * LOGGER_NAME;
 
  protected:
   void sink_it_(const spdlog::details::log_msg &msg) override;

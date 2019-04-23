@@ -69,8 +69,6 @@ matrix:
       - |
         if [[ -s dox/doxygen_warnings.txt ]]; then
           echo "You must fix doxygen before submitting a pull request"
-          echo ""
-          cat dox/doxygen_warnings.txt
           exit -1
         fi
   #
@@ -105,7 +103,7 @@ matrix:
           - gcc-6
           - g++-6
     script:
-      - cmake -Wno-dev -DENABLE_CLANG_TIDY=ON -DCMAKE_CXX_COMPILER="clang++-6.0" ..
+      - cmake -Wno-dev -DCMAKE_BUILD_TYPE=Debug -DENABLE_CLANG_TIDY=ON -DCMAKE_CXX_COMPILER="clang++-6.0" ..
       - make 2>&1 | tee output.txt
       - |
         if [[ -n $(grep -E "(warning: |error: )" output.txt | grep -v -E "(third_party|_build)")  ]]; then

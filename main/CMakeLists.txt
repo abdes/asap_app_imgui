@@ -69,6 +69,7 @@ set(sources
   #
   src/ui/log/sink.cpp
   #
+  src/runner_base.cpp
   src/imgui_runner.cpp
   src/application.cpp
   src/config.cpp

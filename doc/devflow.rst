@@ -210,19 +210,20 @@ release branch.  Instead, the process is:
        there is always a dedicated merge commit)
    * - 8
      - .. todo:: update version numbers
-     -
+       .. todo:: update build badges in README.md to use master branch
+     - See `semantic versioning <https://semver.org>`_
    * - 9
-     - git commit -a -m "version bump to 0.31.1"
+     - git commit -a -m "version bump to M.m.p"
      -
    * - 10
      - git push
      -
    * - 11
-     - git tag -a 0.31.1 -m "release 0.31.1"
+     - git tag -a M.m.p -m "release M.m.p"
      - Tag `master` with appropriate label.
        See `here <https://git-scm.com/book/en/v2/Git-Basics-Tagging>`_
    * - 12
-     - git push origin 0.31.1
+     - git push origin M.m.p
      - Pushes the tag to the remote repository
    * - 13
      - git checkout develop
@@ -233,9 +234,11 @@ release branch.  Instead, the process is:
        (see --no-ff notes below)
    * - 15
      - .. todo:: version bump for develop
-     - Version bump (e.g. from 0.<prev> to 0.<next>-alpha)
+       .. todo:: update build badges in README.md to use develop branch
+     - Version bump (e.g. from 0.9.0 to 0.9.1,
+       see `semantic versioning <https://semver.org>`_)
    * - 16
-     - git commit -a -m "version bump to 0.32.0-alpha"
+     - git commit -a -m "version bump to M.m.p"
      -
    * - 17
      - git push

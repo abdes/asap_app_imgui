@@ -505,7 +505,7 @@ void Theme::AddFont(std::string const &name, ImFont *font) {
 
 namespace {
 void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
-  auto &logger = asap::logging::Registry::GetLogger(asap::logging::Id::MAIN);
+  auto &logger = asap::logging::Registry::GetLogger("main");
 
   auto theme = config->get_table("theme");
   if (!theme) {
@@ -658,7 +658,7 @@ void Theme::SaveStyle() {
   }
 
 void Theme::LoadStyle() {
-  auto &logger = asap::logging::Registry::GetLogger(asap::logging::Id::MAIN);
+  auto &logger = asap::logging::Registry::GetLogger("main");
 
   std::shared_ptr<cpptoml::table> config;
   auto theme_settings =
