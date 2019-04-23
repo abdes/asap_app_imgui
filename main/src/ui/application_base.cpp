@@ -83,10 +83,10 @@ bool ApplicationBase::Draw() {
           ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
     }
 
-    // When using ImGuiDockNodeFlags_PassthruDockspace, DockSpace() will render
+    // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render
     // our background and handle the pass-thru hole, so we ask Begin() to not
     // render a background.
-    if (opt_flags & ImGuiDockNodeFlags_PassthruDockspace)
+    if (opt_flags & ImGuiDockNodeFlags_PassthruCentralNode)
       window_flags |= ImGuiWindowFlags_NoBackground;
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -149,8 +149,8 @@ float ApplicationBase::DrawMainMenu() {
         opt_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
       if (ImGui::MenuItem(
               "Flag: PassthruDockspace", "",
-              (opt_flags & ImGuiDockNodeFlags_PassthruDockspace) != 0))
-        opt_flags ^= ImGuiDockNodeFlags_PassthruDockspace;
+              (opt_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))
+        opt_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
 
       ImGui::EndMenu();
     }
