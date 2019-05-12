@@ -32,6 +32,15 @@ variables:
       fi
 
     #
+    # Update / Install Xorg dev and other libs for glfw3
+    #
+    - |
+      if [ "${TRAVIS_OS_NAME}" == "linux" ]; then
+        sudo apt-get update
+        sudo apt-get install xorg-dev libglu1-mesa-dev
+      fi
+
+    #
     # Run the build
     #
     - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=ON -DOPTION_SELF_CONTAINED=ON -DCMAKE_INSTALL_PREFIX=./asap-install ..
