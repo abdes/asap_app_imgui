@@ -39,7 +39,7 @@ variables:
     - make install
     - ctest -C $BUILD_TYPE --output-on-failure
 
-build:ubuntu:trusty:gcc-6:
+build:ubuntu:trusty:gcc-7:
   <<: *build_definition
   image: ubuntu:trusty
   before_script:
