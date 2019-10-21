@@ -16,5 +16,5 @@ add_subdirectory(catch2 EXCLUDE_FROM_ALL)
 
 # spdlog
 SET(SPDLOG_BUILD_TESTING OFF CACHE BOOL "Build spdlog tests")
+SET(SPDLOG_INSTALL ON CACHE BOOL "Generate the spdlog install target")
 add_subdirectory(spdlog)
-
