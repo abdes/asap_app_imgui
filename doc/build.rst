@@ -117,19 +117,112 @@ To install all key packages:
    $ sudo apt-get install lld-6.0
 
 
-Building
---------
+Mac OS X
+========
 
-for g++
+   #. Download and install git:
+
+      ``$ brew install git``
+
+   #. Download and install cmake
+
+      ``$ brew install cmake``
+
+
+Windows with Visual Studio
+==========================
+
+   #. Download and install git for Windows: https://git-scm.com/download/win
+   #. Download and install cmake for Windows: https://cmake.org/download/
+
+Windows WSL (Ubuntu)
+====================
+
+Simply follow the instructions for setting up a Linux system running Ubuntu.
+
+
+Setting up the documentation tools
+==================================
+
+This project can produce documentation in 2 formats:
+
+  * Overall project documentation using `sphinx <https://www.sphinx-doc.org>`_ and
+    `breathe <https://breathe.readthedocs.io/en/latest/>`_. We use *breathe* to integrate the C++ API documentation
+    generated (under the hood) by doxygen as XML,
+  * Pure `doxygen <http://www.doxygen.nl/>`_ API documentation generated as HTML.
+
+We recommend setting up a virtual python environment using `conda <https://docs.conda.io/en/latest/>`_, in which you
+need to install the python packages for both *breathe* and *sphinx*. Although, there are many ways to achieve this
+result, the following simple instructions can get you up and running very quickly
+
+  #. Install doxygen (http://www.doxygen.nl/download.html)
+  #. Install graphviz to get access to the dot tool (https://graphviz.gitlab.io/download/) used by doxygen to generate
+     hierarchy graphs
+  #. Install miniconda (https://docs.conda.io/en/latest/miniconda.html)
+  #. Create a virtual environment to use for sphinx documentation generation. It is recommended to create this
+     environment close to where the asap project is located using specific path with conda.
+
+     ``$ conda create -p ./sphinx-cxx breathe sphinx``
+
+  #. Activate the environment
+
+     ``$ conda activate ./sphinx-cxx``
+
+
+Configuring the CMake project
+=============================
+
+for Linux with g++
 
 .. code-block:: bash
 
-   $ cd build &&\
+   $ cd build
    $ /opt/cmake/bin/cmake -DCMAKE_C_COMPILER="gcc-7" -DCMAKE_CXX_COMPILER="g++-7" ..
 
-for clang
+for Linux with clang
 
 .. code-block:: bash
 
-   $ cd build &&\
+   $ cd build
    $ /opt/cmake/bin/cmake -DCMAKE_C_COMPILER="clang-6.0" -DCMAKE_CXX_COMPILER="clang++-6.0" ..
+
+for Mac OS X
+
+.. code-block:: bash
+
+   $ cd build
+   $ /opt/cmake/bin/cmake ..
+
+for Windows with Visual Studio 2017
+
+.. code-block:: bash
+
+   $ cd build
+   $ cmake -G "Visual Studio 15 2017" ..
+
+for Windows with Visual Studio 2019
+
+.. code-block:: bash
+
+   $ cd build
+   $ cmake -G "Visual Studio 16 2019" -A x64  ..
+
+
+Building
+========
+
+to build the default targets
+
+.. code-block:: bash
+
+   $ cmake --build .
+
+or to build a specific target
+
+.. code-block:: bash
+
+   -- Build the sphinx documentation
+   $ cmake --build . --target sphinx
+
+   -- Build the doxygen API documentation
+   $ cmake --build . --target dox
