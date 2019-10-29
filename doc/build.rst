@@ -174,6 +174,13 @@ result, the following simple instructions can get you up and running very quickl
 
      ``$ conda activate ./sphinx-cxx``
 
+  After activating an environment using its prefix, your prompt will look similar to the following:
+
+  ``(/absolute/path/to/envs) $``
+
+  To remove this long prefix in your shell prompt, modify the env_prompt setting in your .condarc file:
+
+  ``$ conda config --set env_prompt '({name})'``
 
 Configuring the CMake project
 =============================
