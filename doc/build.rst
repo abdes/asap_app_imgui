@@ -159,6 +159,12 @@ result, the following simple instructions can get you up and running very quickl
   #. Install graphviz to get access to the dot tool (https://graphviz.gitlab.io/download/) used by doxygen to generate
      hierarchy graphs
   #. Install miniconda (https://docs.conda.io/en/latest/miniconda.html)
+  #. Add conda-forge channel
+  
+     ``conda config --add channels conda-forge``
+     
+     ``conda config --set channel_priority strict``
+     
   #. Create a virtual environment to use for sphinx documentation generation. It is recommended to create this
      environment close to where the asap project is located using specific path with conda.
 
