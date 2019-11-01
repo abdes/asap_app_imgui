@@ -5,16 +5,14 @@
 
 message("=> [third-party modules]")
 
-# Boost
-#set(BOOST_URL https://dl.bintray.com/boostorg/release/1.67.0/source/boost_1_67_0.tar.bz2 CACHE STRING "Boost download URL" FORCE)
-#set(BOOST_URL_SHA256 2684c972994ee57fc5632e03bf044746f6eb45d4920c343937a465fd67a5adba CACHE STRING "Boost download URL SHA256 checksum" FORCE)
-#add_subdirectory(boost-cmake)
-
 # Catch2
 # EXCLUDE_FROM_ALL to not have it install its files during install
 add_subdirectory(catch2 EXCLUDE_FROM_ALL)
 
 # spdlog
 SET(SPDLOG_BUILD_TESTING OFF CACHE BOOL "Build spdlog tests")
+SET(SPDLOG_INSTALL ON CACHE BOOL "Generate the spdlog install target")
+if(NOT (WIN32 OR MINGW))
+	SET(SPDLOG_BUILD_SHARED ${BUILD_SHARED_LIBS} CACHE BOOL "Build spdlog as a shared library")
+endif()
 add_subdirectory(spdlog)
-
