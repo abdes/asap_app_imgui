@@ -490,14 +490,14 @@ void ImGuiRunner::LoadSetting() {
   if (asap::filesystem::exists(display_settings)) {
     try {
       config = cpptoml::parse_file(display_settings.string());
-      ASLOG(info, "display settings loaded from {}", display_settings);
+      ASLOG(info, "display settings loaded from {}", display_settings.string());
       has_config = true;
     } catch (std::exception const &ex) {
       ASLOG(error, "error () while loading settings from {}", ex.what(),
-            display_settings);
+            display_settings.string());
     }
   } else {
-    ASLOG(info, "file {} does not exist", display_settings);
+    ASLOG(info, "file {} does not exist", display_settings.string());
   }
 
   int width = 800;

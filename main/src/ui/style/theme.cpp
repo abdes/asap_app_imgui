@@ -668,15 +668,15 @@ void Theme::LoadStyle() {
     try {
       config = cpptoml::parse_file(theme_settings.string());
       ASLOG_TO_LOGGER(logger, info, "theme settings loaded from {}",
-                      theme_settings);
+                      theme_settings.string());
       has_config = true;
     } catch (std::exception const &ex) {
       ASLOG_TO_LOGGER(logger, error,
                       "error () while loading theme settings from {}",
-                      ex.what(), theme_settings);
+                      ex.what(), theme_settings.string());
     }
   } else {
-    ASLOG_TO_LOGGER(logger, info, "file {} does not exist", theme_settings);
+    ASLOG_TO_LOGGER(logger, info, "file {} does not exist", theme_settings.string());
   }
 
   if (has_config) {

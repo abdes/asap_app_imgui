@@ -191,8 +191,8 @@ float ApplicationBase::DrawMainMenu() {
 void ApplicationBase::DrawStatusBar(float width, float height, float pos_x,
                                     float pos_y) {
   // Draw status bar (no docking)
-  ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiSetCond_Always);
-  ImGui::SetNextWindowPos(ImVec2(pos_x, pos_y), ImGuiSetCond_Always);
+  ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_Always);
+  ImGui::SetNextWindowPos(ImVec2(pos_x, pos_y), ImGuiCond_Always);
   ImGui::Begin("statusbar", nullptr,
                ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoSavedSettings |
                    ImGuiWindowFlags_NoBringToFrontOnFocus |

@@ -290,7 +290,7 @@ namespace asap {
       color_range_end = static_cast<std::size_t>(ostr.tellp());
     }
     if (show_logger_) {
-      ostr << "[" << *msg.logger_name << "] ";
+      ostr.put('[').write(msg.logger_name.data(), msg.logger_name.size()).write("] ", 2);
     }
     auto properties = ostr.str();
 
@@ -431,7 +431,7 @@ namespace asap {
               log_settings.string());
       }
     } else {
-      ASLOG(info, "file {} does not exist", log_settings);
+      ASLOG(info, "file {} does not exist", log_settings.string());
     }
 
     if (has_config) {
