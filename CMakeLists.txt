@@ -295,3 +295,11 @@ install(FILES README.md DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
 # Install runtime data
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/data DESTINATION ${INSTALL_DATA} COMPONENT runtime)
 
+# Install sphinx master docs
+if(SPHINX_FOUND)
+  install(
+    DIRECTORY ${SPHINX_BUILD_DIR}/master
+    DESTINATION ${INSTALL_DOC}
+    COMPONENT docs
+  )
+endif()
