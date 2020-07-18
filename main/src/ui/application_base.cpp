@@ -358,7 +358,7 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
   // Toolbar
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {5.0f, 2.0f});
   ImGui::PushStyleColor(
-      ImGuiCol_ChildWindowBg,
+      ImGuiCol_ChildBg,
       (pending_changes) ? ImGui::GetStyleColorVec4(ImGuiCol_PlotLinesHovered)
                         : ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
 
@@ -460,7 +460,7 @@ void ShowStyleSettings() {
   // Toolbar
   {
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {5.0f, 2.0f});
-    ImGui::PushStyleColor(ImGuiCol_ChildWindowBg,
+    ImGui::PushStyleColor(ImGuiCol_ChildBg,
                           ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
     {
       ImGui::BeginChild("Style Settings Toolbar",
