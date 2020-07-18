@@ -58,7 +58,7 @@ set(META_AUTHOR_DOMAIN       "https://github.com/abdes/asap")
 set(META_AUTHOR_MAINTAINER   "Abdessattar Sassi (abde.sassi gmail account)")
 set(META_VERSION_MAJOR       "0")
 set(META_VERSION_MINOR       "10")
-set(META_VERSION_PATCH       "1")
+set(META_VERSION_PATCH       "2")
 set(META_VERSION_REVISION    "${GIT_REV}")
 set(META_VERSION             "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
 set(META_NAME_VERSION        "${META_PROJECT_NAME} v${META_VERSION} (${META_VERSION_REVISION})")
@@ -295,3 +295,11 @@ install(FILES README.md DESTINATION ${INSTALL_ROOT} COMPONENT runtime)
 # Install runtime data
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/data DESTINATION ${INSTALL_DATA} COMPONENT runtime)
 
+# Install sphinx master docs
+if(SPHINX_FOUND)
+  install(
+    DIRECTORY ${SPHINX_BUILD_DIR}/master
+    DESTINATION ${INSTALL_DOC}
+    COMPONENT docs
+  )
+endif()

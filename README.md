@@ -13,13 +13,13 @@
 | Windows | [![Windows][21]][20] |
 
 [0]: https://travis-ci.org/abdes/asap
-[9]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/master/9
-[10]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/master/10
-[11]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/master/11
-[12]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/master/12
-[13]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/master/13
+[9]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/9
+[10]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/10
+[11]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/11
+[12]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/12
+[13]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/13
 [20]: https://ci.appveyor.com/project/abdes/asap
-[21]: https://ci.appveyor.com/api/projects/status/fbqox338lae708fq/branch/master?svg=true
+[21]: https://ci.appveyor.com/api/projects/status/fbqox338lae708fq/branch/develop?svg=true
 
 ## Overview
 
@@ -88,11 +88,3 @@ option(OPTION_GOOGLE_TSAN    "Instrument code with thread sanitizer"            
 
 The code is portable across Linux (g++ and clang), OS X and Visual Studio 2017.
 
-## Special Thanks
-
-[<img src="https://upload.wikimedia.org/wikipedia/commons/1/1a/JetBrains_Logo_2016.svg" width="128" height="128">](https://www.jetbrains.com/)
-
-[JetBrains](https://www.jetbrains.com/) provides a free license of
-[CLion](https://www.jetbrains.com/clion/) for the development of this project.
-CLion is an excellent platform independent IDE for C++ that saves me a lot of
-time and allows me to concentrate on problem solving and coding.
