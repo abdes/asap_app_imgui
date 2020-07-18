@@ -11,13 +11,13 @@
 | Windows | [![Windows][21]][20] |
 
 [0]: https://travis-ci.org/abdes/asap_app_imgui
-[9]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/master/9
-[10]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/master/10
-[11]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/master/11
-[12]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/master/12
-[13]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/master/13
+[9]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/9
+[10]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/10
+[11]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/11
+[12]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/12
+[13]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/13
 [20]: https://ci.appveyor.com/project/abdes/asap-app-imgui
-[21]: https://ci.appveyor.com/api/projects/status/qoaae14rw3cyivgq/branch/master?svg=true
+[21]: https://ci.appveyor.com/api/projects/status/qoaae14rw3cyivgq/branch/develop?svg=true
 
 # Starter project with minimum necessary functionality
   - use cmake for the build system
