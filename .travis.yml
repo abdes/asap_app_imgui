@@ -96,7 +96,6 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-6.0
           packages:
             - clang-6.0
             - clang-tidy-6.0
@@ -232,7 +231,6 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-4.0
           packages:
             - clang-4.0
             - gcc-6
@@ -252,7 +250,6 @@ matrix:
         apt:
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-5.0
           packages:
             - clang-5.0
             - gcc-6
