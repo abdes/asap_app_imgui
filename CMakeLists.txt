@@ -151,15 +151,15 @@ include(Valgrind)
 # Generate version-header
 configure_file(
   templates/version.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME}/${META_PROJECT_NAME}-version.h
+  ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h
 )
 
 # Generate feature-header
 message(STATUS "Generating compiler feature detection header...")
-set(feature_file "${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME}/${META_PROJECT_NAME}-features.h")
+set(feature_file "${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-features.h")
 write_compiler_detection_header(
   FILE ${feature_file}
-  PREFIX ${META_PROJECT_ID}
+  PREFIX ASAP
   COMPILERS AppleClang Clang GNU MSVC
   FEATURES cxx_constexpr cxx_final cxx_noexcept cxx_nullptr cxx_sizeof_member cxx_thread_local
   ALLOW_UNKNOWN_COMPILERS
