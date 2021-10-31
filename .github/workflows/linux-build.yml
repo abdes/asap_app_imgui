@@ -24,7 +24,7 @@ jobs:
     steps:
     - name: Install additional packages
       run: |
-        sudo apt-get -y install libxrandr-dev libxinerama-dev
+        sudo apt-get -y install libxrandr-dev libxinerama-dev libxcursor-dev
         
     - name: Checkout
       uses: actions/checkout@v2
