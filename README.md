@@ -3,6 +3,8 @@
 
 [![Linux Build (Ubuntu latest)](https://github.com/abdes/asap_app_imgui/actions/workflows/linux-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap_app_imgui/actions/workflows/linux-build.yml)
 
+[![Windows Build (latest)](https://github.com/abdes/asap_app_imgui/actions/workflows/windows-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap_app_imgui/actions/workflows/windows-build.yml)
+
 # Starter project with minimum necessary functionality
 
 - use cmake for the build system
