@@ -2,7 +2,6 @@
 [![repo on GitLab](https://img.shields.io/badge/repo-GitLab-brightgreen.svg)](https://gitlab.com/absassi/asap_app_imgui)
 
 [![Linux Build (Ubuntu latest)](https://github.com/abdes/asap_app_imgui/actions/workflows/linux-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap_app_imgui/actions/workflows/linux-build.yml)
-
 [![Windows Build (latest)](https://github.com/abdes/asap_app_imgui/actions/workflows/windows-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap_app_imgui/actions/workflows/windows-build.yml)
 
 # Starter project with minimum necessary functionality
