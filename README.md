@@ -3,15 +3,15 @@
 
 | Configuration             | Build Status                          |
 | ------------------------- | ------------------------------------- |
-| Linux G++ 7               | [![Linux G++ 7][9]][0]                |
+| Linux Ubuntu latest g++   | [![Linux G++ 7][9]][0]                |
 | Linux Clang 4             | [![Linux Clang 4][10]][0]             |
 | Linux Clang 5             | [![Linux Clang 5][11]][0]             |
 | XCode 9.4.1 - OS X 10.13  | [![XCode 9.4.1 - OS X 10.13][12]][0]  |
 | XCode 12.0 - OS X 10.15.5 | [![XCode 12.0 - OS X 10.15.5][13]][0] |
 | Windows                   | [![Windows][21]][20]                  |
 
-[0]: https://travis-ci.org/abdes/asap_app_imgui
-[9]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/9
+[0]: https://github.com/abdes/asap_app_imgui/actions/workflows/linux-build.yml
+[9]: https://github.com/abdes/asap_app_imgui/actions/workflows/linux-build.yml/badge.svg?branch=develop
 [10]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/10
 [11]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/11
 [12]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap_app_imgui/branches/develop/12
