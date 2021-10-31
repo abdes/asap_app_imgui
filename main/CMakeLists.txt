@@ -136,6 +136,13 @@ asap_executable(
   ${compile_options}
 )
 
+# Hacking the include directories when building th executable simply because of 
+# Imgui backend files including "imgui.h" literally like that. We add the imgui 
+# directory to the includes so that it will work.
+#
+# In other files, such as the ones we provide, we don't do that shit like that.
+# Instead, we include files from Imgui library as <imgui/xxxxx>
+target_include_directories(${target} PRIVATE ${CMAKE_SOURCE_DIR}/imgui/imgui)
 
 # ------------------------------------------------------------------------------
 # Tests

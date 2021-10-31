@@ -261,7 +261,7 @@ namespace asap {
     }
     ImGui::PopStyleVar();
 
-    if (!scroll_lock_ && scroll_to_bottom_) ImGui::SetScrollHere(1.0f);
+    if (!scroll_lock_ && scroll_to_bottom_) ImGui::SetScrollHereY(1.0f);
     scroll_to_bottom_ = false;
     ImGui::EndChild();
 
