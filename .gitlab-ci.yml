@@ -39,16 +39,16 @@ variables:
     - make install
     - ctest -C $BUILD_TYPE --output-on-failure
 
-build:ubuntu:trusty:gcc-7:
+build:ubuntu:latest:gcc-9:
   <<: *build_definition
-  image: ubuntu:trusty
+  image: ubuntu:latest
   before_script:
     - apt-get update -qq
     - apt-get install -y -qq software-properties-common python-software-properties
     - add-apt-repository ppa:ubuntu-toolchain-r/test
     - apt-get update -qq
-    - apt-get install -y -qq wget git build-essential gcc-7 g++-7
+    - apt-get install -y -qq wget git build-essential gcc-9 g++-9
     - apt-get install -y -qq xorg-dev libglu1-mesa-dev
   variables:
-    CC: gcc-7
-    CXX: g++-7
+    CC: gcc-9
+    CXX: g++-9
