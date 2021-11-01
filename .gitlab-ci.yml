@@ -27,4 +27,4 @@ build:ubuntu:latest:
   image: ubuntu:latest
   before_script:
     - apt-get update -qq
-    - apt-get install -y -qq libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl-dev
+    - apt-get install -y -qq cmake libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl-dev
