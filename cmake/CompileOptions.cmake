@@ -78,7 +78,12 @@ set(DEFAULT_COMPILE_OPTIONS)
 
 # MSVC compiler options
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-  set(DEFAULT_COMPILE_OPTIONS ${DEFAULT_COMPILE_OPTIONS}
+  # CMake adds compiler warning levels by default and for MSVC, it uses /W3 
+  # which we want to override with /W4. The override does make MSVC complain 
+  # though, so we just strip any argument already added by cmake before we set ours.
+  string(REGEX REPLACE "/W[3|4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
+  set(DEFAULT_COMPILE_OPTIONS
     /MP           # -> build with multiple processes
     /W4           # -> warning level 4
     # /WX         # -> treat warnings as errors
@@ -103,7 +108,7 @@ endif ()
 
 # GCC and Clang compiler options
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-  set(DEFAULT_COMPILE_OPTIONS ${DEFAULT_COMPILE_OPTIONS}
+  set(DEFAULT_COMPILE_OPTIONS
     -Wall
     -Wextra
     -Wunused
