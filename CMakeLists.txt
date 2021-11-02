@@ -27,7 +27,6 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # Register general cmake commands
 include(GenerateExportHeader)
-include(WriteCompilerDetectionHeader)
 include(ExternalProject)
 find_package(Git REQUIRED)
 
@@ -153,19 +152,6 @@ configure_file(
   templates/version.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h
 )
-
-# Generate feature-header
-message(STATUS "Generating compiler feature detection header...")
-set(feature_file "${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-features.h")
-write_compiler_detection_header(
-  FILE ${feature_file}
-  PREFIX ASAP
-  COMPILERS AppleClang Clang GNU MSVC
-  FEATURES cxx_constexpr cxx_final cxx_noexcept cxx_nullptr cxx_sizeof_member cxx_thread_local
-  ALLOW_UNKNOWN_COMPILERS
-  ALLOW_UNKNOWN_COMPILER_VERSIONS
-)
-
 
 # ------------------------------------------------------------------------------
 # Test targets

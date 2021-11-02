@@ -6,5 +6,10 @@
         130
     ],
     "rewrap.wrappingColumn": 80,
-    "rewrap.autoWrap.enabled": true
+    "rewrap.autoWrap.enabled": true,
+    "files.associations": {
+        "xtr1common": "cpp",
+        "memory": "cpp",
+        "system_error": "cpp"
+    }
 }
