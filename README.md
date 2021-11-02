@@ -55,6 +55,16 @@ NOTES:
 Make sure you have a C++ compiler with C++-14 capabilities at least. Gnu, Clang and MSVC
 all can do that with a recent version.
 
+## Enabling husky/commitlint/standard-version
+
+Only one time after the project is cloned, do the following:
+
+```bash
+npx husky install
+npm install -g @commitlint/cli @commitlint/config-conventional
+npm install -g standard-version
+```
+
 ## Building
 
 ```bash
