@@ -57,7 +57,8 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
     'sphinx-prompt',
-    'sphinx_copybutton'
+    'sphinx_copybutton',
+    'myst_parser'
 ]
 
 # Tell sphinx what the primary language being documented is.

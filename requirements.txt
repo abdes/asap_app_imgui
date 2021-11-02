@@ -2,6 +2,8 @@ autopep8
 bandit
 breathe
 docutils
+esbonio
+myst-parser
 pygments
 rstcheck
 Sphinx
@@ -9,4 +11,3 @@ sphinx-autobuild
 sphinx-book-theme
 sphinx-copybutton
 sphinx-prompt
-esbonio

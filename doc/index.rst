@@ -19,7 +19,7 @@ ASAP documentation!
    02-developer-guides/index
    03-library-modules/index
    license
-   version
+   changelog.md
 
 Welcome! This is the documentation for the *asap* project. This is the top level
 container project for the asap modules. It provides the integrated build system
@@ -57,5 +57,7 @@ Indices and tables
 
 Meta information
 ================
+
+This documentation was generated from version: |release|.
 
   | :doc:`License <license>`
