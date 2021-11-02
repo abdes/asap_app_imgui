@@ -6,12 +6,8 @@
      ^ for subsubsections
      " for paragraphs
 
-*******
-Modules
-*******
+################
+Getting Started!
+################
 
-:doc:`common <common:api>`
-==========================
 
-:doc:`filesystem <filesystem:api>`
-==================================

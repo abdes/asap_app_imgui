@@ -12,14 +12,14 @@ ASAP documentation!
 
 .. toctree::
    :maxdepth: 2
+   :titlesonly:
    :hidden:
 
-   Usage <usage>
-   Build <build>
-   Development <devflow>
-   Modules <modules>
-   License <license>
-   Version <version>
+   01-getting-started/index
+   02-developer-guides/index
+   03-library-modules/index
+   license
+   version
 
 Welcome! This is the documentation for the *asap* project. This is the top level
 container project for the asap modules. It provides the integrated build system
@@ -32,32 +32,22 @@ system.
 Parts of the documentation
 ==========================
 
-:doc:`Using in your project <usage>`
-------------------------------------
+:doc:`Getting Started! <01-getting-started/index>`
+--------------------------------------------------
 *start here to understand how to use this project as a starter for your own
 project*
 
-:doc:`Building this project <build>`
-------------------------------------
-*start here to understand how to add this module to your own asap based
-project*
-
-:doc:`Development workflow <devflow>`
--------------------------------------
+:doc:`Developer Guides <02-developer-guides/index>`
+---------------------------------------------------
 *refer to this part of the documentation to understand the build system
 specifics for this project, the development workflow, coding and unit testing
 guidelines*
 
-:doc:`Modules <modules>`
-------------------------
+:doc:`Library Modules <03-library-modules/index>`
+-------------------------------------------------
 *check this out to explore the different modules part of this project. From
 there, you can also jump to the detailed API documentation of each of those
 modules.*
-
-Recipes and HOWTOs (TODO)
--------------------------
-*in-depth documents on specific topics related to the usage of the asap starter
-project*
 
 Indices and tables
 ==================

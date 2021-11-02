@@ -1,0 +1,10 @@
+{
+    "cmake.configureOnOpen": true,
+    "esbonio.sphinx.confDir": "doc",
+    "editor.rulers": [
+        80,
+        130
+    ],
+    "rewrap.wrappingColumn": 80,
+    "rewrap.autoWrap.enabled": true
+}

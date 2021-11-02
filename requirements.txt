@@ -1,0 +1,12 @@
+autopep8
+bandit
+breathe
+docutils
+pygments
+rstcheck
+Sphinx
+sphinx-autobuild
+sphinx-book-theme
+sphinx-copybutton
+sphinx-prompt
+esbonio
