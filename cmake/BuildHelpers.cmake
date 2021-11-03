@@ -7,16 +7,6 @@ include(CMakeParseArguments)
 include(GenerateTemplateExportHeader)
 
 
-# Set policy if policy is available
-function(set_policy POL VAL)
-
-  if (POLICY ${POL})
-    cmake_policy(SET ${POL} ${VAL})
-  endif ()
-
-endfunction(set_policy)
-
-
 # Define function "source_group_by_path with three mandatory arguments
 # (PARENT_PATH, REGEX, GROUP, ...) to group source files in folders (e.g. for
 # MSVC solutions).
