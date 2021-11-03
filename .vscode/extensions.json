@@ -5,6 +5,7 @@
         "donjayamanne.githistory",
         "eamodio.gitlens",
         "kevinkyang.auto-comment-blocks",
-        "matepek.vscode-catch2-test-adapter"
+        "matepek.vscode-catch2-test-adapter",
+        "cheshirekow.cmake-format"
     ]
 }
