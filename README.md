@@ -1,25 +1,14 @@
 # Starter project with minimum necessary functionality
 
+![Start Now!!](doc/_static/logo.png "ASAP Logo")
+
 [![repo on GitHub](https://img.shields.io/badge/repo-GitHub-brightgreen.svg)](https://github.com/abdes/asap)
 [![repo on GitLab](https://img.shields.io/badge/repo-GitLab-brightgreen.svg)](https://gitlab.com/absassi/asap)
 
-| Configuration             | Build Status                          |
-| ------------------------- | ------------------------------------- |
-| Linux G++ 7               | [![Linux G++ 7][9]][0]                |
-| Linux Clang 4             | [![Linux Clang 4][10]][0]             |
-| Linux Clang 5             | [![Linux Clang 5][11]][0]             |
-| XCode 9.4.1 - OS X 10.13  | [![XCode 9.4.1 - OS X 10.13][12]][0]  |
-| XCode 12.0 - OS X 10.15.5 | [![XCode 12.0 - OS X 10.15.5][13]][0] |
-| Windows                   | [![Windows][21]][20]                  |
+[![Linux Build (Ubuntu latest)](https://github.com/abdes/asap/actions/workflows/linux-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap/actions/workflows/linux-build.yml)
+[![Windows Build (latest)](https://github.com/abdes/asap/actions/workflows/windows-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap/actions/workflows/windows-build.yml)
 
-[0]: https://travis-ci.org/abdes/asap
-[9]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/9
-[10]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/10
-[11]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/11
-[12]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/12
-[13]: https://travis-matrix-badges.herokuapp.com/repos/abdes/asap/branches/develop/13
-[20]: https://ci.appveyor.com/project/abdes/asap
-[21]: https://ci.appveyor.com/api/projects/status/fbqox338lae708fq/branch/develop?svg=true
+## [Project Documentation](https://abdes.github.io/asap/)
 
 ## Overview
 
@@ -42,7 +31,7 @@ and from the master CMakeLists.txt (`add_subdirectory()`).
 ## Getting the code
 
 ```bash
-git clone --recurse-submodules -j4 https://gitlab.com/absassi/asap.git
+git clone --recurse-submodules -j4 https://github.com/abdes/asap.git
 ```
 
 NOTES:

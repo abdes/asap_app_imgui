@@ -255,8 +255,27 @@ add_subdirectory(deploy)
 
 # Setup sphinx doc master target and add other submodules as dependencies
 if(SPHINX_FOUND)
+  # Add a target for copying the index.html from the doc dir to the sphinx build
+  # dir. A dependency on this target will be added to the master sphinx target.
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
+    COMMAND
+    ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
+    DEPENDS
+      ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html
+  )
+  add_custom_target(copy_doc_index ALL
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
+  )
+
   add_sphinx_target("master")
-  add_dependencies(master_sphinx asap_common_sphinx asap_filesystem_sphinx)
+
+  add_dependencies(
+    master_sphinx
+    asap_common_sphinx 
+    asap_filesystem_sphinx 
+    copy_doc_index
+  )
 endif()
 
 
