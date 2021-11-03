@@ -27,7 +27,6 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # Register general cmake commands
 include(GenerateExportHeader)
-include(WriteCompilerDetectionHeader)
 include(ExternalProject)
 find_package(Git REQUIRED)
 
@@ -55,10 +54,10 @@ set(META_AUTHOR_ORGANIZATION "The Authors")
 set(META_GITHUB_USER         "abdes")
 set(META_GITHUB_REPO         "asap")
 set(META_AUTHOR_DOMAIN       "https://github.com/abdes/asap")
-set(META_AUTHOR_MAINTAINER   "Abdessattar Sassi (abde.sassi gmail account)")
+set(META_AUTHOR_MAINTAINER   "Abdessattar Sassi")
 set(META_VERSION_MAJOR       "0")
 set(META_VERSION_MINOR       "10")
-set(META_VERSION_PATCH       "6")
+set(META_VERSION_PATCH       "7")
 set(META_VERSION_REVISION    "${GIT_REV}")
 set(META_VERSION             "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
 set(META_NAME_VERSION        "${META_PROJECT_NAME} v${META_VERSION} (${META_VERSION_REVISION})")
@@ -153,19 +152,6 @@ configure_file(
   templates/version.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h
 )
-
-# Generate feature-header
-message(STATUS "Generating compiler feature detection header...")
-set(feature_file "${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-features.h")
-write_compiler_detection_header(
-  FILE ${feature_file}
-  PREFIX ASAP
-  COMPILERS AppleClang Clang GNU MSVC
-  FEATURES cxx_constexpr cxx_final cxx_noexcept cxx_nullptr cxx_sizeof_member cxx_thread_local
-  ALLOW_UNKNOWN_COMPILERS
-  ALLOW_UNKNOWN_COMPILER_VERSIONS
-)
-
 
 # ------------------------------------------------------------------------------
 # Test targets
@@ -269,8 +255,27 @@ add_subdirectory(deploy)
 
 # Setup sphinx doc master target and add other submodules as dependencies
 if(SPHINX_FOUND)
+  # Add a target for copying the index.html from the doc dir to the sphinx build
+  # dir. A dependency on this target will be added to the master sphinx target.
+  add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
+    COMMAND
+    ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
+    DEPENDS
+      ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html
+  )
+  add_custom_target(copy_doc_index ALL
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
+  )
+
   add_sphinx_target("master")
-  add_dependencies(master_sphinx asap_common_sphinx asap_filesystem_sphinx)
+
+  add_dependencies(
+    master_sphinx
+    asap_common_sphinx 
+    asap_filesystem_sphinx 
+    copy_doc_index
+  )
 endif()
 
 

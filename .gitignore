@@ -7,8 +7,8 @@ _build/
 _build-*/
 cmake-build*/
 .idea
-.vscode
 .vs
+.sphinx
 
 # Generated files inside source tree
 doc/conf.py

@@ -6,9 +6,9 @@
      ^ for subsubsections
      " for paragraphs
 
-*******
-Modules
-*******
+###############
+Library Modules
+###############
 
 :doc:`common <common:api>`
 ==========================
