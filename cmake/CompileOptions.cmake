@@ -1,8 +1,13 @@
+# ~~~
+#        Copyright The Authors 2018.
+#    Distributed under the 3-Clause BSD License.
+#    (See accompanying file LICENSE or copy at
+#   https://opensource.org/licenses/BSD-3-Clause)
+# ~~~
 
 # ------------------------------------------------------------------------------
 # Common/Default compiler options and flags, applied to all modules.
 # ------------------------------------------------------------------------------
-
 
 #
 # Platform and architecture setup
@@ -13,28 +18,28 @@ string(TOUPPER ${CMAKE_SYSTEM_NAME} SYSTEM_NAME_UPPER)
 
 # Determine architecture (32/64 bit)
 set(X64 OFF)
-if (CMAKE_SIZEOF_VOID_P EQUAL 8)
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
   set(X64 ON)
-endif ()
-
+endif()
 
 #
 # Project options
 #
 
 set(DEFAULT_PROJECT_OPTIONS
-  DEBUG_POSTFIX "d"
-  CXX_STANDARD 14
-  LINKER_LANGUAGE "CXX"
-  CXX_EXTENSIONS Off
-  )
+    DEBUG_POSTFIX
+    "d"
+    CXX_STANDARD
+    14
+    LINKER_LANGUAGE
+    "CXX"
+    CXX_EXTENSIONS
+    Off)
 
-if (BUILD_SHARED_LIBS)
-  list(APPEND DEFAULT_PROJECT_OPTIONS
-    POSITION_INDEPENDENT_CODE ON
-    CXX_VISIBILITY_PRESET "hidden"
-    )
-endif ()
+if(BUILD_SHARED_LIBS)
+  list(APPEND DEFAULT_PROJECT_OPTIONS POSITION_INDEPENDENT_CODE ON
+       CXX_VISIBILITY_PRESET "hidden")
+endif()
 
 #
 # Include directories
@@ -42,33 +47,25 @@ endif ()
 
 set(DEFAULT_INCLUDE_DIRECTORIES)
 
-
 #
 # Libraries
 #
 
 set(DEFAULT_LIBRARIES)
 
-
 #
 # Compile definitions
 #
 
-set(DEFAULT_COMPILE_DEFINITIONS
-  SYSTEM_${SYSTEM_NAME_UPPER}
-  )
+set(DEFAULT_COMPILE_DEFINITIONS SYSTEM_${SYSTEM_NAME_UPPER})
 
 # MSVC compiler options
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-  set(DEFAULT_COMPILE_DEFINITIONS ${DEFAULT_COMPILE_DEFINITIONS}
-    #_SCL_SECURE_NO_WARNINGS  # Calling any one of the potentially unsafe methods in the Standard C++ Library
-    #_CRT_SECURE_NO_WARNINGS  # Calling any one of the potentially unsafe methods in the CRT Library
-    NOMINMAX
-    WIN32_LEAN_AND_MEAN=1
-    _WIN32_WINNT=0x0600
-    )
-endif ()
-
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+  set(DEFAULT_COMPILE_DEFINITIONS
+      ${DEFAULT_COMPILE_DEFINITIONS}
+      # _SCL_SECURE_NO_WARNINGS _CRT_SECURE_NO_WARNINGS
+      NOMINMAX WIN32_LEAN_AND_MEAN=1 _WIN32_WINNT=0x0600)
+endif()
 
 #
 # Compile options
@@ -77,10 +74,13 @@ endif ()
 set(DEFAULT_COMPILE_OPTIONS)
 
 # MSVC compiler options
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
   # remove default warning level from CMAKE_CXX_FLAGS_INIT
-  string (REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT}")
-  set(DEFAULT_COMPILE_OPTIONS ${DEFAULT_COMPILE_OPTIONS}
+  string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS_INIT
+                       "${CMAKE_CXX_FLAGS_INIT}")
+  set(DEFAULT_COMPILE_OPTIONS
+      ${DEFAULT_COMPILE_OPTIONS}
+      # cmake-format: off
     /MP           # -> build with multiple processes
     /W4           # -> warning level 4
     # /WX         # -> treat warnings as errors
@@ -100,46 +100,40 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
     /GL           # -> whole program optimization: enable link-time code generation (disables Zi)
     /GF           # -> enable string pooling
     >
-    )
-endif ()
+  # cmake-format: on
+  )
+endif()
 
 # GCC and Clang compiler options
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-  set(DEFAULT_COMPILE_OPTIONS ${DEFAULT_COMPILE_OPTIONS}
-    -Wall
-    -Wextra
-    -Wunused
-
-    -Wreorder
-    -Wignored-qualifiers
-    -Wmissing-braces
-    -Wreturn-type
-    -Wswitch
-    -Wuninitialized
-    -Wmissing-field-initializers
-
-    $<$<CXX_COMPILER_ID:GNU>:
-    -Wmaybe-uninitialized
-
-    $<$<VERSION_GREATER:$<CXX_COMPILER_VERSION>,4.8>:
-    -Wpedantic
-
-    -Wreturn-local-addr
-    >
-    >
-
-    $<$<CXX_COMPILER_ID:Clang>:
-    -Wpedantic
-
-    # -Wreturn-stack-address # gives false positives
-    >
-
-    $<$<PLATFORM_ID:Darwin>:
-    -pthread
-    >
-    )
-endif ()
-
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}"
+                                               MATCHES "Clang")
+  set(DEFAULT_COMPILE_OPTIONS
+      ${DEFAULT_COMPILE_OPTIONS}
+      -Wall
+      -Wextra
+      -Wunused
+      -Wreorder
+      -Wignored-qualifiers
+      -Wmissing-braces
+      -Wreturn-type
+      -Wswitch
+      -Wuninitialized
+      -Wmissing-field-initializers
+      $<$<CXX_COMPILER_ID:GNU>:
+      -Wmaybe-uninitialized
+      $<$<VERSION_GREATER:$<CXX_COMPILER_VERSION>,4.8>:
+      -Wpedantic
+      -Wreturn-local-addr
+      >
+      >
+      $<$<CXX_COMPILER_ID:Clang>:
+      -Wpedantic
+      # -Wreturn-stack-address # gives false positives
+      >
+      $<$<PLATFORM_ID:Darwin>:
+      -pthread
+      >)
+endif()
 
 #
 # Linker options
@@ -148,13 +142,14 @@ endif ()
 set(DEFAULT_LINKER_OPTIONS)
 
 # MSVC compiler options
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
   if(CMAKE_BUILD_TYPE MATCHES "Release")
     list(APPEND DEFAULT_LINKER_OPTIONS /LTCG)
   endif()
 endif()
 
 # Use pthreads on mingw and linux
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_SYSTEM_NAME}" MATCHES
+                                               "Linux")
   list(APPEND DEFAULT_LINKER_OPTIONS -pthread)
-endif ()
+endif()
