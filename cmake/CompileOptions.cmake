@@ -75,9 +75,12 @@ set(DEFAULT_COMPILE_OPTIONS)
 
 # MSVC compiler options
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-  # remove default warning level from CMAKE_CXX_FLAGS_INIT
-  string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS_INIT
-                       "${CMAKE_CXX_FLAGS_INIT}")
+  # remove default warning level from CMAKE_CXX_FLAGS_INIT CMake adds compiler
+  # warning levels by default and for MSVC, it uses /W3 which we want to
+  # override with /W4. The override does make MSVC complain though, so we just
+  # strip any argument already added by cmake before we set ours.
+  string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+
   set(DEFAULT_COMPILE_OPTIONS
       ${DEFAULT_COMPILE_OPTIONS}
       # cmake-format: off
