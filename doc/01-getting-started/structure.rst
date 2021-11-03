@@ -127,6 +127,7 @@ translates into the hierarchy of directories forming the `asap` project layout.
      ├── <.sphinx>                               
      ├── <build>                                 
      │   ----------------------------------------
+     ├── <.github>                                
      ├── <.husky>                                
      ├── <.vscode>                               
      ├── <doxygen>                       II      
