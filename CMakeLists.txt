@@ -131,10 +131,16 @@ file(WRITE "${PROJECT_BINARY_DIR}/VERSION" "${META_NAME_VERSION}")
 add_subdirectory(third_party)
 
 # ------------------------------------------------------------------------------
-# Compiler settings and options
+# Clean compiler settings and options
 # ------------------------------------------------------------------------------
 
-include(CompileOptions)
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+  # remove default warning level from CMAKE_CXX_FLAGS_INIT CMake adds compiler
+  # warning levels by default and for MSVC, it uses /W3 which we want to
+  # override with /W4. The override does make MSVC complain though, so we just
+  # strip any argument already added by cmake before we set ours.
+  string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endif()
 
 # ------------------------------------------------------------------------------
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...

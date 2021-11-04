@@ -12,6 +12,38 @@
 include(CMakeParseArguments)
 include(GenerateTemplateExportHeader)
 
+function(asap_compiler_definitions target)
+  #
+  # Compile definitions
+  #
+  # ones we use for every single target
+  target_compile_definitions(${target}
+    PRIVATE 
+      $<$<CXX_COMPILER_ID:MSVC>:
+        NOMINMAX
+        WIN32_LEAN_AND_MEAN=1
+        _WIN32_WINNT=0x0600
+      >
+  )
+endfunction()
+
+function(asap_compiler_options target)
+  target_compile_options(${target}
+    PRIVATE
+      $<$<CXX_COMPILER_ID:MSVC>:/MP /W4>
+      $<$<CXX_COMPILER_ID:Clang>:
+        -Weverything 
+        -Wno-c++98-compat 
+        -Wno-c++98-compat-pedantic 
+        -Wno-c++98-c++11-compat-pedantic
+        -Wno-padded
+        -Wno-documentation-unknown-command
+        -Wno-switch-enum
+      >
+      $<$<CXX_COMPILER_ID:GNU>:-Wpedantic -Wall -Wextra -Wcast-align -Wcast-qual -Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self -Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5 -Wswitch-default -Wundef -Werror -Wno-unused>
+  )
+endfunction()
+
 # ------------------------------------------------------------------------------
 # Add a library to the project.
 # ------------------------------------------------------------------------------
@@ -41,10 +73,9 @@ function(asap_library)
                          EXPORT_MACRO_NAME ${export_macro})
   generate_template_export_header(${_NAME} ${target_id} ${template_export_file})
 
-  #
-  # Compile definitions
-  #
+  asap_compiler_definitions(${_NAME})
 
+  # target specific
   target_compile_definitions(
     ${_NAME}
     PRIVATE ${ASAP_LIB_PRIVATE_COMPILE_DEFINITIONS}
@@ -54,6 +85,7 @@ function(asap_library)
   #
   # Compile options
   #
+  asap_compiler_options(${_NAME})
 
   target_compile_options(
     ${_NAME}
@@ -176,6 +208,13 @@ function(asap_header_library)
   generate_template_export_header(${_NAME} ${target_id} ${template_export_file})
 
   #
+  # Compile definitions
+  #
+  asap_compiler_definitions(${_NAME})
+
+  asap_compiler_options(${_NAME})
+
+  #
   # Libraries
   #
 
@@ -263,6 +302,7 @@ function(asap_executable)
   #
   # Compile definitions
   #
+  asap_compiler_definitions(${_NAME})
 
   target_compile_definitions(${_NAME} PRIVATE ${ASAP_EXE_COMPILE_DEFINITIONS}
                                               ${DEFAULT_COMPILE_DEFINITIONS})
@@ -270,6 +310,7 @@ function(asap_executable)
   #
   # Compile options
   #
+  asap_compiler_options(${_NAME})
 
   target_compile_options(${_NAME} PRIVATE ${ASAP_EXE_COMPILE_OPTIONS}
                                           ${DEFAULT_COMPILE_OPTIONS})
@@ -334,6 +375,7 @@ function(asap_test_executable)
   #
   # Compile definitions
   #
+  asap_compiler_definitions(${_NAME})
 
   target_compile_definitions(${_NAME} PRIVATE ${ASAP_TEST_COMPILE_DEFINITIONS}
                                               ${DEFAULT_COMPILE_DEFINITIONS})
@@ -341,6 +383,7 @@ function(asap_test_executable)
   #
   # Compile options
   #
+  asap_compiler_options(${_NAME})
 
   target_compile_options(${_NAME} PRIVATE ${ASAP_TEST_COMPILE_OPTIONS}
                                           ${DEFAULT_COMPILE_OPTIONS})
@@ -365,8 +408,7 @@ function(asap_test_executable)
 
   target_include_directories(
     ${_NAME}
-    PRIVATE ${PROJECT_BINARY_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/include
-            ${CMAKE_CURRENT_BINARY_DIR}/include ${ASAP_TEST_INCLUDE_DIRS})
+    PRIVATE ${PROJECT_BINARY_DIR}/include ${ASAP_TEST_INCLUDE_DIRS})
 
   #
   # Project options
