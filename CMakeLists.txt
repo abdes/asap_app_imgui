@@ -129,7 +129,6 @@ file(WRITE "${PROJECT_BINARY_DIR}/VERSION" "${META_NAME_VERSION}")
 # ------------------------------------------------------------------------------
 
 include(ClangTidy)
-include(CppCheck)
 include(GoogleSanitizers)
 include(Valgrind)
 
