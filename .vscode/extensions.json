@@ -6,6 +6,11 @@
         "eamodio.gitlens",
         "kevinkyang.auto-comment-blocks",
         "matepek.vscode-catch2-test-adapter",
-        "cheshirekow.cmake-format"
+        "cheshirekow.cmake-format",
+        "ms-python.python",
+        "ms-vscode.cmake-tools",
+        "twxs.cmake",
+        "hbenl.vscode-test-explorer",
+        "ms-vscode.test-adapter-converter"
     ]
 }
