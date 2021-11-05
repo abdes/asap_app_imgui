@@ -84,7 +84,7 @@ option(OPTION_BUILD_EXAMPLES "Build examples."                                  
 option(OPTION_CLANG_TIDY     "Analyze code with clang-tidy."                          OFF)
 option(OPTION_CPPCHECK       "Analyze code with CppCheck."                            OFF)
 option(OPTION_GOOGLE_ASAN    "Instrument code with address sanitizer"                 OFF)
-option(OPTION_GOOGLE_USAN    "Instrument code with memory sanitizer"                  OFF)
+option(OPTION_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitizer"      OFF)
 option(OPTION_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
 # cmake-format: on
 
@@ -125,6 +125,15 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 file(WRITE "${PROJECT_BINARY_DIR}/VERSION" "${META_NAME_VERSION}")
 
 # ------------------------------------------------------------------------------
+# Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
+# ------------------------------------------------------------------------------
+
+include(ClangTidy)
+include(CppCheck)
+include(GoogleSanitizers)
+include(Valgrind)
+
+# ------------------------------------------------------------------------------
 # Third party modules
 # ------------------------------------------------------------------------------
 
@@ -141,15 +150,6 @@ if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
   # strip any argument already added by cmake before we set ours.
   string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif()
-
-# ------------------------------------------------------------------------------
-# Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
-# ------------------------------------------------------------------------------
-
-include(ClangTidy)
-include(CppCheck)
-include(GoogleSanitizers)
-include(Valgrind)
 
 # ------------------------------------------------------------------------------
 # Top level code generation
