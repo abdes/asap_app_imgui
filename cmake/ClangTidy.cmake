@@ -9,28 +9,27 @@
 # Helper module providing a macro that can be used to declare that a target is
 # interested in participating in a build that uses clang-tidy instead of the
 # regular C++ compiler.
+#
+# We do not set clang-tidy configuration here, instead we rely on an external
+# .clang-tidy config file in the project root or somewhere else in the hierarchy
+# of modules.
 # ------------------------------------------------------------------------------
 
 if(OPTION_CLANG_TIDY)
   find_program(
-    CLANG_TIDY_EXE
-    NAMES "clang-tidy" "clang-tidy-4.0"
+    CLANG_TIDY_COMMAND
+    NAMES "clang-tidy"
     DOC "Path to clang-tidy executable")
 
-  mark_as_advanced(CLANG_TIDY_EXE)
-
-  if(NOT CLANG_TIDY_EXE)
-    message(FATAL_ERROR "unable to locate clang-tidy")
+  if(NOT CLANG_TIDY_COMMAND)
+    message(FATAL_ERROR "Unable to locate clang-tidy")
     macro(tidy_target TARGET_NAME)
       # left empty on purpose
     endmacro()
   else()
-    list(APPEND CLANG_TIDY_BIN_ARGS -header-filter=.*
-         -checks=*,-clang-analyzer-alpha.*)
     macro(tidy_target TARGET_NAME)
       set_target_properties(
-        ${target_name} PROPERTIES CXX_CLANG_TIDY ${CLANG_TIDY_EXE}
-                                  ${RUN_CLANG_TIDY_BIN_ARGS})
+        ${TARGET_NAME} PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
     endmacro()
   endif()
 else()
