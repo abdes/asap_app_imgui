@@ -82,7 +82,6 @@ option(OPTION_BUILD_TESTS    "Build tests."                                     
 option(OPTION_BUILD_DOCS     "Build documentation."                                   OFF)
 option(OPTION_BUILD_EXAMPLES "Build examples."                                        OFF)
 option(OPTION_CLANG_TIDY     "Analyze code with clang-tidy."                          OFF)
-option(OPTION_CPPCHECK       "Analyze code with CppCheck."                            OFF)
 option(OPTION_GOOGLE_ASAN    "Instrument code with address sanitizer"                 OFF)
 option(OPTION_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitizer"      OFF)
 option(OPTION_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
