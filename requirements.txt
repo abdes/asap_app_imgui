@@ -7,7 +7,7 @@ esbonio
 myst-parser
 pygments
 rstcheck
-Sphinx
+sphinx
 sphinx-autobuild
 sphinx-book-theme
 sphinx-copybutton
