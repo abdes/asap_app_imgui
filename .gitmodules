@@ -9,4 +9,7 @@
   url = https://github.com/abdes/asap_common.git
 [submodule "filesystem"]
   path = filesystem
-  url = https://github.com/abdes/asap_filesystem.git
+  url = https://gitlab.com/absassi/asap_filesystem.git
+[submodule "third_party/fmt"]
+	path = third_party/fmt
+	url = https://github.com/fmtlib/fmt.git
