@@ -290,7 +290,7 @@ install(
 # Deploy generated top level headers
 install(
   DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME}
-  DESTINATION include
+  DESTINATION ${INSTALL_INCLUDE}
   COMPONENT dev)
 
 # Install cmake find script for the project
