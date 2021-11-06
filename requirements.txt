@@ -1,6 +1,7 @@
 autopep8
 bandit
 breathe
+cmakelang
 docutils
 esbonio
 myst-parser
