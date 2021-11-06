@@ -2,9 +2,6 @@
 
 ![Start Now!!](doc/_static/logo.png "ASAP Logo")
 
-[![repo on GitHub](https://img.shields.io/badge/repo-GitHub-brightgreen.svg)](https://github.com/abdes/asap)
-[![repo on GitLab](https://img.shields.io/badge/repo-GitLab-brightgreen.svg)](https://gitlab.com/absassi/asap)
-
 [![Linux Build (Ubuntu latest)](https://github.com/abdes/asap/actions/workflows/linux-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap/actions/workflows/linux-build.yml)
 [![Windows Build (latest)](https://github.com/abdes/asap/actions/workflows/windows-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap/actions/workflows/windows-build.yml)
 
