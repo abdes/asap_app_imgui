@@ -91,7 +91,7 @@
     "xstring": "cpp",
     "xtree": "cpp",
     "xutility": "cpp"
-  }
+  },
   /**********
  * VSCode *
  **********/
@@ -247,8 +247,6 @@
   "cmake.configureOnEdit": false,
   // Automatically configure the CMake project directory when it is opened
   "cmake.configureOnOpen": true,
-  // After successful configuration, compile will be_ Copy commands.json to this location
-  "cmake.copyCompileCommands": "",
   /*******
  * Git *
  *******/
