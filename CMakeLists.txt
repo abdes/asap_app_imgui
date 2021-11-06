@@ -254,6 +254,7 @@ endif()
 # ------------------------------------------------------------------------------
 
 add_subdirectory(common)
+add_subdirectory(logging)
 add_subdirectory(filesystem)
 
 # For packaging
