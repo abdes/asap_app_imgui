@@ -6,7 +6,7 @@
   url = https://github.com/catchorg/Catch2.git
 [submodule "common"]
   path = common
-  url = https://gitlab.com/absassi/asap_common.git
+  url = https://github.com/abdes/asap_common.git
 [submodule "filesystem"]
   path = filesystem
-  url = https://gitlab.com/absassi/asap_filesystem.git
+  url = https://github.com/abdes/asap_filesystem.git
