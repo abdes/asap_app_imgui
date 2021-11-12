@@ -172,7 +172,6 @@ enable_testing()
 # ------------------------------------------------------------------------------
 
 # Doxygen
-include(FindDoxygen)
 set(DOXYGEN_BUILD_DIR "${CMAKE_BINARY_DIR}/dox")
 include(DoxGeneration)
 

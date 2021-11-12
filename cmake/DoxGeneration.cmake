@@ -37,34 +37,36 @@
 # Use 'make dox' to generate documentation. (not done by default)
 # ~~~
 
-macro(configure_doxyfile TARGET_NAME TARGET_TITLE TARGET_BRIEF
-      TARGET_INPUT_PATH)
-  if(EXISTS "${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in")
-    set(DOXY_TARGET_OUTPUT_DIR "${TARGET_NAME}")
-    set(DOXY_TARGET_ROOT_DIR "") # ${DOXTOSRCDIR} - set(DOXTOSRCDIR "../src")
-    set(DOXY_TARGET_NAME "${TARGET_NAME}")
-    set(DOXY_TARGET_TITLE "${TARGET_TITLE}")
-    set(DOXY_TARGET_BRIEF "${TARGET_BRIEF}")
-    set(DOXY_TARGET_INPUT_PATH "${TARGET_INPUT_PATH}")
-    set(DOXY_COMPILER_PREDEFINED "${TARGET_COMPILER_DEFINES}")
-    set(DOXY_TARGET_FILE_VERSION_FILTER "\"${PRINT_FILE_DATE_COMMAND_STR} \"")
-    if(NOT EXISTS "${DOXYGEN_BUILD_DIR}/${DOXY_TARGET_OUTPUT_DIR}")
-      file(MAKE_DIRECTORY "${DOXYGEN_BUILD_DIR}/${DOXY_TARGET_OUTPUT_DIR}")
-    endif()
-    configure_file("${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in"
-                   "${DOXYGEN_BUILD_DIR}/${TARGET_NAME}_Doxyfile" @ONLY)
-  else()
-    message(
-      STATUS
-        "WARNING: The '${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in' file does not exist!"
-    )
-  endif()
-endmacro(configure_doxyfile)
+include(FindDoxygen)
 
 if(DOXYGEN_FOUND)
   message(STATUS "Doxygen package was found.")
-  add_custom_target(dox)
-  macro(add_doxygen_target TARGET_NAME)
+
+  macro(_configure_doxyfile TARGET_NAME TARGET_TITLE TARGET_BRIEF
+        TARGET_INPUT_PATH)
+    if(EXISTS "${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in")
+      set(DOXY_TARGET_OUTPUT_DIR "${TARGET_NAME}")
+      set(DOXY_TARGET_ROOT_DIR "") # ${DOXTOSRCDIR} - set(DOXTOSRCDIR "../src")
+      set(DOXY_TARGET_NAME "${TARGET_NAME}")
+      set(DOXY_TARGET_TITLE "${TARGET_TITLE}")
+      set(DOXY_TARGET_BRIEF "${TARGET_BRIEF}")
+      set(DOXY_TARGET_INPUT_PATH "${TARGET_INPUT_PATH}")
+      set(DOXY_COMPILER_PREDEFINED "${TARGET_COMPILER_DEFINES}")
+      set(DOXY_TARGET_FILE_VERSION_FILTER "\"${PRINT_FILE_DATE_COMMAND_STR} \"")
+      if(NOT EXISTS "${DOXYGEN_BUILD_DIR}/${DOXY_TARGET_OUTPUT_DIR}")
+        file(MAKE_DIRECTORY "${DOXYGEN_BUILD_DIR}/${DOXY_TARGET_OUTPUT_DIR}")
+      endif()
+      configure_file("${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in"
+                    "${DOXYGEN_BUILD_DIR}/${TARGET_NAME}_Doxyfile" @ONLY)
+    else()
+      message(
+        STATUS
+          "WARNING: The '${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in' file does not exist!"
+      )
+    endif()
+  endmacro()
+
+  macro(_add_doxygen_target TARGET_NAME)
     add_custom_target(
       ${TARGET_NAME}_dox
       COMMAND ${CMAKE_COMMAND} -E echo "Building doxygen dox for ${TARGET_NAME}"
@@ -78,7 +80,24 @@ if(DOXYGEN_FOUND)
     set_target_properties(${TARGET_NAME}_dox PROPERTIES EXCLUDE_FROM_ALL TRUE)
     add_dependencies(dox ${TARGET_NAME}_dox)
   endmacro()
-  set_target_properties(dox PROPERTIES EXCLUDE_FROM_ALL TRUE)
+
+  macro(asap_with_doxygen 
+    TARGET_NAME
+    TARGET_TITLE
+    TARGET_BRIEF
+    TARGET_INPUT_PATH)
+    # Substitute variables in the doxygen config file for the target
+    _configure_doxyfile(
+      ${TARGET_NAME} ${TARGET_TITLE} ${TARGET_BRIEF} ${TARGET_INPUT_PATH})
+    # Add the target as a dependency to the master dox target
+    _add_doxygen_target(${TARGET_NAME})
+  endmacro()
+
+  # We'll make a special script to collect all doxygen warnings from submodules
+  # and print them at the end of the doxygen run. This mwill make it easier 
+  # to detect if there were doxygen warnings in the project and eventually
+  # fail the build in a CI environment for example.
+
   set(COLLECT_WARNINGS_SCRIPT "${DOXYGEN_BUILD_DIR}/collect_warnings.cmake")
   # cmake-format: off
   file(WRITE "${COLLECT_WARNINGS_SCRIPT}" " \
@@ -96,16 +115,30 @@ if(DOXYGEN_FOUND)
     # Print the warnings\n \
     message(\"\${ALL_WARNINGS}\")\n \
   endif(DOXYGEN_HAD_WARNINGS)\n")
-# cmake-format: on
+  # cmake-format: on
+
+  # The master doxygen target
+  add_custom_target(dox)
+  # We don't want it to be rebuilt everytime we build all. Need to explicitly 
+  # request it to be built.
+  set_target_properties(dox PROPERTIES EXCLUDE_FROM_ALL TRUE)
+  # Custom command to collect warnings and print them
   add_custom_command(
     TARGET dox
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo "Running post-build command for dox"
     COMMAND ${CMAKE_COMMAND} -P "${COLLECT_WARNINGS_SCRIPT}"
     WORKING_DIRECTORY "${DOXYGEN_BUILD_DIR}")
+
 else()
   message(STATUS "WARNING: Doxygen package is not available on this system!")
-  macro(add_doxygen_target TARGET_NAME)
+  
+  macro(_configure_doxyfile)
+  endmacro()
 
+  macro(_add_doxygen_target)
+  endmacro()
+
+  macro(asap_with_doxygen)
   endmacro()
 endif()
