@@ -6,7 +6,7 @@
 # ~~~
 
 # ------------------------------------------------------------------------------
-# API Documentation with Sphinx/Breathe/Exhale
+# Documentation with Sphinx/Breathe/Exhale
 # ------------------------------------------------------------------------------
 
 # To avoid indiscriminately generating documentation for all modules in the
@@ -18,28 +18,14 @@
 # Doxygen is run separately NOT by exhale. Sphinx targets must be run after
 # doxygen.
 #
-# To use in a specific CmakeLists.txt add the following:
+# To use in a submodule or in the master module add the following:
 #
 # ~~~
-# 1. Call configure_sphinx_files(...)
-#      configure_sphinx_files(
-#        ${target}
-#        "\"<Title>\""
-#        "\"<Desscription>\""
-#        "<List of directories to include>")
-#
-# 2. Call add_sphinx_target(...) to add this module under the 'sphinx' target
-#      add_sphinx_target(${target})
-#
-# 3. Add install instructions
-#      install(
-#        DIRECTORY ${dox_root}/${target}
-#        DESTINATION ${INSTALL_DOC}
-#        COMPONENT docs
-#      )
+#      asap_with_sphinx(${target})
+# ~~~
 #
 # Use 'make sphinx' to generate documentation. (not done by default)
-# ~~~
+#
 
 include(FindSphinx)
 

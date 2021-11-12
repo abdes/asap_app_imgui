@@ -17,25 +17,15 @@
 # To use in a specific CmakeLists.txt add the following:
 #
 # ~~~
-# 1. Call configure_doxyfile(...)
-#      configure_doxyfile(
+#      asap_with_doxygen(
 #        ${target}
 #        "\"<Title>\""
 #        "\"<Desscription>\""
 #        "<List of directories to include>")
-#
-# 2. Call add_doxygen_target(...) to add this module under the 'dox' target
-#      add_doxygen_target(${target})
-#
-# 3. Add install instructions
-#      install(
-#        DIRECTORY ${DOXYGEN_BUILD_DIR}/${target}
-#        DESTINATION ${INSTALL_DOC}
-#        COMPONENT docs
-#      )
+# ~~~
 #
 # Use 'make dox' to generate documentation. (not done by default)
-# ~~~
+#
 
 include(FindDoxygen)
 
