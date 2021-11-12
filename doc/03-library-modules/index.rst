@@ -13,5 +13,8 @@ Library Modules
 :doc:`common <common:api>`
 ==========================
 
+:doc:`logging <logging:api>`
+==========================
+
 :doc:`filesystem <filesystem:api>`
 ==================================
