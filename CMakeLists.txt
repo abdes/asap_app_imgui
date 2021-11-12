@@ -124,68 +124,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
 file(WRITE "${PROJECT_BINARY_DIR}/VERSION" "${META_NAME_VERSION}")
 
 # ------------------------------------------------------------------------------
-# Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
-# ------------------------------------------------------------------------------
-
-include(ClangTidy)
-include(GoogleSanitizers)
-include(Valgrind)
-
-# ------------------------------------------------------------------------------
-# Third party modules
-# ------------------------------------------------------------------------------
-
-add_subdirectory(third_party)
-
-# ------------------------------------------------------------------------------
-# Clean compiler settings and options
-# ------------------------------------------------------------------------------
-
-if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-  # remove default warning level from CMAKE_CXX_FLAGS_INIT CMake adds compiler
-  # warning levels by default and for MSVC, it uses /W3 which we want to
-  # override with /W4. The override does make MSVC complain though, so we just
-  # strip any argument already added by cmake before we set ours.
-  string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-endif()
-
-# ------------------------------------------------------------------------------
-# Top level code generation
-# ------------------------------------------------------------------------------
-
-# Generate version-header
-configure_file(templates/version.h.in
-               ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h)
-
-# ------------------------------------------------------------------------------
-# Test targets
-# ------------------------------------------------------------------------------
-
-# enable CTest.  This will set BUILD_TESTING to ON unless otherwise specified on
-# the command line
-include(CTest)
-include(third_party/catch2/contrib/Catch.cmake)
-enable_testing()
-
-# ------------------------------------------------------------------------------
-# Documentation - doxygen, sphinx/breathe/exhale
-# ------------------------------------------------------------------------------
-
-# Doxygen
-set(DOXYGEN_BUILD_DIR "${CMAKE_BINARY_DIR}/dox")
-include(DoxGeneration)
-
-# Sphinx/breathe/exhale
-include(FindSphinx)
-# sphinx build dir
-set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx")
-# Sphinx cache with pickled ReST documents
-set(SPHINX_CACHE_DIR "${SPHINX_BUILD_DIR}/_doctrees")
-# HTML output directory
-set(SPHINX_HTML_DIR "${SPHINX_BUILD_DIR}/html")
-include(SphinxGeneration)
-
-# ------------------------------------------------------------------------------
 # Deployment/installation setup
 # ------------------------------------------------------------------------------
 
@@ -249,18 +187,67 @@ if(NOT SYSTEM_DIR_INSTALL)
 endif()
 
 # ------------------------------------------------------------------------------
-# Project modules
+# Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
 # ------------------------------------------------------------------------------
 
-add_subdirectory(common)
-add_subdirectory(logging)
-add_subdirectory(filesystem)
+include(ClangTidy)
+include(GoogleSanitizers)
+include(Valgrind)
 
-# For packaging
-add_subdirectory(deploy)
+# ------------------------------------------------------------------------------
+# Third party modules
+# ------------------------------------------------------------------------------
+
+add_subdirectory(third_party)
+
+# ------------------------------------------------------------------------------
+# Clean compiler settings and options
+# ------------------------------------------------------------------------------
+
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+  # remove default warning level from CMAKE_CXX_FLAGS_INIT CMake adds compiler
+  # warning levels by default and for MSVC, it uses /W3 which we want to
+  # override with /W4. The override does make MSVC complain though, so we just
+  # strip any argument already added by cmake before we set ours.
+  string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endif()
+
+# ------------------------------------------------------------------------------
+# Top level code generation
+# ------------------------------------------------------------------------------
+
+# Generate version-header
+configure_file(templates/version.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h)
+
+# ------------------------------------------------------------------------------
+# Test targets
+# ------------------------------------------------------------------------------
+
+# enable CTest.  This will set BUILD_TESTING to ON unless otherwise specified on
+# the command line
+include(CTest)
+include(third_party/catch2/contrib/Catch.cmake)
+enable_testing()
+
+# ------------------------------------------------------------------------------
+# Documentation - doxygen, sphinx/breathe/exhale
+# ------------------------------------------------------------------------------
+
+# Doxygen
+set(DOXYGEN_BUILD_DIR "${CMAKE_BINARY_DIR}/dox")
+include(DoxGeneration)
+
+# Sphinx/breathe/exhale
+set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx")
+set(SPHINX_CACHE_DIR "${SPHINX_BUILD_DIR}/_doctrees")
+set(SPHINX_HTML_DIR "${SPHINX_BUILD_DIR}/html")
+include(SphinxGeneration)
 
 # Setup sphinx doc master target and add other submodules as dependencies
 if(SPHINX_FOUND)
+  asap_with_sphinx("master")
+  
   # Add a target for copying the index.html from the doc dir to the sphinx build
   # dir. A dependency on this target will be added to the master sphinx target.
   add_custom_command(
@@ -271,11 +258,20 @@ if(SPHINX_FOUND)
   add_custom_target(copy_doc_index ALL
                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
 
-  add_sphinx_target("master")
-
   add_dependencies(master_sphinx asap_common_sphinx asap_filesystem_sphinx
                    copy_doc_index)
 endif()
+
+# ------------------------------------------------------------------------------
+# Project modules
+# ------------------------------------------------------------------------------
+
+add_subdirectory(common)
+add_subdirectory(logging)
+add_subdirectory(filesystem)
+
+# For packaging
+add_subdirectory(deploy)
 
 # ------------------------------------------------------------------------------
 # Deployment (global project files)
@@ -318,11 +314,3 @@ install(
   DIRECTORY ${PROJECT_SOURCE_DIR}/data
   DESTINATION ${INSTALL_DATA}
   COMPONENT runtime)
-
-# Install sphinx master docs
-if(SPHINX_FOUND)
-  install(
-    DIRECTORY ${SPHINX_BUILD_DIR}/master
-    DESTINATION ${INSTALL_DOC}
-    COMPONENT docs)
-endif()

@@ -41,6 +41,8 @@
 # Use 'make sphinx' to generate documentation. (not done by default)
 # ~~~
 
+include(FindSphinx)
+
 if(SPHINX_FOUND)
   message(STATUS "System has sphinx.")
 
@@ -48,7 +50,7 @@ if(SPHINX_FOUND)
   add_custom_target(sphinx)
 
   # The macro to add a submodule as a sphinx target.
-  macro(add_sphinx_target TARGET_NAME)
+  macro(asap_with_sphinx TARGET_NAME)
     # Setup work directory for the target module
     set(SPHINX_TARGET_WORKDIR "${SPHINX_BUILD_DIR}/${TARGET_NAME}")
     if(NOT EXISTS "${SPHINX_TARGET_WORKDIR}")
@@ -77,6 +79,13 @@ if(SPHINX_FOUND)
     # Finally add the module sphinx target as a dependency for the overall
     # sphinx target
     add_dependencies(sphinx ${TARGET_NAME}_sphinx)
+
+    # Install sphinx master docs
+    install(
+      DIRECTORY ${SPHINX_BUILD_DIR}/${TARGET_NAME}
+      DESTINATION ${INSTALL_DOC}
+      COMPONENT docs)
+
   endmacro()
   # We only build documentation through explicit invocation of the sphinx target
   # as it is pretty heavy and requires doxygen to be run before it is invoked.
@@ -84,7 +93,7 @@ if(SPHINX_FOUND)
 
 else(SPHINX_FOUND)
   message(STATUS "WARNING: sphinx is not available on this system!")
-  macro(add_sphinx_target TARGET_NAME)
 
+  macro(asap_with_sphinx TARGET_NAME)
   endmacro()
 endif(SPHINX_FOUND)
