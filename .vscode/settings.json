@@ -1,10 +1,10 @@
 {
   "esbonio.sphinx.confDir": "doc",
   "editor.rulers": [
-    80,
+    100,
     130
   ],
-  "rewrap.wrappingColumn": 80,
+  "rewrap.wrappingColumn": 100,
   "rewrap.autoWrap.enabled": true,
   "files.associations": {
     "xtr1common": "cpp",
