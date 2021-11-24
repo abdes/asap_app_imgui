@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.205.2/containers/python-3
 {
-  "name": "Python 3",
+  "name": "ASAP",
   "build": {
     "dockerfile": "Dockerfile",
     "context": "..",
@@ -29,6 +29,7 @@
     "python.linting.pydocstylePath": "/usr/local/py-utils/bin/pydocstyle",
     "python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
     "python.pythonPath": "/usr/local/bin/python",
+    "esbonio.server.pythonPath": "/usr/local/bin/python"
   },
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
