@@ -92,17 +92,8 @@
     "xtree": "cpp",
     "xutility": "cpp"
   },
-  /**********
- * VSCode *
- **********/
-  // Controls when the internal debugging console opens
-  "debug.internalConsoleOptions": "neverOpen",
-  // The Enter key is not allowed to process input suggestions to avoid ambiguity between line feed and acceptance of suggestions
-  // You can also allow this item to wrap using Ctrl + Enter
-  "editor.acceptSuggestionOnEnter": "off",
-  // The control editor should automatically overwrite the opening or closing quotation marks
-  "editor.autoClosingOvertype": "always",
-  // Disable automatic detection of file indent mode and indent size, that is, automatically change the file to the indent format configured by VSCode after opening the file
+  // Disable automatic detection of file indent mode and indent size, that is, automatically change
+  // the file to the indent format configured by VSCode after opening the file
   "editor.detectIndentation": false,
   // Format file when pasting
   "editor.formatOnPaste": true,
@@ -123,8 +114,6 @@
   },
   // Controls the wait time (in milliseconds) before quick suggestions are displayed
   "editor.quickSuggestionsDelay": 0,
-  // Show indented guides. Because I use the plug-in, the display of built-in guides is turned off here
-  "editor.renderIndentGuides": false,
   // Controls how the editor displays symbols on white space characters
   "editor.renderWhitespace": "none",
   // Code snippets are recommended over other suggestions
@@ -153,33 +142,6 @@
   "files.autoSave": "afterDelay",
   // Wait time for auto save (MS)
   "files.autoSaveDelay": 1000,
-  // Configure glob mode for excluded files and folders
-  // Based on this setting, file explorer determines which files and folders to show or hide
-  "files.exclude": {
-    "**/.classpath": true,
-    "**/.factorypath": true,
-    "**/.project": true,
-    "**/.settings": true
-  },
-  // Remember unsaved files between sessions to allow you to skip the save prompt when you exit the editor
-  // onExitAndWindowClose: on exit or window close
-  "files.hotExit": "onExitAndWindowClose",
-  // Grunt task automatic detection
-  "grunt.autoDetect": "on",
-  // Gulp task automatic detection
-  "gulp.autoDetect": "on",
-  // Where should the cell toolbar be displayed, or do you want to hide it
-  "notebook.cellToolbarLocation": {
-    // Default: right
-    "default": "right",
-    // Jupiter Notebook: left
-    "jupyter-notebook": "left"
-  },
-  // Configure glob mode for files and folders excluded from search
-  "search.exclude": {
-    // "someFolder/": true,
-    // "somefile": true
-  },
   // Displays the line number of the search results
   "search.showLineNumbers": true,
   // When the search term is lowercase, the search is case insensitive
@@ -221,10 +183,6 @@
     "--background-index",
     // Enable clang tidy to provide static checking
     "--clang-tidy",
-    // The parameter of clang tidy static check indicates which rules are followed for static check. For details, see "advantages over VSCode configured according to official documents"
-    // The * after the parameter indicates a wildcard
-    // Adding - such as - modernize use trailing return type before the parameter will disable a rule
-    "--clang-tidy-checks=cppcoreguidelines-*,performance-*,bugprone-*,portability-*,modernize-*,google-*",
     // Default formatting style: Google open source project code Guide
     "--fallback-style=Google",
     // Number of tasks opened at the same time
@@ -240,9 +198,6 @@
   "clangd.checkUpdates": true,
   // Cland's snippets have many jump points. Without this, Intellisense must be triggered manually
   "editor.suggest.snippetsPreventQuickSuggestions": false,
-  /*********
- * CMake *
- *********/
   // When you save the contents of cmake.sourceDirectory or CMakeLists.txt, the CMake project directory is not automatically configured
   "cmake.configureOnEdit": false,
   // Automatically configure the CMake project directory when it is opened
@@ -250,18 +205,12 @@
   "cmake.preferredGenerators": [
     "Ninja"
   ],
-  /*******
- * Git *
- *******/
   // Automatically extract submissions from the default remote library of the current Git repository
   "git.autofetch": true,
   // Confirm before synchronizing Git repository
   "git.confirmSync": false,
   // When there are no pending changes, commit all changes directly
   "git.enableSmartCommit": true,
-  /*********
- * Color *
- *********/
   // Controls whether brackets are shaded
   "editor.bracketPairColorization.enabled": true,
   // I got used to the blue brackets in the Bracket Pair Colorizer 2, so I changed the color of the blue brackets in VSCode
