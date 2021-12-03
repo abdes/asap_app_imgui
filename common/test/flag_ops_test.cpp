@@ -34,25 +34,25 @@ namespace {
 
 // NOLINTNEXTLINE
 TEST(FlagOps, SetSingleBit) {
-  constexpr auto TEST_MASK = 0x100010;
-  constexpr auto TEST_FLAGS = 0x1000;
-  constexpr auto RESULT_MASK = 0x101010;
+  constexpr auto TEST_MASK = 0x100010u;
+  constexpr auto TEST_FLAGS = 0x1000u;
+  constexpr auto RESULT_MASK = 0x101010u;
 
   std::uint32_t mask = TEST_MASK;
   std::uint32_t flag = TEST_FLAGS;
 
   FlagSet(mask, flag);
   // bit corresponding to flag is set
-  EXPECT_THAT((mask & flag), Ne(0));
+  EXPECT_THAT((mask & flag), Ne(0u));
   // other bits not touched
   EXPECT_THAT(mask, Eq(RESULT_MASK));
 }
 
 // NOLINTNEXTLINE
 TEST(FlagOps, SetMultipleBits) {
-  constexpr auto TEST_MASK = 0x100010;
-  constexpr auto TEST_FLAGS = 0x1001;
-  constexpr auto RESULT_MASK = 0x101011;
+  constexpr auto TEST_MASK = 0x100010u;
+  constexpr auto TEST_FLAGS = 0x1001u;
+  constexpr auto RESULT_MASK = 0x101011u;
 
   std::uint32_t mask = TEST_MASK;
   std::uint32_t flag = TEST_FLAGS;
@@ -63,61 +63,61 @@ TEST(FlagOps, SetMultipleBits) {
 
 // NOLINTNEXTLINE
 TEST(FlagOps, ClearSingleBit) {
-  constexpr auto TEST_MASK = 0x100010;
-  constexpr auto TEST_FLAGS = 0x10;
-  constexpr auto RESULT_MASK = 0x100000;
+  constexpr auto TEST_MASK = 0x100010u;
+  constexpr auto TEST_FLAGS = 0x10u;
+  constexpr auto RESULT_MASK = 0x100000u;
 
   std::uint32_t mask = TEST_MASK;
   std::uint32_t flag = TEST_FLAGS;
 
   FlagClear(mask, flag);
   // bit corresponding to flag is cleared
-  EXPECT_THAT((mask & flag), Eq(0));
+  EXPECT_THAT((mask & flag), Eq(0u));
   // other bits not touched
   EXPECT_THAT(mask, Eq(RESULT_MASK));
 }
 
 // NOLINTNEXTLINE
 TEST(FlagOps, ClearMultipleBits) {
-  constexpr auto TEST_MASK = 0x10101010;
-  constexpr auto TEST_FLAGS = 0x101000;
-  constexpr auto RESULT_MASK = 0x10000010;
+  constexpr auto TEST_MASK = 0x10101010u;
+  constexpr auto TEST_FLAGS = 0x101000u;
+  constexpr auto RESULT_MASK = 0x10000010u;
 
   std::uint32_t mask = TEST_MASK;
   std::uint32_t flag = TEST_FLAGS;
 
   FlagClear(mask, flag);
-  EXPECT_THAT((mask & flag), Eq(0));
+  EXPECT_THAT((mask & flag), Eq(0u));
   EXPECT_THAT(mask, Eq(RESULT_MASK));
 }
 
 // NOLINTNEXTLINE
 TEST(FlagOps, FlipSingleBit) {
-  constexpr auto INITIAL_MASK = 0x10101010;
-  constexpr auto TEST_FLAGS = 0x101000;
-  constexpr auto RESULT_MASK = 0x10000010;
+  constexpr auto INITIAL_MASK = 0x10101010u;
+  constexpr auto TEST_FLAGS = 0x101000u;
+  constexpr auto RESULT_MASK = 0x10000010u;
 
   std::uint32_t mask = INITIAL_MASK;
   std::uint32_t flag = TEST_FLAGS;
 
   FlagFlip(mask, flag);
   // bit corresponding to flag is cleared
-  EXPECT_THAT((mask & flag), Eq(0));
+  EXPECT_THAT((mask & flag), Eq(0u));
   // other bits not touched
   EXPECT_THAT(mask, Eq(RESULT_MASK));
 
   FlagFlip(mask, flag);
   // bit corresponding to flag is cleared
-  EXPECT_THAT((mask & flag), Ne(0));
+  EXPECT_THAT((mask & flag), Ne(0u));
   // other bits not touched
   EXPECT_THAT(mask, Eq(INITIAL_MASK));
 }
 
 // NOLINTNEXTLINE
 TEST(FlagOps, FlipMultipleBits) {
-  constexpr auto INITIAL_MASK = 0x10101010;
-  constexpr auto TEST_FLAGS = 0x11111111;
-  constexpr auto RESULT_MASK = 0x01010101;
+  constexpr auto INITIAL_MASK = 0x10101010u;
+  constexpr auto TEST_FLAGS = 0x11111111u;
+  constexpr auto RESULT_MASK = 0x01010101u;
 
   std::uint32_t mask = INITIAL_MASK;
   std::uint32_t flag = TEST_FLAGS;
@@ -130,8 +130,8 @@ TEST(FlagOps, FlipMultipleBits) {
 
 // NOLINTNEXTLINE
 TEST(FlagOps, TestMultipleBits) {
-  constexpr auto TEST_MASK = 0x100010;
-  constexpr auto TEST_FLAGS = 0x10;
+  constexpr auto TEST_MASK = 0x100010u;
+  constexpr auto TEST_FLAGS = 0x10u;
 
   std::uint32_t mask = TEST_MASK;
   std::uint32_t flag = TEST_FLAGS;
