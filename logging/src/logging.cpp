@@ -97,7 +97,8 @@ void Registry::PushSink(spdlog::sink_ptr sink) {
 void Registry::PopSink() {
   std::lock_guard<std::mutex> lock(sinks_mutex_);
   auto &sinks = sinks_();
-  // TODO(Abdessattar): replace after contracts are implemented - ASAP_ASSERT(!sinks.empty() && "call to PopSink() not matching a previous call to PushSink()");
+  // TODO(Abdessattar): replace after contracts are implemented
+  // ASAP_ASSERT(!sinks.empty() && "call to PopSink() not matching a previous call to PushSink()");
   if (!sinks.empty()) {
     auto &sink = sinks.top();
     // Assign this previous sink to the delegating sink
