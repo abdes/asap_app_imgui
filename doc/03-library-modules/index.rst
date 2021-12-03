@@ -15,6 +15,3 @@ Library Modules
 
 :doc:`logging <logging:api>`
 ============================
-
-:doc:`filesystem <filesystem:api>`
-==================================

@@ -258,7 +258,7 @@ if(SPHINX_FOUND)
   add_custom_target(copy_doc_index ALL
                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
 
-  add_dependencies(master_sphinx asap_common_sphinx asap_filesystem_sphinx
+  add_dependencies(master_sphinx asap_common_sphinx 
                    copy_doc_index)
 endif()
 
@@ -268,7 +268,6 @@ endif()
 
 add_subdirectory(common)
 add_subdirectory(logging)
-add_subdirectory(filesystem)
 
 # For packaging
 add_subdirectory(deploy)
