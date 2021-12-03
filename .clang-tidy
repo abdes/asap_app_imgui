@@ -15,4 +15,3 @@ Checks: >
     -readability-function-cognitive-complexity,
     -google-runtime-references
 HeaderFilterRegex: ".*/[common|filesystem|logging]/.*"
-
