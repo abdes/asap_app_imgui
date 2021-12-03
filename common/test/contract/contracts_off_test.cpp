@@ -18,6 +18,7 @@ ASAP_DIAGNOSTIC_PUSH
 #if defined(__clang__) && ASAP_HAS_WARNING("-Wused-but-marked-unused")
 #pragma clang diagnostic ignored "-Wused-but-marked-unused"
 #pragma clang diagnostic ignored "-Wglobal-constructors"
+#pragma clang diagnostic ignored "-Wunused-member-function"
 #endif
 // NOLINTBEGIN(used-but-marked-unused)
 

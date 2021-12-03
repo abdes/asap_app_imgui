@@ -51,7 +51,7 @@ extern ASAP_CONTRACT_THREAD_LOCAL jmp_buf jmp_env;
     asap::contract::details::ContractCheckPush();                                                  \
     memcpy(static_cast<void *>(old_jmp_buf),                                                       \
         static_cast<void *>(asap::contract::details::jmp_env), sizeof(old_jmp_buf));               \
-    if (!setjmp(static_cast<__jmp_buf_tag *>(asap::contract::details::jmp_env))) {                 \
+    if (!setjmp(&asap::contract::details::jmp_env[0])) {                 \
       call;                                                                                        \
       violation_detected = 0;                                                                      \
     } else {                                                                                       \

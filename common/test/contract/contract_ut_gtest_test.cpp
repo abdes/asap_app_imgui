@@ -20,9 +20,9 @@ ASAP_DIAGNOSTIC_PUSH
 #if defined(__clang__) && ASAP_HAS_WARNING("-Wused-but-marked-unused")
 #pragma clang diagnostic ignored "-Wused-but-marked-unused"
 #pragma clang diagnostic ignored "-Wglobal-constructors"
+#pragma clang diagnostic ignored "-Wunused-member-function"
 #endif
 // NOLINTBEGIN(used-but-marked-unused)
-// NOLINTBEGIN(cert-err52-cpp)
 
 namespace asap {
 namespace contract {
@@ -63,8 +63,6 @@ TEST(GoogleTestMacros, NestedChecks) {
 
 } // namespace contract
 } // namespace asap
-
-// NOLINTEND(cert-err52-cpp)
 
 auto main(int argc, char **argv) -> int {
   asap::contract::PrepareForTesting();
