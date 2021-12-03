@@ -234,7 +234,7 @@ configure_file(templates/version.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/asap/a
 # enable CTest.  This will set BUILD_TESTING to ON unless otherwise specified on the command line
 include(CTest)
 enable_testing()
-add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest* /usr/*)
+asap_add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest* /usr/*)
 
 include(FetchContent)
 # We make sure that we have 'thirdparty' in the name so that the targets get excluded from the

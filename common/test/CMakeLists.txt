@@ -26,7 +26,7 @@ asap_add_test(
   COMMENT
   "ASAP common unit tests")
 
-  # Target specific compiler features
+# Target specific compiler features
 target_compile_features(${MAIN_TEST_TARGET_NAME} PRIVATE cxx_constexpr)
 
 gtest_discover_tests(${MAIN_TEST_TARGET_NAME})
@@ -35,3 +35,6 @@ gtest_discover_tests(${MAIN_TEST_TARGET_NAME})
 asap_configure_sanitizers(${MAIN_TEST_TARGET_NAME})
 swift_add_valgrind_massif(${MAIN_TEST_TARGET_NAME})
 swift_add_valgrind_callgrind(${MAIN_TEST_TARGET_NAME})
+
+# Also build the tests programs in contract subdirectory
+add_subdirectory(contract)

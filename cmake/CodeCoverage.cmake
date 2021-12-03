@@ -12,10 +12,6 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang|GNU")
 
   include(common/CodeCoverage)
 
-  function(asap_target_code_coverage target)
-    target_code_coverage(${target} ${ARGN})
-  endfunction()
-
   function(asap_add_code_coverage)
     add_code_coverage(${ARGV})
   endfunction()
@@ -25,11 +21,7 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang|GNU")
   endfunction()
 
 else()
-  function(target_code_coverage TARGET_NAME)
-    # empty
-  endfunction()
-
-  function(asap_target_code_coverage target)
+  function(target_code_coverage)
     # empty
   endfunction()
 

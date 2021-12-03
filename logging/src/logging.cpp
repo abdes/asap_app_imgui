@@ -6,9 +6,11 @@
 #include "logging/logging.h"
 
 #include <common/compilers.h>
+#include <contract/contract.h>
 
 #include <iomanip> // std::setw
 #include <sstream> // std::ostringstream
+#include <utility>
 
 // spdlog causes a bunch of compiler warnings we can't do anything about except
 // temporarily disabling them
@@ -91,14 +93,13 @@ void Registry::PushSink(spdlog::sink_ptr sink) {
   std::lock_guard<std::mutex> lock(sinks_mutex_);
   auto &sinks = sinks_();
   // Push the current sink on the stack and use the new one
-  sinks.emplace(delegating_sink()->SwapSink(sink));
+  sinks.emplace(delegating_sink()->SwapSink(std::move(sink)));
 }
 
 void Registry::PopSink() {
   std::lock_guard<std::mutex> lock(sinks_mutex_);
   auto &sinks = sinks_();
-  // TODO(Abdessattar): replace after contracts are implemented
-  // ASAP_ASSERT(!sinks.empty() && "call to PopSink() not matching a previous call to PushSink()");
+  ASAP_ASSERT(!sinks.empty() && "call to PopSink() not matching a previous call to PushSink()");
   if (!sinks.empty()) {
     auto &sink = sinks.top();
     // Assign this previous sink to the delegating sink

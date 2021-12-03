@@ -1,0 +1,76 @@
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
+//    Distributed under the 3-Clause BSD License.
+//    (See accompanying file LICENSE or copy at
+//   https://opensource.org/licenses/BSD-3-Clause)
+
+#include <gtest/gtest.h>
+
+#include "contract/ut/framework.h"
+#include "contract/ut/gtest.h"
+#include "test_helper.h"
+
+#include <common/compilers.h>
+
+// Disable compiler and linter warnings originating from the unit test framework and for which we
+// cannot do anything.
+// Additionally every TEST or TEST_X macro usage must be preceded by a '// NOLINTNEXTLINE'.
+ASAP_DIAGNOSTIC_PUSH
+#if defined(__clang__) && ASAP_HAS_WARNING("-Wused-but-marked-unused")
+#pragma clang diagnostic ignored "-Wused-but-marked-unused"
+#pragma clang diagnostic ignored "-Wglobal-constructors"
+#endif
+// NOLINTBEGIN(used-but-marked-unused)
+// NOLINTBEGIN(cert-err52-cpp)
+
+namespace asap {
+namespace contract {
+
+namespace {
+
+// NOLINTNEXTLINE
+TEST(GoogleTestMacros, Expect) {
+  ASSERT_VIOLATES_CONTRACT(testing::TestExpectDefault(nullptr));
+}
+
+// NOLINTNEXTLINE
+TEST(GoogleTestMacros, Ensure) {
+  ASSERT_VIOLATES_CONTRACT(testing::TestEnsureDefault(nullptr));
+}
+
+// NOLINTNEXTLINE
+TEST(GoogleTestMacros, Assert) {
+  ASSERT_VIOLATES_CONTRACT(testing::TestAssertDefault(nullptr));
+}
+
+void NestedViolator(int *ptr) {
+  CHECK_VIOLATES_CONTRACT(testing::TestAssertDefault(ptr));
+  testing::TestEnsureDefault(nullptr);
+}
+void Violator(int *ptr) {
+  CHECK_VIOLATES_CONTRACT(testing::TestAssertDefault(ptr));
+  CHECK_VIOLATES_CONTRACT(NestedViolator(ptr));
+  testing::TestExpectDefault(nullptr);
+}
+
+// NOLINTNEXTLINE
+TEST(GoogleTestMacros, NestedChecks) {
+  CHECK_VIOLATES_CONTRACT(Violator(nullptr));
+}
+
+} // namespace
+
+} // namespace contract
+} // namespace asap
+
+// NOLINTEND(cert-err52-cpp)
+
+auto main(int argc, char **argv) -> int {
+  asap::contract::PrepareForTesting();
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+
+// NOLINTEND(used-but-marked-unused)
+ASAP_DIAGNOSTIC_POP

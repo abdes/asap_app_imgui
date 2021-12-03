@@ -52,17 +52,16 @@ asap_add_library(
   # Headers
   "include/common/platform.h"
   "include/common/compilers.h"
-  #"include/common/singleton.h"
+  "include/common/singleton.h"
   "include/common/flag_ops.h"
   # traits module
   "include/common/traits/logical.h"
   # contract module
-  #"include/contract/contract.h"
-  #"include/contract/ut/gtest.h"
-  #"include/contract/ut/framework.h"
+  "include/contract/contract.h"
+  "include/contract/ut/gtest.h"
+  "include/contract/ut/framework.h"
   # Sources
-  #"src/contract.cpp",
-  "src/place_holder_to_be_removed.cpp")
+  "src/contract.cpp")
 
 target_link_libraries(${MODULE_TARGET_NAME} PRIVATE Microsoft.GSL::GSL)
 
