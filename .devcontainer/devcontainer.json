@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.205.2/containers/python-3
 {
-  "name": "ASAP",
+  "name": "asap_dev",
   "build": {
     "dockerfile": "Dockerfile",
     "context": "..",
@@ -29,7 +29,8 @@
     "python.linting.pydocstylePath": "/usr/local/py-utils/bin/pydocstyle",
     "python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
     "python.pythonPath": "/usr/local/bin/python",
-    "esbonio.server.pythonPath": "/usr/local/bin/python"
+    "esbonio.server.pythonPath": "/usr/local/bin/python",
+    "clangd.path": "/usr/bin/clangd-14",
   },
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
@@ -43,12 +44,13 @@
     "swyddfa.esbonio",
     "eamodio.gitlens",
     "hbenl.vscode-test-explorer",
-    "guyutongxue.cpp-reference"
+    "guyutongxue.cpp-reference",
+    "cheshirekow.cmake-format"
   ],
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
   // Use 'postCreateCommand' to run commands after the container is created.
-  // "postCreateCommand": "pip3 install --user -r requirements.txt",
+  "postCreateCommand": "npx husky install < /dev/null",
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
   "remoteUser": "vscode"
 }

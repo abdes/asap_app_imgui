@@ -8,16 +8,37 @@ FROM mcr.microsoft.com/vscode/devcontainers/python:0-${VARIANT}
 ARG NODE_VERSION="none"
 RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/local/share/nvm/nvm.sh && nvm install ${NODE_VERSION} 2>&1"; fi
 
+RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+  && apt-get -y install lsb-release wget software-properties-common \
+  && apt-get -y install build-essential cmake ninja-build valgrind gdb lcov doxygen graphviz \
+  && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+RUN wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
+RUN add-apt-repository 'deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main'
+
 # Install additional OS packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-  && apt-get -y install build-essential cmake ninja-build valgrind clang clangd lldb llvm gdb clang-format clang-tidy doxygen graphviz \
+  && apt-get -y install clang-14 clangd-14 lldb-14 llvm-14 clang-format-14 clang-tidy-14 \
   && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+
+RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-14 100
+RUN update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-14 100
+RUN update-alternatives --install /usr/bin/clang-apply-replacements clang-apply-replacements /usr/bin/clang-apply-replacements-14 100
+RUN update-alternatives --install /usr/bin/clang-check clang-check /usr/bin/clang-check-14 100
+RUN update-alternatives --install /usr/bin/clang-query clang-query /usr/bin/clang-query-14 100
+RUN update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-14 100
+RUN update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-14 100
+RUN update-alternatives --install /usr/bin/scan-build scan-build /usr/bin/scan-build-14 100
+RUN update-alternatives --install /usr/bin/scan-view scan-view /usr/bin/scan-view-14 100
+RUN update-alternatives --install /usr/bin/llvm-cov llvm-cov /usr/bin/llvm-cov-14 100
+RUN update-alternatives --install /usr/bin/llvm-profdata llvm-profdata /usr/bin/llvm-profdata-14 100
 
 # Our pip requirements rarely change, add them to the image.
 COPY requirements.txt /tmp/pip-tmp/
-RUN pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
-  && rm -rf /tmp/pip-tmp
+RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then \
+  pip3 --disable-pip-version-check --no-cache-dir install -r /tmp/pip-tmp/requirements.txt \
+  && rm -rf /tmp/pip-tmp; \
+  fi
 
 # Install global node packages and enable husky.
-RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g standard-version @commitlint/cli @commitlint/config-conventional " 2>&1
-RUN npx husky install
+RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g husky standard-version @commitlint/cli @commitlint/config-conventional " 2>&1
