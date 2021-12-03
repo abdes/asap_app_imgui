@@ -96,9 +96,9 @@
   // the file to the indent format configured by VSCode after opening the file
   "editor.detectIndentation": false,
   // Format file when pasting
-  "editor.formatOnPaste": true,
+  "editor.formatOnPaste": false,
   // Format file on save
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   // Automatically display inline suggestions in the editor
   "editor.inlineSuggest.enabled": true,
   // Whether to display a small panel with parameter document and type information when entering
@@ -141,7 +141,7 @@
   // Auto save unsaved editor: after waiting time
   "files.autoSave": "afterDelay",
   // Wait time for auto save (MS)
-  "files.autoSaveDelay": 1000,
+  "files.autoSaveDelay": 10000,
   // Displays the line number of the search results
   "search.showLineNumbers": true,
   // When the search term is lowercase, the search is case insensitive
@@ -202,6 +202,10 @@
   "cmake.configureOnEdit": false,
   // Automatically configure the CMake project directory when it is opened
   "cmake.configureOnOpen": true,
+  "cmake.configureSettings": {
+    "CMAKE_INSTALL_PREFIX": "asap-install",
+    "CODE_COVERAGE": "ON"
+  },
   "cmake.preferredGenerators": [
     "Ninja"
   ],
@@ -260,4 +264,33 @@
       }
     }
   },
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": "googletest.failed",
+        "settings": {
+          "foreground": "#f00"
+        }
+      },
+      {
+        "scope": "googletest.passed",
+        "settings": {
+          "foreground": "#0f0"
+        }
+      },
+      {
+        "scope": "googletest.run",
+        "settings": {
+          "foreground": "#0f0"
+        }
+      }
+    ]
+  },
+  "cSpell.enableFiletypes": [
+    "rst"
+  ],
+  "cmakeFormat.args": [
+    "--config-file=${workspaceFolder}/.cmake-format.yaml"
+  ],
+  "python.pythonPath": "${workspaceFolder}\\.sphinx\\python"
 }
