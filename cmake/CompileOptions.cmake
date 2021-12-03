@@ -154,7 +154,6 @@ function(swift_set_compile_options)
       -Wshadow
       -Wsign-conversion
       -Wsign-promo
-      -Wstrict-overflow=5
       -Wswitch-default
       -Wundef
       -Werror
