@@ -25,6 +25,7 @@ ASAP_DIAGNOSTIC_PUSH
 #if defined(__clang__) && ASAP_HAS_WARNING("-Wused-but-marked-unused")
 #pragma clang diagnostic ignored "-Wused-but-marked-unused"
 #pragma clang diagnostic ignored "-Wglobal-constructors"
+#pragma clang diagnostic ignored "-Wunused-member-function"
 #endif
 // NOLINTBEGIN(used-but-marked-unused)
 
@@ -33,6 +34,10 @@ using ::testing::Eq;
 using ::testing::IsFalse;
 using ::testing::IsTrue;
 using ::testing::Ne;
+
+// spdlog puts template definitions in separate files from the .h files. We ned to declare the
+// template explicit instantiation present in the implementation files to avoid compiler warnings.
+extern template class spdlog::sinks::base_sink<std::mutex>;
 
 namespace asap {
 namespace logging {
@@ -72,7 +77,12 @@ public:
 
   static const char *const LOGGER_NAME;
 };
+ASAP_DIAGNOSTIC_PUSH
+#if defined(__clang__) && ASAP_HAS_WARNING("-Wunused-const-variable")
+#pragma clang diagnostic ignored "-Wunused-const-variable"
+#endif
 const char *const Foo::LOGGER_NAME = "foo";
+ASAP_DIAGNOSTIC_POP
 
 // NOLINTNEXTLINE
 TEST(Logging, LoggingByExtendingLoggable) {
@@ -143,10 +153,6 @@ TEST(Logging, LogToLoggerWithParameters) {
   auto &test_logger = Registry::GetLogger("testing");
 
   auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
-
-  AS_DO_LOG(test_logger);
-  EXPECT_THAT(test_sink->called_, Eq(1));
-  test_sink->Reset();
 
   AS_DO_LOG(test_logger, debug);
   EXPECT_THAT(test_sink->called_, Eq(1));
