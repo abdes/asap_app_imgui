@@ -36,7 +36,7 @@
   "bumpFiles": [
     {
       "filename": "CMakeLists.txt",
-      "updater": "cmake/standard-version-updater.js"
+      "updater": "cmake/scripts/standard-version-updater.js"
     }
   ],
   "commitUrlFormat": "http://github.com/abdes/asap/commit/{{hash}}",
