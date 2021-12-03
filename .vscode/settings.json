@@ -292,5 +292,4 @@
   "cmakeFormat.args": [
     "--config-file=${workspaceFolder}/.cmake-format.yaml"
   ],
-  "python.pythonPath": "${workspaceFolder}\\.sphinx\\python"
 }

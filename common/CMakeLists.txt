@@ -5,165 +5,138 @@
 #   https://opensource.org/licenses/BSD-3-Clause)
 # ~~~
 
-# Meta information about the project
-# cmake-format: off
-set(META_MODULE_NAME                "common")
-set(META_MODULE_DESCRIPTION         "Common functionality for asap based projects")
-set(META_MODULE_GITHUB_REPO         "asap_common")
-set(META_MODULE_VERSION_MAJOR       "0")
-set(META_MODULE_VERSION_MINOR       "1")
-set(META_MODULE_VERSION_PATCH       "1")
-set(META_MODULE_VERSION_REVISION    "${MODULE_GIT_REV}")
-set(META_MODULE_VERSION             "${META_MODULE_VERSION_MAJOR}.${META_MODULE_VERSION_MINOR}.${META_MODULE_VERSION_PATCH}")
-set(META_MODULE_NAME_VERSION        "${META_MODULE_PROJECT_NAME} v${META_MODULE_VERSION}")
-# cmake-format: on
-message("=> [module: common ${META_MODULE_VERSION}]")
+# --------------------------------------------------------------------------------------------------
+# Meta information about the this module
+# --------------------------------------------------------------------------------------------------
 
-# ------------------------------------------------------------------------------
-# Configuration
-# ------------------------------------------------------------------------------
+asap_declare_module(
+  MODULE_NAME
+  "common"
+  DESCRIPTION
+  "Common functionality for asap based projects"
+  GITHUB_REPO
+  "https://github.com/abdes/asap"
+  AUTHOR_MAINTAINER
+  "Abdessattar Sassi"
+  VERSION_MAJOR
+  "1"
+  VERSION_MINOR
+  "0"
+  VERSION_PATCH
+  "0")
 
-set(IDE_FOLDER "Libraries")
+# --------------------------------------------------------------------------------------------------
+# Code generation
+# --------------------------------------------------------------------------------------------------
 
-# Project options
-option(ASAP_USE_ASSERTS "Enable ASSERT macros." ON)
-option(ASAP_USE_SYSTEM_ASSERTS
-       "Use system assert() to implement ASSERT macros." OFF)
+# Generate config-header
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/${META_MODULE_NAME}/config.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/include/${META_MODULE_NAME}/config.h)
 
-# This module's specific Environment detection
-include(CheckIncludeFileCXX)
-check_include_file_cxx("execinfo.h" ASAP_HAVE_EXECINFO_H)
-include(CheckCXXSourceCompiles)
-check_cxx_source_compiles(
-  "
-  #define _POSIX_C_SOURCE 200112L
-  #include <unistd.h>
-  #if !defined(_POSIX_VERSION) || (_POSIX_VERSION < 200112L)
-  posix_200112L_unsupported
-  #endif
-  int main(int, char**) {
-  }"
-  ASAP_POSIX
-  FAIL_REGEX
-  "posix_200112L_unsupported")
-
-# ------------------------------------------------------------------------------
-# External dependencies
-# ------------------------------------------------------------------------------
-
-# find_package(THIRDPARTY REQUIRED)
-
-# ==============================================================================
+# ==================================================================================================
 # Build instructions
-# ==============================================================================
+# ==================================================================================================
 
-# Target name
-set(target asap_common)
-set(target_export common)
+# --------------------------------------------------------------------------------------------------
+# Main module target
+# --------------------------------------------------------------------------------------------------
 
-# Exit here if required dependencies are not met
+set(MODULE_TARGET_NAME "${META_PROJECT_NAME}_${META_MODULE_NAME}")
 
-# ------------------------------------------------------------------------------
-# Sources
-# ------------------------------------------------------------------------------
-
-set(include_path "${CMAKE_CURRENT_SOURCE_DIR}/include/common")
-set(source_path "${CMAKE_CURRENT_SOURCE_DIR}/src")
-
-set(public_headers
-    "include/common/platform.h"
-    "include/common/compilers.h"
-    "include/common/flag_ops.h"
-    # traits module
-    "include/common/traits/logical.h")
-
-set(sources "src/place_holder_to_be_removed.cpp" ${public_headers})
-
-# ------------------------------------------------------------------------------
-# Include dirs
-# ------------------------------------------------------------------------------
-
-set(public_include_dirs)
-set(private_include_dirs)
-
-# ------------------------------------------------------------------------------
-# Compile definitions / options
-# ------------------------------------------------------------------------------
-
-set(private_compile_definitions)
-set(private_compile_options)
-
-# ------------------------------------------------------------------------------
-# Libraries
-# ------------------------------------------------------------------------------
-
-# GSL is so basic that we make it available for any module that uses the 
-# 'common' submodule.
-set(public_libraries Microsoft.GSL::GSL)
-
-if(WIN32)
-  list(APPEND public_libraries dbghelp)
-endif(WIN32)
-
-# ------------------------------------------------------------------------------
-# Create targets
-# ------------------------------------------------------------------------------
-
-asap_library(
-  TARGET
-  ${target}
-  EXPORT_NAME
-  ${target_export}
+asap_add_library(
+  ${MODULE_TARGET_NAME}
+  STATIC
+  SHARED
+  WARNING
   SOURCES
-  ${sources}
-  PUBLIC_INCLUDE_DIRS
-  ${public_include_dirs}
-  PRIVATE_INCLUDE_DIRS
-  ${private_include_dirs}
-  PUBLIC_LIBRARIES
-  ${public_libraries}
-  PRIVATE_COMPILE_DEFINITIONS
-  ${private_compile_definitions}
-  PRIVATE_COMPILE_OPTIONS
-  ${private_compile_options})
+  # Headers
+  "include/common/platform.h"
+  "include/common/compilers.h"
+  #"include/common/singleton.h"
+  "include/common/flag_ops.h"
+  # traits module
+  "include/common/traits/logical.h"
+  # contract module
+  #"include/contract/contract.h"
+  #"include/contract/ut/gtest.h"
+  #"include/contract/ut/framework.h"
+  # Sources
+  #"src/contract.cpp",
+  "src/place_holder_to_be_removed.cpp")
 
-set_target_properties(${target} PROPERTIES
-   CXX_STANDARD 11
-   CXX_STANDARD_REQUIRED YES
-   CXX_EXTENSIONS NO
-)
+target_link_libraries(${MODULE_TARGET_NAME} PRIVATE Microsoft.GSL::GSL)
 
-# ------------------------------------------------------------------------------
+target_include_directories(
+  ${MODULE_TARGET_NAME}
+  PUBLIC $<INSTALL_INTERFACE:include> $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Add support for (optional) code quality tools
+asap_configure_sanitizers(${MODULE_TARGET_NAME})
+
+# --------------------------------------------------------------------------------------------------
 # Tests
-# ------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 if(OPTION_BUILD_TESTS)
   add_subdirectory(test)
 endif()
 
-# ------------------------------------------------------------------------------
-# Code generation
-# ------------------------------------------------------------------------------
-
-# Generate config-header
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/common/config.h.in
-               ${CMAKE_CURRENT_BINARY_DIR}/include/common/config.h)
-
-# ------------------------------------------------------------------------------
-# Add support for (optional) code quality tools
-# ------------------------------------------------------------------------------
-
-asap_configure_sanitizers(${target})
-tidy_target(${target})
-
-# ------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 # API Documentation
-# ------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 
 asap_with_doxygen(
-  ${target}
-  "\"Common Module\""
+  ${MODULE_TARGET_NAME} "\"Common Module\""
   "\"Provides common basic building blocks such as portability, assertions, etc.\""
   "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-asap_with_sphinx(${target})
+asap_with_sphinx(${MODULE_TARGET_NAME})
+
+# ==================================================================================================
+# Deployment instructions
+# ==================================================================================================
+
+# Library
+install(
+  TARGETS ${MODULE_TARGET_NAME}
+  EXPORT "${TARGETS_EXPORT_NAME}"
+  COMPONENT dev
+  RUNTIME DESTINATION ${ASAP_INSTALL_BIN} COMPONENT runtime
+  LIBRARY DESTINATION ${ASAP_INSTALL_SHARED} COMPONENT runtime
+  ARCHIVE DESTINATION ${ASAP_INSTALL_LIB} COMPONENT dev)
+
+# Header files
+install(
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/${META_MODULE_NAME}
+  DESTINATION ${ASAP_INSTALL_INCLUDE}
+  COMPONENT dev
+  FILES_MATCHING
+  PATTERN "*.h")
+
+# Contract library Header files
+install(
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/contract
+  DESTINATION ${ASAP_INSTALL_INCLUDE}
+  COMPONENT dev
+  FILES_MATCHING
+  PATTERN "*.h")
+
+# Generated header files
+install(
+  DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/${META_MODULE_NAME}
+  DESTINATION ${ASAP_INSTALL_INCLUDE}
+  COMPONENT dev)
+
+# Target config
+install(
+  EXPORT ${TARGETS_EXPORT_NAME}
+  NAMESPACE ${META_PROJECT_NAME}::
+  DESTINATION ${ASAP_INSTALL_CMAKE}/${META_MODULE_NAME}
+  COMPONENT dev)
+
+# Package configuration files
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}Config.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}ConfigVersion.cmake
+        DESTINATION ${ASAP_INSTALL_CMAKE}/${META_MODULE_NAME})

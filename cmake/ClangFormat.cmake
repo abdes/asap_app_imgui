@@ -8,21 +8,21 @@
 #
 # Clang-format targets work only when clang-format executable can be found.
 #
-find_program(CLANG_FORMAT NAMES clang-tidy clang-tidy-14)
+find_program(CLANG_FORMAT NAMES clang-format clang-format-14)
 if("${CLANG_FORMAT}" STREQUAL "CLANG_FORMAT-NOTFOUND")
 
   message(STATUS "Could not find appropriate clang-format, targets disabled")
 
-  function(asap_create_clang_tidy_targets)
+  function(asap_setup_clang_format)
     # empty
   endfunction()
 
 else()
 
-  include(common/ClangTidy)
+  include(common/ClangFormat)
 
-  function(asap_create_clang_tidy_targets)
-    swift_create_clang_tidy_targets(DONT_GENERATE_CLANG_TIDY_CONFIG ${ARGV})
+  function(asap_setup_clang_format)
+    swift_setup_clang_format(${ARGV})
   endfunction()
 
 endif()

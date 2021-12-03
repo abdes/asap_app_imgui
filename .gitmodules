@@ -7,3 +7,6 @@
 [submodule "third_party/gsl"]
 	path = third_party/gsl
 	url = https://github.com/microsoft/GSL.git
+[submodule "cmake/common"]
+	path = cmake/common
+	url = https://github.com/abdes/cmake

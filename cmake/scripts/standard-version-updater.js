@@ -1,14 +1,16 @@
-//        Copyright The Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Detect the dominant newline character of a string, from  'detect-newline'
 // https://github.com/sindresorhus/detect-newline
 //
 // MIT License
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 function detectNewline(string) {
     if (typeof string !== 'string') {
         throw new TypeError('Expected a string');
@@ -29,12 +31,12 @@ function detectNewline(string) {
 function detectNewlineGraceful(string) {
     return (typeof string === 'string' && detectNewline(string)) || '\n';
 }
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Version reader/updated for standard-version that uses the mETA information in
 // the CmakeLists.txt file
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 const major_rex = /set\(META_VERSION_MAJOR\s+\"(\d+)\"\)/;
 const minor_rex = /set\(META_VERSION_MINOR\s+\"(\d+)\"\)/;

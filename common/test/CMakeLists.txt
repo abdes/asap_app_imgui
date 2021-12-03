@@ -5,87 +5,33 @@
 #   https://opensource.org/licenses/BSD-3-Clause)
 # ~~~
 
-# ------------------------------------------------------------------------------
-# Configuration
-# ------------------------------------------------------------------------------
-
-set(IDE_FOLDER "Tests")
-
-# ------------------------------------------------------------------------------
-# External dependencies
-# ------------------------------------------------------------------------------
-
-# find_package(THIRDPARTY REQUIRED)
-
-# ==============================================================================
+# ==================================================================================================
 # Build instructions
-# ==============================================================================
+# ==================================================================================================
 
-# Target name
-set(target asap_common_test)
+set(MAIN_TEST_TARGET_NAME ${MODULE_TARGET_NAME}_test)
 
-# Exit here if required dependencies are not met
+asap_add_test(
+  ${MAIN_TEST_TARGET_NAME}
+  UNIT_TEST
+  VALGRIND_MEMCHECK
+  SRCS
+  "traits_logical_test.cpp"
+  "flag_ops_test.cpp"
+  "main.cpp"
+  LINK
+  ${META_PROJECT_NAME}::common
+  gtest_main
+  gmock_main
+  COMMENT
+  "ASAP common unit tests")
 
-# ------------------------------------------------------------------------------
-# Sources
-# ------------------------------------------------------------------------------
+  # Target specific compiler features
+target_compile_features(${MAIN_TEST_TARGET_NAME} PRIVATE cxx_constexpr)
 
-set(include_path "${CMAKE_CURRENT_SOURCE_DIR}")
-set(source_path "${CMAKE_CURRENT_SOURCE_DIR}")
+gtest_discover_tests(${MAIN_TEST_TARGET_NAME})
 
-set(public_headers)
-
-set(sources
-    "traits_logical_test.cpp"
-    "flag_ops_test.cpp"
-    "main.cpp"
-    ${public_headers})
-
-# ------------------------------------------------------------------------------
-# Include dirs
-# ------------------------------------------------------------------------------
-
-set(include_dirs)
-
-# ------------------------------------------------------------------------------
-# Compile definitions / options
-# ------------------------------------------------------------------------------
-
-set(compile_definitions)
-set(compile_options)
-
-# ------------------------------------------------------------------------------
-# Libraries
-# ------------------------------------------------------------------------------
-
-set(libraries ${META_PROJECT_NAME}::common gtest gmock)
-
-# ------------------------------------------------------------------------------
-# Create targets
-# ------------------------------------------------------------------------------
-
-asap_test_executable(
-  TARGET
-  ${target}
-  SOURCES
-  ${sources}
-  INCLUDE_DIRS
-  ${include_dirs}
-  LIBRARIES
-  ${libraries}
-  COMPILE_DEFINITIONS
-  ${compile_definitions}
-  COMPILE_OPTIONS
-  ${compile_options})
-
-set_target_properties(${target} PROPERTIES
-   CXX_STANDARD 11
-   CXX_STANDARD_REQUIRED YES
-   CXX_EXTENSIONS NO
-)
-
-# ------------------------------------------------------------------------------
 # Add support for (optional) code quality tools
-# ------------------------------------------------------------------------------
-
-asap_configure_sanitizers(${target})
+asap_configure_sanitizers(${MAIN_TEST_TARGET_NAME})
+swift_add_valgrind_massif(${MAIN_TEST_TARGET_NAME})
+swift_add_valgrind_callgrind(${MAIN_TEST_TARGET_NAME})

@@ -5,18 +5,16 @@
 #   https://opensource.org/licenses/BSD-3-Clause)
 # ~~~
 
-# ------------------------------------------------------------------------------
-# Valgrind
-# ------------------------------------------------------------------------------
+include(common/Valgrind)
 
-# run tests with: ctest -T memcheck --output-on-failure
+function(asap_add_valgrind_memcheck target)
+  swift_add_valgrind_memcheck(${target}, ${ARGN})
+endfunction()
 
-find_program(MEMORYCHECK_COMMAND valgrind)
-set(MEMORYCHECK_COMMAND_OPTIONS
-    "${MEMORYCHECK_COMMAND_OPTIONS} --leak-check=full")
-set(MEMORYCHECK_COMMAND_OPTIONS
-    "${MEMORYCHECK_COMMAND_OPTIONS} --track-fds=yes")
-set(MEMORYCHECK_COMMAND_OPTIONS
-    "${MEMORYCHECK_COMMAND_OPTIONS} --trace-children=yes")
-set(MEMORYCHECK_COMMAND_OPTIONS
-    "${MEMORYCHECK_COMMAND_OPTIONS} --error-exitcode=1")
+function(asap_add_valgrind_callgrind target)
+  swift_add_valgrind_callgrind(${target}, ${ARGN})
+endfunction()
+
+function(asap_add_valgrind_massif target)
+  swift_add_valgrind_massif(${target}, ${ARGN})
+endfunction()
