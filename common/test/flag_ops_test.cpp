@@ -1,100 +1,148 @@
-//        Copyright The Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-#if defined(__clang__)
-#pragma clang diagnostic push
-// Catch2 uses a lot of macro names that will make clang go crazy
-#if (__clang_major__ >= 13) && !defined(__APPLE__)
-#pragma clang diagnostic ignored "-Wreserved-identifier"
-#endif
-// Big mess created because of the way spdlog is organizing its source code
-// based on header only builds vs library builds. The issue is that spdlog
-// places the template definitions in a separate file and explicitly
-// instantiates them, so we have no problem at link, but we do have a problem
-// with clang (rightfully) complaining that the template definitions are not
-// available when the template needs to be instantiated here.
-#pragma clang diagnostic ignored "-Wundefined-func-template"
-#endif // __clang__
+#include "common/flag_ops.h"
 
-#include <common/flag_ops.h>
+#include <common/compilers.h>
 
-#include <catch2/catch.hpp>
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
 #include <cstdint>
+
+// Disable compiler and linter warnings originating from the unit test framework and for which we
+// cannot do anything.
+// Additionally every TEST or TEST_X macro usage must be preceded by a '// NOLINTNEXTLINE'.
+ASAP_DIAGNOSTIC_PUSH
+#if defined(__clang__) && ASAP_HAS_WARNING("-Wused-but-marked-unused")
+#pragma clang diagnostic ignored "-Wused-but-marked-unused"
+#pragma clang diagnostic ignored "-Wglobal-constructors"
+#endif
+// NOLINTBEGIN(used-but-marked-unused)
+
+using ::testing::Eq;
+using ::testing::IsTrue;
+using ::testing::Ne;
 
 namespace asap {
 
-TEST_CASE("Flag / Set", "[common][flag]") {
-  std::uint64_t mask = 0x100010;
-  std::uint64_t flag = 0x1000;
+namespace {
+
+// NOLINTNEXTLINE
+TEST(FlagOps, SetSingleBit) {
+  constexpr auto TEST_MASK = 0x100010;
+  constexpr auto TEST_FLAGS = 0x1000;
+  constexpr auto RESULT_MASK = 0x101010;
+
+  std::uint32_t mask = TEST_MASK;
+  std::uint32_t flag = TEST_FLAGS;
 
   FlagSet(mask, flag);
   // bit corresponding to flag is set
-  REQUIRE((mask & flag) != 0);
+  EXPECT_THAT((mask & flag), Ne(0));
   // other bits not touched
-  REQUIRE(mask == 0x101010);
+  EXPECT_THAT(mask, Eq(RESULT_MASK));
+}
 
-  // multi-bit flag
-  mask = 0x100010;
-  flag = 0x1001;
+// NOLINTNEXTLINE
+TEST(FlagOps, SetMultipleBits) {
+  constexpr auto TEST_MASK = 0x100010;
+  constexpr auto TEST_FLAGS = 0x1001;
+  constexpr auto RESULT_MASK = 0x101011;
+
+  std::uint32_t mask = TEST_MASK;
+  std::uint32_t flag = TEST_FLAGS;
+
   FlagSet(mask, flag);
-  // bit corresponding to flag is set
-  REQUIRE(mask == 0x101011);
+  EXPECT_THAT(mask, Eq(RESULT_MASK));
 }
 
-TEST_CASE("Flag / Clear", "[common][flag]") {
-  std::uint64_t mask = 0x100010;
-  std::uint64_t flag = 0x10;
+// NOLINTNEXTLINE
+TEST(FlagOps, ClearSingleBit) {
+  constexpr auto TEST_MASK = 0x100010;
+  constexpr auto TEST_FLAGS = 0x10;
+  constexpr auto RESULT_MASK = 0x100000;
+
+  std::uint32_t mask = TEST_MASK;
+  std::uint32_t flag = TEST_FLAGS;
 
   FlagClear(mask, flag);
   // bit corresponding to flag is cleared
-  REQUIRE((mask & flag) == 0);
+  EXPECT_THAT((mask & flag), Eq(0));
   // other bits not touched
-  REQUIRE(mask == 0x100000);
+  EXPECT_THAT(mask, Eq(RESULT_MASK));
+}
 
-  // multi-bit flag
-  mask = 0x10101010;
-  flag = 0x101000;
+// NOLINTNEXTLINE
+TEST(FlagOps, ClearMultipleBits) {
+  constexpr auto TEST_MASK = 0x10101010;
+  constexpr auto TEST_FLAGS = 0x101000;
+  constexpr auto RESULT_MASK = 0x10000010;
+
+  std::uint32_t mask = TEST_MASK;
+  std::uint32_t flag = TEST_FLAGS;
+
   FlagClear(mask, flag);
-  REQUIRE((mask & flag) == 0);
-  REQUIRE(mask == 0x10000010);
+  EXPECT_THAT((mask & flag), Eq(0));
+  EXPECT_THAT(mask, Eq(RESULT_MASK));
 }
 
-TEST_CASE("Flag / Flip", "[common][flag]") {
-  std::uint64_t mask = 0x100010;
-  std::uint64_t flag = 0x10;
+// NOLINTNEXTLINE
+TEST(FlagOps, FlipSingleBit) {
+  constexpr auto INITIAL_MASK = 0x10101010;
+  constexpr auto TEST_FLAGS = 0x101000;
+  constexpr auto RESULT_MASK = 0x10000010;
+
+  std::uint32_t mask = INITIAL_MASK;
+  std::uint32_t flag = TEST_FLAGS;
 
   FlagFlip(mask, flag);
   // bit corresponding to flag is cleared
-  REQUIRE((mask & flag) == 0);
+  EXPECT_THAT((mask & flag), Eq(0));
   // other bits not touched
-  REQUIRE(mask == 0x100000);
+  EXPECT_THAT(mask, Eq(RESULT_MASK));
+
   FlagFlip(mask, flag);
   // bit corresponding to flag is cleared
-  REQUIRE((mask & flag) != 0);
+  EXPECT_THAT((mask & flag), Ne(0));
   // other bits not touched
-  REQUIRE(mask == 0x100010);
-
-  // multi-bit flag
-  mask = 0x10101010;
-  flag = 0x11111111;
-  FlagFlip(mask, flag);
-  REQUIRE(mask == 0x01010101);
-  FlagFlip(mask, flag);
-  REQUIRE(mask == 0x10101010);
+  EXPECT_THAT(mask, Eq(INITIAL_MASK));
 }
 
-TEST_CASE("Flag / Test", "[common][flag]") {
-  std::uint64_t mask = 0x100010;
-  std::uint64_t flag = 0x10;
+// NOLINTNEXTLINE
+TEST(FlagOps, FlipMultipleBits) {
+  constexpr auto INITIAL_MASK = 0x10101010;
+  constexpr auto TEST_FLAGS = 0x11111111;
+  constexpr auto RESULT_MASK = 0x01010101;
 
-  REQUIRE(FlagTest(mask, flag));
-  REQUIRE(FlagTest(mask, mask));
+  std::uint32_t mask = INITIAL_MASK;
+  std::uint32_t flag = TEST_FLAGS;
+
+  FlagFlip(mask, flag);
+  EXPECT_THAT(mask, Eq(RESULT_MASK));
+  FlagFlip(mask, flag);
+  EXPECT_THAT(mask, Eq(INITIAL_MASK));
 }
+
+// NOLINTNEXTLINE
+TEST(FlagOps, TestMultipleBits) {
+  constexpr auto TEST_MASK = 0x100010;
+  constexpr auto TEST_FLAGS = 0x10;
+
+  std::uint32_t mask = TEST_MASK;
+  std::uint32_t flag = TEST_FLAGS;
+
+  EXPECT_THAT(FlagTest(mask, flag), IsTrue());
+  EXPECT_THAT(FlagTest(mask, mask), IsTrue());
+}
+
+} // namespace
 
 } // namespace asap
 
-#if defined(__clang__)
-#pragma clang diagnostic pop
-#endif // __clang__
+// NOLINTEND(used-but-marked-unused)
+ASAP_DIAGNOSTIC_POP

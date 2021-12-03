@@ -14,13 +14,6 @@ message("=> [third-party modules]")
 add_subdirectory(gsl)
 
 # ------------------------------------------------------------------------------
-# catch2
-# ------------------------------------------------------------------------------
-
-# EXCLUDE_FROM_ALL to not have it install its files during install
-add_subdirectory(catch2 EXCLUDE_FROM_ALL)
-
-# ------------------------------------------------------------------------------
 # fmt (must come before spdlog)
 # ------------------------------------------------------------------------------
 

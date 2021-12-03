@@ -435,7 +435,7 @@ function(asap_test_executable)
   #
 
   target_link_libraries(${_NAME} PRIVATE ${DEFAULT_LIBRARIES}
-                                         ${ASAP_TEST_LIBRARIES} Catch2)
+                                         ${ASAP_TEST_LIBRARIES})
 
   #
   # Linker flags
@@ -458,10 +458,12 @@ function(asap_test_executable)
   set_target_properties(${_NAME} PROPERTIES ${DEFAULT_PROJECT_OPTIONS} FOLDER
                                             "${IDE_FOLDER}")
 
-  if(TARGET Catch2)
-    catch_discover_tests(${_NAME} TEST_PREFIX "${_NAME}::")
-  else()
-    add_test(${_NAME} ${PROJECT_BINARY_DIR}/${_NAME})
-  endif()
-
+if(TARGET Catch2)
+  catch_discover_tests(${_NAME} TEST_PREFIX "${_NAME}::")
+elseif(TARGET gtest)
+  gtest_discover_tests(${_NAME})
+else()
+  add_test(${_NAME} ${PROJECT_BINARY_DIR}/${_NAME})
+endif()
+                                                                              
 endfunction()

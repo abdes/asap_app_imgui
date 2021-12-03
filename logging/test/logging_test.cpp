@@ -7,32 +7,37 @@
 
 #include <common/compilers.h>
 
-ASAP_DIAGNOSTIC_PUSH
-#if defined(__clang__)
-// Catch2 uses a lot of macro names that will make clang go crazy
-#if (__clang_major__ >= 13) && !defined(__APPLE__)
-#pragma clang diagnostic ignored "-Wreserved-identifier"
-#endif
-// Big mess created because of the way spdlog is organizing its source code
-// based on header only builds vs library builds. The issue is that spdlog
-// places the template definitions in a separate file and explicitly
-// instantiates them, so we have no problem at link, but we do have a problem
-// with clang (rightfully) complaining that the template definitions are not
-// available when the template needs to be instantiated here.
-#pragma clang diagnostic ignored "-Wundefined-func-template"
-#endif
-
-#include <logging/logging.h>
-#include <spdlog/sinks/base_sink.h>
-#include <spdlog/spdlog.h>
-
-#include <catch2/catch.hpp>
-
-ASAP_DIAGNOSTIC_POP
+#include <gmock/gmock-more-matchers.h>
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
 
 #include <iostream>
 #include <mutex>
 #include <sstream>
+
+#include <spdlog/sinks/base_sink.h>
+#include <spdlog/spdlog.h>
+
+// Disable compiler and linter warnings originating from the unit test framework and for which we
+// cannot do anything.
+// Additionally every TEST or TEST_X macro usage must be preceded by a '// NOLINTNEXTLINE'.
+ASAP_DIAGNOSTIC_PUSH
+#if defined(__clang__) && ASAP_HAS_WARNING("-Wused-but-marked-unused")
+#pragma clang diagnostic ignored "-Wused-but-marked-unused"
+#pragma clang diagnostic ignored "-Wglobal-constructors"
+#endif
+// NOLINTBEGIN(used-but-marked-unused)
+
+using ::testing::ContainsRegex;
+using ::testing::Eq;
+using ::testing::IsFalse;
+using ::testing::IsTrue;
+using ::testing::Ne;
+
+namespace asap {
+namespace logging {
+
+namespace {
 
 template <typename Mutex> class TestSink : public spdlog::sinks::base_sink<Mutex> {
 public:
@@ -51,171 +56,186 @@ protected:
     out_.write("\n", 1);
   }
 
-  void flush_() override { out_.flush(); }
+  void flush_() override {
+    out_.flush();
+  }
 };
 
 using TestSink_mt = TestSink<std::mutex>;
 using TestSink_st = TestSink<spdlog::details::null_mutex>;
 
-namespace asap {
-namespace logging {
-
 class Foo : Loggable<Foo> {
 public:
-  Foo() { ASLOG(trace, "Foo constructor"); }
+  Foo() {
+    ASLOG(trace, "Foo constructor");
+  }
 
   static const char *const LOGGER_NAME;
 };
 const char *const Foo::LOGGER_NAME = "foo";
 
-TEST_CASE("TestLoggable", "[common][logging]") {
-  auto *test_sink = new TestSink_mt();
-  auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(test_sink);
+// NOLINTNEXTLINE
+TEST(Logging, LoggingByExtendingLoggable) {
+  auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
   Registry::PushSink(test_sink_ptr);
 
   Foo foo;
-  REQUIRE(test_sink->called_);
+  auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
+  EXPECT_THAT(test_sink->called_, IsTrue());
   auto msg = test_sink->out_.str();
-  REQUIRE(!msg.empty());
-  REQUIRE(msg.find("Foo constructor") != std::string::npos);
+  EXPECT_THAT(msg.empty(), IsFalse());
+  EXPECT_THAT(msg.find("Foo constructor"), Ne(std::string::npos));
 
   Registry::PopSink();
 }
 
-TEST_CASE("TestMultipleThreads", "[common][logging]") {
-  auto *test_sink = new TestSink_mt();
-  spdlog::set_pattern("%v");
-  auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(test_sink);
+// NOLINTNEXTLINE
+TEST(Logging, LoggingFromMultipleThreadsWorks) {
+  auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
   Registry::PushSink(test_sink_ptr);
+  spdlog::set_pattern("%v");
 
   std::thread th1([]() {
-    for (auto ii = 0; ii < 5; ++ii) {
+    constexpr int LOG_ITERATIONS = 5;
+    for (auto ii = 0; ii < LOG_ITERATIONS; ++ii) {
       ASLOG_MISC(debug, "THREAD_1: {}", ii);
     }
   });
   std::thread th2([]() {
+    constexpr int LOG_ITERATIONS = 5;
     auto &test_logger = Registry::GetLogger("testing");
-    for (auto ii = 0; ii < 5; ++ii) {
+    for (auto ii = 0; ii < LOG_ITERATIONS; ++ii) {
       ASLOG_TO_LOGGER(test_logger, trace, "THREAD_2: {}", ii);
     }
   });
   th1.join();
   th2.join();
 
-  REQUIRE(test_sink->called_ == 10);
+  auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
+  EXPECT_THAT(test_sink->called_, IsTrue());
   std::istringstream msg_reader(test_sink->out_.str());
   std::string line;
   auto expected_seq_th1 = 0;
   auto expected_seq_th2 = 0;
   while (std::getline(msg_reader, line)) {
     if (line.find("THREAD_1") != std::string::npos) {
-      REQUIRE(line.find(std::string("THREAD_1: ") + std::to_string(expected_seq_th1)) !=
-              std::string::npos);
+      EXPECT_THAT(line.find(std::string("THREAD_1: ") + std::to_string(expected_seq_th1)),
+          Ne(std::string::npos));
       ++expected_seq_th1;
     }
     if (line.find("THREAD_2") != std::string::npos) {
-      REQUIRE(line.find(std::string("THREAD_2: ") + std::to_string(expected_seq_th2)) !=
-              std::string::npos);
+      EXPECT_THAT(line.find(std::string("THREAD_2: ") + std::to_string(expected_seq_th2)),
+          Ne(std::string::npos));
       ++expected_seq_th2;
     }
   }
-  REQUIRE(expected_seq_th1 == 5);
-  REQUIRE(expected_seq_th2 == 5);
+  EXPECT_THAT(expected_seq_th1, Eq(5));
+  EXPECT_THAT(expected_seq_th2, Eq(5));
 
   Registry::PopSink();
 }
 
-TEST_CASE("TestLogWithPrefix", "[common][logging]") {
-  auto *test_sink = new TestSink_mt();
-  auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(test_sink);
+// NOLINTNEXTLINE
+TEST(Logging, LogToLoggerWithParameters) {
+  auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
   Registry::PushSink(test_sink_ptr);
 
   auto &test_logger = Registry::GetLogger("testing");
 
+  auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
+
+  AS_DO_LOG(test_logger);
+  EXPECT_THAT(test_sink->called_, Eq(1));
+  test_sink->Reset();
+
+  AS_DO_LOG(test_logger, debug);
+  EXPECT_THAT(test_sink->called_, Eq(1));
+  test_sink->Reset();
+
   AS_DO_LOG(test_logger, debug, "message");
-  REQUIRE(test_sink->called_ == 1);
-  REQUIRE(test_sink->out_.str().find("message") != std::string::npos);
+  EXPECT_THAT(test_sink->called_, Eq(1));
+  EXPECT_THAT(test_sink->out_.str(), ContainsRegex("message"));
   test_sink->Reset();
 
   AS_DO_LOG(test_logger, debug, "message {}", 1);
-  REQUIRE(test_sink->called_ == 1);
-  REQUIRE(test_sink->out_.str().find("message 1") != std::string::npos);
+  EXPECT_THAT(test_sink->called_, Eq(1));
+  EXPECT_THAT(test_sink->out_.str(), ContainsRegex("message 1"));
   test_sink->Reset();
 
   AS_DO_LOG(test_logger, debug, "message {} {}", 1, 2);
-  REQUIRE(test_sink->called_ == 1);
-  REQUIRE(test_sink->out_.str().find("message 1 2") != std::string::npos);
+  EXPECT_THAT(test_sink->called_, Eq(1));
+  EXPECT_THAT(test_sink->out_.str(), ContainsRegex("message 1 2"));
   test_sink->Reset();
 
   AS_DO_LOG(test_logger, debug, "message {} {} {}", 1, 2, 3);
-  REQUIRE(test_sink->called_ == 1);
-  REQUIRE(test_sink->out_.str().find("message 1 2 3") != std::string::npos);
+  EXPECT_THAT(test_sink->called_, Eq(1));
+  EXPECT_THAT(test_sink->out_.str(), ContainsRegex("message 1 2 3"));
   test_sink->Reset();
 
   AS_DO_LOG(test_logger, debug, "message {} {} {} {}", 1, 2, 3, 4);
-  REQUIRE(test_sink->called_ == 1);
-  REQUIRE(test_sink->out_.str().find("message 1 2 3 4") != std::string::npos);
+  EXPECT_THAT(test_sink->called_, Eq(1));
+  EXPECT_THAT(test_sink->out_.str(), ContainsRegex("message 1 2 3 4"));
   test_sink->Reset();
 
   Registry::PopSink();
 }
 
-namespace {
 class MockSink : public spdlog::sinks::sink {
 public:
-  void log(const spdlog::details::log_msg & /*msg*/) override { ++called_; }
-  void flush() override {}
-  void set_pattern(const std::string & /*pattern*/) override {}
-  void set_formatter(std::unique_ptr<spdlog::formatter> /*sink_formatter*/) override {}
+  void log(const spdlog::details::log_msg & /*msg*/) override {
+    ++called_;
+  }
+  void flush() override {
+  }
+  void set_pattern(const std::string & /*pattern*/) override {
+  }
+  void set_formatter(std::unique_ptr<spdlog::formatter> /*sink_formatter*/) override {
+  }
 
-  void Reset() { called_ = 0; }
+  void Reset() {
+    called_ = 0;
+  }
 
   int called_{0};
 };
-} // namespace
 
-TEST_CASE("TestLogPushSink", "[common][logging]") {
-  auto *first_mock = new MockSink();
-  auto *second_mock = new MockSink();
-  auto first_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(first_mock);
-  auto second_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(second_mock);
+// NOLINTNEXTLINE
+TEST(Logging, SinkPushPop) {
+  auto first_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new MockSink());
+  auto second_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new MockSink());
+
+  auto *first_mock = dynamic_cast<MockSink *>(first_sink_ptr.get());
+  auto *second_mock = dynamic_cast<MockSink *>(second_sink_ptr.get());
 
   auto &test_logger = Registry::GetLogger("testing");
+
   Registry::PushSink(first_sink_ptr);
   ASLOG_TO_LOGGER(test_logger, debug, "message");
-
-  REQUIRE(first_mock->called_ == 1);
+  EXPECT_THAT(first_mock->called_, Eq(1));
   first_mock->Reset();
   second_mock->Reset();
 
   Registry::PushSink(second_sink_ptr);
   ASLOG_TO_LOGGER(test_logger, debug, "message");
-
-  REQUIRE(first_mock->called_ == 0);
-  REQUIRE(second_mock->called_ == 1);
+  EXPECT_THAT(first_mock->called_, Eq(0));
+  EXPECT_THAT(second_mock->called_, Eq(1));
   first_mock->Reset();
   second_mock->Reset();
 
   Registry::PopSink();
   ASLOG_TO_LOGGER(test_logger, debug, "message");
-
-  REQUIRE(first_mock->called_ == 1);
-  REQUIRE(second_mock->called_ == 0);
+  EXPECT_THAT(first_mock->called_, Eq(1));
+  EXPECT_THAT(second_mock->called_, Eq(0));
   first_mock->Reset();
   second_mock->Reset();
 
   Registry::PopSink();
-  // mute the logger output
-  auto *test_sink = new TestSink_mt();
-  auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(test_sink);
-  Registry::PushSink(test_sink_ptr);
   ASLOG_TO_LOGGER(test_logger, debug, "message");
-
-  REQUIRE(first_mock->called_ == 0);
-  REQUIRE(second_mock->called_ == 0);
-
-  Registry::PopSink();
+  EXPECT_THAT(first_mock->called_, Eq(0));
+  EXPECT_THAT(second_mock->called_, Eq(0));
 }
+
+} // namespace
 
 } // namespace logging
 } // namespace asap

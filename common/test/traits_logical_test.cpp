@@ -1,29 +1,34 @@
-//        Copyright The Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
 #include <common/traits/logical.h>
+#include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
+#include <type_traits>
 
 #include <common/compilers.h>
 
+// Disable compiler and linter warnings originating from the unit test framework and for which we
+// cannot do anything.
+// Additionally every TEST or TEST_X macro usage must be preceded by a '// NOLINTNEXTLINE'.
 ASAP_DIAGNOSTIC_PUSH
-#if defined(__clang__)
-// Catch2 uses a lot of macro names that will make clang go crazy
-#if (__clang_major__ >= 13) && !defined(__APPLE__)
-#pragma clang diagnostic ignored "-Wreserved-identifier"
+#if defined(__clang__) && ASAP_HAS_WARNING("-Wused-but-marked-unused")
+#pragma clang diagnostic ignored "-Wused-but-marked-unused"
+#pragma clang diagnostic ignored "-Wglobal-constructors"
 #endif
-// Big mess created because of the way spdlog is organizing its source code
-// based on header only builds vs library builds. The issue is that spdlog
-// places the template definitions in a separate file and explicitly
-// instantiates them, so we have no problem at link, but we do have a problem
-// with clang (rightfully) complaining that the template definitions are not
-// available when the template needs to be instantiated here.
-#pragma clang diagnostic ignored "-Wundefined-func-template"
-#endif // __clang__
+// NOLINTBEGIN(used-but-marked-unused)
 
-#include <catch2/catch.hpp>
+using ::testing::IsFalse;
+using ::testing::IsTrue;
 
+// ---------------------------------------------------------------------------------------------------------------------
+// Check we can use the type aliases
+// ---------------------------------------------------------------------------------------------------------------------
 
 ASAP_DIAGNOSTIC_PUSH
 #if ASAP_GNUC_VERSION
@@ -36,8 +41,8 @@ namespace asap {
 
 namespace {
 
-TEST_CASE("Conjunction_typedef", "[common][traits][logical]") {
-  // Check for required typedefs
+// NOLINTNEXTLINE
+TEST(TraitsLogical, Conjunctiontypedef) {
   using test_type = conjunction<std::true_type, std::true_type>;
   using value_type = test_type::value_type;
   using type = test_type::type;
@@ -45,8 +50,8 @@ TEST_CASE("Conjunction_typedef", "[common][traits][logical]") {
   using type_type = test_type::type::type;
 }
 
-TEST_CASE("Disjunction_typedef", "[common][traits][logical]") {
-  // Check for required typedefs
+// NOLINTNEXTLINE
+TEST(TraitsLogical, Disjunctiontypedef) {
   using test_type = disjunction<std::false_type, std::true_type>;
   using value_type = test_type::value_type;
   using type = test_type::type;
@@ -54,8 +59,8 @@ TEST_CASE("Disjunction_typedef", "[common][traits][logical]") {
   using type_type = test_type::type::type;
 }
 
-TEST_CASE("Negation_typedef", "[common][traits][logical]") {
-  // Check for required typedefs
+// NOLINTNEXTLINE
+TEST(TraitsLogical, Negationtypedef) {
   using test_type = negation<std::false_type>;
   using value_type = test_type::value_type;
   using type = test_type::type;
@@ -65,30 +70,89 @@ TEST_CASE("Negation_typedef", "[common][traits][logical]") {
 
 ASAP_DIAGNOSTIC_POP
 
-TEST_CASE("Value", "[common][traits][logical]") {
-  REQUIRE(negation<std::false_type>{});
-  REQUIRE(!negation<std::true_type>{});
-  REQUIRE(conjunction<>{});
-  REQUIRE(!disjunction<>{});
-  REQUIRE(conjunction<std::true_type>{});
-  REQUIRE(!conjunction<std::false_type>{});
-  REQUIRE(disjunction<std::true_type>{});
-  REQUIRE(!disjunction<std::false_type>{});
-  REQUIRE(conjunction<std::true_type, std::true_type>{});
-  REQUIRE(!conjunction<std::true_type, std::false_type>{});
-  REQUIRE(disjunction<std::false_type, std::true_type>{});
-  REQUIRE(!disjunction<std::false_type, std::false_type>{});
-  REQUIRE(conjunction<std::true_type, std::true_type, std::true_type>{});
-  REQUIRE(!conjunction<std::true_type, std::true_type, std::false_type>{});
-  REQUIRE(disjunction<std::false_type, std::false_type, std::true_type>{});
-  REQUIRE(!disjunction<std::false_type, std::false_type, std::false_type>{});
+// ---------------------------------------------------------------------------------------------------------------------
+// Check that the logic in the implementation is correct
+// ---------------------------------------------------------------------------------------------------------------------
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, NegationOfTrueIsFalse) {
+  EXPECT_THAT(negation<std::true_type>{}, IsFalse());
 }
 
-ASAP_DIAGNOSTIC_POP
+// NOLINTNEXTLINE
+TEST(TraitsLogical, NegationOfFalseIsTrue) {
+  EXPECT_THAT(negation<std::false_type>{}, IsTrue());
+}
 
-#if defined(__clang__)
-#pragma clang diagnostic pop
-#endif // __clang__
+// NOLINTNEXTLINE
+TEST(TraitsLogical, ConjunctionDefaultIsTrue) {
+  EXPECT_THAT(conjunction<>{}, IsTrue());
+}
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, DisjunctionDefaultIsFalse) {
+  EXPECT_THAT(disjunction<>{}, IsFalse());
+}
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, ConjunctionOfOneTrueIsTrue) {
+  EXPECT_THAT(conjunction<std::true_type>{}, IsTrue());
+}
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, ConjunctionOfOneFalseIsFalse) {
+  EXPECT_THAT(conjunction<std::false_type>{}, IsFalse());
+}
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, DisjunctionOfOneTrueIsTrue) {
+  EXPECT_THAT(disjunction<std::true_type>{}, IsTrue());
+}
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, DisjunctionOfOneFalseIsFalse) {
+  EXPECT_THAT(disjunction<std::false_type>{}, IsFalse());
+}
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, ConjunctionOfAllFalseIsFalse) {
+  auto value = conjunction<std::false_type, std::false_type, std::false_type>{};
+  EXPECT_THAT(value, IsFalse());
+}
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, ConjunctionOfAllTrueIsTrue) {
+  auto value = conjunction<std::true_type, std::true_type, std::true_type>{};
+  EXPECT_THAT(value, IsTrue());
+}
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, ConjunctionOfMixedValuesIsFalse) {
+  auto value1 = conjunction<std::true_type, std::false_type, std::true_type>{};
+  EXPECT_THAT(value1, IsFalse());
+  auto value2 = conjunction<std::true_type, std::true_type, std::false_type>{};
+  EXPECT_THAT(value2, IsFalse());
+}
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, DisjunctionOfAllFalseIsFalse) {
+  auto value = disjunction<std::false_type, std::false_type, std::false_type>{};
+  EXPECT_THAT(value, IsFalse());
+}
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, DisjunctionOfAllTrueIsTrue) {
+  auto value = disjunction<std::true_type, std::true_type, std::true_type>{};
+  EXPECT_THAT(value, IsTrue());
+}
+
+// NOLINTNEXTLINE
+TEST(TraitsLogical, DisjunctionOfMixedValuesIsTrue) {
+  auto value1 = disjunction<std::true_type, std::false_type, std::true_type>{};
+  EXPECT_THAT(value1, IsTrue());
+  auto value2 = disjunction<std::false_type, std::false_type, std::true_type>{};
+  EXPECT_THAT(value2, IsTrue());
+}
 
 } // namespace
 

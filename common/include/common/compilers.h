@@ -279,7 +279,7 @@
 #elif ASAP_GCC_VERSION_CHECK(4, 6, 0)
 #define ASAP_DIAGNOSTIC_PUSH _Pragma("GCC diagnostic push")
 #define ASAP_DIAGNOSTIC_POP _Pragma("GCC diagnostic pop")
-#elif ASAP_MSVC_VERSION_CHECK(15, 0, 0) || ASAP_INTEL_CL_VERSION_CHECK(2021, 1, 0)
+#elif ASAP_MSVC_VERSION_CHECK(15, 0, 0)
 #define ASAP_DIAGNOSTIC_PUSH __pragma(warning(push))
 #define ASAP_DIAGNOSTIC_POP __pragma(warning(pop))
 #else

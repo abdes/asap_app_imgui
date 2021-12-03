@@ -58,7 +58,7 @@ set(compile_options)
 # Libraries
 # ------------------------------------------------------------------------------
 
-set(libraries ${META_PROJECT_NAME}::common)
+set(libraries ${META_PROJECT_NAME}::common gtest gmock)
 
 # ------------------------------------------------------------------------------
 # Create targets

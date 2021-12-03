@@ -36,9 +36,9 @@ set(source_path "${CMAKE_CURRENT_SOURCE_DIR}")
 set(public_headers)
 
 set(sources
-    "logging_test.cpp"
-    "main.cpp"
-    ${public_headers})
+  "logging_test.cpp"
+  "main.cpp"
+  ${public_headers})
 
 # ------------------------------------------------------------------------------
 # Include dirs
@@ -57,7 +57,7 @@ set(compile_options)
 # Libraries
 # ------------------------------------------------------------------------------
 
-set(public_libraries ${META_PROJECT_NAME}::logging)
+set(public_libraries ${META_PROJECT_NAME}::logging gtest gmock)
 
 # ------------------------------------------------------------------------------
 # Create targets

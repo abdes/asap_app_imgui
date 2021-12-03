@@ -116,9 +116,9 @@ project(
   LANGUAGES C CXX)
 
 # Set output directories
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 
 # Create version file
 file(WRITE "${PROJECT_BINARY_DIR}/VERSION" "${META_NAME_VERSION}")
@@ -227,8 +227,24 @@ configure_file(templates/version.h.in
 # enable CTest.  This will set BUILD_TESTING to ON unless otherwise specified on
 # the command line
 include(CTest)
-include(third_party/catch2/contrib/Catch.cmake)
 enable_testing()
+
+include(FetchContent)
+# We make sure that we have 'thirdparty' in the name so that the targets get excluded from the
+# generated target lists for the various tools.
+set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG # GoogleTest now follows the Abseil Live at Head philosophy. We recommend using the latest
+          # commit in the main branch in your projects.
+          origin/main)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt
+    ON
+    CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+include(GoogleTest)
 
 # ------------------------------------------------------------------------------
 # Documentation - doxygen, sphinx/breathe/exhale
