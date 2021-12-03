@@ -16,6 +16,7 @@
         "llvm-vs-code-extensions.vscode-clangd",
         "vadimcn.vscode-lldb",
         "guyutongxue.cpp-reference",
-        "cschlosser.doxdocgen"
-    ]
+        "cschlosser.doxdocgen",
+        "cheshirekow.cmake-format"
+      ]
 }
