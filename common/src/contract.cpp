@@ -51,8 +51,8 @@ Verbosity verbosity_level = Verbosity::QUIET;
     PrintViolation(violation);
   }
 
-  // NOLINTNEXTLINE(cert-err52-cpp)
-  longjmp(static_cast<__jmp_buf_tag *>(details::jmp_env), 1);
+  // NOLINTNEXTLINE
+  longjmp(details::jmp_env, 1);
 }
 
 } // namespace
