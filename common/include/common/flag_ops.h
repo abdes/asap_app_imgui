@@ -17,8 +17,8 @@ namespace asap {
  * bits to set.
  */
 template <typename T,
-          typename std::enable_if<asap::disjunction<
-              std::is_arithmetic<T>, std::is_enum<T>>::value>::type * = nullptr>
+    typename std::enable_if<asap::disjunction<std::is_arithmetic<T>, std::is_enum<T>>::value>::type
+        * = nullptr>
 void FlagSet(T &mask, T flags) {
   mask |= flags;
 }
@@ -31,8 +31,8 @@ void FlagSet(T &mask, T flags) {
  * bits to clear.
  */
 template <typename T,
-          typename std::enable_if<asap::disjunction<
-              std::is_arithmetic<T>, std::is_enum<T>>::value>::type * = nullptr>
+    typename std::enable_if<asap::disjunction<std::is_arithmetic<T>, std::is_enum<T>>::value>::type
+        * = nullptr>
 void FlagClear(T &mask, T flags) {
   mask &= ~flags;
 }
@@ -46,8 +46,8 @@ void FlagClear(T &mask, T flags) {
  * bits to set.
  */
 template <typename T,
-          typename std::enable_if<asap::disjunction<
-              std::is_arithmetic<T>, std::is_enum<T>>::value>::type * = nullptr>
+    typename std::enable_if<asap::disjunction<std::is_arithmetic<T>, std::is_enum<T>>::value>::type
+        * = nullptr>
 void FlagFlip(T &mask, T flags) {
   mask ^= flags;
 }
@@ -62,10 +62,10 @@ void FlagFlip(T &mask, T flags) {
  * @return \b true if the flags are set in mask; otherwise \b false;
  */
 template <typename T,
-          typename std::enable_if<asap::disjunction<
-              std::is_arithmetic<T>, std::is_enum<T>>::value>::type * = nullptr>
-bool FlagTest(T mask, T flags) {
+    typename std::enable_if<asap::disjunction<std::is_arithmetic<T>, std::is_enum<T>>::value>::type
+        * = nullptr>
+auto FlagTest(T mask, T flags) -> bool {
   return (mask & flags) == flags;
 }
 
-}  // namespace asap
+} // namespace asap
