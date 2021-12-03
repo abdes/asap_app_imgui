@@ -1,4 +1,7 @@
 # ~~~
+# SPDX-License-Identifier: BSD-3-Clause
+
+# ~~~
 #        Copyright The Authors 2018.
 #    Distributed under the 3-Clause BSD License.
 #    (See accompanying file LICENSE or copy at
@@ -48,16 +51,11 @@ if(SPHINX_FOUND)
     # Add a target for building the sphinx documentation of the module
     add_custom_target(
       ${TARGET_NAME}_sphinx
-      COMMAND
-      ${SPHINX_EXECUTABLE} -q -b html -c "${EXHALE_TARGET_WORKDIR}"
-      -d
-      "${SPHINX_CACHE_DIR}"
-      "${CMAKE_CURRENT_SOURCE_DIR}/doc"
-      "${SPHINX_TARGET_WORKDIR}/html"
+      COMMAND ${SPHINX_EXECUTABLE} -q -b html -c "${EXHALE_TARGET_WORKDIR}" -d "${SPHINX_CACHE_DIR}"
+              "${CMAKE_CURRENT_SOURCE_DIR}/doc" "${SPHINX_TARGET_WORKDIR}/html"
       WORKING_DIRECTORY "${SPHINX_TARGET_WORKDIR}"
       VERBATIM
-      COMMENT
-      "Generating `sphinx` documentation for `${TARGET_NAME}`")
+      COMMENT "Generating `sphinx` documentation for `${TARGET_NAME}`")
     set_target_properties(${TARGET_NAME}_sphinx PROPERTIES EXCLUDE_FROM_ALL TRUE)
     # Finally add the module sphinx target as a dependency for the overall sphinx target
     add_dependencies(sphinx ${TARGET_NAME}_sphinx)

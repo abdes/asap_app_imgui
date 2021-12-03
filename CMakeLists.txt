@@ -1,4 +1,7 @@
 # ~~~
+# SPDX-License-Identifier: BSD-3-Clause
+
+# ~~~
 #        Copyright The Authors 2018.
 #    Distributed under the 3-Clause BSD License.
 #    (See accompanying file LICENSE or copy at
@@ -92,7 +95,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 file(WRITE "${PROJECT_BINARY_DIR}/VERSION" "${META_NAME_VERSION}")
 
 # --------------------------------------------------------------------------------------------------
-# ZZZZZZZZZZZZZZZZZZ
+# Additional CMake modules
 # --------------------------------------------------------------------------------------------------
 
 # Register general cmake commands
