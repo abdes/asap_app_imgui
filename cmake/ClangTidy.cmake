@@ -8,25 +8,27 @@
 #   https://opensource.org/licenses/BSD-3-Clause)
 # ~~~
 
-
 #
-# Clang-format targets work only when clang-format executable can be found.
+# clang-tidy targets work only when clang-tidy executable can be found and the compiler being
+# used is clang (otherwise gcc/others options may cause errors for clang-tidy)
 #
-find_program(CLANG_FORMAT NAMES clang-tidy clang-tidy-14)
-if("${CLANG_FORMAT}" STREQUAL "CLANG_FORMAT-NOTFOUND")
+find_program(CLANG_TIDY NAMES clang-tidy clang-tidy-14)
+if(NOT "${CLANG_TIDY}" STREQUAL "CLANG_TIDY-NOTFOUND")
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    include(common/ClangTidy)
 
-  message(STATUS "Could not find appropriate clang-format, targets disabled")
-
-  function(asap_create_clang_tidy_targets)
-    # empty
-  endfunction()
-
+    function(asap_create_clang_tidy_targets)
+      swift_create_clang_tidy_targets(DONT_GENERATE_CLANG_TIDY_CONFIG ${ARGV})
+    endfunction()
+    return()
+    
+  else()
+    message(STATUS "Not using clang as a compiler, disabling clang-tidy targets")
+  endif()
 else()
-
-  include(common/ClangTidy)
-
-  function(asap_create_clang_tidy_targets)
-    swift_create_clang_tidy_targets(DONT_GENERATE_CLANG_TIDY_CONFIG ${ARGV})
-  endfunction()
-
+  message(STATUS "Could not find appropriate clang-tidy, targets disabled")
 endif()
+
+function(asap_create_clang_tidy_targets)
+  # empty
+endfunction()
