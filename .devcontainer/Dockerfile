@@ -10,16 +10,22 @@ RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get -y install lsb-release wget software-properties-common \
-  && apt-get -y install build-essential cmake ninja-build valgrind gdb lcov doxygen graphviz \
-  && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+  && apt-get -y install build-essential ninja-build valgrind gdb lcov doxygen graphviz
 
+# Install latest cmake 3.22
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.22.0/cmake-3.22.0-linux-x86_64.sh \
+      -q -O /tmp/cmake-install.sh \
+      && chmod u+x /tmp/cmake-install.sh \
+      && /tmp/cmake-install.sh --skip-license --prefix=/usr \
+      && rm /tmp/cmake-install.sh
+
+# Install clang-14
 RUN wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 RUN add-apt-repository 'deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main'
-
-# Install additional OS packages.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-  && apt-get -y install clang-14 clangd-14 lldb-14 llvm-14 clang-format-14 clang-tidy-14 \
-  && apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
+  && apt-get -y install clang-14 clangd-14 lldb-14 llvm-14 clang-format-14 clang-tidy-14
+
+RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-14 100
 RUN update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-14 100
