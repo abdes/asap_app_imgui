@@ -5,11 +5,11 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-#include <gtest/gtest.h>
-
 #include "test_helper.h"
 
 #include <common/compilers.h>
+
+#include <gtest/gtest.h>
 
 // Disable compiler and linter warnings originating from the unit test framework and for which we
 // cannot do anything.

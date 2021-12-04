@@ -33,8 +33,8 @@ asap_add_test(
   "contract_ut_gtest_test.cpp"
   LINK
   ${META_PROJECT_NAME}::common
-  gtest_main
-  gmock_main
+  gtest
+  gmock
   COMMENT
   "Contract unit test macros tests")
 
@@ -66,10 +66,11 @@ asap_add_test(
   "contract_handlers_test.cpp"
   "contracts_honored_test.cpp"
   "test_helper.cpp"
+  "../main.cpp"
   LINK
   ${META_PROJECT_NAME}::common
-  gtest_main
-  gmock_main
+  gtest
+  gmock
   COMMENT
   "Contract unit tests in DEFAULT build mode")
 
@@ -100,10 +101,11 @@ asap_add_test(
   "contracts_off_test.cpp"
   "contracts_honored_test.cpp"
   "test_helper.cpp"
+  "../main.cpp"
   LINK
   ${META_PROJECT_NAME}::common
-  gtest_main
-  gmock_main
+  gtest
+  gmock
   COMMENT
   "Contract unit tests in OFF build mode")
 
@@ -133,10 +135,11 @@ asap_add_test(
   "contracts_audit_test.cpp"
   "contracts_honored_test.cpp"
   "test_helper.cpp"
+  "../main.cpp"
   LINK
   ${META_PROJECT_NAME}::common
-  gtest_main
-  gmock_main
+  gtest
+  gmock
   COMMENT
   "Contract unit tests in AUDIT build mode")
 

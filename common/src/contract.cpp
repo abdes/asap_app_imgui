@@ -51,6 +51,8 @@ Verbosity verbosity_level = Verbosity::QUIET;
     PrintViolation(violation);
   }
 
+  // Restore calling environment and jump back to setjmp. Return
+  // -1 so that setjmp will return false for conditional test.
   // NOLINTNEXTLINE
   longjmp(details::jmp_env, 1);
 }

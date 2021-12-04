@@ -7,15 +7,16 @@
 
 #include "contract/contract.h"
 
-#include <cstdlib>
+#include <common/compilers.h>
+
 #include <gmock/gmock-matchers.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest-death-test.h>
 #include <gtest/gtest.h>
+
+#include <cstdlib>
 #include <sstream>
 #include <streambuf>
-
-#include <common/compilers.h>
 
 // Disable compiler and linter warnings originating from the unit test framework and for which we
 // cannot do anything.

@@ -5,13 +5,13 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-#include <gtest/gtest.h>
-
 #include "contract/ut/framework.h"
 #include "contract/ut/gtest.h"
 #include "test_helper.h"
 
 #include <common/compilers.h>
+
+#include <gtest/gtest.h>
 
 // Disable compiler and linter warnings originating from the unit test framework and for which we
 // cannot do anything.
@@ -30,18 +30,18 @@ namespace contract {
 namespace {
 
 // NOLINTNEXTLINE
-TEST(GoogleTestMacros, Expect) {
-  ASSERT_VIOLATES_CONTRACT(testing::TestExpectDefault(nullptr));
+TEST(GoogleTestDeathMacros, DefaultModeExpectDeath) {
+  CHECK_VIOLATES_CONTRACT(testing::TestExpectDefault(nullptr));
 }
 
 // NOLINTNEXTLINE
-TEST(GoogleTestMacros, Ensure) {
-  ASSERT_VIOLATES_CONTRACT(testing::TestEnsureDefault(nullptr));
+TEST(GoogleTestDeathMacros, DefaultModeEnsureDeath) {
+  CHECK_VIOLATES_CONTRACT(testing::TestEnsureDefault(nullptr));
 }
 
 // NOLINTNEXTLINE
-TEST(GoogleTestMacros, Assert) {
-  ASSERT_VIOLATES_CONTRACT(testing::TestAssertDefault(nullptr));
+TEST(GoogleTestDeathMacros, DefaultModeAssertDeath) {
+  CHECK_VIOLATES_CONTRACT(testing::TestAssertDefault(nullptr));
 }
 
 void NestedViolator(int *ptr) {
@@ -55,7 +55,7 @@ void Violator(int *ptr) {
 }
 
 // NOLINTNEXTLINE
-TEST(GoogleTestMacros, NestedChecks) {
+TEST(GoogleTestDeathMacros, NestedChecks) {
   CHECK_VIOLATES_CONTRACT(Violator(nullptr));
 }
 

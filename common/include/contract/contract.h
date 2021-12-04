@@ -17,7 +17,7 @@
 namespace asap {
 namespace contract {
 
-struct Violation {
+struct ASAP_COMMON_API Violation {
   const char *file;
   size_t line;
   const char *function;
@@ -25,7 +25,7 @@ struct Violation {
   const char *condition;
 };
 
-class ViolationHandler {
+class ASAP_COMMON_API ViolationHandler {
 public:
   using FunctionType = void (*)(const Violation *);
   using WrapperType = std::function<void(const Violation *)>;

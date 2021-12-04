@@ -5,11 +5,12 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-#include <gtest/gtest.h>
-
 #include "test_helper.h"
 
 #include <common/compilers.h>
+#include <common/platform.h>
+
+#include <gtest/gtest.h>
 
 // Disable compiler and linter warnings originating from the unit test framework and for which we
 // cannot do anything.
@@ -28,65 +29,95 @@ namespace {
 
 // NOLINTNEXTLINE
 TEST(DefaultModeContractViolations, ExpectDefaultWillAbort) {
+#if !defined(ASAP_WINDOWS)
   // NOLINTNEXTLINE
-  ASSERT_EXIT((testing::TestExpectDefault(nullptr), exit(0)), ::testing::KilledBySignal(SIGABRT),
+  ASSERT_EXIT(testing::TestExpectDefault(nullptr), ::testing::KilledBySignal(SIGABRT),
       "precondition.*violated");
+#else
+  ASSERT_DEATH(testing::TestExpectDefault(nullptr), "");
+#endif
 }
 
 // NOLINTNEXTLINE
 TEST(DefaultModeContractViolations, EnsureDefaultWillAbort) {
+#if !defined(ASAP_WINDOWS)
   // NOLINTNEXTLINE
-  ASSERT_EXIT((testing::TestEnsureDefault(nullptr), exit(0)), ::testing::KilledBySignal(SIGABRT),
+  ASSERT_EXIT(testing::TestEnsureDefault(nullptr), ::testing::KilledBySignal(SIGABRT),
       "postcondition.*violated");
+#else
+  ASSERT_DEATH(testing::TestEnsureDefault(nullptr), "");
+#endif
 }
 
 // NOLINTNEXTLINE
 TEST(DefaultModeContractViolations, AssertDefaultWillAbort) {
+#if !defined(ASAP_WINDOWS)
   // NOLINTNEXTLINE
-  ASSERT_EXIT((testing::TestAssertDefault(nullptr), exit(0)), ::testing::KilledBySignal(SIGABRT),
+  ASSERT_EXIT(testing::TestAssertDefault(nullptr), ::testing::KilledBySignal(SIGABRT),
       "assertion.*violated");
+#else
+  ASSERT_DEATH(testing::TestAssertDefault(nullptr), "");
+#endif
 }
 
 // NOLINTNEXTLINE
 TEST(DefaultModeContractViolations, ExpectAuditWillSegFault) {
+#if !defined(ASAP_WINDOWS)
   // NOLINTNEXTLINE
-  ASSERT_EXIT(
-      (testing::TestExpectAudit(nullptr), exit(0)), ::testing::KilledBySignal(SIGSEGV), ".*");
+  ASSERT_EXIT(testing::TestExpectAudit(nullptr), ::testing::KilledBySignal(SIGSEGV), ".*");
+#else
+  ASSERT_DEATH(testing::TestExpectAudit(nullptr), "");
+#endif
 }
 
 // NOLINTNEXTLINE
 TEST(DefaultModeContractViolations, EnsureAuditWillSegFault) {
+#if !defined(ASAP_WINDOWS)
   // NOLINTNEXTLINE
-  ASSERT_EXIT(
-      (testing::TestEnsureAudit(nullptr), exit(0)), ::testing::KilledBySignal(SIGSEGV), ".*");
+  ASSERT_EXIT(testing::TestEnsureAudit(nullptr), ::testing::KilledBySignal(SIGSEGV), ".*");
+#else
+  ASSERT_DEATH(testing::TestEnsureAudit(nullptr), "");
+#endif
 }
 
 // NOLINTNEXTLINE
 TEST(DefaultModeContractViolations, AssertAuditWillSegFault) {
+#if !defined(ASAP_WINDOWS)
   // NOLINTNEXTLINE
-  ASSERT_EXIT(
-      (testing::TestAssertAudit(nullptr), exit(0)), ::testing::KilledBySignal(SIGSEGV), ".*");
+  ASSERT_EXIT(testing::TestAssertAudit(nullptr), ::testing::KilledBySignal(SIGSEGV), ".*");
+#else
+  ASSERT_DEATH(testing::TestAssertAudit(nullptr), "");
+#endif
 }
 
 // NOLINTNEXTLINE
 TEST(DefaultModeContractViolations, ExpectAxiomWillSegFault) {
+#if !defined(ASAP_WINDOWS)
   // NOLINTNEXTLINE
-  ASSERT_EXIT(
-      (testing::TestExpectAxiom(nullptr), exit(0)), ::testing::KilledBySignal(SIGSEGV), ".*");
+  ASSERT_EXIT(testing::TestExpectAxiom(nullptr), ::testing::KilledBySignal(SIGSEGV), ".*");
+#else
+  ASSERT_DEATH(testing::TestExpectAxiom(nullptr), "");
+#endif
 }
 
 // NOLINTNEXTLINE
 TEST(DefaultModeContractViolations, EnsureAxiomWillSegFault) {
+#if !defined(ASAP_WINDOWS)
   // NOLINTNEXTLINE
-  ASSERT_EXIT(
-      (testing::TestEnsureAxiom(nullptr), exit(0)), ::testing::KilledBySignal(SIGSEGV), ".*");
+  ASSERT_EXIT(testing::TestEnsureAxiom(nullptr), ::testing::KilledBySignal(SIGSEGV), ".*");
+#else
+  ASSERT_DEATH(testing::TestEnsureAxiom(nullptr), "");
+#endif
 }
 
 // NOLINTNEXTLINE
 TEST(DefaultModeContractViolations, AssertAxiomWillSegFault) {
+#if !defined(ASAP_WINDOWS)
   // NOLINTNEXTLINE
-  ASSERT_EXIT(
-      (testing::TestAssertAxiom(nullptr), exit(0)), ::testing::KilledBySignal(SIGSEGV), ".*");
+  ASSERT_EXIT(testing::TestAssertAxiom(nullptr), ::testing::KilledBySignal(SIGSEGV), ".*");
+#else
+  ASSERT_DEATH(testing::TestAssertAxiom(nullptr), "");
+#endif
 }
 
 } // namespace
