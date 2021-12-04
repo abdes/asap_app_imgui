@@ -11,6 +11,9 @@
 
 include(common/Valgrind)
 
+mark_as_advanced(${PROJECT_NAME}_ENABLE_PROFILING)
+set(${PROJECT_NAME}_ENABLE_PROFILING ${ASAP_WITH_VALGRIND})
+
 function(asap_add_valgrind_memcheck target)
   swift_add_valgrind_memcheck(${target}, ${ARGN})
 endfunction()
