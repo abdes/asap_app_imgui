@@ -70,6 +70,7 @@ option(OPTION_CLANG_TIDY     "Analyze code with clang-tidy."                    
 option(OPTION_GOOGLE_ASAN    "Instrument code with address sanitizer"                 OFF)
 option(OPTION_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitizer"      OFF)
 option(OPTION_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
+option(ASAP_WITH_VALGRIND    "Builds targets with valgrind profilers added"           OFF)
 # cmake-format: on
 
 # --------------------------------------------------------------------------------------------------
