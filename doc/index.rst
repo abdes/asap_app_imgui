@@ -10,6 +10,10 @@
 ASAP documentation!
 *******************
 
+.. |date| date::
+
+Last Updated on |date|
+
 .. toctree::
    :maxdepth: 2
    :titlesonly:
@@ -49,15 +53,13 @@ guidelines*
 there, you can also jump to the detailed API documentation of each of those
 modules.*
 
-Indices and tables
-==================
-
-  | :ref:`genindex`
-  | :ref:`search`
-
-Meta information
+Acknowledgements
 ================
 
-This documentation was generated from version: |release|.
+.. figure:: https://executablebooks.org/en/latest/_static/logo-wide.png
+  :figclass: margin
+  :alt: Executable Books Project
+  :name: executable_book_logo
 
-  | :doc:`License <license>`
+This documentation uses the theme provided by the `Executable Books Project
+<https://executablebooks.org/>`_ Project.
