@@ -177,7 +177,7 @@ The `asap` starter project offers two alternatives for the development methodolo
   about this can be found `here <https://code.visualstudio.com/docs/remote/containers>`_.
 
 When developing for multiple platforms including Windows, Linux and Mac OS X, a combination of both
-models becomes quite important so that the development can hapen locally for Windows, while the
+models becomes quite important so that the development can happen locally for Windows, while the
 Linux version for example is done inside a container. This is much lighter weight than using
 full-blown Virtual Machines and much faster to setup.
 
@@ -357,7 +357,7 @@ higher-level build system, and it is designed to run builds as fast as possible.
 preferred generator for CMake in ` asap`.
 
 Install it by following the instructions described in `Getting Ninja <https://ninja-build.org/>`_.
-Add the ninja executable to the **PATH** e3environment variable and restart your terminal.
+Add the ninja executable to the **PATH** environment variable and restart your terminal.
 
 Python 3 via Miniconda
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -370,7 +370,7 @@ Miniconda is a simple and reliable way to manage python environments and is used
 documentation generation. Even if you have python installed on your development environment, it is
 still **recommended to install conda and use an isolated environment** for each project needs.
 
-Install it by following the instructions described in `Miniconda Insttallation
+Install it by following the instructions described in `Miniconda Installation
 <https://docs.conda.io/en/latest/miniconda.html>`_ guide.
 
 .. tip::

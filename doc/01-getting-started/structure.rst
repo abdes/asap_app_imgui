@@ -165,7 +165,7 @@ hierarchy of directories forming the `asap` project layout.
      ├── README.md                               
      └── CHANGELOG.md                            
                                                  
-The above diagram shows a typical layeout with directories and files of a startup project based on
+The above diagram shows a typical layout with directories and files of a startup project based on
 asap. The actual files and directories will of course differ from project to project based on how
 you customize it to add or remove things from the starting state.
 
