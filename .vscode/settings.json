@@ -202,10 +202,6 @@
   "cmake.configureOnEdit": false,
   // Automatically configure the CMake project directory when it is opened
   "cmake.configureOnOpen": true,
-  "cmake.configureSettings": {
-    "CMAKE_INSTALL_PREFIX": "asap-install",
-    "CODE_COVERAGE": "ON"
-  },
   "cmake.preferredGenerators": [
     "Ninja"
   ],
@@ -292,4 +288,5 @@
   "cmakeFormat.args": [
     "--config-file=${workspaceFolder}/.cmake-format.yaml"
   ],
+  "cmake.allowCommentsInPresetsFile": true,
 }
