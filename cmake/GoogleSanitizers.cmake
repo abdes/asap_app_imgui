@@ -18,11 +18,13 @@
 # A target can be instrumented with any of the sanitizers by calling the corresponding function with
 # the target name:
 # ~~~
-#    address sanitizer            : enable_google_asan(target)
-#    undefined behavior sanitizer : enable_google_ubsan(target)
-#    thread sanitizer             : enable_google_tsan(target)
+#    address sanitizer            : asap_add_google_asan(target)
+#    undefined behavior sanitizer : asap_add_google_ubsan(target)
+#    thread sanitizer             : asap_add_google_tsan(target)
 # ~~~
-# NOTE:
+# NOTES:
+#
+# ASAN and UBSAN can be run together, but TSAN must be run separately.
 #
 # Not all compilers support all sanitizers. It is the responsibility of the caller to call these
 # functions when the selected compiler does support the requested sanitizer. Failure to do so will
@@ -77,9 +79,9 @@ WARNING: ${sanitizer} Sanitizer was requested but is not working!\n\
 --   2- Make sure ${sanitizer_lib} is installed.")
 endmacro()
 
-# ---- Address Sanitizer -------------------------------------------------------
+# ---- Address Sanitizer ---------------------------------------------------------------------------
 
-function(enable_google_asan target)
+function(asap_add_google_asan target)
   # In order to use AddressSanitizer you will need to compile and link your program using clang with
   # the -fsanitize=address switch. To get a reasonable performance add -O1 or higher. To get nicer
   # stack traces in error messages add -fno-omit-frame-pointer.
@@ -106,9 +108,9 @@ function(enable_google_asan target)
   endif()
 endfunction()
 
-# ---- Undefined Behavior Sanitizer --------------------------------------------
+# ---- Undefined Behavior Sanitizer ----------------------------------------------------------------
 
-function(enable_google_ubsan target)
+function(asap_add_google_ubsan target)
   # To use UBSan, compile and link your program with -fsanitize=undefined. To get nicer output for
   # file names, we'll only keep the last 3 components of the path.
   set(SANITIZER_FLAGS_UBSAN "-fsanitize=undefined" "-fsanitize-undefined-strip-path-components=-2")
@@ -134,9 +136,9 @@ function(enable_google_ubsan target)
   endif()
 endfunction()
 
-# ---- Thread Sanitizer --------------------------------------------------------
+# ---- Thread Sanitizer ----------------------------------------------------------------------------
 
-function(enable_google_tsan target)
+function(asap_add_google_tsan target)
   # To use TSan, compile and link your program with -fsanitize=thread.
   set(SANITIZER_FLAGS_TSAN "-fsanitize=thread")
 
@@ -158,5 +160,26 @@ function(enable_google_tsan target)
                                  INTERFACE_LINK_OPTIONS "${SANITIZER_FLAGS_TSAN}")
     endif()
     target_link_libraries(${target} PRIVATE internal_tsan)
+  endif()
+endfunction()
+
+# ---- Helper to activate all sanitizers -----------------------------------------------------------
+
+function(asap_add_sanitizers target)
+  if(ASAP_WITH_GOOGLE_ASAN)
+    asap_add_google_asan(${target})
+  endif()
+  if(ASAP_WITH_GOOGLE_UBSAN)
+    asap_add_google_ubsan(${target})
+  endif()
+  if(ASAP_WITH_GOOGLE_TSAN)
+    asap_add_google_tsan(${target})
+  endif()
+
+  # Add -O2 to get some reasonable performance during the test
+  if(ASAP_WITH_GOOGLE_ASAN
+     OR ASAP_WITH_GOOGLE_UBSAN
+     OR ASAP_WITH_GOOGLE_TSAN)
+    target_compile_options(${target} PRIVATE -O2)
   endif()
 endfunction()

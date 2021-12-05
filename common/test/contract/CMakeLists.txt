@@ -9,6 +9,14 @@
 # Build instructions
 # ==================================================================================================
 
+# If running with google sanitizers, skill all these targets as they are abort and segmentation
+# fault tests that do not make sense to run under sanitizers
+if(ASAP_WITH_GOOGLE_ASAN
+   OR ASAP_WITH_GOOGLE_UBSAN
+   OR ASAP_WITH_GOOGLE_TSAN)
+  return()
+endif()
+
 function(_remove_contract_mode target)
   get_target_property(defs ${target} COMPILE_DEFINITIONS)
   list(REMOVE_ITEM defs ASAP_CONTRACT_DEFAULT ASAP_CONTRACT_AUDIT ASAP_CONTRACT_OFF)
@@ -45,9 +53,6 @@ target_compile_definitions(${target_name} PRIVATE ASAP_CONTRACT_DEFAULT)
 
 gtest_discover_tests(${target_name})
 
-# Add support for (optional) code quality tools
-asap_configure_sanitizers(${target_name})
-
 # --------------------------------------------------------------------------------------------------
 # Default mode tests
 # --------------------------------------------------------------------------------------------------
@@ -81,9 +86,6 @@ target_compile_definitions(${target_name} PRIVATE ASAP_CONTRACT_DEFAULT)
 
 gtest_discover_tests(${target_name})
 
-# Add support for (optional) code quality tools
-asap_configure_sanitizers(${target_name})
-
 # --------------------------------------------------------------------------------------------------
 # OFF mode tests
 # --------------------------------------------------------------------------------------------------
@@ -115,9 +117,6 @@ target_compile_definitions(${target_name} PRIVATE ASAP_CONTRACT_OFF)
 
 gtest_discover_tests(${target_name})
 
-# Add support for (optional) code quality tools
-asap_configure_sanitizers(${target_name})
-
 # --------------------------------------------------------------------------------------------------
 # Audit mode tests
 # --------------------------------------------------------------------------------------------------
@@ -148,6 +147,3 @@ _remove_contract_mode(${target_name})
 target_compile_definitions(${target_name} PRIVATE ASAP_CONTRACT_AUDIT)
 
 gtest_discover_tests(${target_name})
-
-# Add support for (optional) code quality tools
-asap_configure_sanitizers(${target_name})

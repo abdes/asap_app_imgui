@@ -60,7 +60,7 @@ target_include_directories(
          $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-asap_configure_sanitizers(${MODULE_TARGET_NAME})
+asap_add_sanitizers(${MODULE_TARGET_NAME})
 
 # --------------------------------------------------------------------------------------------------
 # Tests

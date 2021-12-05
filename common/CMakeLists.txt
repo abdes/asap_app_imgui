@@ -75,7 +75,7 @@ target_include_directories(
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Add support for (optional) code quality tools
-asap_configure_sanitizers(${MODULE_TARGET_NAME})
+asap_add_sanitizers(${MODULE_TARGET_NAME})
 
 # --------------------------------------------------------------------------------------------------
 # Tests
