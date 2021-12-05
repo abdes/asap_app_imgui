@@ -1,4 +1,4 @@
-# Starter project with minimum necessary functionality
+# Starter project for C++ with cmake 
 
 ![Start Now!!](doc/_static/logo.png "ASAP Logo")
 
@@ -9,21 +9,17 @@
 
 ## Overview
 
-- cmake as the build system
-- modular structure with each module self-contained in a subdirectory within
-  the project
-- build helpers in common/cmake to facilitate declaration of library, exe,
-  test modules, for the end-to-end lifecycle including doc generation, test,
-  packaging etc...
-- common facilities (common module) for platform specifics, assertions
-  support, logging
-- unit testing with Catch2
-- Optional Modules:
-  - backported C++17 filesystem implementation (will be portable across Linux, Mac
-    and Windows)
+- cmake as the build system with or without presets
+- cross-platform portability on Linux, OS X and Windows
+- multiple compilers: clang, g++ and MSVC
+- modular structure with each module self-contained in a subdirectory within the project
+- build helpers in common/cmake to facilitate declaration of library, exe, test modules, for the
+  end-to-end lifecycle including doc generation, test, packaging etc...
+- common facilities (common module) for platform specifics, assertions support, logging
+- unit testing with Google Test, and easy to add any other test framework
+- zero-touch valgrind, clang-tidy, clang-format, google sanitizers, etc.
 
-Any optional submodule that is not needed can be simply removed from the git submodules
-and from the master CMakeLists.txt (`add_subdirectory()`).
+Development can be done locally or in a dev container with vscode.
 
 ## Getting the code
 
@@ -80,5 +76,3 @@ option(ASAP_WITH_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitiz
 option(ASAP_WITH_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
 option(ASAP_WITH_VALGRIND    "Builds targets with valgrind profilers added"              OFF)
 ```
-
-The code is portable across Linux (g++ and clang), OS X and Visual Studio 2017.
