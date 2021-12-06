@@ -44,7 +44,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/${META_MODULE_NAME}/config.h.
 # Main module target
 # --------------------------------------------------------------------------------------------------
 
-set(MODULE_TARGET_NAME "${META_PROJECT_NAME}_${META_MODULE_NAME}")
+# Hardcode `asap` in the module name as we do not want this prefix to change with the forked project
+# name.
+set(MODULE_TARGET_NAME "asap_${META_MODULE_NAME}")
 
 asap_add_library(
   ${MODULE_TARGET_NAME}

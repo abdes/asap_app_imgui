@@ -314,9 +314,9 @@ install(
   DESTINATION ${ASAP_INSTALL_ROOT}
   COMPONENT runtime)
 
-# Deploy generated top level headers
+# Deploy generated top level headers (always in `asap` directory even when forked)
 install(
-  DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME}
+  DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/asap
   DESTINATION ${ASAP_INSTALL_INCLUDE}
   COMPONENT dev)
 
