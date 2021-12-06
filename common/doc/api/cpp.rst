@@ -1,19 +1,17 @@
 C++ language helpers
 ====================
 
-Non copiable class
+Singleton class
 ------------------
 
-The header <common/non_copyable.h> defines the class
-:class:`asap::NonCopiable`.
+The header <common/singleton.h> declares the class :class:`asap::Singleton`.
 
-.. doxygenclass:: asap::NonCopiable
+.. doxygenclass:: asap::Singleton
    :members:
    :protected-members:
 
-Class :class:`asap::NonCopiable` has protected constructor and destructor
-members to emphasize that it is only intended to be inherited from. Both use
-the C++ 11 trivial implementation by marking them ``default``.
+Class :class:`asap::Singleton` provide a base class that can be used to implement concrete singleton
+classes. A singleton is a class for which only one instance can exist in the process.
 
 Logical traits
 --------------
