@@ -127,7 +127,12 @@
         "debug",
         "compiler-clang",
         "code-coverage"
-      ]
+      ],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      }
     },
     {
       "name": "dev-clang",
@@ -237,7 +242,12 @@
         "base",
         "release",
         "compiler-clang"
-      ]
+      ],
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      }
     }
   ],
   "buildPresets": [
