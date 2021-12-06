@@ -25,6 +25,7 @@ Last Updated on |date|
    04-library-modules/index
    license
    changelog.md
+   version
 
 Welcome! This is the documentation for the *asap* project. This is the top level
 container project for the asap modules. It provides the integrated build system
