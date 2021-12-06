@@ -6,9 +6,11 @@
      ^ for subsections
      " for paragraphs
 
-*****************
-Project structure
-*****************
+.. _project-structure:
+
+********************************
+Understand the project structure
+********************************
 
 .. |date| date::
 
