@@ -266,7 +266,7 @@
         "build-all-tests",
         "dox",
         "sphinx"
-      ],
+      ]
     },
     {
       "name": "dev-clang",
