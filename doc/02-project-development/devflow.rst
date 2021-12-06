@@ -10,6 +10,10 @@
 Development Process
 *******************
 
+.. todo::
+
+  This chapter needs to be updated/restructured/completed.
+
 Version control
 ===============
 We use Git and we require a recent version of the git tools to take advantage of

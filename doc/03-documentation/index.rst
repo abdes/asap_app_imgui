@@ -15,8 +15,6 @@ Developer Guides
    :titlesonly:
    :hidden:
 
-   build
-   devflow
    sphinx-doc
 
 

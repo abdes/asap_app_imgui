@@ -10,6 +10,10 @@
 Build instructions
 ******************
 
+.. todo::
+
+  This chapter needs to be updated/restructured/completed.
+
 The project uses `cmake <https://cmake.org/>`_ as its build system (generator).
 We require recent versions of git (latest version is recommended), cmake (latest
 version is recommended), and compilers.
