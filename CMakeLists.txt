@@ -283,7 +283,8 @@ if(SPHINX_FOUND)
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html)
   add_custom_target(copy_doc_index ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
 
-  add_dependencies(master_sphinx asap_common_sphinx asap_logging_sphinx copy_doc_index)
+  add_dependencies(master_sphinx ${META_PROJECT_NAME}_common_sphinx
+                   ${META_PROJECT_NAME}_logging_sphinx copy_doc_index)
 
 endif()
 

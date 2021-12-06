@@ -34,11 +34,11 @@ rst_epilog = """
 
 intersphinx_mapping = {
     'common': (
-        '@SPHINX_BUILD_DIR@/asap_common/html',
-        '@SPHINX_BUILD_DIR@/asap_common/html/objects.inv'),
+        '@SPHINX_BUILD_DIR@/@META_PROJECT_NAME@_common/html',
+        '@SPHINX_BUILD_DIR@/@META_PROJECT_NAME@_common/html/objects.inv'),
     'logging': (
-        '@SPHINX_BUILD_DIR@/asap_logging/html',
-        '@SPHINX_BUILD_DIR@/asap_logging/html/objects.inv')
+        '@SPHINX_BUILD_DIR@/@META_PROJECT_NAME@_logging/html',
+        '@SPHINX_BUILD_DIR@/@META_PROJECT_NAME@_logging/html/objects.inv')
 }
 
 # -- General configuration ---------------------------------------------------

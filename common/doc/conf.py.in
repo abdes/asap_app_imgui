@@ -21,7 +21,6 @@
 
 project = u'@META_PROJECT_NAME@/@META_MODULE_NAME@'
 copyright = u'2018, @META_AUTHOR_ORGANIZATION@'
-author = u'@META_MODULE_AUTHOR_MAINTAINER@'
 
 # The short X.Y version
 version = u'@META_MODULE_VERSION@'
@@ -109,7 +108,7 @@ html_favicon = "_static/favicon.ico"
 # If this is not None, a ‘Last updated on:’ timestamp is inserted at every page
 # bottom, using the given strftime() format. The empty string is equivalent to
 # '%b %d, %Y' (or a locale-dependent equivalent).
-html_last_updated_fmt = ""
+html_last_updated_fmt = None
 
 html_theme_options = {
     "path_to_docs": "docs",
@@ -121,7 +120,7 @@ html_theme_options = {
     "use_fullscreen_button": True,
     # We don't want the default navigation bar footer to be displayed on every
     # page. Mention of the book theme will be added in the home page.
-    "show_toc_level": 2
+    "extra_navbar": ""
 }
 
 # -- Extension configuration -------------------------------------------------
