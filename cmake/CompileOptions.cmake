@@ -120,7 +120,7 @@ function(swift_set_compile_options)
     endif()
   endif()
 
-  if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     # using Clang
     list(
       APPEND
