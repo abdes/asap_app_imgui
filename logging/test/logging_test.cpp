@@ -1,3 +1,5 @@
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
 //        Copyright The Authors 2018.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
@@ -39,8 +41,7 @@ using ::testing::Ne;
 // template explicit instantiation present in the implementation files to avoid compiler warnings.
 extern template class spdlog::sinks::base_sink<std::mutex>;
 
-namespace asap {
-namespace logging {
+namespace asap::logging {
 
 namespace {
 
@@ -243,5 +244,4 @@ TEST(Logging, SinkPushPop) {
 
 } // namespace
 
-} // namespace logging
-} // namespace asap
+}  // namespace asap::logging

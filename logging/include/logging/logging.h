@@ -1,3 +1,5 @@
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
 //        Copyright The Authors 2018.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
@@ -32,10 +34,8 @@ ASAP_PRAGMA(GCC diagnostic ignored "-Weverything")
 #include <spdlog/spdlog.h>
 ASAP_DIAGNOSTIC_POP
 
-/// Top level namespace.
-namespace asap {
 /// Namespace for logging related APIs.
-namespace logging {
+namespace asap::logging {
 
 // ---------------------------------------------------------------------------
 // Logger
@@ -98,7 +98,7 @@ public:
    *
    * @return the logger name.
    */
-  auto Name() const -> const std::string & {
+  [[nodiscard]] auto Name() const -> const std::string & {
     return logger_->name();
   }
 
@@ -116,7 +116,7 @@ public:
    *
    * @return This logger's logging level.
    */
-  auto GetLevel() const -> spdlog::level::level_enum {
+  [[nodiscard]] auto GetLevel() const -> spdlog::level::level_enum {
     return logger_->level();
   }
 
@@ -488,5 +488,4 @@ auto ASAP_LOGGING_API FormatFileAndLine(char const *file, char const *line) -> s
 
 //@}
 
-} // namespace logging
-} // namespace asap
+}  // namespace asap::logging

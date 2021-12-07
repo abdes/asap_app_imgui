@@ -1,3 +1,5 @@
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
 //        Copyright The Authors 2018.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
@@ -25,8 +27,7 @@ ASAP_PRAGMA(GCC diagnostic ignored "-Weverything")
 #endif
 ASAP_DIAGNOSTIC_POP
 
-namespace asap {
-namespace logging {
+namespace asap::logging {
 
 // ---------------------------------------------------------------------------
 // Static members initialization
@@ -187,5 +188,4 @@ auto FormatFileAndLine(char const *file, char const *line) -> std::string {
 }
 #endif // NDEBUG
 
-} // namespace logging
-} // namespace asap
+}  // namespace asap::logging
