@@ -62,7 +62,7 @@ Verbosity verbosity_level = Verbosity::QUIET;
 namespace details {
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-ASAP_CONTRACT_THREAD_LOCAL jmp_buf jmp_env;
+jmp_buf jmp_env;
 
 void ContractCheckPush() {
   contract_check_active++;
