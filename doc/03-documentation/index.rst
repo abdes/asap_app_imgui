@@ -6,9 +6,9 @@
      ^ for subsubsections
      " for paragraphs
 
-################
-Developer Guides
-################
+#############
+Documentation
+#############
 
 .. toctree::
    :maxdepth: 1
@@ -18,9 +18,8 @@ Developer Guides
    sphinx-doc
 
 
-:doc:`Documentation <sphinx-doc>`
+:doc:`Sphinx <sphinx-doc>`
 ---------------------------------
-*if you are, and you should be, writing API documentation in your own code or
-adding more parts to the user manual of this project, you should read this part.
-It will help you understand how this User Manual is maintained and transformed 
-into the final HTML output*
+*if you are maintaining parts in the user manual of this project, you should read this document.
+It will help you understand how this User Manual is written and transformed into the final HTML 
+output*

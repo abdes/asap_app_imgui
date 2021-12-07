@@ -6,9 +6,9 @@
      ^ for subsubsections
      " for paragraphs
 
-*******************
+###################
 ASAP documentation!
-*******************
+###################
 
 .. |date| date::
 

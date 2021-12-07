@@ -6,9 +6,9 @@
      ^ for subsubsections
      " for paragraphs
 
-***********************************************
-Documentation with Sphinx and restructured text
-***********************************************
+****************************
+Sphinx and restructured text
+****************************
 
 .. todo::
 

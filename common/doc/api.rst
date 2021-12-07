@@ -13,3 +13,4 @@ API reference
    Platform detection <api/platform>
    C++ language <api/cpp>
    Mask/Flags manipulation <api/flags>
+   Contract checking API <api/contract>
