@@ -230,6 +230,14 @@ endif()
 # Generate version-header
 configure_file(templates/version.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h)
 
+# Generate a clangd configuration file that points to the compilation database in the cmake build
+# directory. We need to do this as the build directory is different for every preset and can be
+# different as well when the user decides to build somewhere else.
+# Currently we cannot configure this properly in vscode settings.
+# See https://github.com/clangd/vscode-clangd/issues/48
+configure_file(.clangd.in ${CMAKE_SOURCE_DIR}/.clangd @ONLY)
+
+
 # --------------------------------------------------------------------------------------------------
 # Test targets
 # --------------------------------------------------------------------------------------------------
