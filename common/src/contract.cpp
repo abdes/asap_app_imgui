@@ -85,6 +85,7 @@ void PrepareForTesting() {
   GetViolationHandler().SwapHandler(test_handler);
 }
 
+// Internal implementation of the singleton violation handler.
 class ViolationHandler_impl : public ViolationHandler, public Singleton<ViolationHandler_impl> {
 public:
   explicit ViolationHandler_impl(typename Singleton<ViolationHandler_impl>::token /*unused*/) {
@@ -106,7 +107,7 @@ void ViolationHandler_impl::SwapHandler(WrapperType &other_handler) {
   other_handler.swap(handler);
 }
 
-auto GetViolationHandler() -> ViolationHandler & {
+inline auto GetViolationHandler() -> ViolationHandler & {
   return ViolationHandler_impl::instance();
 }
 

@@ -1,3 +1,5 @@
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
 //        Copyright The Authors 2018.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
@@ -5,9 +7,9 @@
 
 #pragma once
 
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 //   Operating System detection
-// -----------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 // WINDOWS
 #if defined(_WIN32) // defined for 32-bit and 64-bit environments

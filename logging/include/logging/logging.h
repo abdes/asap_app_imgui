@@ -3,6 +3,12 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+/*!
+ * @file logging.h
+ * 
+ * @brief Types and and macros used for logging.
+ */
+
 #pragma once
 
 #include <common/compilers.h>

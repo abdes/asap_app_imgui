@@ -11,21 +11,65 @@
 
 #include <memory>
 
+/// Top level namespace.
 namespace asap {
 
+/*!
+ * \brief Templated singleton design pattern implementation with thread-safe lazy initialization.
+ *
+ * This singleton implementation follows Scott Meyers' approach. This approach is founded on C++'s
+ * guarantee that local static objects are initialized when the object's definition is first
+ * encountered during a call to that function." ... "As a bonus, if you never call a function
+ * emulating a non-local static object, you never incur the cost of constructing and destructing the
+ * object.
+ *
+ * To avoid that the single instance is always initialized before main whether it is used or not, we
+ * introduce the use of a smart pointer (`unique_ptr`) to wrap the single instance.
+ *
+ * The problem is that the make_unique_ptr/make_shared_ptr of the C++11 standard library cannot work
+ * on private constructors, but the direct solution is not concise (and it is difficult to achieve
+ * cross-compiler compatibility). Instead we use a token to deny users directly constructing a
+ * class and we ask derived classes to implement a special constructor to implicitly convert a token
+ * into the derived class.
+ * 
+ * Example:
+ * ```
+ * class MyVars: public asap::singleton<MyVars> {
+ * public:
+ *   explicit MyVars(typename asap::singleton<MyVars>::token) {}
+ *   long var1;
+ * };
+ * ```
+ */
 template <typename T> class ASAP_COMMON_TEMPLATE_API Singleton {
 public:
+/*!
+ * Get the single instance of the singleton.
+ * 
+ * \return the single instance of the singleton.
+ */
   static auto instance() -> T &;
 
+  /// Copy constructor (deleted).
   Singleton(const Singleton &) = delete;
+
+  /// Assignment operator (deleted).
   auto operator=(const Singleton) -> Singleton & = delete;
 
+  /// Move constructor (deleted).
   Singleton(Singleton &&) = delete;
+
+  /// Move assignment operator (deleted).
   auto operator=(Singleton &&) -> Singleton & = delete;
 
 protected:
+  /// A token type used to only allow derived classes to be singletons.
   struct token {};
+
+  /// Default constructor.
   Singleton() = default;
+
+  /// Destructor.
   ~Singleton() = default;
 };
 

@@ -23,27 +23,63 @@
 #endif
 // NOLINTEND(cppcoreguidelines-macro-usage)
 
-namespace asap {
-namespace contract {
+namespace asap::contract {
 
-enum class ASAP_COMMON_API Verbosity { QUIET = 0, VERBOSE };
+/// Verbosity level of the test violation handler.
+enum class Verbosity {
+  /// Do not print anything
+  QUIET = 0,
+  /// Print the same information as if the default handler were running.
+  VERBOSE
+};
 
+/*!
+ * \brief Set the verbosity level of the test violation handler.
+ *
+ * \param verbosity a value of Verbosity::QUIET will not produce any output, while a value of
+ * Verbosity::VERBOSE will produce the same output than the default handler.
+ */
 void ASAP_COMMON_API SetVerbosity(enum Verbosity verbosity);
 
+/*!
+ * \brief Prepare the violation handler for testing.
+ *
+ * This function replaces the default violation handler with a special purpose handler that allows
+ * to test the contract checking assertions without the need for sophisticated death test features
+ * from the unit testing framework.
+ *
+ * Here is an example of its usage with the Google Test frameowk:
+ *
+ * ```
+ * auto main(int argc, char **argv) -> int {
+ *   asap::contract::PrepareForTesting();
+ *   ::testing::InitGoogleTest(&argc, argv);
+ *   return RUN_ALL_TESTS();
+ * }
+ * ```
+ *
+ * \see CHECK_VIOLATES_CONTRACT
+ * \see EXPECT_VIOLATES_CONTRACT
+ * \see ASSERT_VIOLATES_CONTRACT
+ */
 void ASAP_COMMON_API PrepareForTesting();
 
 namespace details {
-
+/// Push a contract check for nested violation checks.
 void ASAP_COMMON_API ContractCheckPush();
+/// Pop a contract check for nested violation checks.
 void ASAP_COMMON_API ContractCheckPop();
 
+/// Stack environment saved/restored with the setjmp/longjmp used to handle contract violations
+/// during testing.
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 extern ASAP_CONTRACT_THREAD_LOCAL ASAP_COMMON_API jmp_buf jmp_env;
 
 } // namespace details
 
-} // namespace contract
-} // namespace asap
+} // namespace asap::contract
+
+#if !defined(DOXYGEN_DOCUMENTATION_BUILD)
 
 // NOLINTBEGIN(cppcoreguidelines-macro-usage)
 #define ASAP_CONTRACT_UT_DO_CHECK_VIOLATION_(call, check, expected, msg)                           \
@@ -83,5 +119,7 @@ extern ASAP_CONTRACT_THREAD_LOCAL ASAP_COMMON_API jmp_buf jmp_env;
 #define ASAP_CONTRACT_UT_CHECK_VIOLATION_(call, check)                                             \
   ASAP_CONTRACT_UT_DO_CHECK_VIOLATION_(call, check, 1, "'" #call ";' does not violate any contract")
 #endif
+
+#endif // DOXYGEN_DOCUMENTATION_BUILD
 
 // NOLINTEND(cppcoreguidelines-macro-usage)

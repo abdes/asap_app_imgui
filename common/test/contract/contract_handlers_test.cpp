@@ -39,18 +39,22 @@ namespace contract {
 
 namespace {
 
+/// The signature of functions which can be used as violation handler implementation.
+using FunctionType = void (*)(const Violation *);
+
+
 // NOLINTNEXTLINE
 TEST(DefaultHandler, IsDefined) {
   ViolationHandler::WrapperType dummy_handler;
   auto &default_handler = GetViolationHandler();
 
   default_handler.SwapHandler(dummy_handler);
-  auto *handler_function = dummy_handler.target<ViolationHandler::FunctionType>();
+  auto *handler_function = dummy_handler.target<FunctionType>();
   ASSERT_THAT(handler_function, NotNull());
 
   // Restore the handler
   default_handler.SwapHandler(dummy_handler);
-  handler_function = dummy_handler.target<ViolationHandler::FunctionType>();
+  handler_function = dummy_handler.target<FunctionType>();
   ASSERT_THAT(handler_function, IsNull());
 }
 
@@ -73,7 +77,7 @@ TEST(CustomHandler, HandleViolationCallsRegisteredHandler) {
   auto function_mock = violation_handler_mock.AsStdFunction();
   auto &default_handler = GetViolationHandler();
   default_handler.SwapHandler(function_mock);
-  auto *handler_function = function_mock.target<ViolationHandler::FunctionType>();
+  auto *handler_function = function_mock.target<FunctionType>();
   ASSERT_THAT(handler_function, NotNull());
 
   const asap::contract::Violation violation = {
@@ -83,7 +87,7 @@ TEST(CustomHandler, HandleViolationCallsRegisteredHandler) {
   default_handler.HandleViolation(&violation);
 
   default_handler.SwapHandler(function_mock);
-  handler_function = function_mock.target<ViolationHandler::FunctionType>();
+  handler_function = function_mock.target<FunctionType>();
   ASSERT_THAT(handler_function, IsNull());
 }
 
