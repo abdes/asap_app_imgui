@@ -59,8 +59,6 @@ asap_add_library(
   "include/common/compilers.h"
   "include/common/singleton.h"
   "include/common/flag_ops.h"
-  # traits module
-  "include/common/traits/logical.h"
   # contract module
   "include/contract/contract.h"
   "include/contract/ut/gtest.h"
@@ -75,6 +73,9 @@ target_include_directories(
   PUBLIC $<INSTALL_INTERFACE:include> $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
          $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+target_compile_features(${MODULE_TARGET_NAME} PUBLIC cxx_std_17)
+
 
 # Add support for (optional) code quality tools
 asap_add_sanitizers(${MODULE_TARGET_NAME})

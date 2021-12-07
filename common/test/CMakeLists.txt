@@ -19,7 +19,6 @@ asap_add_test(
   UNIT_TEST
   VALGRIND_MEMCHECK
   SRCS
-  "traits_logical_test.cpp"
   "flag_ops_test.cpp"
   "main.cpp"
   LINK
