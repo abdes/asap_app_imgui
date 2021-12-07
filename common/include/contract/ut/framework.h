@@ -13,16 +13,6 @@
 #include <cstdlib>
 #include <cstring>
 
-// NOLINTBEGIN(cppcoreguidelines-macro-usage)
-#if __cplusplus >= 201103L
-#define ASAP_CONTRACT_THREAD_LOCAL thread_local
-#elif __STDC_VERSION__ >= 201112L
-#define ASAP_CONTRACT_THREAD_LOCAL _Thread_local
-#else
-#define ASAP_CONTRACT_THREAD_LOCAL
-#endif
-// NOLINTEND(cppcoreguidelines-macro-usage)
-
 namespace asap::contract {
 
 /// Verbosity level of the test violation handler.
@@ -73,7 +63,7 @@ void ASAP_COMMON_API ContractCheckPop();
 /// Stack environment saved/restored with the setjmp/longjmp used to handle contract violations
 /// during testing.
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-extern ASAP_CONTRACT_THREAD_LOCAL ASAP_COMMON_API jmp_buf jmp_env;
+extern ASAP_COMMON_API jmp_buf jmp_env;
 
 } // namespace details
 
