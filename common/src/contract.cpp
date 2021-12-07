@@ -36,7 +36,7 @@ void PrintViolation(const Violation *violation) {
 }
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
-ASAP_CONTRACT_THREAD_LOCAL int contract_check_active = 0;
+int contract_check_active = 0;
 
 // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 Verbosity verbosity_level = Verbosity::QUIET;
