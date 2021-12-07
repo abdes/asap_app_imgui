@@ -43,21 +43,6 @@ auto TestAssertAudit(const int *ptr) -> int {
   return *ptr;
 }
 
-auto TestExpectAxiom(const int *ptr) -> int {
-  ASAP_EXPECT_AXIOM(ptr);
-  return *ptr;
-}
-
-auto TestEnsureAxiom(const int *ptr) -> int {
-  ASAP_ENSURE_AXIOM(ptr);
-  return *ptr;
-}
-
-auto TestAssertAxiom(const int *ptr) -> int {
-  ASAP_ASSERT_AXIOM(ptr);
-  return *ptr;
-}
-
 } // namespace testing
 } // namespace contract
 } // namespace asap

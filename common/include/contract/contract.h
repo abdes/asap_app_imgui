@@ -76,16 +76,6 @@ ASAP_COMMON_API auto GetViolationHandler() -> ViolationHandler &;
 #define ASAP_ASSERT_AUDIT(cond)                                                                    \
   INTERNAL_ASAP_CONTRACT_CREATE_ASSERT_(INTERNAL_ASAP_CONTRACT_MODE_AUDIT_, cond)
 
-/* Axiom macros */
-#define ASAP_EXPECT_AXIOM(cond)                                                                    \
-  INTERNAL_ASAP_CONTRACT_CREATE_EXPECT_(INTERNAL_ASAP_CONTRACT_MODE_AXIOM_, cond)
-
-#define ASAP_ENSURE_AXIOM(cond)                                                                    \
-  INTERNAL_ASAP_CONTRACT_CREATE_ENSURE_(INTERNAL_ASAP_CONTRACT_MODE_AXIOM_, cond)
-
-#define ASAP_ASSERT_AXIOM(cond)                                                                    \
-  INTERNAL_ASAP_CONTRACT_CREATE_ASSERT_(INTERNAL_ASAP_CONTRACT_MODE_AXIOM_, cond)
-
 /* Helper macros */
 #define INTERNAL_ASAP_CONTRACT_CREATE_EXPECT_(check, cond)                                         \
   check(INTERNAL_ASAP_CONTRACT_TYPE_EXPECT_, cond)
@@ -117,14 +107,6 @@ ASAP_COMMON_API auto GetViolationHandler() -> ViolationHandler &;
 
 /* Contract modes */
 #define INTERNAL_ASAP_CONTRACT_IGNORE_(type, cond) (void)sizeof((cond) ? 1 : 0)
-
-#if INTERNAL_ASAP_CONTRACT_HAVE_BUILTIN_UNREACHABLE
-#define INTERNAL_ASAP_CONTRACT_ASSUME_(type, cond) ((cond) ? (void)0 : __builtin_unreachable())
-#elif INTERNAL_ASAP_CONTRACT_HAVE_BUILTIN_ASSUME
-#define INTERNAL_ASAP_CONTRACT_ASSUME_(type, cond) __assume(cond)
-#else
-#define INTERNAL_ASAP_CONTRACT_ASSUME_(type, cond) INTERNAL_ASAP_CONTRACT_IGNORE_(type, cond)
-#endif
 
 #define INTERNAL_ASAP_CONTRACT_CHECK_NEVER_CONTINUE_(type, cond)                                   \
   do {                                                                                             \
@@ -172,15 +154,12 @@ ASAP_COMMON_API auto GetViolationHandler() -> ViolationHandler &;
 #if INTERNAL_ASAP_CONTRACT_BUILD_ == INTERNAL_ASAP_CONTRACT_BUILD_MODE_OFF_
 #define INTERNAL_ASAP_CONTRACT_MODE_DEFAULT_ INTERNAL_ASAP_CONTRACT_IGNORE_
 #define INTERNAL_ASAP_CONTRACT_MODE_AUDIT_ INTERNAL_ASAP_CONTRACT_IGNORE_
-#define INTERNAL_ASAP_CONTRACT_MODE_AXIOM_ INTERNAL_ASAP_CONTRACT_ASSUME_
 #elif INTERNAL_ASAP_CONTRACT_BUILD_ == INTERNAL_ASAP_CONTRACT_BUILD_MODE_DEFAULT_
 #define INTERNAL_ASAP_CONTRACT_MODE_DEFAULT_ INTERNAL_ASAP_CONTRACT_CHECK_NEVER_CONTINUE_
 #define INTERNAL_ASAP_CONTRACT_MODE_AUDIT_ INTERNAL_ASAP_CONTRACT_IGNORE_
-#define INTERNAL_ASAP_CONTRACT_MODE_AXIOM_ INTERNAL_ASAP_CONTRACT_IGNORE_
 #elif INTERNAL_ASAP_CONTRACT_BUILD_ == INTERNAL_ASAP_CONTRACT_BUILD_MODE_AUDIT_
 #define INTERNAL_ASAP_CONTRACT_MODE_DEFAULT_ INTERNAL_ASAP_CONTRACT_CHECK_NEVER_CONTINUE_
 #define INTERNAL_ASAP_CONTRACT_MODE_AUDIT_ INTERNAL_ASAP_CONTRACT_CHECK_NEVER_CONTINUE_
-#define INTERNAL_ASAP_CONTRACT_MODE_AXIOM_ INTERNAL_ASAP_CONTRACT_IGNORE_
 #endif
 
 /* Options to override standard build configurations */
@@ -192,11 +171,6 @@ ASAP_COMMON_API auto GetViolationHandler() -> ViolationHandler &;
 #if defined ASAP_CONTRACT_MODE_AUDIT
 #undef INTERNAL_ASAP_CONTRACT_MODE_AUDIT_
 #define INTERNAL_ASAP_CONTRACT_MODE_AUDIT_ ASAP_CONTRACT_MODE_AUDIT
-#endif
-
-#if defined ASAP_CONTRACT_MODE_AXIOM
-#undef INTERNAL_ASAP_CONTRACT_MODE_AXIOM_
-#define INTERNAL_ASAP_CONTRACT_MODE_AXIOM_ ASAP_CONTRACT_MODE_AXIOM
 #endif
 
 // NOLINTEND(cppcoreguidelines-macro-usage)

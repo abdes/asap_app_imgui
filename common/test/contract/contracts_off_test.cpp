@@ -87,36 +87,6 @@ TEST(OffModeContractViolations, AssertAuditWillSegFault) {
 #endif
 }
 
-// NOLINTNEXTLINE
-TEST(OffModeContractViolations, ExpectAxiomWillSegFault) {
-#if !defined(ASAP_WINDOWS)
-  // NOLINTNEXTLINE
-  ASSERT_EXIT(testing::TestExpectAxiom(nullptr), ::testing::KilledBySignal(SIGSEGV), ".*");
-#else
-  ASSERT_DEATH(testing::TestExpectAxiom(nullptr), "");
-#endif
-}
-
-// NOLINTNEXTLINE
-TEST(OffModeContractViolations, EnsureAxiomWillSegFault) {
-#if !defined(ASAP_WINDOWS)
-  // NOLINTNEXTLINE
-  ASSERT_EXIT(testing::TestEnsureAxiom(nullptr), ::testing::KilledBySignal(SIGSEGV), ".*");
-#else
-  ASSERT_DEATH(testing::TestEnsureAxiom(nullptr), "");
-#endif
-}
-
-// NOLINTNEXTLINE
-TEST(OffModeContractViolations, AssertAxiomWillSegFault) {
-#if !defined(ASAP_WINDOWS)
-  // NOLINTNEXTLINE
-  ASSERT_EXIT(testing::TestAssertAxiom(nullptr), ::testing::KilledBySignal(SIGSEGV), ".*");
-#else
-  ASSERT_DEATH(testing::TestAssertAxiom(nullptr), "");
-#endif
-}
-
 } // namespace
 } // namespace contract
 } // namespace asap

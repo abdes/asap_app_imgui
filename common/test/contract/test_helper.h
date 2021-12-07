@@ -25,10 +25,6 @@ auto TestExpectAudit(const int *ptr) -> int;
 auto TestEnsureAudit(const int *ptr) -> int;
 auto TestAssertAudit(const int *ptr) -> int;
 
-auto TestExpectAxiom(const int *ptr) -> int;
-auto TestEnsureAxiom(const int *ptr) -> int;
-auto TestAssertAxiom(const int *ptr) -> int;
-
 } // namespace testing
 } // namespace contract
 } // namespace asap

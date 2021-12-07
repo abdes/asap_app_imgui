@@ -74,24 +74,6 @@ TEST(INTERNAL_ACT_TESTSUITE_NAME, AssertAudit) {
   testing::TestAssertAudit(&value);
 }
 
-// NOLINTNEXTLINE
-TEST(INTERNAL_ACT_TESTSUITE_NAME, ExpectAxiom) {
-  static int value = 1;
-  testing::TestExpectAxiom(&value);
-}
-
-// NOLINTNEXTLINE
-TEST(INTERNAL_ACT_TESTSUITE_NAME, EnsureAxiom) {
-  static int value = 1;
-  testing::TestEnsureAxiom(&value);
-}
-
-// NOLINTNEXTLINE
-TEST(INTERNAL_ACT_TESTSUITE_NAME, AssertAxiom) {
-  static int value = 1;
-  testing::TestAssertAxiom(&value);
-}
-
 } // namespace
 } // namespace contract
 } // namespace asap
