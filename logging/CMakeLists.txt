@@ -77,8 +77,8 @@ endif()
 # --------------------------------------------------------------------------------------------------
 
 asap_with_doxygen(
-  ${META_PROJECT_NAME}_${META_MODULE_NAME} "\"Common Module\""
-  "\"Provides common basic building blocks such as portability, assertions, etc.\""
+  ${META_PROJECT_NAME}_${META_MODULE_NAME} "\"Logging Module\""
+  "\"Provides logging APIs around spdlog.\""
   "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 asap_with_sphinx(${META_PROJECT_NAME}_${META_MODULE_NAME})
