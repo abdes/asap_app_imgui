@@ -9,9 +9,7 @@
 
 #include "test_helper.h"
 
-namespace asap {
-namespace contract {
-namespace testing {
+namespace asap::contract::testing {
 
 auto TestExpectDefault(const int *ptr) -> int {
   ASAP_EXPECT(ptr);
@@ -43,6 +41,4 @@ auto TestAssertAudit(const int *ptr) -> int {
   return *ptr;
 }
 
-} // namespace testing
-} // namespace contract
-} // namespace asap
+}  // namespace asap::contract::testing
