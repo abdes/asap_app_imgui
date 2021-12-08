@@ -5,6 +5,12 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+/*!
+ * \file flag_ops.h
+ * 
+ * \brief C++ template API for bit flags manipulation. 
+ */
+
 #pragma once
 
 #include <type_traits>

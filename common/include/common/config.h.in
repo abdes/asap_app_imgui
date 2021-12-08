@@ -5,6 +5,12 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+/*!
+ * \file config.h
+ * 
+ * \brief Contains useful compiler definitions produced during project configure time. 
+ */
+
 #pragma once
 
 // POSIX 200112L compliance

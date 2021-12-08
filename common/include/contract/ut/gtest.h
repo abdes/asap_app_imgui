@@ -8,8 +8,8 @@
 /*!
  * \file gtest.h
  *
- * Macros used with Google Test unit testing framework to test contract checking assertions without
- * the need for death tests.
+ * \brief Macros used with Google Test unit testing framework to test contract checking assertions
+ * without the need for death tests.
  *
  * To use, include the following call in your test main:
  * ```

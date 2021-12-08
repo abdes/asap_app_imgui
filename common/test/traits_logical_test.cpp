@@ -32,7 +32,7 @@ using ::testing::IsTrue;
 // -------------------------------------------------------------------------------------------------
 
 ASAP_DIAGNOSTIC_PUSH
-#if ASAP_GNUC_VERSION
+#if defined(ASAP_GCC_VERSION)
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #elif defined(__clang__)
 #pragma clang diagnostic ignored "-Wunused-local-typedef"

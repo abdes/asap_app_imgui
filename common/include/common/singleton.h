@@ -5,6 +5,12 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+/*!
+ * \file singleton.h
+ * 
+ * \brief C++ template based singleton interface declarations. 
+ */
+
 #pragma once
 
 #include <common/asap_common_api.h>

@@ -5,6 +5,12 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+/*!
+ * \file framework.h
+ * 
+ * \brief Declaration for the unit testing support for contract checking. 
+ */
+
 #pragma once
 
 #include <common/asap_common_api.h>

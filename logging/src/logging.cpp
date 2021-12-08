@@ -5,6 +5,12 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+/*!
+ * \file logging.cpp
+ * 
+ * \brief Implementation details for the logging API.
+ */
+
 #include "logging/logging.h"
 
 #include <common/compilers.h>

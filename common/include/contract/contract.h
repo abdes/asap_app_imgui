@@ -9,7 +9,7 @@
 /*!
  * \file contract.h
  *
- * Types and and macros used for contract checking.
+ * \brief Types and and macros used for contract checking.
  *
  * Behavior of the contract checking macros can be changed by setting the contract checking build
  * mode to one of the values: `OFF`, `DEFAULT` or `AUDIT` by defining the corresponding symbol as

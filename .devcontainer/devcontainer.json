@@ -45,7 +45,8 @@
     "eamodio.gitlens",
     "hbenl.vscode-test-explorer",
     "guyutongxue.cpp-reference",
-    "cheshirekow.cmake-format"
+    "cheshirekow.cmake-format",
+    "kevinkyang.auto-comment-blocks"
   ],
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],

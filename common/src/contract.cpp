@@ -5,8 +5,11 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-// This file was generated from libcontract (https://github.com/fblomqvi/libcontract)
-// and then modified.
+/*!
+ * \file contract.cpp
+ * 
+ * \brief Implementation details for the contract checking API.
+ */
 
 #include <cassert>
 #include <csetjmp>

@@ -5,6 +5,12 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+/*!
+ * \file platform.h
+ * 
+ * \brief Contains compiler definitions and macros for platform detection.
+ */
+
 #pragma once
 
 // -------------------------------------------------------------------------------------------------
