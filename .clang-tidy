@@ -12,6 +12,6 @@ Checks: >
     readability-*,
     -cppcoreguidelines-macro-usage,
     -hicpp-signed-bitwise,
-    -readability-function-cognitive-complexity
-HeaderFilterRegex: ".*"
-
+    -readability-function-cognitive-complexity,
+    -google-runtime-references
+HeaderFilterRegex: ".*/[common|filesystem|logging]/.*"

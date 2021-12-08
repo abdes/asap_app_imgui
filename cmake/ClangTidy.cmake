@@ -1,39 +1,34 @@
 # ~~~
+# SPDX-License-Identifier: BSD-3-Clause
+
+# ~~~
 #        Copyright The Authors 2018.
 #    Distributed under the 3-Clause BSD License.
 #    (See accompanying file LICENSE or copy at
 #   https://opensource.org/licenses/BSD-3-Clause)
 # ~~~
 
-# ------------------------------------------------------------------------------
-# Helper module providing a macro that can be used to declare that a target is
-# interested in participating in a build that uses clang-tidy instead of the
-# regular C++ compiler.
 #
-# We do not set clang-tidy configuration here, instead we rely on an external
-# .clang-tidy config file in the project root or somewhere else in the hierarchy
-# of modules.
-# ------------------------------------------------------------------------------
+# clang-tidy targets work only when clang-tidy executable can be found and the compiler being
+# used is clang (otherwise gcc/others options may cause errors for clang-tidy)
+#
+find_program(CLANG_TIDY NAMES clang-tidy clang-tidy-14)
+if(NOT "${CLANG_TIDY}" STREQUAL "CLANG_TIDY-NOTFOUND")
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    include(common/ClangTidy)
 
-if(OPTION_CLANG_TIDY)
-  find_program(
-    CLANG_TIDY_COMMAND
-    NAMES "clang-tidy"
-    DOC "Path to clang-tidy executable")
-
-  if(NOT CLANG_TIDY_COMMAND)
-    message(FATAL_ERROR "Unable to locate clang-tidy")
-    macro(tidy_target TARGET_NAME)
-      # left empty on purpose
-    endmacro()
+    function(asap_create_clang_tidy_targets)
+      swift_create_clang_tidy_targets(DONT_GENERATE_CLANG_TIDY_CONFIG ${ARGV})
+    endfunction()
+    return()
+    
   else()
-    macro(tidy_target TARGET_NAME)
-      set_target_properties(
-        ${TARGET_NAME} PROPERTIES CXX_CLANG_TIDY "${CLANG_TIDY_COMMAND}")
-    endmacro()
+    message(STATUS "Not using clang as a compiler, disabling clang-tidy targets")
   endif()
 else()
-  macro(tidy_target TARGET_NAME)
-    # left empty on purpose
-  endmacro()
+  message(STATUS "Could not find appropriate clang-tidy, targets disabled")
 endif()
+
+function(asap_create_clang_tidy_targets)
+  # empty
+endfunction()
