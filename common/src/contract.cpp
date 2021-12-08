@@ -16,8 +16,7 @@
 #include "contract/contract.h"
 #include "contract/ut/framework.h"
 
-namespace asap {
-namespace contract {
+namespace asap::contract {
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Unit Testing stuff
@@ -107,9 +106,8 @@ void ViolationHandler_impl::SwapHandler(WrapperType &other_handler) {
   other_handler.swap(handler);
 }
 
-inline auto GetViolationHandler() -> ViolationHandler & {
+auto GetViolationHandler() -> ViolationHandler & {
   return ViolationHandler_impl::instance();
 }
 
-} // namespace contract
-} // namespace asap
+}  // namespace asap::contract
