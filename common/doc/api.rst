@@ -11,6 +11,7 @@ API reference
    :hidden:
 
    Platform detection <api/platform>
+   Compiler detection <api/compilers>
    C++ language <api/cpp>
    Mask/Flags manipulation <api/flags>
    Contract checking API <api/contract>
