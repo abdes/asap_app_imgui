@@ -7,7 +7,7 @@
 
 /*!
  * \file logging.cpp
- * 
+ *
  * \brief Implementation details for the logging API.
  */
 
@@ -194,4 +194,4 @@ auto FormatFileAndLine(char const *file, char const *line) -> std::string {
 }
 #endif // NDEBUG
 
-}  // namespace asap::logging
+} // namespace asap::logging

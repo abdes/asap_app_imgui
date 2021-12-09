@@ -7,7 +7,7 @@
 
 /*!
  * @file logging.h
- * 
+ *
  * @brief Types and and macros used for logging.
  */
 
@@ -488,4 +488,4 @@ auto ASAP_LOGGING_API FormatFileAndLine(char const *file, char const *line) -> s
 
 //@}
 
-}  // namespace asap::logging
+} // namespace asap::logging

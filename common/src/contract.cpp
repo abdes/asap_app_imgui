@@ -7,7 +7,7 @@
 
 /*!
  * \file contract.cpp
- * 
+ *
  * \brief Implementation details for the contract checking API.
  */
 
@@ -113,4 +113,4 @@ auto GetViolationHandler() -> ViolationHandler & {
   return ViolationHandler_impl::instance();
 }
 
-}  // namespace asap::contract
+} // namespace asap::contract

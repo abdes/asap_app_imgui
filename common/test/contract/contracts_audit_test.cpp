@@ -23,8 +23,7 @@ ASAP_DIAGNOSTIC_PUSH
 #endif
 // NOLINTBEGIN(used-but-marked-unused)
 
-namespace asap {
-namespace contract {
+namespace asap::contract {
 namespace {
 
 // NOLINTNEXTLINE
@@ -88,8 +87,7 @@ TEST(AuditModeContractViolations, AssertAuditWillAbort) {
 }
 
 } // namespace
-} // namespace contract
-} // namespace asap
+}  // namespace asap::contract
 
 // NOLINTEND(used-but-marked-unused)
 ASAP_DIAGNOSTIC_POP

@@ -24,9 +24,7 @@ ASAP_DIAGNOSTIC_PUSH
 #endif
 // NOLINTBEGIN(used-but-marked-unused)
 
-namespace asap {
-namespace contract {
-
+namespace asap::contract {
 namespace {
 
 // NOLINTNEXTLINE
@@ -60,9 +58,7 @@ TEST(GoogleTestDeathMacros, NestedChecks) {
 }
 
 } // namespace
-
-} // namespace contract
-} // namespace asap
+}  // namespace asap::contract
 
 auto main(int argc, char **argv) -> int {
   asap::contract::PrepareForTesting();

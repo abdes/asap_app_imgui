@@ -7,8 +7,8 @@
 
 /*!
  * \file singleton.h
- * 
- * \brief C++ template based singleton interface declarations. 
+ *
+ * \brief C++ template based singleton interface declarations.
  */
 
 #pragma once
@@ -37,7 +37,7 @@ namespace asap {
  * cross-compiler compatibility). Instead we use a token to deny users directly constructing a
  * class and we ask derived classes to implement a special constructor to implicitly convert a token
  * into the derived class.
- * 
+ *
  * Example:
  * ```
  * class MyVars: public asap::singleton<MyVars> {
@@ -49,11 +49,11 @@ namespace asap {
  */
 template <typename T> class ASAP_COMMON_TEMPLATE_API Singleton {
 public:
-/*!
- * Get the single instance of the singleton.
- * 
- * \return the single instance of the singleton.
- */
+  /*!
+   * Get the single instance of the singleton.
+   *
+   * \return the single instance of the singleton.
+   */
   static auto instance() -> T &;
 
   /// Copy constructor (deleted).

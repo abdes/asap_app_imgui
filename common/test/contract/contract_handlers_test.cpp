@@ -34,14 +34,11 @@ using ::testing::IsNull;
 using ::testing::IsTrue;
 using ::testing::NotNull;
 
-namespace asap {
-namespace contract {
-
+namespace asap::contract {
 namespace {
 
 /// The signature of functions which can be used as violation handler implementation.
 using FunctionType = void (*)(const Violation *);
-
 
 // NOLINTNEXTLINE
 TEST(DefaultHandler, IsDefined) {
@@ -92,8 +89,7 @@ TEST(CustomHandler, HandleViolationCallsRegisteredHandler) {
 }
 
 } // namespace
-} // namespace contract
-} // namespace asap
+}  // namespace asap::contract
 
 // NOLINTEND(used-but-marked-unused)
 ASAP_DIAGNOSTIC_POP

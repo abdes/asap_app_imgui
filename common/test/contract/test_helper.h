@@ -7,9 +7,7 @@
 
 #pragma once
 
-namespace asap {
-namespace contract {
-namespace testing {
+namespace asap::contract::testing {
 
 /*
  * The test functions are placed in their own translation unit so that the compiler cannot optimize
@@ -25,6 +23,4 @@ auto TestExpectAudit(const int *ptr) -> int;
 auto TestEnsureAudit(const int *ptr) -> int;
 auto TestAssertAudit(const int *ptr) -> int;
 
-} // namespace testing
-} // namespace contract
-} // namespace asap
+}  // namespace asap::contract::testing

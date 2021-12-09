@@ -7,8 +7,8 @@
 
 /*!
  * \file flag_ops.h
- * 
- * \brief C++ template API for bit flags manipulation. 
+ *
+ * \brief C++ template API for bit flags manipulation.
  */
 
 #pragma once

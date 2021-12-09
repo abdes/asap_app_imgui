@@ -244,4 +244,4 @@ TEST(Logging, SinkPushPop) {
 
 } // namespace
 
-}  // namespace asap::logging
+} // namespace asap::logging
