@@ -1,0 +1,170 @@
+# ~~~
+# SPDX-License-Identifier: BSD-3-Clause
+
+# ~~~
+#        Copyright The Authors 2018.
+#    Distributed under the 3-Clause BSD License.
+#    (See accompanying file LICENSE or copy at
+#   https://opensource.org/licenses/BSD-3-Clause)
+# ~~~
+
+# --------------------------------------------------------------------------------------------------
+# Meta information about the this module
+# --------------------------------------------------------------------------------------------------
+
+asap_declare_module(
+  MODULE_NAME
+  "imgui"
+  DESCRIPTION
+  "Imgui and related integration files"
+  GITHUB_REPO
+  "https://github.com/abdes/asap"
+  AUTHOR_MAINTAINER
+  "Abdessattar Sassi"
+  VERSION_MAJOR
+  "1"
+  VERSION_MINOR
+  "0"
+  VERSION_PATCH
+  "0")
+
+# ==============================================================================
+# Build instructions
+# ==============================================================================
+
+# --------------------------------------------------------------------------------------------------
+# Main module target
+# --------------------------------------------------------------------------------------------------
+
+# Hardcode `asap` in the module name as we do not want this prefix to change with the forked project
+# name.
+set(MODULE_TARGET_NAME "asap_${META_MODULE_NAME}")
+
+asap_add_library(
+  ${MODULE_TARGET_NAME}
+  STATIC
+  SHARED
+  WARNING
+  SOURCES
+  # IMgui public Headers
+  "imgui/imgui.h"
+  "imgui/backends/imgui_impl_glfw.h"
+  "imgui/backends/imgui_impl_opengl3.h"
+  # Imgui private headers
+  "imgui/imgui_internal.h"
+  "imgui/imconfig.h"
+  "imgui/imstb_rectpack.h"
+  "imgui/imstb_textedit.h"
+  "imgui/imstb_truetype.h"
+  # Imgui Sources
+  "imgui/imgui.cpp"
+  "imgui/imgui_widgets.cpp"
+  "imgui/imgui_tables.cpp"
+  "imgui/imgui_draw.cpp"
+  "imgui/imgui_demo.cpp"
+  "imgui/backends/imgui_impl_glfw.cpp"
+  "imgui/backends/imgui_impl_opengl3.cpp"
+  # Integration public headers
+  "include/KHR/khrplatform.h"
+  "include/glad/gl.h"
+  # Integration sources
+  "src/glad/gl.cpp")
+
+target_link_libraries(${MODULE_TARGET_NAME} PRIVATE asap::common PUBLIC glfw)
+
+target_include_directories(
+  ${MODULE_TARGET_NAME}
+  PUBLIC $<INSTALL_INTERFACE:include> $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/imgui
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_SOURCE_DIR}/third_party/glfw/include
+  )
+
+target_compile_definitions(${MODULE_TARGET_NAME}
+  PRIVATE
+  IMGUI_USER_CONFIG="imgui_user_config.h"
+  IMGUI_IMPL_OPENGL_LOADER_GLAD)
+
+target_compile_features(${MODULE_TARGET_NAME} PUBLIC cxx_std_11)
+
+# Add support for (optional) code quality tools
+asap_add_sanitizers(${MODULE_TARGET_NAME})
+
+# Add dll specific defines for glad
+target_compile_definitions(${MODULE_TARGET_NAME}
+  PRIVATE
+  $<$<BOOL:${BUILD_SHARED_LIBS}>:GLAD_API_CALL_EXPORT_BUILD>
+
+  PUBLIC
+    $<$<BOOL:${BUILD_SHARED_LIBS}>:GLAD_API_CALL_EXPORT>
+  )
+
+# ------------------------------------------------------------------------------
+# Tests
+# ------------------------------------------------------------------------------
+
+#if (OPTION_BUILD_TESTS)
+#  add_subdirectory(test)
+#endif()
+
+
+# --------------------------------------------------------------------------------------------------
+# API Documentation
+# --------------------------------------------------------------------------------------------------
+
+asap_with_doxygen(
+  ${META_PROJECT_NAME}_${META_MODULE_NAME} "\"Imgui Module\""
+  "\"The Imgui library and additional integration files.\""
+  "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
+
+asap_with_sphinx(${META_PROJECT_NAME}_${META_MODULE_NAME})
+
+# ==================================================================================================
+# Deployment instructions
+# ==================================================================================================
+
+# Library
+install(
+  TARGETS ${MODULE_TARGET_NAME}
+  EXPORT "${TARGETS_EXPORT_NAME}"
+  COMPONENT dev
+  RUNTIME DESTINATION ${ASAP_INSTALL_BIN} COMPONENT runtime
+  LIBRARY DESTINATION ${ASAP_INSTALL_SHARED} COMPONENT runtime
+  ARCHIVE DESTINATION ${ASAP_INSTALL_LIB} COMPONENT dev)
+
+# Header files
+install(
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/${META_MODULE_NAME}
+  DESTINATION ${ASAP_INSTALL_INCLUDE}
+  COMPONENT dev
+  FILES_MATCHING
+  PATTERN "*.h")
+
+# Imgui library Header files
+install(
+  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/imgui
+  DESTINATION ${ASAP_INSTALL_INCLUDE}
+  COMPONENT dev
+  FILES_MATCHING
+  PATTERN "*.h")
+
+# Generated header files
+install(
+  DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/${META_MODULE_NAME}
+  DESTINATION ${ASAP_INSTALL_INCLUDE}
+  COMPONENT dev)
+
+# Target config
+install(
+  EXPORT ${TARGETS_EXPORT_NAME}
+  NAMESPACE ${META_PROJECT_NAME}::
+  DESTINATION ${ASAP_INSTALL_CMAKE}/${META_MODULE_NAME}
+  COMPONENT dev)
+
+# Package configuration files
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}Config.cmake
+              ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}ConfigVersion.cmake
+        DESTINATION ${ASAP_INSTALL_CMAKE}/${META_MODULE_NAME})

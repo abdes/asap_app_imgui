@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <common/logging.h>
+#include <logging/logging.h>
 
 #include <abstract_application.h>
 #include <ui/log/sink.h>
@@ -15,7 +15,6 @@ namespace ui {
 
 
 class ApplicationBase : public AbstractApplication,
-                        asap::NonCopiable,
                         protected asap::logging::Loggable<ApplicationBase> {
  public:
   ApplicationBase() = default;

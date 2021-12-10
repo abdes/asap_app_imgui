@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <filesystem/filesystem.h>
+#include <filesystem>
 
 namespace asap {
 namespace fs {
@@ -19,7 +19,7 @@ enum class Location {
   F_THEME_SETTINGS
 };
 
-asap::filesystem::path GetPathFor(Location id);
+std::filesystem::path GetPathFor(Location id);
 
 void CreateDirectories();
 

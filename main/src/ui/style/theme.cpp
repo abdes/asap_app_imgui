@@ -13,7 +13,7 @@
 
 #include <cpptoml.h>
 
-#include <common/logging.h>
+#include <logging/logging.h>
 #include <config.h>
 #include <ui/fonts/fonts.h>
 #include <ui/fonts/material_design_icons.h>
@@ -664,7 +664,7 @@ void Theme::LoadStyle() {
   auto theme_settings =
       asap::fs::GetPathFor(asap::fs::Location::F_THEME_SETTINGS);
   auto has_config = false;
-  if (asap::filesystem::exists(theme_settings)) {
+  if (std::filesystem::exists(theme_settings)) {
     try {
       config = cpptoml::parse_file(theme_settings.string());
       ASLOG_TO_LOGGER(logger, info, "theme settings loaded from {}",

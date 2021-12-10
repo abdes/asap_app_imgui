@@ -8,10 +8,10 @@
 namespace asap {
 namespace fs {
 
-asap::filesystem::path GetPathFor(Location id) {
+std::filesystem::path GetPathFor(Location id) {
   switch (id) {
     case Location::D_USER_CONFIG: {
-      auto p = asap::filesystem::current_path();
+      auto p = std::filesystem::current_path();
       p /= ".asap";
       return p;
     }
@@ -37,11 +37,11 @@ asap::filesystem::path GetPathFor(Location id) {
     }
   }
   // Worakround only for MSVC complaining
-  return asap::filesystem::current_path().append("__unreachable__");
+  return std::filesystem::current_path().append("__unreachable__");
 }
 
 void CreateDirectories() {
-  asap::filesystem::create_directories(GetPathFor(Location::D_USER_CONFIG));
+  std::filesystem::create_directories(GetPathFor(Location::D_USER_CONFIG));
 }
 
 }  // namespace fs

@@ -8,7 +8,7 @@
 #include <cxxopts.hpp>
 
 #include <asap/asap-version.h>
-#include <common/logging.h>
+#include <logging/logging.h>
 #include <imgui_runner.h>
 #include <config.h>
 #include <application.h>

@@ -11,7 +11,7 @@
 #include <spdlog/sinks/sink.h>
 #include <spdlog/spdlog.h>
 
-#include <common/logging.h>
+#include <logging/logging.h>
 #include <imgui/imgui.h>
 
 namespace asap {

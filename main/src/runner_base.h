@@ -7,7 +7,7 @@
 
 #include <functional>  // for std::function
 
-#include <common/logging.h>
+#include <logging/logging.h>
 #include <abstract_application.h>
 
 namespace asap {

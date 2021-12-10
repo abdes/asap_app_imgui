@@ -23,7 +23,7 @@
 
 #include <cpptoml.h>
 
-#include <common/assert.h>
+#include <contract/contract.h>
 #include <application.h>
 #include <config.h>
 
@@ -487,7 +487,7 @@ void ImGuiRunner::LoadSetting() {
   auto display_settings =
       asap::fs::GetPathFor(asap::fs::Location::F_DISPLAY_SETTINGS);
   auto has_config = false;
-  if (asap::filesystem::exists(display_settings)) {
+  if (std::filesystem::exists(display_settings)) {
     try {
       config = cpptoml::parse_file(display_settings.string());
       ASLOG(info, "display settings loaded from {}", display_settings.string());

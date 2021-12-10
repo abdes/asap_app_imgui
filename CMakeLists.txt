@@ -302,7 +302,6 @@ endif()
 
 add_subdirectory(common)
 add_subdirectory(logging)
-add_subdirectory(filesystem)
 add_subdirectory(imgui)
 add_subdirectory(main)
 

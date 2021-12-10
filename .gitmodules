@@ -4,15 +4,6 @@
 [submodule "third_party/catch2"]
   path = third_party/catch2
   url = https://github.com/catchorg/Catch2.git
-[submodule "common"]
-  path = common
-  url = https://gitlab.com/absassi/asap_common.git
-[submodule "filesystem"]
-	path = filesystem
-	url = https://gitlab.com/absassi/asap_filesystem.git
-[submodule "imgui"]
-	path = imgui
-	url = https://gitlab.com/absassi/asap_imgui.git
 [submodule "third_party/glfw"]
 	path = third_party/glfw
 	url = https://github.com/glfw/glfw.git
@@ -40,3 +31,6 @@
 [submodule "doxygen/doxygen-awesome-css"]
 	path = doxygen/doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
+[submodule "imgui/imgui"]
+	path = imgui/imgui
+	url = https://github.com/ocornut/imgui.git
