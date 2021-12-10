@@ -74,7 +74,7 @@ TEST(INTERNAL_ACT_TESTSUITE_NAME, AssertAudit) {
 }
 
 } // namespace
-}  // namespace asap::contract
+} // namespace asap::contract
 
 // NOLINTEND(used-but-marked-unused)
 ASAP_DIAGNOSTIC_POP
