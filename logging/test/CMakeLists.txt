@@ -23,7 +23,7 @@ asap_add_test(
   "logging_test.cpp"
   "main.cpp"
   LINK
-  ${META_PROJECT_NAME}::logging
+  asap::logging
   gtest_main
   gmock_main
   COMMENT
