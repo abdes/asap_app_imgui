@@ -35,12 +35,12 @@ endif()
 
 # Meta information about the project
 # cmake-format: off
-set(META_PROJECT_NAME        "asap")
+set(META_PROJECT_NAME        "asap-app-imgui")
 set(META_PROJECT_DESCRIPTION "Instantly start with a fully loaded CMake project")
 set(META_AUTHOR_ORGANIZATION "The Authors")
-set(META_GITHUB_REPO         "https://github.com/abdes/asap")
-set(META_AUTHOR_DOMAIN       "https://github.com/abdes/asap")
-set(META_AUTHOR_MAINTAINER   "Abdessattar Sassi (abde.sassi gmail account)")
+set(META_GITHUB_REPO         "https://github.com/abdes/asap_app_imgui")
+set(META_AUTHOR_DOMAIN       "https://github.com/abdes")
+set(META_AUTHOR_MAINTAINER   "Abdessattar Sassi")
 set(META_VERSION_MAJOR       "0")
 set(META_VERSION_MINOR       "9")
 set(META_VERSION_PATCH       "8")
