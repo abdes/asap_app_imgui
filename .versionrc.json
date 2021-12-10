@@ -1,0 +1,46 @@
+{
+  "types": [
+    {
+      "type": "feat",
+      "section": "Features"
+    },
+    {
+      "type": "fix",
+      "section": "Bug Fixes"
+    },
+    {
+      "type": "chore",
+      "hidden": true
+    },
+    {
+      "type": "docs",
+      "hidden": true
+    },
+    {
+      "type": "style",
+      "hidden": true
+    },
+    {
+      "type": "refactor",
+      "hidden": true
+    },
+    {
+      "type": "perf",
+      "hidden": true
+    },
+    {
+      "type": "test",
+      "hidden": true
+    }
+  ],
+  "bumpFiles": [
+    {
+      "filename": "CMakeLists.txt",
+      "updater": "cmake/scripts/standard-version-updater.js"
+    }
+  ],
+  "commitUrlFormat": "http://github.com/abdes/asap/commit/{{hash}}",
+  "compareUrlFormat": "http://github.com/abdes/asap/compare/{{previousTag}}...{{currentTag}}",
+  "issueUrlFormat": "http://github.com/abdes/asap/issues/{{id}}",
+  "userUrlFormat": "http://github.com/abdes"
+}

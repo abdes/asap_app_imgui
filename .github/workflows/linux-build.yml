@@ -21,11 +21,18 @@ jobs:
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
     runs-on: ubuntu-latest
 
-    steps:
+    steps:        
+    - name: Install GCC11
+      shell: bash
+      run:  |
+            sudo apt-get update
+            sudo apt-get install gcc-11 g++-11
+            sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
+
     - name: Install additional packages
       run: |
         sudo apt-get -y install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl-dev
-        
+            
     - name: Checkout
       uses: actions/checkout@v2
       with:
@@ -38,7 +45,7 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: cmake --build ${{github.workspace}}/build --target build-all-tests --config ${{env.BUILD_TYPE}}
       
     - name: Test
       working-directory: ${{github.workspace}}/build

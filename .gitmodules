@@ -28,3 +28,15 @@
 [submodule "third_party/cpptoml"]
 	path = third_party/cpptoml
 	url = https://github.com/skystrife/cpptoml
+[submodule "third_party/fmt"]
+	path = third_party/fmt
+	url = https://github.com/fmtlib/fmt.git
+[submodule "third_party/gsl"]
+	path = third_party/gsl
+	url = https://github.com/microsoft/GSL.git
+[submodule "cmake/common"]
+	path = cmake/common
+	url = https://github.com/abdes/cmake
+[submodule "doxygen/doxygen-awesome-css"]
+	path = doxygen/doxygen-awesome-css
+	url = https://github.com/jothepro/doxygen-awesome-css.git
