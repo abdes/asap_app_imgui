@@ -62,6 +62,10 @@ target_include_directories(
          $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
+# logging comes directly from asap and is usually kept as is. It is more convenient to simply use it
+# as asap::logging
+add_library(asap::${META_MODULE_NAME} ALIAS ${MODULE_TARGET_NAME})
+
 asap_add_sanitizers(${MODULE_TARGET_NAME})
 
 # --------------------------------------------------------------------------------------------------

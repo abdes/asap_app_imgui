@@ -22,7 +22,7 @@ asap_add_test(
   "flag_ops_test.cpp"
   "main.cpp"
   LINK
-  ${META_PROJECT_NAME}::common
+  asap::common
   gtest_main
   gmock_main
   COMMENT

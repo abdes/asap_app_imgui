@@ -76,6 +76,9 @@ target_include_directories(
 
 target_compile_features(${MODULE_TARGET_NAME} PUBLIC cxx_std_17)
 
+# common comes directly from asap and is usually kept as is. It is more convenient to simply use it
+# as asap::common
+add_library(asap::${META_MODULE_NAME} ALIAS ${MODULE_TARGET_NAME})
 
 # Add support for (optional) code quality tools
 asap_add_sanitizers(${MODULE_TARGET_NAME})

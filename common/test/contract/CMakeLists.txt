@@ -40,7 +40,7 @@ asap_add_test(
   # sources
   "contract_ut_gtest_test.cpp"
   LINK
-  ${META_PROJECT_NAME}::common
+  asap::common
   gtest
   gmock
   COMMENT
@@ -73,7 +73,7 @@ asap_add_test(
   "test_helper.cpp"
   "../main.cpp"
   LINK
-  ${META_PROJECT_NAME}::common
+  asap::common
   gtest
   gmock
   COMMENT
@@ -105,7 +105,7 @@ asap_add_test(
   "test_helper.cpp"
   "../main.cpp"
   LINK
-  ${META_PROJECT_NAME}::common
+  asap::common
   gtest
   gmock
   COMMENT
@@ -136,7 +136,7 @@ asap_add_test(
   "test_helper.cpp"
   "../main.cpp"
   LINK
-  ${META_PROJECT_NAME}::common
+  asap::common
   gtest
   gmock
   COMMENT
