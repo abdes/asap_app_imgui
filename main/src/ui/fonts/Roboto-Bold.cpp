@@ -1,4 +1,11 @@
-// File: 'Roboto-Bold.ttf' (170760 bytes)
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
+//    Distributed under the 3-Clause BSD License.
+//    (See accompanying file LICENSE or copy at
+//   https://opensource.org/licenses/BSD-3-Clause)
+
+// File:  'Robotto-Bold.ttf' (170760 bytes)
 // Exported using binary_to_compressed_c.cpp
 
 // Designed by: Christian Robertson
@@ -8,10 +15,9 @@
 
 #include "fonts.h"
 
-namespace asap {
-namespace debug {
-namespace ui {
+namespace asap::debug::ui {
 
+// clang-format off
 const unsigned int Fonts::ROBOTO_BOLD_COMPRESSED_DATA[120828 / 4] = {
     0x0000bc57, 0x00000000, 0x089b0200, 0x00000400, 0x00010025, 0x82120000,
     0x045e0804, 0x44472000, 0x42b44645, 0x020082b0, 0x0000e41d, 0x50476202,
@@ -5049,7 +5055,6 @@ const unsigned int Fonts::ROBOTO_BOLD_COMPRESSED_DATA[120828 / 4] = {
     0x73007a00, 0x3f027400, 0x41024002, 0x43024202, 0x02004402, 0x14000100,
     0x00001d00, 0x3f04fa05, 0x00009406,
 };
+// clang-format on
 
-}  // namespace ui
-}  // namespace debug
-}  // namespace asap
+} // namespace asap::debug::ui

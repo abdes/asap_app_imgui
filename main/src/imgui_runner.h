@@ -1,4 +1,6 @@
-//    Copyright The asap Project Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
@@ -13,7 +15,7 @@ struct GLFWmonitor;
 namespace asap {
 
 class ImGuiRunner : public RunnerBase {
- public:
+public:
   ImGuiRunner(AbstractApplication &app, shutdown_function_type func);
 
   ~ImGuiRunner() override = default;
@@ -25,8 +27,7 @@ class ImGuiRunner : public RunnerBase {
 
   void Windowed(int width, int height, char const *title);
   void FullScreenWindowed(char const *title, int monitor);
-  void FullScreen(int width, int height, char const *title, int monitor,
-                  int refresh_rate);
+  void FullScreen(int width, int height, char const *title, int monitor, int refresh_rate);
 
   void EnableVsync(bool state = true);
   void MultiSample(int samples);
@@ -35,18 +36,26 @@ class ImGuiRunner : public RunnerBase {
   void Run() override;
 
   std::string const &GetWindowTitle() const;
-  bool IsFullScreen() const { return full_screen_; };
-  bool IsWindowed() const { return windowed_; };
+  bool IsFullScreen() const {
+    return full_screen_;
+  };
+  bool IsWindowed() const {
+    return windowed_;
+  };
   GLFWmonitor *GetMonitor() const;
   int GetMonitorId() const;
   int RefreshRate() const;
   void GetWindowSize(int size[2]) const;
   void GetWindowPosition(int position[2]) const;
 
-  bool Vsync() const { return vsync_; };
-  int MultiSample() const { return samples_; }
+  bool Vsync() const {
+    return vsync_;
+  };
+  int MultiSample() const {
+    return samples_;
+  }
 
- private:
+private:
   void InitGraphics();
   void SetupContext();
   void InitImGui();
@@ -64,4 +73,4 @@ class ImGuiRunner : public RunnerBase {
   mutable int saved_position_[2]{-1, -1};
 };
 
-}  // namespace asap
+} // namespace asap

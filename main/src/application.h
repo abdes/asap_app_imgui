@@ -1,4 +1,6 @@
-//    Copyright The Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
@@ -13,9 +15,10 @@ class Shader;
 
 namespace asap {
 
- class Application final : public asap::ui::ApplicationBase {
- public:
-  Application() : asap::ui::ApplicationBase() {}
+class Application final : public asap::ui::ApplicationBase {
+public:
+  Application() : asap::ui::ApplicationBase() {
+  }
 
   /// Not move constructible
   Application(Application &&) = delete;
@@ -26,17 +29,19 @@ namespace asap {
 
   bool Draw() final;
 
- protected:
+protected:
   void AfterInit() override;
-  void DrawInsideMainMenu() override {}
-  void DrawInsideStatusBar(float /*width*/, float /*height*/) override {}
+  void DrawInsideMainMenu() override {
+  }
+  void DrawInsideStatusBar(float /*width*/, float /*height*/) override {
+  }
   void BeforeShutDown() override;
 
-  private:
-   GLuint VBO = 0, VAO = 0;
-   GLuint frameBuffer_ = 0;
-   GLuint texColorBuffer_ = 0;
-   Shader *ourShader_{nullptr};
- };
+private:
+  GLuint VBO = 0, VAO = 0;
+  GLuint frameBuffer_ = 0;
+  GLuint texColorBuffer_ = 0;
+  Shader *ourShader_{nullptr};
+};
 
-}  // namespace asap
+} // namespace asap

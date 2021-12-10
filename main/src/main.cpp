@@ -1,4 +1,6 @@
-//    Copyright The Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
@@ -7,15 +9,13 @@
 
 #include <cxxopts.hpp>
 
-#include <asap/asap-version.h>
-#include <logging/logging.h>
-#include <imgui_runner.h>
-#include <config.h>
 #include <application.h>
-
+#include <asap/asap-version.h>
+#include <config.h>
+#include <imgui_runner.h>
+#include <logging/logging.h>
 
 using asap::ImGuiRunner;
-
 
 int main(int argc, char **argv) {
   auto &logger = asap::logging::Registry::GetLogger("main");
@@ -29,11 +29,12 @@ int main(int argc, char **argv) {
     // TODO: UTF-8 to be tested on Windows
     cxxopts::Options options(ASAP_PROJECT_NAME, ASAP_PROJECT_DESCRIPTION);
     options.add_options()
+        // clang-format off
       ("v,version", "Show version")
       ("h,help", "Show usage information")
       ("t,test", "Test option with value", cxxopts::value<std::string>())
-      ("c,chinese", "中文帮助文本", cxxopts::value<std::string>())
-      ;
+        // clang-format on
+        ;
     auto result = options.parse(argc, argv);
 
     if (result.count("help")) {
@@ -51,7 +52,6 @@ int main(int argc, char **argv) {
       std::cout << "test = " << result["test"].as<std::string>() << std::endl;
     }
     // End Test code
-
 
     ASLOG_TO_LOGGER(logger, info, "starting ImGui application...");
     asap::Application app;

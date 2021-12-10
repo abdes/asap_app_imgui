@@ -1,11 +1,13 @@
-//    Copyright The asap Project Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-#include <chrono>   // for sleep timeout
-#include <csignal>  // for signal handling
-#include <thread>   // for access to this thread
+#include <chrono>  // for sleep timeout
+#include <csignal> // for signal handling
+#include <thread>  // for access to this thread
 
 #include <imgui_runner.h>
 
@@ -23,9 +25,9 @@
 
 #include <cpptoml.h>
 
-#include <contract/contract.h>
 #include <application.h>
 #include <config.h>
+#include <contract/contract.h>
 
 namespace {
 void glfw_error_callback(int error, const char *description) {
@@ -35,14 +37,15 @@ void glfw_error_callback(int error, const char *description) {
 
 volatile std::sig_atomic_t gSignalInterrupt_;
 
-void SignalHandler(int signal) { gSignalInterrupt_ = signal; }
+void SignalHandler(int signal) {
+  gSignalInterrupt_ = signal;
+}
 
-}  // namespace
+} // namespace
 
 namespace asap {
 
-ImGuiRunner::ImGuiRunner(AbstractApplication &app,
-                         RunnerBase::shutdown_function_type func)
+ImGuiRunner::ImGuiRunner(AbstractApplication &app, RunnerBase::shutdown_function_type func)
     : RunnerBase(app, std::move(func)) {
   InitGraphics();
   LoadSetting();
@@ -61,21 +64,21 @@ void ImGuiRunner::InitGraphics() {
   // GL 3.2
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);  // Required on Mac
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);           // Required on Mac
 #elif _WIN32
   // GL 3.0 (as per ImGui demo)
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
   // glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+
   // only
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);  // 3.0+ only
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // 3.0+ only
 #else
   // GL 3.2
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); // 3.2+ only
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);           // 3.0+ only
 #endif
 
   ASLOG(debug, "  GLFW init done");
@@ -143,23 +146,21 @@ void ImGuiRunner::Windowed(int width, int height, char const *title) {
   full_screen_ = false;
 
   if (!window_) {
-    ASLOG(debug, "  starting in 'Windowed' mode: w={}, h={}, t='{}'", width,
-          height, title);
-    glfwWindowHint(GLFW_SAMPLES, MultiSample());  // multisampling
+    ASLOG(debug, "  starting in 'Windowed' mode: w={}, h={}, t='{}'", width, height, title);
+    glfwWindowHint(GLFW_SAMPLES, MultiSample()); // multisampling
     window_ = glfwCreateWindow(width, height, title, nullptr, nullptr);
     if (!window_) {
       glfwTerminate();
       exit(EXIT_FAILURE);
     }
     SetupContext();
-    glfwSwapInterval(Vsync() ? 1 : 0);  // Enable vsync
+    glfwSwapInterval(Vsync() ? 1 : 0); // Enable vsync
     InitImGui();
   } else {
-    ASLOG(debug, "setting 'Windowed' mode: w={}, h={}, t={}", width, height,
-          title);
+    ASLOG(debug, "setting 'Windowed' mode: w={}, h={}, t={}", width, height, title);
     // Restore the window position when you switch to windowed mode
-    glfwSetWindowMonitor(window_, nullptr, saved_position_[0],
-                         saved_position_[1], width, height, 60);
+    glfwSetWindowMonitor(
+        window_, nullptr, saved_position_[0], saved_position_[1], width, height, 60);
     glfwSetWindowTitle(window_, title);
   }
 }
@@ -177,14 +178,13 @@ GLFWmonitor *GetMonitorByNumber(int monitor) {
     else {
       auto &logger = logging::Registry::GetLogger("main");
       ASLOG_TO_LOGGER(
-          logger, error,
-          "requested monitor {} is not connected, using primary monitor");
+          logger, error, "requested monitor {} is not connected, using primary monitor");
       the_monitor = monitors[0];
     }
   }
   return the_monitor;
 }
-}  // namespace
+} // namespace
 
 void ImGuiRunner::FullScreenWindowed(char const *title, int monitor) {
   window_title_ = title;
@@ -195,67 +195,61 @@ void ImGuiRunner::FullScreenWindowed(char const *title, int monitor) {
   const GLFWvidmode *mode = glfwGetVideoMode(the_monitor);
   if (!window_) {
     ASLOG(debug,
-          "  starting in 'Full Screen Windowed' mode: w={}, h={}, r={}, "
-          "t='{}', m={}",
-          mode->width, mode->height, mode->refreshRate, title, monitor);
+        "  starting in 'Full Screen Windowed' mode: w={}, h={}, r={}, "
+        "t='{}', m={}",
+        mode->width, mode->height, mode->refreshRate, title, monitor);
     glfwWindowHint(GLFW_RED_BITS, mode->redBits);
     glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
     glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
     glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
-    glfwWindowHint(GLFW_SAMPLES, MultiSample());  // multisampling
-    window_ = glfwCreateWindow(mode->width, mode->height, title, the_monitor,
-                               nullptr);
+    glfwWindowHint(GLFW_SAMPLES, MultiSample()); // multisampling
+    window_ = glfwCreateWindow(mode->width, mode->height, title, the_monitor, nullptr);
     if (!window_) {
       glfwTerminate();
       exit(EXIT_FAILURE);
     }
     SetupContext();
-    glfwSwapInterval(Vsync() ? 1 : 0);  // Enable vsync
+    glfwSwapInterval(Vsync() ? 1 : 0); // Enable vsync
     InitImGui();
   } else {
-    ASLOG(
-        debug,
-        "setting 'Full Screen Windowed' mode: w={}, h={}, r= {}, t='{}', m={}",
+    ASLOG(debug, "setting 'Full Screen Windowed' mode: w={}, h={}, r= {}, t='{}', m={}",
         mode->width, mode->height, mode->refreshRate, title, monitor);
 
     // Save the window position
     GetWindowPosition(saved_position_);
 
-    glfwSetWindowMonitor(window_, the_monitor, 0, 0, mode->width, mode->height,
-                         mode->refreshRate);
+    glfwSetWindowMonitor(window_, the_monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
     glfwSetWindowTitle(window_, title);
   }
 }
-void ImGuiRunner::FullScreen(int width, int height, char const *title,
-                             int monitor, int refresh_rate) {
+void ImGuiRunner::FullScreen(
+    int width, int height, char const *title, int monitor, int refresh_rate) {
   window_title_ = title;
   windowed_ = false;
   full_screen_ = true;
 
   GLFWmonitor *the_monitor = GetMonitorByNumber(monitor);
   if (!window_) {
-    ASLOG(debug,
-          "  starting in 'Full Screen' mode: w={}, h={}, t='{}', m={}, r={}",
-          width, height, title, monitor, refresh_rate);
+    ASLOG(debug, "  starting in 'Full Screen' mode: w={}, h={}, t='{}', m={}, r={}", width, height,
+        title, monitor, refresh_rate);
     glfwWindowHint(GLFW_REFRESH_RATE, refresh_rate);
-    glfwWindowHint(GLFW_SAMPLES, MultiSample());  // multisampling
+    glfwWindowHint(GLFW_SAMPLES, MultiSample()); // multisampling
     window_ = glfwCreateWindow(width, height, title, the_monitor, nullptr);
     if (!window_) {
       glfwTerminate();
       exit(EXIT_FAILURE);
     }
     SetupContext();
-    glfwSwapInterval(Vsync() ? 1 : 0);  // Enable vsync
+    glfwSwapInterval(Vsync() ? 1 : 0); // Enable vsync
     InitImGui();
   } else {
-    ASLOG(debug, "setting 'Full Screen' mode: w={}, h={}, t='{}', m={}, r={}",
-          width, height, title, monitor, refresh_rate);
+    ASLOG(debug, "setting 'Full Screen' mode: w={}, h={}, t='{}', m={}, r={}", width, height, title,
+        monitor, refresh_rate);
 
     // Save the window position
     GetWindowPosition(saved_position_);
 
-    glfwSetWindowMonitor(window_, the_monitor, 0, 0, width, height,
-                         refresh_rate);
+    glfwSetWindowMonitor(window_, the_monitor, 0, 0, width, height, refresh_rate);
     glfwSetWindowTitle(window_, title);
   }
 }
@@ -321,7 +315,8 @@ void ImGuiRunner::Run() {
     // Not doing so will cause the docking system to lose its mind
     int size[2];
     GetWindowSize(size);
-    if (size[0] == 0 || size[1] == 0) continue;
+    if (size[0] == 0 || size[1] == 0)
+      continue;
 
     // Start the ImGui frame
     ImGui_ImplOpenGL3_NewFrame();
@@ -361,11 +356,14 @@ void ImGuiRunner::EnableVsync(bool state) {
   vsync_ = state;
 }
 void ImGuiRunner::MultiSample(int samples) {
-  if (samples < 0 || samples > 4) samples = GLFW_DONT_CARE;
+  if (samples < 0 || samples > 4)
+    samples = GLFW_DONT_CARE;
   samples_ = samples;
   glfwWindowHint(GLFW_SAMPLES, MultiSample());
 }
-std::string const &ImGuiRunner::GetWindowTitle() const { return window_title_; }
+std::string const &ImGuiRunner::GetWindowTitle() const {
+  return window_title_;
+}
 void ImGuiRunner::SetWindowTitle(char const *title) {
   if (window_) {
     window_title_ = title;
@@ -375,18 +373,15 @@ void ImGuiRunner::SetWindowTitle(char const *title) {
   }
 }
 GLFWmonitor *ImGuiRunner::GetMonitor() const {
-  ASAP_ASSERT(window_ &&
-              "don't call GetMonitor() before the window is created");
+  ASAP_ASSERT(window_ && "don't call GetMonitor() before the window is created");
   return glfwGetWindowMonitor(window_);
 }
 void ImGuiRunner::GetWindowSize(int size[2]) const {
-  ASAP_ASSERT(window_ &&
-              "don't call GetWindowSize() before the window is created");
+  ASAP_ASSERT(window_ && "don't call GetWindowSize() before the window is created");
   glfwGetWindowSize(window_, &size[0], &size[1]);
 }
 void ImGuiRunner::GetWindowPosition(int position[2]) const {
-  ASAP_ASSERT(window_ &&
-              "don't call GetMonitor() before the window is created");
+  ASAP_ASSERT(window_ && "don't call GetMonitor() before the window is created");
   glfwGetWindowPos(window_, &position[0], &position[1]);
 }
 
@@ -426,12 +421,10 @@ void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
       } else {
         auto size = display->get_table("size");
         if (!size->contains("width")) {
-          ASLOG_TO_LOGGER(logger, warn,
-                          "missing 'display/size/width' in config");
+          ASLOG_TO_LOGGER(logger, warn, "missing 'display/size/width' in config");
         }
         if (!size->contains("height")) {
-          ASLOG_TO_LOGGER(logger, warn,
-                          "missing 'display/size/height' in config");
+          ASLOG_TO_LOGGER(logger, warn, "missing 'display/size/height' in config");
         }
       }
       if (!display->contains("title")) {
@@ -441,8 +434,7 @@ void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
         ASLOG_TO_LOGGER(logger, warn, "missing 'display/monitor' in config");
       }
       if (!display->contains("refresh-rate")) {
-        ASLOG_TO_LOGGER(logger, warn,
-                        "missing 'display/refresh-rate' in config");
+        ASLOG_TO_LOGGER(logger, warn, "missing 'display/refresh-rate' in config");
       }
     } else if (mode == "Full Screen Windowed") {
       if (!display->contains("title")) {
@@ -457,12 +449,10 @@ void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
       } else {
         auto size = display->get_table("size");
         if (!size->contains("width")) {
-          ASLOG_TO_LOGGER(logger, warn,
-                          "missing 'display/size/width' in config");
+          ASLOG_TO_LOGGER(logger, warn, "missing 'display/size/width' in config");
         }
         if (!size->contains("height")) {
-          ASLOG_TO_LOGGER(logger, warn,
-                          "missing 'display/size/height' in config");
+          ASLOG_TO_LOGGER(logger, warn, "missing 'display/size/height' in config");
         }
       }
       if (!display->contains("title")) {
@@ -480,12 +470,11 @@ void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
     ASLOG_TO_LOGGER(logger, warn, "missing 'display/vsync' in config");
   }
 }
-}  // namespace
+} // namespace
 
 void ImGuiRunner::LoadSetting() {
   std::shared_ptr<cpptoml::table> config;
-  auto display_settings =
-      asap::fs::GetPathFor(asap::fs::Location::F_DISPLAY_SETTINGS);
+  auto display_settings = asap::fs::GetPathFor(asap::fs::Location::F_DISPLAY_SETTINGS);
   auto has_config = false;
   if (std::filesystem::exists(display_settings)) {
     try {
@@ -493,8 +482,7 @@ void ImGuiRunner::LoadSetting() {
       ASLOG(info, "display settings loaded from {}", display_settings.string());
       has_config = true;
     } catch (std::exception const &ex) {
-      ASLOG(error, "error () while loading settings from {}", ex.what(),
-            display_settings.string());
+      ASLOG(error, "error () while loading settings from {}", ex.what(), display_settings.string());
     }
   } else {
     ASLOG(info, "file {} does not exist", display_settings.string());
@@ -509,8 +497,7 @@ void ImGuiRunner::LoadSetting() {
     if (display->contains("multi-sampling")) {
       MultiSample(*(display->get_as<int>("multi-sampling")));
     }
-    auto mode =
-        display->get_as<std::string>("mode").value_or("Full Screen Windowed");
+    auto mode = display->get_as<std::string>("mode").value_or("Full Screen Windowed");
     if (mode == "Full Screen") {
       auto size = display->get_table("size");
       if (size) {
@@ -522,16 +509,12 @@ void ImGuiRunner::LoadSetting() {
         }
       }
       FullScreen(width, height,
-                 display->get_as<std::string>("title")
-                     .value_or("ASAP Application")
-                     .c_str(),
-                 display->get_as<int>("monitor").value_or(0),
-                 display->get_as<int>("refresh-rate").value_or(0));
+          display->get_as<std::string>("title").value_or("ASAP Application").c_str(),
+          display->get_as<int>("monitor").value_or(0),
+          display->get_as<int>("refresh-rate").value_or(0));
     } else if (mode == "Full Screen Windowed") {
-      FullScreenWindowed(display->get_as<std::string>("title")
-                             .value_or("ASAP Application")
-                             .c_str(),
-                         display->get_as<int>("monitor").value_or(0));
+      FullScreenWindowed(display->get_as<std::string>("title").value_or("ASAP Application").c_str(),
+          display->get_as<int>("monitor").value_or(0));
     } else if (mode == "Windowed") {
       auto size = display->get_table("size");
       if (size) {
@@ -543,9 +526,7 @@ void ImGuiRunner::LoadSetting() {
         }
       }
       Windowed(width, height,
-               display->get_as<std::string>("title")
-                   .value_or("ASAP Application")
-                   .c_str());
+          display->get_as<std::string>("title").value_or("ASAP Application").c_str());
     } else {
       Windowed(width, height, "ASAP Application");
     }
@@ -597,12 +578,11 @@ void ImGuiRunner::SaveSetting() {
 
   root->insert("display", display_settings);
 
-  auto settings_path =
-      asap::fs::GetPathFor(asap::fs::Location::F_DISPLAY_SETTINGS);
+  auto settings_path = asap::fs::GetPathFor(asap::fs::Location::F_DISPLAY_SETTINGS);
   auto ofs = std::ofstream();
   ofs.open(settings_path.string());
   ofs << (*root) << std::endl;
   ofs.close();
 }
 
-}  // namespace asap
+} // namespace asap

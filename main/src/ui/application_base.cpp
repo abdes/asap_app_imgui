@@ -1,11 +1,13 @@
-//    Copyright The Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
 #include <ui/application_base.h>
 
-#include <cmath>  // for rounding frame rate
+#include <cmath> // for rounding frame rate
 #include <sstream>
 
 #include <GLFW/glfw3.h>
@@ -17,8 +19,7 @@
 #include <ui/log/sink.h>
 #include <ui/style/theme.h>
 
-namespace asap {
-namespace ui {
+namespace asap::ui {
 
 // TODO: cleanup this from a c== point of view
 static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
@@ -66,21 +67,18 @@ bool ApplicationBase::Draw() {
     // We are using the ImGuiWindowFlags_NoDocking flag to make the parent
     // window not dockable into, because it would be confusing to have two
     // docking targets within each others.
-    ImGuiWindowFlags window_flags =
-        ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
     if (opt_fullscreen) {
       auto dockSpaceSize = viewport->Size;
-      dockSpaceSize.y -= 16.0f;  // remove the status bar
+      dockSpaceSize.y -= 16.0f; // remove the status bar
       ImGui::SetNextWindowPos(viewport->Pos);
       ImGui::SetNextWindowSize(dockSpaceSize);
       ImGui::SetNextWindowViewport(viewport->ID);
       ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
       ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-      window_flags |= ImGuiWindowFlags_NoTitleBar |
-                      ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-                      ImGuiWindowFlags_NoMove;
-      window_flags |=
-          ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+      window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
+                      ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+      window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
     }
 
     // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render
@@ -93,7 +91,8 @@ bool ApplicationBase::Draw() {
     ImGui::Begin("DockSpace Demo", nullptr, window_flags);
     ImGui::PopStyleVar();
 
-    if (opt_fullscreen) ImGui::PopStyleVar(2);
+    if (opt_fullscreen)
+      ImGui::PopStyleVar(2);
 
     // Dockspace
     ImGuiIO &io = ImGui::GetIO();
@@ -104,16 +103,21 @@ bool ApplicationBase::Draw() {
       // TODO: emit a log message
     }
 
-	//
-	// Status bar
-	//
+    //
+    // Status bar
+    //
     DrawStatusBar(viewport->Size.x, 16.0f, 0.0f, viewport->Size.y - menu_height);
 
-    if (show_logs_) DrawLogView();
-    if (show_settings_) DrawSettings();
-    if (show_docks_debug_) DrawDocksDebug();
-    if (show_imgui_metrics_) DrawImGuiMetrics();
-    if (show_imgui_demos_) DrawImGuiDemos();
+    if (show_logs_)
+      DrawLogView();
+    if (show_settings_)
+      DrawSettings();
+    if (show_docks_debug_)
+      DrawDocksDebug();
+    if (show_imgui_metrics_)
+      DrawImGuiMetrics();
+    if (show_imgui_demos_)
+      DrawImGuiDemos();
   }
 
   ImGui::End();
@@ -140,15 +144,12 @@ float ApplicationBase::DrawMainMenu() {
       // depth/z control.
       // ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 
-      if (ImGui::MenuItem("Flag: NoSplit", "",
-                          (opt_flags & ImGuiDockNodeFlags_NoSplit) != 0))
+      if (ImGui::MenuItem("Flag: NoSplit", "", (opt_flags & ImGuiDockNodeFlags_NoSplit) != 0))
         opt_flags ^= ImGuiDockNodeFlags_NoSplit;
-      if (ImGui::MenuItem(
-              "Flag: NoDockingInCentralNode", "",
+      if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "",
               (opt_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))
         opt_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
-      if (ImGui::MenuItem(
-              "Flag: PassthruDockspace", "",
+      if (ImGui::MenuItem("Flag: PassthruDockspace", "",
               (opt_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))
         opt_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
 
@@ -159,8 +160,7 @@ float ApplicationBase::DrawMainMenu() {
       if (ImGui::MenuItem("Show Logs", "CTRL+SHIFT+L", &show_logs_)) {
         DrawLogView();
       }
-      if (ImGui::MenuItem("Show Docks Debug", "CTRL+SHIFT+D",
-                          &show_docks_debug_)) {
+      if (ImGui::MenuItem("Show Docks Debug", "CTRL+SHIFT+D", &show_docks_debug_)) {
         DrawDocksDebug();
       }
       if (ImGui::MenuItem("Show Settings", "CTRL+SHIFT+S", &show_settings_)) {
@@ -169,12 +169,10 @@ float ApplicationBase::DrawMainMenu() {
 
       ImGui::Separator();
 
-      if (ImGui::MenuItem("Show ImGui Metrics", "CTRL+SHIFT+M",
-                          &show_imgui_metrics_)) {
+      if (ImGui::MenuItem("Show ImGui Metrics", "CTRL+SHIFT+M", &show_imgui_metrics_)) {
         DrawImGuiMetrics();
       }
-      if (ImGui::MenuItem("Show ImGui Demos", "CTRL+SHIFT+G",
-                          &show_imgui_demos_)) {
+      if (ImGui::MenuItem("Show ImGui Demos", "CTRL+SHIFT+G", &show_imgui_demos_)) {
         DrawImGuiDemos();
       }
 
@@ -188,15 +186,13 @@ float ApplicationBase::DrawMainMenu() {
   return menu_height;
 }
 
-void ApplicationBase::DrawStatusBar(float width, float height, float pos_x,
-                                    float pos_y) {
+void ApplicationBase::DrawStatusBar(float width, float height, float pos_x, float pos_y) {
   // Draw status bar (no docking)
   ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_Always);
   ImGui::SetNextWindowPos(ImVec2(pos_x, pos_y), ImGuiCond_Always);
   ImGui::Begin("statusbar", nullptr,
-               ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoSavedSettings |
-                   ImGuiWindowFlags_NoBringToFrontOnFocus |
-                   ImGuiWindowFlags_NoResize);
+      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoSavedSettings |
+          ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoResize);
 
   // Call the derived class to add stuff to the status bar
   DrawInsideStatusBar(width - 45.0f, height);
@@ -219,7 +215,9 @@ void ApplicationBase::DrawLogView() {
   ImGui::End();
 }
 
-void ApplicationBase::DrawImGuiMetrics() { ImGui::ShowMetricsWindow(); }
+void ApplicationBase::DrawImGuiMetrics() {
+  ImGui::ShowMetricsWindow();
+}
 
 void ApplicationBase::DrawImGuiDemos() {
   ImGui::ShowDemoWindow(&show_imgui_demos_);
@@ -229,18 +227,15 @@ namespace {
 
 bool DrawDisplaySettingsTitle(ImGuiRunner *runner, char title[80]) {
   auto changed = false;
-  if (ImGui::InputText("Window Title", title, 79,
-                       ImGuiInputTextFlags_EnterReturnsTrue)) {
+  if (ImGui::InputText("Window Title", title, 79, ImGuiInputTextFlags_EnterReturnsTrue)) {
     changed = runner->GetWindowTitle() != title;
   }
   return changed;
 }
 
 bool DrawDisplaySettingsMode(int &display_mode) {
-  static const char *mode_items[] = {"Windowed", "Full Screen",
-                                     "Full Screen Windowed"};
-  auto changed = ImGui::Combo("Display Mode", &display_mode, mode_items,
-                              IM_ARRAYSIZE(mode_items));
+  static const char *mode_items[] = {"Windowed", "Full Screen", "Full Screen Windowed"};
+  auto changed = ImGui::Combo("Display Mode", &display_mode, mode_items, IM_ARRAYSIZE(mode_items));
   return changed;
 }
 
@@ -270,17 +265,15 @@ bool DrawDisplaySettingsWindowSize(ImGuiRunner *runner, int size[2]) {
   auto input_changed = ImGui::InputInt2("Size", size);
   int current_pos[2];
   runner->GetWindowSize(current_pos);
-  auto changed = input_changed || (current_pos[0] != size[0]) ||
-                 (current_pos[1] != size[1]);
+  auto changed = input_changed || (current_pos[0] != size[0]) || (current_pos[1] != size[1]);
   return changed;
 }
 
-bool DrawDisplaySettingsResolution(GLFWmonitor *monitor,
-                                   const GLFWvidmode *&resolution) {
+bool DrawDisplaySettingsResolution(GLFWmonitor *monitor, const GLFWvidmode *&resolution) {
   auto changed = false;
   auto ostr = std::ostringstream();
-  ostr << resolution->width << 'x' << resolution->height << " @ "
-       << resolution->refreshRate << " Hz";
+  ostr << resolution->width << 'x' << resolution->height << " @ " << resolution->refreshRate
+       << " Hz";
   auto current_mode = ostr.str();
   if (ImGui::BeginCombo("Resolution", ostr.str().c_str())) {
     int count = 0;
@@ -310,7 +303,8 @@ int GetMonitorIndex(GLFWmonitor *monitor) {
   int count = 0;
   GLFWmonitor **monitors = glfwGetMonitors(&count);
   for (int n = 0; n < count; n++) {
-    if (monitors[n] == monitor) return n;
+    if (monitors[n] == monitor)
+      return n;
   }
   return 0;
 }
@@ -344,7 +338,8 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
     runner->GetWindowSize(size);
 
     monitor = runner->GetMonitor();
-    if (!monitor) monitor = glfwGetPrimaryMonitor();
+    if (!monitor)
+      monitor = glfwGetPrimaryMonitor();
 
     resolution = glfwGetVideoMode(monitor);
 
@@ -357,15 +352,13 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
 
   // Toolbar
   ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {5.0f, 2.0f});
-  ImGui::PushStyleColor(
-      ImGuiCol_ChildBg,
-      (pending_changes) ? ImGui::GetStyleColorVec4(ImGuiCol_PlotLinesHovered)
-                        : ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
+  ImGui::PushStyleColor(ImGuiCol_ChildBg, (pending_changes)
+                                              ? ImGui::GetStyleColorVec4(ImGuiCol_PlotLinesHovered)
+                                              : ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
 
-  ImGui::BeginChild("Display Settings Toolbar",
-                    {ImGui::GetContentRegionAvailWidth(), 20}, true,
-                    ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar |
-                        ImGuiWindowFlags_NoScrollWithMouse);
+  ImGui::BeginChild("Display Settings Toolbar", {ImGui::GetContentRegionAvailWidth(), 20}, true,
+      ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar |
+          ImGuiWindowFlags_NoScrollWithMouse);
 
   Font font(Font::FAMILY_PROPORTIONAL);
   font.Italic().Light().LargeSize();
@@ -392,17 +385,17 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
       runner->EnableVsync(vsync);
       runner->MultiSample(samples);
       switch (display_mode) {
-        case 0:
-          runner->Windowed(size[0], size[1], title);
-          break;
-        case 1:
-          runner->FullScreen(resolution->width, resolution->height, title,
-                             GetMonitorIndex(monitor), resolution->refreshRate);
-          break;
-        case 2:
-          runner->FullScreenWindowed(title, GetMonitorIndex(monitor));
-          break;
-        default:;
+      case 0:
+        runner->Windowed(size[0], size[1], title);
+        break;
+      case 1:
+        runner->FullScreen(resolution->width, resolution->height, title, GetMonitorIndex(monitor),
+            resolution->refreshRate);
+        break;
+      case 2:
+        runner->FullScreenWindowed(title, GetMonitorIndex(monitor));
+        break;
+      default:;
       }
       runner->SetWindowTitle(title);
       pending_changes = false;
@@ -460,14 +453,11 @@ void ShowStyleSettings() {
   // Toolbar
   {
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {5.0f, 2.0f});
-    ImGui::PushStyleColor(ImGuiCol_ChildBg,
-                          ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
     {
-      ImGui::BeginChild("Style Settings Toolbar",
-                        {ImGui::GetContentRegionAvailWidth(), 20}, true,
-                        ImGuiWindowFlags_NoTitleBar |
-                            ImGuiWindowFlags_NoScrollbar |
-                            ImGuiWindowFlags_NoScrollWithMouse);
+      ImGui::BeginChild("Style Settings Toolbar", {ImGui::GetContentRegionAvailWidth(), 20}, true,
+          ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar |
+              ImGuiWindowFlags_NoScrollWithMouse);
       {
         if (ImGui::SmallButton("Load Default Style")) {
           Theme::LoadDefaultStyle();
@@ -504,7 +494,7 @@ void ShowStyleSettings() {
   ImGui::ShowStyleEditor();
 }
 
-}  // namespace
+} // namespace
 
 void ApplicationBase::DrawSettings() {
   if (ImGui::Begin("Settings", &show_settings_)) {
@@ -528,10 +518,8 @@ void ApplicationBase::DrawSettings() {
 
 void ApplicationBase::DrawDocksDebug() {
   if (ImGui::Begin("Docks", &show_docks_debug_)) {
-    ImGui::LabelText(
-        "TODO",
-        "Get docking information from ImGui and populate this once the ImGui "
-        "programmatic access to docking is published as a stable API");
+    ImGui::LabelText("TODO", "Get docking information from ImGui and populate this once the ImGui "
+                             "programmatic access to docking is published as a stable API");
     // TODO: generate docking information
   }
   ImGui::End();
@@ -576,5 +564,4 @@ void ApplicationBase::DrawDocksDebug() {
 
 #endif
 
-}  // namespace ui
-}  // namespace asap
+} // namespace asap::ui

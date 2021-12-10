@@ -1,4 +1,6 @@
-//    Copyright The asap Project Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
@@ -7,20 +9,19 @@
 #include <cstring>
 #include <fstream>
 #include <map>
-#include <mutex>  // for call_once()
+#include <mutex> // for call_once()
 
 #include <imgui/imgui.h>
 
 #include <cpptoml.h>
 
-#include <logging/logging.h>
 #include <config.h>
+#include <logging/logging.h>
 #include <ui/fonts/fonts.h>
 #include <ui/fonts/material_design_icons.h>
 #include <ui/style/theme.h>
 
-namespace asap {
-namespace ui {
+namespace asap::ui {
 
 std::string const Font::FAMILY_MONOSPACE{"Inconsolata"};
 std::string const Font::FAMILY_PROPORTIONAL{"Roboto"};
@@ -30,8 +31,8 @@ ImFont *Theme::icons_font_normal_{nullptr};
 
 namespace {
 
-std::string BuildFontName(std::string const &family, Font::Weight weight,
-                          Font::Style style, Font::Size size) {
+std::string BuildFontName(
+    std::string const &family, Font::Weight weight, Font::Style style, Font::Size size) {
   std::string name(family);
   name.append(" ").append(Font::WeightString(weight));
   if (style == Font::Style::ITALIC)
@@ -56,15 +57,15 @@ ImFont *MergeIcons(float size) {
   fontConfig.PixelSnapH = true;
   auto font = io.Fonts->AddFontFromMemoryCompressedTTF(
       asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_DATA,
-      asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE, size,
-      &fontConfig, icons_ranges);
+      asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE, size, &fontConfig,
+      icons_ranges);
   // use FONT_ICON_FILE_NAME_FAR if you want regular instead of solid
 
   return font;
 }
 
-ImFont *LoadRobotoFont(std::string const &name, Font::Weight weight,
-                       Font::Style style, Font::Size size) {
+ImFont *LoadRobotoFont(
+    std::string const &name, Font::Weight weight, Font::Style style, Font::Size size) {
   ImGuiIO &io = ImGui::GetIO();
   ImFontConfig fontConfig;
   // Set Oversamping parameters to 1 on both axis, the texture will be 6 times
@@ -76,71 +77,63 @@ ImFont *LoadRobotoFont(std::string const &name, Font::Weight weight,
   fontConfig.Name[sizeof(fontConfig.Name) - 1] = 0;
   ImFont *font = nullptr;
   switch (weight) {
-    case Font::Weight::LIGHT:
-      switch (style) {
-        case Font::Style::ITALIC:
-          io.Fonts->AddFontFromMemoryCompressedTTF(
-              asap::debug::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_DATA,
-              asap::debug::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_SIZE,
-              Font::SizeFloat(size), &fontConfig,
-              io.Fonts->GetGlyphRangesDefault());
-          font = MergeIcons(Font::SizeFloat(size));
-          break;
-        case Font::Style::NORMAL:
-          io.Fonts->AddFontFromMemoryCompressedTTF(
-              asap::debug::ui::Fonts::ROBOTO_LIGHT_COMPRESSED_DATA,
-              asap::debug::ui::Fonts::ROBOTO_LIGHT_COMPRESSED_SIZE,
-              Font::SizeFloat(size), &fontConfig,
-              io.Fonts->GetGlyphRangesDefault());
-          font = MergeIcons(Font::SizeFloat(size));
-          break;
-      }
+  case Font::Weight::LIGHT:
+    switch (style) {
+    case Font::Style::ITALIC:
+      io.Fonts->AddFontFromMemoryCompressedTTF(
+          asap::debug::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_DATA,
+          asap::debug::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_SIZE, Font::SizeFloat(size),
+          &fontConfig, io.Fonts->GetGlyphRangesDefault());
+      font = MergeIcons(Font::SizeFloat(size));
       break;
-    case Font::Weight::REGULAR:
-      switch (style) {
-        case Font::Style::ITALIC:
-          io.Fonts->AddFontFromMemoryCompressedTTF(
-              asap::debug::ui::Fonts::ROBOTO_ITALIC_COMPRESSED_DATA,
-              asap::debug::ui::Fonts::ROBOTO_ITALIC_COMPRESSED_SIZE,
-              Font::SizeFloat(size), &fontConfig,
-              io.Fonts->GetGlyphRangesDefault());
-          font = MergeIcons(Font::SizeFloat(size));
-          break;
-        case Font::Style::NORMAL:
-          io.Fonts->AddFontFromMemoryCompressedTTF(
-              asap::debug::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_DATA,
-              asap::debug::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_SIZE,
-              Font::SizeFloat(size), &fontConfig,
-              io.Fonts->GetGlyphRangesDefault());
-          font = MergeIcons(Font::SizeFloat(size));
-          break;
-      }
+    case Font::Style::NORMAL:
+      io.Fonts->AddFontFromMemoryCompressedTTF(asap::debug::ui::Fonts::ROBOTO_LIGHT_COMPRESSED_DATA,
+          asap::debug::ui::Fonts::ROBOTO_LIGHT_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig,
+          io.Fonts->GetGlyphRangesDefault());
+      font = MergeIcons(Font::SizeFloat(size));
       break;
-    case Font::Weight::BOLD:
-      switch (style) {
-        case Font::Style::ITALIC:
-          io.Fonts->AddFontFromMemoryCompressedTTF(
-              asap::debug::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_DATA,
-              asap::debug::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_SIZE,
-              Font::SizeFloat(size), &fontConfig,
-              io.Fonts->GetGlyphRangesDefault());
-          font = MergeIcons(Font::SizeFloat(size));
-          break;
-        case Font::Style::NORMAL:
-          io.Fonts->AddFontFromMemoryCompressedTTF(
-              asap::debug::ui::Fonts::ROBOTO_BOLD_COMPRESSED_DATA,
-              asap::debug::ui::Fonts::ROBOTO_BOLD_COMPRESSED_SIZE,
-              Font::SizeFloat(size), &fontConfig);
-          font = MergeIcons(Font::SizeFloat(size));
-          break;
-      }
+    }
+    break;
+  case Font::Weight::REGULAR:
+    switch (style) {
+    case Font::Style::ITALIC:
+      io.Fonts->AddFontFromMemoryCompressedTTF(
+          asap::debug::ui::Fonts::ROBOTO_ITALIC_COMPRESSED_DATA,
+          asap::debug::ui::Fonts::ROBOTO_ITALIC_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig,
+          io.Fonts->GetGlyphRangesDefault());
+      font = MergeIcons(Font::SizeFloat(size));
       break;
+    case Font::Style::NORMAL:
+      io.Fonts->AddFontFromMemoryCompressedTTF(
+          asap::debug::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_DATA,
+          asap::debug::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_SIZE, Font::SizeFloat(size),
+          &fontConfig, io.Fonts->GetGlyphRangesDefault());
+      font = MergeIcons(Font::SizeFloat(size));
+      break;
+    }
+    break;
+  case Font::Weight::BOLD:
+    switch (style) {
+    case Font::Style::ITALIC:
+      io.Fonts->AddFontFromMemoryCompressedTTF(
+          asap::debug::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_DATA,
+          asap::debug::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_SIZE, Font::SizeFloat(size),
+          &fontConfig, io.Fonts->GetGlyphRangesDefault());
+      font = MergeIcons(Font::SizeFloat(size));
+      break;
+    case Font::Style::NORMAL:
+      io.Fonts->AddFontFromMemoryCompressedTTF(asap::debug::ui::Fonts::ROBOTO_BOLD_COMPRESSED_DATA,
+          asap::debug::ui::Fonts::ROBOTO_BOLD_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig);
+      font = MergeIcons(Font::SizeFloat(size));
+      break;
+    }
+    break;
   }
   return font;
 }
 
-ImFont *LoadInconsolataFont(std::string const &name, Font::Weight weight,
-                            Font::Style style, Font::Size size) {
+ImFont *LoadInconsolataFont(
+    std::string const &name, Font::Weight weight, Font::Style style, Font::Size size) {
   ImGuiIO &io = ImGui::GetIO();
   ImFontConfig fontConfig;
   // Set Oversamping parameters to 1 on both axis, the texture will be 6 times
@@ -152,32 +145,32 @@ ImFont *LoadInconsolataFont(std::string const &name, Font::Weight weight,
   fontConfig.Name[sizeof(fontConfig.Name) - 1] = 0;
   ImFont *font = nullptr;
   switch (weight) {
-    case Font::Weight::LIGHT:
+  case Font::Weight::LIGHT:
+    break;
+  case Font::Weight::REGULAR:
+    switch (style) {
+    case Font::Style::ITALIC:
+    case Font::Style::NORMAL:
+      io.Fonts->AddFontFromMemoryCompressedTTF(
+          asap::debug::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_DATA,
+          asap::debug::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_SIZE, Font::SizeFloat(size),
+          &fontConfig);
+      font = MergeIcons(Font::SizeFloat(size));
       break;
-    case Font::Weight::REGULAR:
-      switch (style) {
-        case Font::Style::ITALIC:
-        case Font::Style::NORMAL:
-          io.Fonts->AddFontFromMemoryCompressedTTF(
-              asap::debug::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_DATA,
-              asap::debug::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_SIZE,
-              Font::SizeFloat(size), &fontConfig);
-          font = MergeIcons(Font::SizeFloat(size));
-          break;
-      }
+    }
+    break;
+  case Font::Weight::BOLD:
+    switch (style) {
+    case Font::Style::ITALIC:
+    case Font::Style::NORMAL:
+      io.Fonts->AddFontFromMemoryCompressedTTF(
+          asap::debug::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_DATA,
+          asap::debug::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_SIZE, Font::SizeFloat(size),
+          &fontConfig);
+      font = MergeIcons(Font::SizeFloat(size));
       break;
-    case Font::Weight::BOLD:
-      switch (style) {
-        case Font::Style::ITALIC:
-        case Font::Style::NORMAL:
-          io.Fonts->AddFontFromMemoryCompressedTTF(
-              asap::debug::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_DATA,
-              asap::debug::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_SIZE,
-              Font::SizeFloat(size), &fontConfig);
-          font = MergeIcons(Font::SizeFloat(size));
-          break;
-      }
-      break;
+    }
+    break;
   }
   return font;
 }
@@ -190,20 +183,20 @@ ImFont *LoadIconsFont(float size) {
   fontConfig.OversampleH = 1;
   fontConfig.OversampleV = 1;
   fontConfig.MergeMode = false;
-  std::strncpy(fontConfig.Name, "Material Design Icons",
-               sizeof(fontConfig.Name) - 1);
+  std::strncpy(fontConfig.Name, "Material Design Icons", sizeof(fontConfig.Name) - 1);
   fontConfig.Name[sizeof(fontConfig.Name) - 1] = 0;
   ImFont *font = nullptr;
   font = io.Fonts->AddFontFromMemoryCompressedTTF(
       asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_DATA,
-      asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE, size,
-      &fontConfig);
+      asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE, size, &fontConfig);
   return font;
 }
 
-}  // namespace
+} // namespace
 
-Font::Font(std::string family) : family_(std::move(family)) { InitFont(); }
+Font::Font(std::string family) : family_(std::move(family)) {
+  InitFont();
+}
 
 void Font::InitFont() {
   BuildName();
@@ -212,11 +205,9 @@ void Font::InitFont() {
 }
 
 Font::Font(Font const &other)
-    : font_(other.font_),
-      size_(other.size_),
-      style_(other.style_),
-      weight_(other.weight_),
-      name_(other.name_) {}
+    : font_(other.font_), size_(other.size_), style_(other.style_), weight_(other.weight_),
+      name_(other.name_) {
+}
 
 Font &Font::operator=(Font const &rhs) {
   font_ = rhs.font_;
@@ -227,10 +218,7 @@ Font &Font::operator=(Font const &rhs) {
   return *this;
 }
 Font::Font(Font &&moved) noexcept
-    : font_(moved.font_),
-      size_(moved.size_),
-      style_(moved.style_),
-      weight_(moved.weight_),
+    : font_(moved.font_), size_(moved.size_), style_(moved.style_), weight_(moved.weight_),
       name_(std::move(moved.name_)) {
   moved.font_ = nullptr;
 }
@@ -306,14 +294,14 @@ float Font::SizeFloat(Font::Size size) {
 }
 char const *Font::SizeString(Font::Size size) {
   switch (size) {
-    case Size::SMALL:
-      return "11px";
-    case Size::MEDIUM:
-      return "13px";
-    case Size::LARGE:
-      return "16px";
-    case Size::LARGER:
-      return "24px";
+  case Size::SMALL:
+    return "11px";
+  case Size::MEDIUM:
+    return "13px";
+  case Size::LARGE:
+    return "16px";
+  case Size::LARGER:
+    return "24px";
   }
   // Only needed for compilers that complain about not all control paths
   // return a value.
@@ -322,10 +310,10 @@ char const *Font::SizeString(Font::Size size) {
 
 char const *Font::StyleString(Font::Style style) {
   switch (style) {
-    case Style::NORMAL:
-      return "Normal";
-    case Style::ITALIC:
-      return "Italic";
+  case Style::NORMAL:
+    return "Normal";
+  case Style::ITALIC:
+    return "Italic";
   }
   // Only needed for compilers that complain about not all control paths
   // return a value.
@@ -334,12 +322,12 @@ char const *Font::StyleString(Font::Style style) {
 
 char const *Font::WeightString(Font::Weight weight) {
   switch (weight) {
-    case Weight::LIGHT:
-      return "Light";
-    case Weight::REGULAR:
-      return "Regular";
-    case Weight::BOLD:
-      return "Bold";
+  case Weight::LIGHT:
+    return "Light";
+  case Weight::REGULAR:
+    return "Regular";
+  case Weight::BOLD:
+    return "Bold";
   }
   // Only needed for compilers that complain about not all control paths
   // return a value.
@@ -371,12 +359,10 @@ void Theme::LoadDefaultFonts() {
   // variations. On systems with pretty decent 3D graphics, all variations can
   // be loaded with no issues.
 
-  std::array<Font::Weight, 2> font_weights{
-      {Font::Weight::REGULAR, Font::Weight::BOLD}};
+  std::array<Font::Weight, 2> font_weights{{Font::Weight::REGULAR, Font::Weight::BOLD}};
   // std::array<Font::Weight, 3> font_weights{
   //     {Font::Weight::LIGHT, Font::Weight::REGULAR, Font::Weight::BOLD}};
-  std::array<Font::Style, 2> font_styles{
-      {Font::Style::NORMAL, Font::Style::ITALIC}};
+  std::array<Font::Style, 2> font_styles{{Font::Style::NORMAL, Font::Style::ITALIC}};
   std::array<Font::Size, 2> font_sizes{{Font::Size::SMALL, Font::Size::MEDIUM}};
   // std::array<Font::Size, 4> font_sizes{{Font::Size::SMALL,
   // Font::Size::MEDIUM,
@@ -385,43 +371,37 @@ void Theme::LoadDefaultFonts() {
   for (auto size : font_sizes) {
     for (auto weight : font_weights) {
       for (auto style : font_styles) {
-        auto name =
-            BuildFontName(Font::FAMILY_PROPORTIONAL, weight, style, size);
+        auto name = BuildFontName(Font::FAMILY_PROPORTIONAL, weight, style, size);
         auto font = LoadRobotoFont(name, weight, style, size);
-        if (font) AddFont(name, font);
+        if (font)
+          AddFont(name, font);
       }
     }
 
     // Monospaced
-    auto name = BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::REGULAR,
-                              Font::Style::NORMAL, size);
-    auto font = LoadInconsolataFont(name, Font::Weight::REGULAR,
-                                    Font::Style::NORMAL, size);
+    auto name =
+        BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::REGULAR, Font::Style::NORMAL, size);
+    auto font = LoadInconsolataFont(name, Font::Weight::REGULAR, Font::Style::NORMAL, size);
     if (font) {
       AddFont(name, font);
       // No Italic
-      AddFont(BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::REGULAR,
-                            Font::Style::ITALIC, size),
-              font);
+      AddFont(
+          BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::REGULAR, Font::Style::ITALIC, size),
+          font);
       // Treat LIGHT same as REGULAR
-      AddFont(BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::LIGHT,
-                            Font::Style::NORMAL, size),
-              font);
-      AddFont(BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::LIGHT,
-                            Font::Style::ITALIC, size),
-              font);
+      AddFont(BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::LIGHT, Font::Style::NORMAL, size),
+          font);
+      AddFont(BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::LIGHT, Font::Style::ITALIC, size),
+          font);
     }
 
-    name = BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::BOLD,
-                         Font::Style::NORMAL, size);
-    font = LoadInconsolataFont(name, Font::Weight::BOLD, Font::Style::NORMAL,
-                               size);
+    name = BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::BOLD, Font::Style::NORMAL, size);
+    font = LoadInconsolataFont(name, Font::Weight::BOLD, Font::Style::NORMAL, size);
     if (font) {
       AddFont(name, font);
       // No Italic
-      AddFont(BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::BOLD,
-                            Font::Style::ITALIC, size),
-              font);
+      AddFont(BuildFontName(Font::FAMILY_MONOSPACE, Font::Weight::BOLD, Font::Style::ITALIC, size),
+          font);
     }
   }
 
@@ -521,25 +501,25 @@ void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
   }
 }
 
-}  // namespace
+} // namespace
 
-#define EMIT_TOML_STYLE_IMVEC2(FIELD)            \
-  {                                              \
-    auto float_array = cpptoml::make_array();    \
-    float_array->push_back(style.FIELD.x);       \
-    float_array->push_back(style.FIELD.y);       \
-    style_settings->insert(#FIELD, float_array); \
+#define EMIT_TOML_STYLE_IMVEC2(FIELD)                                                              \
+  {                                                                                                \
+    auto float_array = cpptoml::make_array();                                                      \
+    float_array->push_back(style.FIELD.x);                                                         \
+    float_array->push_back(style.FIELD.y);                                                         \
+    style_settings->insert(#FIELD, float_array);                                                   \
   }
 
-#define EMIT_TOML_COLOR(COLOR_ID)                    \
-  {                                                  \
-    auto float_array = cpptoml::make_array();        \
-    auto &color = colors[COLOR_ID];                  \
-    float_array->push_back(color.x);                 \
-    float_array->push_back(color.y);                 \
-    float_array->push_back(color.z);                 \
-    float_array->push_back(color.w);                 \
-    colors_settings->insert(#COLOR_ID, float_array); \
+#define EMIT_TOML_COLOR(COLOR_ID)                                                                  \
+  {                                                                                                \
+    auto float_array = cpptoml::make_array();                                                      \
+    auto &color = colors[COLOR_ID];                                                                \
+    float_array->push_back(color.x);                                                               \
+    float_array->push_back(color.y);                                                               \
+    float_array->push_back(color.z);                                                               \
+    float_array->push_back(color.w);                                                               \
+    colors_settings->insert(#COLOR_ID, float_array);                                               \
   }
 
 void Theme::SaveStyle() {
@@ -581,8 +561,7 @@ void Theme::SaveStyle() {
       style_settings->insert("MouseCursorScale", style.MouseCursorScale);
       style_settings->insert("AntiAliasedLines", style.AntiAliasedLines);
       style_settings->insert("AntiAliasedFill", style.AntiAliasedFill);
-      style_settings->insert("CurveTessellationTol",
-                             style.CurveTessellationTol);
+      style_settings->insert("CurveTessellationTol", style.CurveTessellationTol);
 
       theme_settings->insert("style", style_settings);
     }
@@ -641,39 +620,34 @@ void Theme::SaveStyle() {
     root->insert("theme", theme_settings);
   }
 
-  auto settings_path =
-      asap::fs::GetPathFor(asap::fs::Location::F_THEME_SETTINGS);
+  auto settings_path = asap::fs::GetPathFor(asap::fs::Location::F_THEME_SETTINGS);
   auto ofs = std::ofstream();
   ofs.open(settings_path.string());
   ofs << (*root) << std::endl;
   ofs.close();
 }
 
-#define SET_COLOR_FROM_TOML(id)                                              \
-  if (colors_settings->contains(#id)) {                                      \
-    auto color = colors_settings->get_array_of<double>(#id);                 \
-    colors[id] = {                                                           \
-        static_cast<float>(color->at(0)), static_cast<float>(color->at(1)),  \
-        static_cast<float>(color->at(2)), static_cast<float>(color->at(3))}; \
+#define SET_COLOR_FROM_TOML(id)                                                                    \
+  if (colors_settings->contains(#id)) {                                                            \
+    auto color = colors_settings->get_array_of<double>(#id);                                       \
+    colors[id] = {static_cast<float>(color->at(0)), static_cast<float>(color->at(1)),              \
+        static_cast<float>(color->at(2)), static_cast<float>(color->at(3))};                       \
   }
 
 void Theme::LoadStyle() {
   auto &logger = asap::logging::Registry::GetLogger("main");
 
   std::shared_ptr<cpptoml::table> config;
-  auto theme_settings =
-      asap::fs::GetPathFor(asap::fs::Location::F_THEME_SETTINGS);
+  auto theme_settings = asap::fs::GetPathFor(asap::fs::Location::F_THEME_SETTINGS);
   auto has_config = false;
   if (std::filesystem::exists(theme_settings)) {
     try {
       config = cpptoml::parse_file(theme_settings.string());
-      ASLOG_TO_LOGGER(logger, info, "theme settings loaded from {}",
-                      theme_settings.string());
+      ASLOG_TO_LOGGER(logger, info, "theme settings loaded from {}", theme_settings.string());
       has_config = true;
     } catch (std::exception const &ex) {
-      ASLOG_TO_LOGGER(logger, error,
-                      "error () while loading theme settings from {}",
-                      ex.what(), theme_settings.string());
+      ASLOG_TO_LOGGER(logger, error, "error () while loading theme settings from {}", ex.what(),
+          theme_settings.string());
     }
   } else {
     ASLOG_TO_LOGGER(logger, info, "file {} does not exist", theme_settings.string());
@@ -688,13 +662,12 @@ void Theme::LoadStyle() {
         auto style = theme->get_table("style");
 
         if (style->contains("Alpha")) {
-          ImGui::GetStyle().Alpha =
-              static_cast<float>(*(style->get_as<double>("Alpha")));
+          ImGui::GetStyle().Alpha = static_cast<float>(*(style->get_as<double>("Alpha")));
         }
         if (style->contains("WindowPadding")) {
           auto vec2 = style->get_array_of<double>("WindowPadding");
-          ImGui::GetStyle().WindowPadding = {static_cast<float>(vec2->at(0)),
-                                             static_cast<float>(vec2->at(1))};
+          ImGui::GetStyle().WindowPadding = {
+              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
         }
 
         if (style->contains("WindowRounding")) {
@@ -707,8 +680,8 @@ void Theme::LoadStyle() {
         }
         if (style->contains("WindowMinSize")) {
           auto vec2 = style->get_array_of<double>("WindowMinSize");
-          ImGui::GetStyle().WindowMinSize = {static_cast<float>(vec2->at(0)),
-                                             static_cast<float>(vec2->at(1))};
+          ImGui::GetStyle().WindowMinSize = {
+              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
         }
         if (style->contains("WindowTitleAlign")) {
           auto vec2 = style->get_array_of<double>("WindowTitleAlign");
@@ -734,8 +707,8 @@ void Theme::LoadStyle() {
         }
         if (style->contains("FramePadding")) {
           auto vec2 = style->get_array_of<double>("FramePadding");
-          ImGui::GetStyle().FramePadding = {static_cast<float>(vec2->at(0)),
-                                            static_cast<float>(vec2->at(1))};
+          ImGui::GetStyle().FramePadding = {
+              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
         }
 
         if (style->contains("FrameRounding")) {
@@ -748,8 +721,8 @@ void Theme::LoadStyle() {
         }
         if (style->contains("ItemSpacing")) {
           auto vec2 = style->get_array_of<double>("ItemSpacing");
-          ImGui::GetStyle().ItemSpacing = {static_cast<float>(vec2->at(0)),
-                                           static_cast<float>(vec2->at(1))};
+          ImGui::GetStyle().ItemSpacing = {
+              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
         }
 
         if (style->contains("ItemInnerSpacing")) {
@@ -790,8 +763,8 @@ void Theme::LoadStyle() {
         }
         if (style->contains("ButtonTextAlign")) {
           auto vec2 = style->get_array_of<double>("ButtonTextAlign");
-          ImGui::GetStyle().ButtonTextAlign = {static_cast<float>(vec2->at(0)),
-                                               static_cast<float>(vec2->at(1))};
+          ImGui::GetStyle().ButtonTextAlign = {
+              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
         }
 
         if (style->contains("DisplayWindowPadding")) {
@@ -811,16 +784,14 @@ void Theme::LoadStyle() {
               static_cast<float>(*(style->get_as<double>("MouseCursorScale")));
         }
         if (style->contains("AntiAliasedLines")) {
-          ImGui::GetStyle().AntiAliasedLines =
-              *(style->get_as<bool>("AntiAliasedLines"));
+          ImGui::GetStyle().AntiAliasedLines = *(style->get_as<bool>("AntiAliasedLines"));
         }
         if (style->contains("AntiAliasedFill")) {
-          ImGui::GetStyle().AntiAliasedFill =
-              *(style->get_as<bool>("AntiAliasedFill"));
+          ImGui::GetStyle().AntiAliasedFill = *(style->get_as<bool>("AntiAliasedFill"));
         }
         if (style->contains("CurveTessellationTol")) {
-          ImGui::GetStyle().CurveTessellationTol = static_cast<float>(
-              *(style->get_as<double>("CurveTessellationTol")));
+          ImGui::GetStyle().CurveTessellationTol =
+              static_cast<float>(*(style->get_as<double>("CurveTessellationTol")));
         }
       }
       if (theme->contains("colors")) {
@@ -879,5 +850,4 @@ void Theme::LoadStyle() {
   }
 }
 
-}  // namespace ui
-}  // namespace asap
+} // namespace asap::ui

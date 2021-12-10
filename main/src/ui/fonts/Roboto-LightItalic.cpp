@@ -1,4 +1,11 @@
-// File: 'Roboto-LightItalic.ttf' (176616 bytes)
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
+//    Distributed under the 3-Clause BSD License.
+//    (See accompanying file LICENSE or copy at
+//   https://opensource.org/licenses/BSD-3-Clause)
+
+// File:  'Robotto-LightItalic.ttf' (176616 bytes)
 // Exported using binary_to_compressed_c.cpp
 
 // Designed by: Christian Robertson
@@ -8,10 +15,9 @@
 
 #include "fonts.h"
 
-namespace asap {
-namespace debug {
-namespace ui {
+namespace asap::debug::ui {
 
+// clang-format off
 const unsigned int Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_DATA[127540 / 4] = {
     0x0000bc57, 0x00000000, 0xe8b10200, 0x00000400, 0x00010025, 0x82120000,
     0x043e0804, 0x44472000, 0x42b44645, 0x020082b0, 0x0000283c, 0x50476202,
@@ -5329,7 +5335,6 @@ const unsigned int Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_DATA[127540 / 4] = {
     0x0240023f, 0x02420241, 0x00440243, 0x00010002, 0x001d0014, 0x45fa0500,
     0x00637822,
 };
+// clang-format on
 
-}  // namespace ui
-}  // namespace debug
-}  // namespace asap
+} // namespace asap::debug::ui

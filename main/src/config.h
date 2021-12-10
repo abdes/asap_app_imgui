@@ -1,4 +1,6 @@
-//    Copyright The asap Project Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
@@ -7,8 +9,7 @@
 
 #include <filesystem>
 
-namespace asap {
-namespace fs {
+namespace asap::fs {
 
 enum class Location {
   D_USER_CONFIG,
@@ -23,5 +24,4 @@ std::filesystem::path GetPathFor(Location id);
 
 void CreateDirectories();
 
-}  // namespace fs
-}  // namespace asap
+} // namespace asap::fs

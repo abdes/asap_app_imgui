@@ -1,4 +1,6 @@
-//    Copyright The asap Project Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
@@ -10,19 +12,18 @@
 
 struct ImFont;
 
-namespace asap {
-namespace ui {
+namespace asap::ui {
 
 class Font final {
- public:
+public:
   static std::string const FAMILY_MONOSPACE;
   static std::string const FAMILY_PROPORTIONAL;
 
   enum class Size {
-    SMALL = 11,   // 11px
-    MEDIUM = 13,  // 13px
-    LARGE = 16,   // 16px
-    LARGER = 24,  // 20px
+    SMALL = 11,  // 11px
+    MEDIUM = 13, // 13px
+    LARGE = 16,  // 16px
+    LARGER = 24, // 20px
   };
   static float SizeFloat(Font::Size size);
   static char const *SizeString(Font::Size size);
@@ -41,8 +42,12 @@ class Font final {
   void swap(Font &other);
   ~Font() = default;
 
-  std::string const &Name() const { return name_; }
-  ImFont *ImGuiFont() { return font_; }
+  std::string const &Name() const {
+    return name_;
+  }
+  ImFont *ImGuiFont() {
+    return font_;
+  }
 
   Font &SmallSize();
   Font &MediumSize();
@@ -56,7 +61,7 @@ class Font final {
   Font &Regular();
   Font &Bold();
 
- private:
+private:
   void BuildName();
   void InitFont();
 
@@ -69,19 +74,21 @@ class Font final {
 };
 
 class Theme {
- public:
+public:
   static void Init();
 
   static ImFont *GetFont(std::string const &name);
 
-  static ImFont *GetIconsFont() { return icons_font_normal_; }
+  static ImFont *GetIconsFont() {
+    return icons_font_normal_;
+  }
 
   static void SaveStyle();
   static void LoadStyle();
 
   static void LoadDefaultStyle();
 
- private:
+private:
   Theme() = default;
 
   static void LoadDefaultFonts();
@@ -92,5 +99,4 @@ class Theme {
   static ImFont *icons_font_normal_;
 };
 
-}  // namespace ui
-}  // namespace asap
+} // namespace asap::ui

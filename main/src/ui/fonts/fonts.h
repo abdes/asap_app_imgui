@@ -1,16 +1,16 @@
-//    Copyright The Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
 #pragma once
 
-namespace asap {
-namespace debug {
-namespace ui {
+namespace asap::debug::ui {
 
 class Fonts {
- public:
+public:
   // Roboto Black
   static const unsigned int ROBOTO_BLACK_COMPRESSED_SIZE = 121781;
   static const unsigned int ROBOTO_BLACK_COMPRESSED_DATA[];
@@ -70,9 +70,6 @@ class Fonts {
   // Material Design Icons
   static const unsigned int MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE = 248964;
   static const unsigned int MATERIAL_DESIGN_ICONS_COMPRESSED_DATA[];
- 
 };
 
-}  // namespace ui
-}  // namespace debug
-}  // namespace asap
+} // namespace asap::debug::ui

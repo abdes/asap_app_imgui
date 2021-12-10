@@ -1,4 +1,6 @@
-//    Copyright The Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
@@ -10,13 +12,11 @@
 #include <abstract_application.h>
 #include <ui/log/sink.h>
 
-namespace asap {
-namespace ui {
-
+namespace asap::ui {
 
 class ApplicationBase : public AbstractApplication,
                         protected asap::logging::Loggable<ApplicationBase> {
- public:
+public:
   ApplicationBase() = default;
 
   /// Not move constructible
@@ -30,15 +30,19 @@ class ApplicationBase : public AbstractApplication,
   bool Draw() override;
   void ShutDown() final;
 
-  static const char * LOGGER_NAME;
+  static const char *LOGGER_NAME;
 
- protected:
-  virtual void AfterInit() {}
-  virtual void DrawInsideMainMenu() {}
-  virtual void DrawInsideStatusBar(float /*width*/, float /*height*/) {}
-  virtual void BeforeShutDown() {}
+protected:
+  virtual void AfterInit() {
+  }
+  virtual void DrawInsideMainMenu() {
+  }
+  virtual void DrawInsideStatusBar(float /*width*/, float /*height*/) {
+  }
+  virtual void BeforeShutDown() {
+  }
 
- private:
+private:
   float DrawMainMenu();
   void DrawStatusBar(float width, float height, float pos_x, float pos_y);
   void DrawLogView();
@@ -47,7 +51,7 @@ class ApplicationBase : public AbstractApplication,
   void DrawImGuiMetrics();
   void DrawImGuiDemos();
 
- private:
+private:
   bool show_docks_debug_{false};
   bool show_logs_{true};
   bool show_settings_{true};
@@ -58,5 +62,4 @@ class ApplicationBase : public AbstractApplication,
   ImGuiRunner *runner_ = nullptr; // TODO: convert to weak_ptr?
 };
 
-}  // namespace ui
-}  // namespace asap
+} // namespace asap::ui

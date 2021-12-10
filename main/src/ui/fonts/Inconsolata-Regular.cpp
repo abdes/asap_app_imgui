@@ -1,3 +1,10 @@
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
+//    Distributed under the 3-Clause BSD License.
+//    (See accompanying file LICENSE or copy at
+//   https://opensource.org/licenses/BSD-3-Clause)
+
 // File: 'Inconsolata-Regular.ttf' (64659 bytes)
 // Exported using binary_to_compressed_c.cpp
 
@@ -8,10 +15,9 @@
 
 #include "fonts.h"
 
-namespace asap {
-namespace debug {
-namespace ui {
+namespace asap::debug::ui {
 
+// clang-format off
 const unsigned int Fonts::INCONSOLATA_REGULAR_COMPRESSED_DATA[64660 / 4] = {
     0x0000bc57, 0x00000000, 0xc47a0100, 0x00000400, 0x00010025, 0x82120000,
     0x00042604, 0x49534420, 0x240d8247, 0x7a010001, 0x2c0782bc, 0x45444708,
@@ -2709,7 +2715,6 @@ const unsigned int Fonts::INCONSOLATA_REGULAR_COMPRESSED_DATA[64660 / 4] = {
     0x0002b18d, 0x6405b344, 0x44440006, 0x00000000, 0x00000001, 0xc3fa0500,
     0x005d3609,
 };
+// clang-format on
 
-}  // namespace ui
-}  // namespace debug
-}  // namespace asap
+} // namespace asap::debug::ui

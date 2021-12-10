@@ -1,4 +1,6 @@
-//    Copyright The Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
@@ -23,11 +25,9 @@ bool Application::Draw() {
       // Define the viewport dimensions
       glBindTexture(GL_TEXTURE_2D, texColorBuffer_);
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(wsize.x),
-                   static_cast<GLsizei>(wsize.y), 0, GL_RGB, GL_UNSIGNED_BYTE,
-                   NULL);
+          static_cast<GLsizei>(wsize.y), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
       glBindTexture(GL_TEXTURE_2D, 0);
-      glViewport(0, 0, static_cast<GLsizei>(wsize.x),
-                 static_cast<GLsizei>(wsize.y));
+      glViewport(0, 0, static_cast<GLsizei>(wsize.x), static_cast<GLsizei>(wsize.y));
 
       // now that we actually created the framebuffer and added all attachments
       // we want to check if it is actually complete now
@@ -37,7 +37,7 @@ bool Application::Draw() {
       // Render
       // Clear the colorbuffer
       glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
-      glClear(GL_COLOR_BUFFER_BIT);  // we're not using the stencil buffer now
+      glClear(GL_COLOR_BUFFER_BIT); // we're not using the stencil buffer now
 
       // Draw the triangle
       ourShader_->use();
@@ -45,7 +45,7 @@ bool Application::Draw() {
       glDrawArrays(GL_TRIANGLES, 0, 3);
       glBindVertexArray(0);
 
-      glBindFramebuffer(GL_FRAMEBUFFER, 0);  // back to default
+      glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
       // get the mouse position
       ImVec2 pos = ImGui::GetCursorScreenPos();
 
@@ -55,8 +55,7 @@ bool Application::Draw() {
       // at the third parameter is the lower right corner the last two
       // parameters are the UVs they have to be flipped (normally they would be
       // (0,0);(1,1)
-      ImGui::GetWindowDrawList()->AddImage(
-          (ImTextureID)(uintptr_t)texColorBuffer_, pos,
+      ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)texColorBuffer_, pos,
           ImVec2(pos.x + wsize.x, pos.y + wsize.y), ImVec2(0, 1), ImVec2(1, 0));
     }
     ImGui::End();
@@ -73,9 +72,9 @@ void Application::AfterInit() {
   // ------------------------------------------------------------------
   float vertices[] = {
       // positions         // colors
-      0.5f,  -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // bottom right
-      -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,  // bottom left
-      0.0f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f   // top
+      0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // bottom right
+      -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom left
+      0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f    // top
   };
 
   glGenVertexArrays(1, &VAO);
@@ -91,8 +90,7 @@ void Application::AfterInit() {
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
   glEnableVertexAttribArray(0);
   // color attribute
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),
-                        (void *)(3 * sizeof(float)));
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
 
   // You can unbind the VAO afterwards so other VAO calls won't accidentally
@@ -116,8 +114,7 @@ void Application::AfterInit() {
   glBindTexture(GL_TEXTURE_2D, 0);
 
   // attach it to currently bound framebuffer object
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-                         texColorBuffer_, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer_, 0);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -132,4 +129,4 @@ void Application::BeforeShutDown() {
   delete ourShader_;
 }
 
-}  // namespace asap
+} // namespace asap

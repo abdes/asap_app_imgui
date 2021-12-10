@@ -1,4 +1,11 @@
-// File: 'Roboto-ThinItalic.ttf' (176300 bytes)
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
+//    Distributed under the 3-Clause BSD License.
+//    (See accompanying file LICENSE or copy at
+//   https://opensource.org/licenses/BSD-3-Clause)
+
+// File:  'Robotto-ThinItalic.ttf' (176300 bytes)
 // Exported using binary_to_compressed_c.cpp
 
 // Designed by: Christian Robertson
@@ -8,10 +15,9 @@
 
 #include "fonts.h"
 
-namespace asap {
-namespace debug {
-namespace ui {
+namespace asap::debug::ui {
 
+// clang-format off
 const unsigned int Fonts::ROBOTO_THINITALIC_COMPRESSED_DATA[125328 / 4] = {
     0x0000bc57, 0x00000000, 0xacb00200, 0x00000400, 0x00010025, 0x82120000,
     0x043e0804, 0x44472000, 0x4cb44645, 0x02008cb0, 0x0000e43a, 0x50476202,
@@ -5236,7 +5242,6 @@ const unsigned int Fonts::ROBOTO_THINITALIC_COMPRESSED_DATA[125328 / 4] = {
     0x23822502, 0x2008c389, 0x020a001a, 0x007a003e, 0x02740073, 0x0240023f,
     0x02420241, 0x00440243, 0x00010002, 0x001d0014, 0x32fa0500, 0x0065e00d,
 };
+// clang-format on
 
-}  // namespace ui
-}  // namespace debug
-}  // namespace asap
+} // namespace asap::debug::ui

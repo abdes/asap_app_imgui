@@ -1,4 +1,6 @@
-//    Copyright The Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
@@ -9,7 +11,7 @@ namespace asap {
 class ImGuiRunner;
 
 class AbstractApplication {
- public:
+public:
   virtual ~AbstractApplication() = default;
 
   virtual void Init(ImGuiRunner *runner) = 0;
@@ -17,4 +19,4 @@ class AbstractApplication {
   virtual void ShutDown() = 0;
 };
 
-}  // namespace asap
+} // namespace asap

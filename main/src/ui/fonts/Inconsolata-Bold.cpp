@@ -1,3 +1,10 @@
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
+//    Distributed under the 3-Clause BSD License.
+//    (See accompanying file LICENSE or copy at
+//   https://opensource.org/licenses/BSD-3-Clause)
+
 // File: 'Inconsolata-Bold.ttf' (72170 bytes)
 // Exported using binary_to_compressed_c.cpp
 
@@ -8,10 +15,9 @@
 
 #include "fonts.h"
 
-namespace asap {
-namespace debug {
-namespace ui {
+namespace asap::debug::ui {
 
+// clang-format off
 const unsigned int Fonts::INCONSOLATA_BOLD_COMPRESSED_DATA[72172 / 4] = {
     0x0000bc57, 0x00000000, 0x7cad0100, 0x00000400, 0x00010025, 0x82120000,
     0x00042604, 0x49534420, 0x240d8247, 0xad010001, 0x2c078274, 0x45444708,
@@ -3022,7 +3028,6 @@ const unsigned int Fonts::INCONSOLATA_BOLD_COMPRESSED_DATA[72172 / 4] = {
     0x440002b1, 0x066405b3, 0x00444400, 0x01000000, 0x00000000, 0xfba7fa05,
     0x0000453b,
 };
+// clang-format on
 
-}  // namespace ui
-}  // namespace debug
-}  // namespace asap
+} // namespace asap::debug::ui

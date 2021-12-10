@@ -1,4 +1,11 @@
-// File: 'Roboto-Light.ttf' (170420 bytes)
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
+//    Distributed under the 3-Clause BSD License.
+//    (See accompanying file LICENSE or copy at
+//   https://opensource.org/licenses/BSD-3-Clause)
+
+// File:  'Robotto-Light.ttf' (170420 bytes)
 // Exported using binary_to_compressed_c.cpp
 
 // Designed by: Christian Robertson
@@ -8,10 +15,9 @@
 
 #include "fonts.h"
 
-namespace asap {
-namespace debug {
-namespace ui {
+namespace asap::debug::ui {
 
+// clang-format off
 const unsigned int Fonts::ROBOTO_LIGHT_COMPRESSED_DATA[119388 / 4] = {
     0x0000bc57, 0x00000000, 0xb4990200, 0x00000400, 0x00010025, 0x82120000,
     0x043e0804, 0x44472000, 0x42b44645, 0x020082b0, 0x0000f423, 0x50476202,
@@ -4989,7 +4995,6 @@ const unsigned int Fonts::ROBOTO_LIGHT_COMPRESSED_DATA[119388 / 4] = {
     0x007a003e, 0x02740073, 0x0240023f, 0x02420241, 0x00440243, 0x00010002,
     0x001d0014, 0xb6fa0500, 0x00946f51,
 };
+// clang-format on
 
-}  // namespace ui
-}  // namespace debug
-}  // namespace asap
+} // namespace asap::debug::ui
