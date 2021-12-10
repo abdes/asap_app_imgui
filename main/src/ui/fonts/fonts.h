@@ -7,7 +7,7 @@
 
 #pragma once
 
-namespace asap::debug::ui {
+namespace asap::ui {
 
 class Fonts {
 public:
@@ -72,4 +72,4 @@ public:
   static const unsigned int MATERIAL_DESIGN_ICONS_COMPRESSED_DATA[];
 };
 
-} // namespace asap::debug::ui
+} // namespace asap::ui

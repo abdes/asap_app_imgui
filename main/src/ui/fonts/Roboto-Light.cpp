@@ -15,7 +15,7 @@
 
 #include "fonts.h"
 
-namespace asap::debug::ui {
+namespace asap::ui {
 
 // clang-format off
 const unsigned int Fonts::ROBOTO_LIGHT_COMPRESSED_DATA[119388 / 4] = {
@@ -4997,4 +4997,4 @@ const unsigned int Fonts::ROBOTO_LIGHT_COMPRESSED_DATA[119388 / 4] = {
 };
 // clang-format on
 
-} // namespace asap::debug::ui
+} // namespace asap::ui

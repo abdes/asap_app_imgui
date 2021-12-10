@@ -56,8 +56,8 @@ ImFont *MergeIcons(float size) {
   fontConfig.MergeMode = true;
   fontConfig.PixelSnapH = true;
   auto font = io.Fonts->AddFontFromMemoryCompressedTTF(
-      asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_DATA,
-      asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE, size, &fontConfig,
+      asap::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_DATA,
+      asap::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE, size, &fontConfig,
       icons_ranges);
   // use FONT_ICON_FILE_NAME_FAR if you want regular instead of solid
 
@@ -81,14 +81,14 @@ ImFont *LoadRobotoFont(
     switch (style) {
     case Font::Style::ITALIC:
       io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::debug::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_DATA,
-          asap::debug::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_SIZE, Font::SizeFloat(size),
+          asap::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_DATA,
+          asap::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_SIZE, Font::SizeFloat(size),
           &fontConfig, io.Fonts->GetGlyphRangesDefault());
       font = MergeIcons(Font::SizeFloat(size));
       break;
     case Font::Style::NORMAL:
-      io.Fonts->AddFontFromMemoryCompressedTTF(asap::debug::ui::Fonts::ROBOTO_LIGHT_COMPRESSED_DATA,
-          asap::debug::ui::Fonts::ROBOTO_LIGHT_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig,
+      io.Fonts->AddFontFromMemoryCompressedTTF(asap::ui::Fonts::ROBOTO_LIGHT_COMPRESSED_DATA,
+          asap::ui::Fonts::ROBOTO_LIGHT_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig,
           io.Fonts->GetGlyphRangesDefault());
       font = MergeIcons(Font::SizeFloat(size));
       break;
@@ -98,15 +98,15 @@ ImFont *LoadRobotoFont(
     switch (style) {
     case Font::Style::ITALIC:
       io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::debug::ui::Fonts::ROBOTO_ITALIC_COMPRESSED_DATA,
-          asap::debug::ui::Fonts::ROBOTO_ITALIC_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig,
+          asap::ui::Fonts::ROBOTO_ITALIC_COMPRESSED_DATA,
+          asap::ui::Fonts::ROBOTO_ITALIC_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig,
           io.Fonts->GetGlyphRangesDefault());
       font = MergeIcons(Font::SizeFloat(size));
       break;
     case Font::Style::NORMAL:
       io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::debug::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_DATA,
-          asap::debug::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_SIZE, Font::SizeFloat(size),
+          asap::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_DATA,
+          asap::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_SIZE, Font::SizeFloat(size),
           &fontConfig, io.Fonts->GetGlyphRangesDefault());
       font = MergeIcons(Font::SizeFloat(size));
       break;
@@ -116,14 +116,14 @@ ImFont *LoadRobotoFont(
     switch (style) {
     case Font::Style::ITALIC:
       io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::debug::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_DATA,
-          asap::debug::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_SIZE, Font::SizeFloat(size),
+          asap::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_DATA,
+          asap::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_SIZE, Font::SizeFloat(size),
           &fontConfig, io.Fonts->GetGlyphRangesDefault());
       font = MergeIcons(Font::SizeFloat(size));
       break;
     case Font::Style::NORMAL:
-      io.Fonts->AddFontFromMemoryCompressedTTF(asap::debug::ui::Fonts::ROBOTO_BOLD_COMPRESSED_DATA,
-          asap::debug::ui::Fonts::ROBOTO_BOLD_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig);
+      io.Fonts->AddFontFromMemoryCompressedTTF(asap::ui::Fonts::ROBOTO_BOLD_COMPRESSED_DATA,
+          asap::ui::Fonts::ROBOTO_BOLD_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig);
       font = MergeIcons(Font::SizeFloat(size));
       break;
     }
@@ -152,8 +152,8 @@ ImFont *LoadInconsolataFont(
     case Font::Style::ITALIC:
     case Font::Style::NORMAL:
       io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::debug::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_DATA,
-          asap::debug::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_SIZE, Font::SizeFloat(size),
+          asap::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_DATA,
+          asap::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_SIZE, Font::SizeFloat(size),
           &fontConfig);
       font = MergeIcons(Font::SizeFloat(size));
       break;
@@ -164,8 +164,8 @@ ImFont *LoadInconsolataFont(
     case Font::Style::ITALIC:
     case Font::Style::NORMAL:
       io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::debug::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_DATA,
-          asap::debug::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_SIZE, Font::SizeFloat(size),
+          asap::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_DATA,
+          asap::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_SIZE, Font::SizeFloat(size),
           &fontConfig);
       font = MergeIcons(Font::SizeFloat(size));
       break;
@@ -187,8 +187,8 @@ ImFont *LoadIconsFont(float size) {
   fontConfig.Name[sizeof(fontConfig.Name) - 1] = 0;
   ImFont *font = nullptr;
   font = io.Fonts->AddFontFromMemoryCompressedTTF(
-      asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_DATA,
-      asap::debug::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE, size, &fontConfig);
+      asap::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_DATA,
+      asap::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE, size, &fontConfig);
   return font;
 }
 
