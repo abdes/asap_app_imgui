@@ -120,7 +120,7 @@ asap_with_doxygen(
   "\"The Imgui library and additional integration files.\""
   "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-asap_with_sphinx(${META_PROJECT_NAME}_${META_MODULE_NAME})
+# asap_with_sphinx(${META_PROJECT_NAME}_${META_MODULE_NAME})
 
 # ==================================================================================================
 # Deployment instructions
