@@ -92,7 +92,7 @@ target_link_libraries(
   asap::logging
   cxxopts
   glm
-  asap::imgui
+  ${META_PROJECT_NAME}::imgui
   cpptoml
   date_interface
 )
