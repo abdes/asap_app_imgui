@@ -23,4 +23,4 @@ auto TestExpectAudit(const int *ptr) -> int;
 auto TestEnsureAudit(const int *ptr) -> int;
 auto TestAssertAudit(const int *ptr) -> int;
 
-}  // namespace asap::contract::testing
+} // namespace asap::contract::testing

@@ -58,7 +58,7 @@ TEST(GoogleTestDeathMacros, NestedChecks) {
 }
 
 } // namespace
-}  // namespace asap::contract
+} // namespace asap::contract
 
 auto main(int argc, char **argv) -> int {
   asap::contract::PrepareForTesting();
