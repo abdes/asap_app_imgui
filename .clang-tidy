@@ -14,4 +14,4 @@ Checks: >
     -hicpp-signed-bitwise,
     -readability-function-cognitive-complexity,
     -google-runtime-references
-HeaderFilterRegex: ".*/[common|filesystem|logging]/.*"
+HeaderFilterRegex: ".*/[common|logging|main]/.*"
