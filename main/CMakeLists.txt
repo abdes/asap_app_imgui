@@ -43,19 +43,21 @@ asap_add_executable(
   WARNING
   SOURCES
   # Headers
+  src/app/application.h
+  src/app/imgui_runner.h
+  src/config/config.h
+  src/shaders/shader.h
   src/ui/fonts/fonts.h
   src/ui/fonts/material_design_icons.h
-  src/ui/style/theme.h
   src/ui/log/sink.h
-  src/ui/application_base.h
-  src/runner_base.h
-  src/imgui_runner.h
-  src/application.h
-  src/config.h
-  src/shader.h
+  src/ui/style/theme.h
   # Sources
   #FONTS
   src/ui/fonts/fonts.h
+  src/ui/fonts/Inconsolata-Bold.cpp
+  src/ui/fonts/Inconsolata-Regular.cpp
+  src/ui/fonts/material_design_icons.cpp
+  src/ui/fonts/material_design_icons.h
   src/ui/fonts/Roboto-Black.cpp
   src/ui/fonts/Roboto-BlackItalic.cpp
   src/ui/fonts/Roboto-Bold.cpp
@@ -68,20 +70,18 @@ asap_add_executable(
   src/ui/fonts/Roboto-Regular.cpp
   src/ui/fonts/Roboto-Thin.cpp
   src/ui/fonts/Roboto-ThinItalic.cpp
-  src/ui/fonts/Inconsolata-Regular.cpp
-  src/ui/fonts/Inconsolata-Bold.cpp
-  src/ui/fonts/material_design_icons.cpp
-  src/ui/fonts/material_design_icons.h
+  #
+  src/config/config.cpp
   #
   src/ui/log/sink.cpp
-  #
-  src/runner_base.cpp
-  src/imgui_runner.cpp
-  src/application.cpp
-  src/config.cpp
-  src/ui/application_base.cpp
   src/ui/style/theme.cpp
   #
+  src/app/imgui_runner.cpp
+  #
+  src/application_base.h
+  src/application_base.cpp
+  src/example_application.h
+  src/example_application.cpp
   src/main.cpp
   )
 

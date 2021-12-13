@@ -5,26 +5,27 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-#include <ui/application_base.h>
+#include "application_base.h"
+
+#include "app/imgui_runner.h"
+#include "ui/fonts/material_design_icons.h"
+#include "ui/log/sink.h"
+#include "ui/style/theme.h"
+
+#include <GLFW/glfw3.h>
+#include <imgui/imgui.h>
 
 #include <cmath> // for rounding frame rate
 #include <sstream>
 
-#include <GLFW/glfw3.h>
+using asap::ui::Font;
+using asap::ui::Theme;
+using asap::app::ImGuiRunner;
+using asap::app::Application;
 
-#include <imgui/imgui.h>
-
-#include <imgui_runner.h>
-#include <ui/fonts/material_design_icons.h>
-#include <ui/log/sink.h>
-#include <ui/style/theme.h>
-
-namespace asap::ui {
-
-// TODO: cleanup this from a c== point of view
 static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
 
-const char *ApplicationBase::LOGGER_NAME = "main";
+const char *const ApplicationBase::LOGGER_NAME = "main";
 
 void ApplicationBase::Init(ImGuiRunner *runner) {
   runner_ = runner;
@@ -56,7 +57,7 @@ void ApplicationBase::ShutDown() {
   Theme::SaveStyle();
 }
 
-bool ApplicationBase::Draw() {
+auto ApplicationBase::DrawCommonElements() -> bool {
   static bool opt_fullscreen_persistant = true;
   ImGuiViewport *viewport = ImGui::GetMainViewport();
 
@@ -70,12 +71,12 @@ bool ApplicationBase::Draw() {
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
     if (opt_fullscreen) {
       auto dockSpaceSize = viewport->Size;
-      dockSpaceSize.y -= 16.0f; // remove the status bar
+      dockSpaceSize.y -= 16.0F; // remove the status bar
       ImGui::SetNextWindowPos(viewport->Pos);
       ImGui::SetNextWindowSize(dockSpaceSize);
       ImGui::SetNextWindowViewport(viewport->ID);
-      ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-      ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0F);
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0F);
       window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse |
                       ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
       window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
@@ -84,29 +85,31 @@ bool ApplicationBase::Draw() {
     // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render
     // our background and handle the pass-thru hole, so we ask Begin() to not
     // render a background.
-    if (opt_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+    if ((opt_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0) {
       window_flags |= ImGuiWindowFlags_NoBackground;
+    }
 
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0F, 0.0F));
     ImGui::Begin("DockSpace Demo", nullptr, window_flags);
     ImGui::PopStyleVar();
 
-    if (opt_fullscreen)
+    if (opt_fullscreen) {
       ImGui::PopStyleVar(2);
+    }
 
     // Dockspace
-    ImGuiIO &io = ImGui::GetIO();
-    if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+    ImGuiIO &imgui_io = ImGui::GetIO();
+    if ((imgui_io.ConfigFlags & ImGuiConfigFlags_DockingEnable) != 0) {
       ImGuiID dockspace_id = ImGui::GetID("MyDockspace");
-      ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), opt_flags);
+      ImGui::DockSpace(dockspace_id, ImVec2(0.0F, 0.0F), opt_flags);
     } else {
-      // TODO: emit a log message
+      // TODO(Abdessattar): emit a log message
     }
 
     //
     // Status bar
     //
-    DrawStatusBar(viewport->Size.x, 16.0f, 0.0f, viewport->Size.y - menu_height);
+    DrawStatusBar(viewport->Size.x, 16.0F, 0.0F, viewport->Size.y - menu_height);
 
     if (show_logs_)
       DrawLogView();
@@ -128,7 +131,7 @@ bool ApplicationBase::Draw() {
 }
 
 float ApplicationBase::DrawMainMenu() {
-  auto menu_height = 0.0f;
+  auto menu_height = 0.0F;
 
   if (ImGui::BeginMainMenuBar()) {
     // Call the derived class to draw the application specific menus inside the
@@ -144,14 +147,17 @@ float ApplicationBase::DrawMainMenu() {
       // depth/z control.
       // ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 
-      if (ImGui::MenuItem("Flag: NoSplit", "", (opt_flags & ImGuiDockNodeFlags_NoSplit) != 0))
+      if (ImGui::MenuItem("Flag: NoSplit", "", (opt_flags & ImGuiDockNodeFlags_NoSplit) != 0)) {
         opt_flags ^= ImGuiDockNodeFlags_NoSplit;
+      }
       if (ImGui::MenuItem("Flag: NoDockingInCentralNode", "",
-              (opt_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0))
+              (opt_flags & ImGuiDockNodeFlags_NoDockingInCentralNode) != 0)) {
         opt_flags ^= ImGuiDockNodeFlags_NoDockingInCentralNode;
+      }
       if (ImGui::MenuItem("Flag: PassthruDockspace", "",
-              (opt_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0))
+              (opt_flags & ImGuiDockNodeFlags_PassthruCentralNode) != 0)) {
         opt_flags ^= ImGuiDockNodeFlags_PassthruCentralNode;
+      }
 
       ImGui::EndMenu();
     }
@@ -195,10 +201,10 @@ void ApplicationBase::DrawStatusBar(float width, float height, float pos_x, floa
           ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoResize);
 
   // Call the derived class to add stuff to the status bar
-  DrawInsideStatusBar(width - 45.0f, height);
+  DrawInsideStatusBar(width - 45.0F, height);
 
   // Draw the common stuff
-  ImGui::SameLine(width - 45.0f);
+  ImGui::SameLine(width - 45.0F);
   Font font(Font::FAMILY_PROPORTIONAL);
   font.Normal().Regular().SmallSize();
   ImGui::PushFont(font.ImGuiFont());
@@ -225,7 +231,7 @@ void ApplicationBase::DrawImGuiDemos() {
 
 namespace {
 
-bool DrawDisplaySettingsTitle(ImGuiRunner *runner, char title[80]) {
+auto DrawDisplaySettingsTitle(ImGuiRunner *runner, char title[80]) -> bool {
   auto changed = false;
   if (ImGui::InputText("Window Title", title, 79, ImGuiInputTextFlags_EnterReturnsTrue)) {
     changed = runner->GetWindowTitle() != title;
@@ -263,9 +269,8 @@ bool DrawDisplaySettingsMonitor(ImGuiRunner *runner, GLFWmonitor *&monitor) {
 
 bool DrawDisplaySettingsWindowSize(ImGuiRunner *runner, int size[2]) {
   auto input_changed = ImGui::InputInt2("Size", size);
-  int current_pos[2];
-  runner->GetWindowSize(current_pos);
-  auto changed = input_changed || (current_pos[0] != size[0]) || (current_pos[1] != size[1]);
+  auto current_pos =  runner->GetWindowSize();
+  auto changed = input_changed || (current_pos.first != size[0]) || (current_pos.second != size[1]);
   return changed;
 }
 
@@ -335,7 +340,9 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
       display_mode = 0;
     }
 
-    runner->GetWindowSize(size);
+    auto current_size = runner->GetWindowSize();
+    size[0] = current_size.first;
+    size[1] = current_size.second;
 
     monitor = runner->GetMonitor();
     if (!monitor)
@@ -351,7 +358,7 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
   }
 
   // Toolbar
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {5.0f, 2.0f});
+  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {5.0F, 2.0F});
   ImGui::PushStyleColor(ImGuiCol_ChildBg, (pending_changes)
                                               ? ImGui::GetStyleColorVec4(ImGuiCol_PlotLinesHovered)
                                               : ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
@@ -367,9 +374,9 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
 
   if (pending_changes) {
     auto button_color = ImGui::GetStyleColorVec4(ImGuiCol_Button);
-    button_color.w = 0.0f;
+    button_color.w = 0.0F;
     ImGui::PushStyleColor(ImGuiCol_Button, button_color);
-    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {1.0f, 1.0f});
+    ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {1.0F, 1.0F});
 
     float right_align_pos = ImGui::GetContentRegionAvailWidth();
     right_align_pos -= 18;
@@ -452,7 +459,7 @@ void ShowStyleSettings() {
   }
   // Toolbar
   {
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {5.0f, 2.0f});
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {5.0F, 2.0F});
     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
     {
       ImGui::BeginChild("Style Settings Toolbar", {ImGui::GetContentRegionAvailWidth(), 20}, true,
@@ -464,9 +471,9 @@ void ShowStyleSettings() {
         }
       }
       {
-        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {1.0f, 1.0f});
+        ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {1.0F, 1.0F});
         auto button_color = ImGui::GetStyleColorVec4(ImGuiCol_Button);
-        button_color.w = 0.0f;
+        button_color.w = 0.0F;
         ImGui::PushStyleColor(ImGuiCol_Button, button_color);
 
         float right_align_pos = ImGui::GetContentRegionAvailWidth();
@@ -539,8 +546,8 @@ void ApplicationBase::DrawDocksDebug() {
       // open/close state
       ImGui::Checkbox("Log Messages Window", &show_log_messages_window);
 
-      ImGui::Text("Application average %.3f ms/frame (%.1f FPS)",
-                  1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+      ImGui::Text("Application average %.3F ms/frame (%.1F FPS)",
+                  1000.0F / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     }
 
     // 3. Show the ImGui demo window. Most of the sample code is in
@@ -563,5 +570,3 @@ void ApplicationBase::DrawDocksDebug() {
     }
 
 #endif
-
-} // namespace asap::ui

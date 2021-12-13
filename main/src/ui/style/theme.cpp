@@ -5,21 +5,20 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+#include "ui/style/theme.h"
+#include "config/config.h"
+#include "ui/fonts/fonts.h"
+#include "ui/fonts/material_design_icons.h"
+
+#include <cpptoml.h>
+#include <imgui/imgui.h>
+#include <logging/logging.h>
+
 #include <array>
 #include <cstring>
 #include <fstream>
 #include <map>
 #include <mutex> // for call_once()
-
-#include <imgui/imgui.h>
-
-#include <cpptoml.h>
-
-#include <config.h>
-#include <logging/logging.h>
-#include <ui/fonts/fonts.h>
-#include <ui/fonts/material_design_icons.h>
-#include <ui/style/theme.h>
 
 namespace asap::ui {
 
@@ -57,8 +56,7 @@ ImFont *MergeIcons(float size) {
   fontConfig.PixelSnapH = true;
   auto font = io.Fonts->AddFontFromMemoryCompressedTTF(
       asap::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_DATA,
-      asap::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE, size, &fontConfig,
-      icons_ranges);
+      asap::ui::Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_SIZE, size, &fontConfig, icons_ranges);
   // use FONT_ICON_FILE_NAME_FAR if you want regular instead of solid
 
   return font;
@@ -80,10 +78,9 @@ ImFont *LoadRobotoFont(
   case Font::Weight::LIGHT:
     switch (style) {
     case Font::Style::ITALIC:
-      io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_DATA,
-          asap::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_SIZE, Font::SizeFloat(size),
-          &fontConfig, io.Fonts->GetGlyphRangesDefault());
+      io.Fonts->AddFontFromMemoryCompressedTTF(asap::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_DATA,
+          asap::ui::Fonts::ROBOTO_LIGHTITALIC_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig,
+          io.Fonts->GetGlyphRangesDefault());
       font = MergeIcons(Font::SizeFloat(size));
       break;
     case Font::Style::NORMAL:
@@ -97,17 +94,15 @@ ImFont *LoadRobotoFont(
   case Font::Weight::REGULAR:
     switch (style) {
     case Font::Style::ITALIC:
-      io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::ui::Fonts::ROBOTO_ITALIC_COMPRESSED_DATA,
+      io.Fonts->AddFontFromMemoryCompressedTTF(asap::ui::Fonts::ROBOTO_ITALIC_COMPRESSED_DATA,
           asap::ui::Fonts::ROBOTO_ITALIC_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig,
           io.Fonts->GetGlyphRangesDefault());
       font = MergeIcons(Font::SizeFloat(size));
       break;
     case Font::Style::NORMAL:
-      io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_DATA,
-          asap::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_SIZE, Font::SizeFloat(size),
-          &fontConfig, io.Fonts->GetGlyphRangesDefault());
+      io.Fonts->AddFontFromMemoryCompressedTTF(asap::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_DATA,
+          asap::ui::Fonts::ROBOTO_REGULAR_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig,
+          io.Fonts->GetGlyphRangesDefault());
       font = MergeIcons(Font::SizeFloat(size));
       break;
     }
@@ -115,10 +110,9 @@ ImFont *LoadRobotoFont(
   case Font::Weight::BOLD:
     switch (style) {
     case Font::Style::ITALIC:
-      io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_DATA,
-          asap::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_SIZE, Font::SizeFloat(size),
-          &fontConfig, io.Fonts->GetGlyphRangesDefault());
+      io.Fonts->AddFontFromMemoryCompressedTTF(asap::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_DATA,
+          asap::ui::Fonts::ROBOTO_BOLDITALIC_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig,
+          io.Fonts->GetGlyphRangesDefault());
       font = MergeIcons(Font::SizeFloat(size));
       break;
     case Font::Style::NORMAL:
@@ -151,10 +145,8 @@ ImFont *LoadInconsolataFont(
     switch (style) {
     case Font::Style::ITALIC:
     case Font::Style::NORMAL:
-      io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_DATA,
-          asap::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_SIZE, Font::SizeFloat(size),
-          &fontConfig);
+      io.Fonts->AddFontFromMemoryCompressedTTF(asap::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_DATA,
+          asap::ui::Fonts::INCONSOLATA_REGULAR_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig);
       font = MergeIcons(Font::SizeFloat(size));
       break;
     }
@@ -163,10 +155,8 @@ ImFont *LoadInconsolataFont(
     switch (style) {
     case Font::Style::ITALIC:
     case Font::Style::NORMAL:
-      io.Fonts->AddFontFromMemoryCompressedTTF(
-          asap::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_DATA,
-          asap::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_SIZE, Font::SizeFloat(size),
-          &fontConfig);
+      io.Fonts->AddFontFromMemoryCompressedTTF(asap::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_DATA,
+          asap::ui::Fonts::INCONSOLATA_BOLD_COMPRESSED_SIZE, Font::SizeFloat(size), &fontConfig);
       font = MergeIcons(Font::SizeFloat(size));
       break;
     }
@@ -406,66 +396,68 @@ void Theme::LoadDefaultFonts() {
   }
 
   // The Icons font
-  icons_font_normal_ = LoadIconsFont(32.0f);
+  icons_font_normal_ = LoadIconsFont(32.0F);
 }
 
+// NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 void Theme::LoadDefaultStyle() {
   auto &style = ImGui::GetStyle();
 
   style.WindowPadding = ImVec2(5, 5);
-  style.WindowRounding = 0.0f;
+  style.WindowRounding = 0.0F;
   style.FramePadding = ImVec2(5, 5);
-  style.FrameRounding = 3.0f;
+  style.FrameRounding = 3.0F;
   style.ItemSpacing = ImVec2(12, 5);
   style.ItemInnerSpacing = ImVec2(5, 5);
-  style.IndentSpacing = 25.0f;
-  style.ScrollbarSize = 15.0f;
-  style.ScrollbarRounding = 9.0f;
-  style.GrabMinSize = 5.0f;
-  style.GrabRounding = 3.0f;
+  style.IndentSpacing = 25.0F;
+  style.ScrollbarSize = 15.0F;
+  style.ScrollbarRounding = 9.0F;
+  style.GrabMinSize = 5.0F;
+  style.GrabRounding = 3.0F;
 
   // clang-format off
-  style.Colors[ImGuiCol_Text] = ImVec4(0.91f, 0.91f, 0.91f, 1.00f);
-  style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.40f, 0.40f, 0.40f, 1.00f);
-  style.Colors[ImGuiCol_WindowBg] = ImVec4(0.10f, 0.10f, 0.10f, 1.00f);
-  style.Colors[ImGuiCol_ChildBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-  style.Colors[ImGuiCol_Border] = ImVec4(0.00f, 0.00f, 0.00f, 0.39f);
-  style.Colors[ImGuiCol_BorderShadow] = ImVec4(1.00f, 1.00f, 1.00f, 0.10f);
-  style.Colors[ImGuiCol_FrameBg] = ImVec4(0.06f, 0.06f, 0.06f, 1.00f);
-  style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.75f, 0.42f, 0.02f, 0.40f);
-  style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.75f, 0.42f, 0.02f, 0.67f);
-  style.Colors[ImGuiCol_TitleBg] = ImVec4(0.04f, 0.04f, 0.04f, 1.00f);
-  style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
-  style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.18f, 0.18f, 0.18f, 1.00f);
-  style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.15f, 0.15f, 0.15f, 1.00f);
-  style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.02f, 0.02f, 0.02f, 0.53f);
-  style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.31f, 0.31f, 0.31f, 0.80f);
-  style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.49f, 0.49f, 0.49f, 0.80f);
-  style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.49f, 0.49f, 0.49f, 1.00f);
-  style.Colors[ImGuiCol_CheckMark] = ImVec4(0.75f, 0.42f, 0.02f, 1.00f);
-  style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.75f, 0.42f, 0.02f, 0.78f);
-  style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.75f, 0.42f, 0.02f, 1.00f);
-  style.Colors[ImGuiCol_Button] = ImVec4(0.75f, 0.42f, 0.02f, 0.40f);
-  style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.75f, 0.42f, 0.02f, 1.00f);
-  style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.94f, 0.47f, 0.02f, 1.00f);
-  style.Colors[ImGuiCol_Header] = ImVec4(0.75f, 0.42f, 0.02f, 0.31f);
-  style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.75f, 0.42f, 0.02f, 0.80f);
-  style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.75f, 0.42f, 0.02f, 1.00f);
-  style.Colors[ImGuiCol_Separator] = ImVec4(0.61f, 0.61f, 0.61f, 1.00f);
-  style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.75f, 0.42f, 0.02f, 0.78f);
-  style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.75f, 0.42f, 0.02f, 1.00f);
-  style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.22f, 0.22f, 0.22f, 1.00f);
-  style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.75f, 0.42f, 0.02f, 0.67f);
-  style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.75f, 0.42f, 0.02f, 0.95f);
-  style.Colors[ImGuiCol_PlotLines] = ImVec4(0.61f, 0.61f, 0.61f, 1.00f);
-  style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.00f, 0.57f, 0.65f, 1.00f);
-  style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.10f, 0.30f, 1.00f, 1.00f);
-  style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.00f, 0.40f, 1.00f, 1.00f);
-  style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.75f, 0.42f, 0.02f, 0.35f);
-  style.Colors[ImGuiCol_PopupBg] = ImVec4(0.00f, 0.00f, 0.00f, 0.94f);
-  style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.06f, 0.06f, 0.06f, 0.35f);
+  style.Colors[ImGuiCol_Text] = ImVec4(0.91F, 0.91F, 0.91F, 1.00F);
+  style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.40F, 0.40F, 0.40F, 1.00F);
+  style.Colors[ImGuiCol_WindowBg] = ImVec4(0.10F, 0.10F, 0.10F, 1.00F);
+  style.Colors[ImGuiCol_ChildBg] = ImVec4(0.00F, 0.00F, 0.00F, 0.00F);
+  style.Colors[ImGuiCol_Border] = ImVec4(0.00F, 0.00F, 0.00F, 0.39F);
+  style.Colors[ImGuiCol_BorderShadow] = ImVec4(1.00F, 1.00F, 1.00F, 0.10F);
+  style.Colors[ImGuiCol_FrameBg] = ImVec4(0.06F, 0.06F, 0.06F, 1.00F);
+  style.Colors[ImGuiCol_FrameBgHovered] = ImVec4(0.75F, 0.42F, 0.02F, 0.40F);
+  style.Colors[ImGuiCol_FrameBgActive] = ImVec4(0.75F, 0.42F, 0.02F, 0.67F);
+  style.Colors[ImGuiCol_TitleBg] = ImVec4(0.04F, 0.04F, 0.04F, 1.00F);
+  style.Colors[ImGuiCol_TitleBgCollapsed] = ImVec4(0.00F, 0.00F, 0.00F, 0.51F);
+  style.Colors[ImGuiCol_TitleBgActive] = ImVec4(0.18F, 0.18F, 0.18F, 1.00F);
+  style.Colors[ImGuiCol_MenuBarBg] = ImVec4(0.15F, 0.15F, 0.15F, 1.00F);
+  style.Colors[ImGuiCol_ScrollbarBg] = ImVec4(0.02F, 0.02F, 0.02F, 0.53F);
+  style.Colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.31F, 0.31F, 0.31F, 0.80F);
+  style.Colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.49F, 0.49F, 0.49F, 0.80F);
+  style.Colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.49F, 0.49F, 0.49F, 1.00F);
+  style.Colors[ImGuiCol_CheckMark] = ImVec4(0.75F, 0.42F, 0.02F, 1.00F);
+  style.Colors[ImGuiCol_SliderGrab] = ImVec4(0.75F, 0.42F, 0.02F, 0.78F);
+  style.Colors[ImGuiCol_SliderGrabActive] = ImVec4(0.75F, 0.42F, 0.02F, 1.00F);
+  style.Colors[ImGuiCol_Button] = ImVec4(0.75F, 0.42F, 0.02F, 0.40F);
+  style.Colors[ImGuiCol_ButtonHovered] = ImVec4(0.75F, 0.42F, 0.02F, 1.00F);
+  style.Colors[ImGuiCol_ButtonActive] = ImVec4(0.94F, 0.47F, 0.02F, 1.00F);
+  style.Colors[ImGuiCol_Header] = ImVec4(0.75F, 0.42F, 0.02F, 0.31F);
+  style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0.75F, 0.42F, 0.02F, 0.80F);
+  style.Colors[ImGuiCol_HeaderActive] = ImVec4(0.75F, 0.42F, 0.02F, 1.00F);
+  style.Colors[ImGuiCol_Separator] = ImVec4(0.61F, 0.61F, 0.61F, 1.00F);
+  style.Colors[ImGuiCol_SeparatorHovered] = ImVec4(0.75F, 0.42F, 0.02F, 0.78F);
+  style.Colors[ImGuiCol_SeparatorActive] = ImVec4(0.75F, 0.42F, 0.02F, 1.00F);
+  style.Colors[ImGuiCol_ResizeGrip] = ImVec4(0.22F, 0.22F, 0.22F, 1.00F);
+  style.Colors[ImGuiCol_ResizeGripHovered] = ImVec4(0.75F, 0.42F, 0.02F, 0.67F);
+  style.Colors[ImGuiCol_ResizeGripActive] = ImVec4(0.75F, 0.42F, 0.02F, 0.95F);
+  style.Colors[ImGuiCol_PlotLines] = ImVec4(0.61F, 0.61F, 0.61F, 1.00F);
+  style.Colors[ImGuiCol_PlotLinesHovered] = ImVec4(0.00F, 0.57F, 0.65F, 1.00F);
+  style.Colors[ImGuiCol_PlotHistogram] = ImVec4(0.10F, 0.30F, 1.00F, 1.00F);
+  style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.00F, 0.40F, 1.00F, 1.00F);
+  style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.75F, 0.42F, 0.02F, 0.35F);
+  style.Colors[ImGuiCol_PopupBg] = ImVec4(0.00F, 0.00F, 0.00F, 0.94F);
+  style.Colors[ImGuiCol_ModalWindowDimBg] = ImVec4(0.06F, 0.06F, 0.06F, 0.35F);
   // clang-format on
 }
+// NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
 
 ImFont *Theme::GetFont(std::string const &name) {
   auto font = fonts_.find(name);
@@ -620,7 +612,7 @@ void Theme::SaveStyle() {
     root->insert("theme", theme_settings);
   }
 
-  auto settings_path = asap::fs::GetPathFor(asap::fs::Location::F_THEME_SETTINGS);
+  auto settings_path = asap::config::GetPathFor(asap::config::Location::F_THEME_SETTINGS);
   auto ofs = std::ofstream();
   ofs.open(settings_path.string());
   ofs << (*root) << std::endl;
@@ -638,7 +630,7 @@ void Theme::LoadStyle() {
   auto &logger = asap::logging::Registry::GetLogger("main");
 
   std::shared_ptr<cpptoml::table> config;
-  auto theme_settings = asap::fs::GetPathFor(asap::fs::Location::F_THEME_SETTINGS);
+  auto theme_settings = asap::config::GetPathFor(asap::config::Location::F_THEME_SETTINGS);
   auto has_config = false;
   if (std::filesystem::exists(theme_settings)) {
     try {

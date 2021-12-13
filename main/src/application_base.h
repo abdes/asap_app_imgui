@@ -7,32 +7,29 @@
 
 #pragma once
 
+#include "app/application.h"
+#include "ui/log/sink.h"
+
 #include <logging/logging.h>
 
-#include <abstract_application.h>
-#include <ui/log/sink.h>
-
-namespace asap::ui {
-
-class ApplicationBase : public AbstractApplication,
+class ApplicationBase : public asap::app::Application,
                         protected asap::logging::Loggable<ApplicationBase> {
 public:
-  ApplicationBase() = default;
-
-  /// Not move constructible
+  ApplicationBase(const ApplicationBase &) = delete;
   ApplicationBase(ApplicationBase &&) = delete;
-  /// Not move assignable
-  ApplicationBase &operator=(ApplicationBase &&) = delete;
 
-  ~ApplicationBase() override = default;
+  auto operator=(const ApplicationBase &) -> ApplicationBase & = delete;
+  auto operator=(ApplicationBase &&) -> ApplicationBase & = delete;
 
-  void Init(ImGuiRunner *runner) final;
-  bool Draw() override;
+  void Init(asap::app::ImGuiRunner *runner) final;
   void ShutDown() final;
 
-  static const char *LOGGER_NAME;
+  static const char *const LOGGER_NAME;
 
 protected:
+  ApplicationBase() = default;
+  ~ApplicationBase() = default;
+
   virtual void AfterInit() {
   }
   virtual void DrawInsideMainMenu() {
@@ -42,8 +39,10 @@ protected:
   virtual void BeforeShutDown() {
   }
 
+  virtual auto DrawCommonElements() -> bool final;
+
 private:
-  float DrawMainMenu();
+  auto DrawMainMenu() -> float;
   void DrawStatusBar(float width, float height, float pos_x, float pos_y);
   void DrawLogView();
   void DrawSettings();
@@ -51,15 +50,12 @@ private:
   void DrawImGuiMetrics();
   void DrawImGuiDemos();
 
-private:
   bool show_docks_debug_{false};
   bool show_logs_{true};
   bool show_settings_{true};
   bool show_imgui_metrics_{false};
   bool show_imgui_demos_{false};
 
-  std::shared_ptr<ImGuiLogSink> sink_;
-  ImGuiRunner *runner_ = nullptr; // TODO: convert to weak_ptr?
+  std::shared_ptr<asap::ui::ImGuiLogSink> sink_;
+  asap::app::ImGuiRunner *runner_ = nullptr; // TODO(Abdessattar): convert to weak_ptr?
 };
-
-} // namespace asap::ui

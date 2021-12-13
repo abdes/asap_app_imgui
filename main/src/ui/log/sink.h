@@ -23,7 +23,7 @@ class ImGuiLogSink : public spdlog::sinks::base_sink<std::mutex>,
 public:
   void Clear();
 
-  void ShowLogLevelsPopup();
+  static void ShowLogLevelsPopup();
 
   void ShowLogFormatPopup();
 
@@ -35,12 +35,13 @@ public:
     scroll_lock_ = !scroll_lock_;
   }
 
+  // TODO(Abdessattar) refactor this ugly interface to not use pointer for open
   void Draw(const char *title = nullptr, bool *p_open = nullptr);
 
   void LoadSettings();
   void SaveSettings();
 
-  static const char *LOGGER_NAME;
+  static const char *const LOGGER_NAME;
 
 protected:
   void sink_it_(const spdlog::details::log_msg &msg) override;

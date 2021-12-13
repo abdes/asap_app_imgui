@@ -9,7 +9,7 @@
 
 #include <filesystem>
 
-namespace asap::fs {
+namespace asap::config {
 
 enum class Location {
   D_USER_CONFIG,
@@ -20,8 +20,8 @@ enum class Location {
   F_THEME_SETTINGS
 };
 
-std::filesystem::path GetPathFor(Location id);
+auto GetPathFor(Location id) -> std::filesystem::path;
 
 void CreateDirectories();
 
-} // namespace asap::fs
+} // namespace asap::config

@@ -5,11 +5,11 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-#include <config.h>
+#include "./config.h"
 
-namespace asap::fs {
+namespace asap::config {
 
-std::filesystem::path GetPathFor(Location id) {
+auto GetPathFor(Location id) -> std::filesystem::path {
   switch (id) {
   case Location::D_USER_CONFIG: {
     auto p = std::filesystem::current_path();
@@ -45,4 +45,4 @@ void CreateDirectories() {
   std::filesystem::create_directories(GetPathFor(Location::D_USER_CONFIG));
 }
 
-}  // namespace asap::fs
+} // namespace asap::config

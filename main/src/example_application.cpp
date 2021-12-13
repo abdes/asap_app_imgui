@@ -5,17 +5,15 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-#include <stdint.h> // for unitptr_t
-
-#include <application.h>
-#include <shader.h>
+#include "example_application.h"
+#include "shaders/shader.h"
 
 #include <imgui/imgui.h>
 
-namespace asap {
+#include <cstdint> // for unitptr_t
 
-bool Application::Draw() {
-  bool sleep_when_inactive = ApplicationBase::Draw();
+auto ExampleApplication::Draw() -> bool {
+  bool sleep_when_inactive = DrawCommonElements();
 
   if (ImGui::GetIO().DisplaySize.y > 0) {
     if (ImGui::Begin("OpenGL Render")) {
@@ -25,18 +23,19 @@ bool Application::Draw() {
       // Define the viewport dimensions
       glBindTexture(GL_TEXTURE_2D, texColorBuffer_);
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(wsize.x),
-          static_cast<GLsizei>(wsize.y), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+          static_cast<GLsizei>(wsize.y), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
       glBindTexture(GL_TEXTURE_2D, 0);
       glViewport(0, 0, static_cast<GLsizei>(wsize.x), static_cast<GLsizei>(wsize.y));
 
       // now that we actually created the framebuffer and added all attachments
       // we want to check if it is actually complete now
-      if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+      if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         ASLOG(error, "ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+      }
 
       // Render
       // Clear the colorbuffer
-      glClearColor(0.2f, 0.2f, 0.3f, 1.0f);
+      glClearColor(0.2F, 0.2F, 0.3F, 1.0F);
       glClear(GL_COLOR_BUFFER_BIT); // we're not using the stencil buffer now
 
       // Draw the triangle
@@ -55,8 +54,8 @@ bool Application::Draw() {
       // at the third parameter is the lower right corner the last two
       // parameters are the UVs they have to be flipped (normally they would be
       // (0,0);(1,1)
-      ImGui::GetWindowDrawList()->AddImage((ImTextureID)(uintptr_t)texColorBuffer_, pos,
-          ImVec2(pos.x + wsize.x, pos.y + wsize.y), ImVec2(0, 1), ImVec2(1, 0));
+      ImGui::GetWindowDrawList()->AddImage((ImTextureID) static_cast<uintptr_t>(texColorBuffer_),
+          pos, ImVec2(pos.x + wsize.x, pos.y + wsize.y), ImVec2(0, 1), ImVec2(1, 0));
     }
     ImGui::End();
   }
@@ -64,7 +63,7 @@ bool Application::Draw() {
   return sleep_when_inactive;
 }
 
-void Application::AfterInit() {
+void ExampleApplication::AfterInit() {
   // Build and compile our shader program
   ourShader_ = new Shader("core.vs", "core.frag");
 
@@ -72,9 +71,9 @@ void Application::AfterInit() {
   // ------------------------------------------------------------------
   float vertices[] = {
       // positions         // colors
-      0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f,  // bottom right
-      -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom left
-      0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f    // top
+      0.5F, -0.5F, 0.0F, 1.0F, 0.0F, 0.0F,  // bottom right
+      -0.5F, -0.5F, 0.0F, 0.0F, 1.0F, 0.0F, // bottom left
+      0.0F, 0.5F, 0.0F, 0.0F, 0.0F, 1.0F    // top
   };
 
   glGenVertexArrays(1, &VAO);
@@ -87,7 +86,7 @@ void Application::AfterInit() {
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
   // position attribute
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), nullptr);
   glEnableVertexAttribArray(0);
   // color attribute
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
@@ -119,7 +118,7 @@ void Application::AfterInit() {
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void Application::BeforeShutDown() {
+void ExampleApplication::BeforeShutDown() {
   // Properly de-allocate all resources once they've outlived their purpose
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
@@ -128,5 +127,3 @@ void Application::BeforeShutDown() {
 
   delete ourShader_;
 }
-
-} // namespace asap

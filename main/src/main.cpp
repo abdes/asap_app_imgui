@@ -5,28 +5,28 @@
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
-#include <iostream>
+#include "app/imgui_runner.h"
+#include "config/config.h"
+#include "example_application.h"
 
 #include <cxxopts.hpp>
 
-#include <application.h>
 #include <asap/asap-version.h>
-#include <config.h>
-#include <imgui_runner.h>
 #include <logging/logging.h>
 
-using asap::ImGuiRunner;
+#include <iostream>
 
-int main(int argc, char **argv) {
+using asap::app::ImGuiRunner;
+
+auto main(int argc, char **argv) -> int {
   auto &logger = asap::logging::Registry::GetLogger("main");
 
-  asap::fs::CreateDirectories();
+  asap::config::CreateDirectories();
 
   try {
     //
     // Handle program options
     //
-    // TODO: UTF-8 to be tested on Windows
     cxxopts::Options options(ASAP_PROJECT_NAME, ASAP_PROJECT_DESCRIPTION);
     options.add_options()
         // clang-format off
@@ -37,24 +37,24 @@ int main(int argc, char **argv) {
         ;
     auto result = options.parse(argc, argv);
 
-    if (result.count("help")) {
+    if (result.count("help") != 0U) {
       std::cout << options.help({}) << std::endl;
       exit(0);
     }
 
-    if (result.count("version")) {
+    if (result.count("version") != 0U) {
       std::cout << ASAP_NAME_VERSION << std::endl;
       exit(0);
     }
 
     // Test code for the option with value
-    if (result.count("test")) {
+    if (result.count("test") != 0U) {
       std::cout << "test = " << result["test"].as<std::string>() << std::endl;
     }
     // End Test code
 
     ASLOG_TO_LOGGER(logger, info, "starting ImGui application...");
-    asap::Application app;
+    ExampleApplication app;
     //
     // Start the ImGui runner
     //

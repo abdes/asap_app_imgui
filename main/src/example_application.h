@@ -7,27 +7,27 @@
 
 #pragma once
 
-#include <glad/gl.h>
+#include "application_base.h"
 
-#include <ui/application_base.h>
+#include <glad/gl.h>
 
 class Shader;
 
-namespace asap {
-
-class Application final : public asap::ui::ApplicationBase {
+class ExampleApplication final : public ApplicationBase {
 public:
-  Application() : asap::ui::ApplicationBase() {
-  }
+  ExampleApplication() = default;
+
+  ExampleApplication(const ExampleApplication&) = delete;
+  auto operator=(const ExampleApplication&) -> ExampleApplication& = delete;
 
   /// Not move constructible
-  Application(Application &&) = delete;
+  ExampleApplication(ExampleApplication &&) = delete;
   /// Not move assignable
-  Application &operator=(Application &&) = delete;
+  auto operator=(ExampleApplication &&) -> ExampleApplication & = delete;
 
-  ~Application() override = default;
+  virtual ~ExampleApplication() = default;
 
-  bool Draw() final;
+  auto Draw() -> bool override;
 
 protected:
   void AfterInit() override;
@@ -43,5 +43,3 @@ private:
   GLuint texColorBuffer_ = 0;
   Shader *ourShader_{nullptr};
 };
-
-} // namespace asap
