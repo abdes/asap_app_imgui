@@ -1,7 +1,7 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.205.2/containers/python-3
 {
-  "name": "asap_dev",
+  "name": "asap_app_imgui_dev",
   "build": {
     "dockerfile": "Dockerfile",
     "context": "..",
