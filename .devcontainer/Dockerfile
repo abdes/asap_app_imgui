@@ -10,8 +10,9 @@ RUN if [ "${NODE_VERSION}" != "none" ]; then su vscode -c "umask 0002 && . /usr/
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get -y install lsb-release wget software-properties-common \
-  && apt-get -y install build-essential ninja-build valgrind gdb lcov doxygen graphviz
-
+  && apt-get -y install build-essential ninja-build valgrind gdb lcov doxygen graphviz \
+  && apt-get -y install libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl-dev
+  
 # Install latest cmake 3.22 so we have support for cmake presets and a better integration in IDEs
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.22.0/cmake-3.22.0-linux-x86_64.sh \
       -q -O /tmp/cmake-install.sh \
