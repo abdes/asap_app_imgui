@@ -46,7 +46,6 @@ asap_add_executable(
   src/app/application.h
   src/app/imgui_runner.h
   src/config/config.h
-  src/shaders/shader.h
   src/ui/fonts/fonts.h
   src/ui/fonts/material_design_icons.h
   src/ui/log/sink.h
@@ -79,7 +78,9 @@ asap_add_executable(
   src/app/imgui_runner.cpp
   #
   src/application_base.h
+  src/application_base.h
   src/application_base.cpp
+  src/linmath.h
   src/example_application.h
   src/example_application.cpp
   src/main.cpp

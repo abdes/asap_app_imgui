@@ -6,11 +6,50 @@
 //   https://opensource.org/licenses/BSD-3-Clause)
 
 #include "example_application.h"
-#include "shaders/shader.h"
+#include "linmath.h"
 
+#include <GLFW/glfw3.h>
 #include <imgui/imgui.h>
 
 #include <cstdint> // for unitptr_t
+
+namespace {
+const struct {
+  float x, y;
+  float r, g, b;
+} VERTICES[3] = {
+    // clang-format off
+    { -0.6F, -0.4F, 1.0F, 0.0F, 0.0F },
+    {  0.6F, -0.4F, 0.0F, 1.0F, 0.0F },
+    {  0.0F,  0.6F, 0.0F, 0.0F, 1.0F }
+    // clang-format on
+};
+
+// clang-format off
+const char *const VERTEX_SHADER_TEXT =
+"#version 110\n"
+"uniform mat4 MVP;\n"
+"attribute vec3 vCol;\n"
+"attribute vec2 vPos;\n"
+"varying vec3 color;\n"
+"void main()\n"
+"{\n"
+"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
+"    color = vCol;\n"
+"}\n";
+// clang-format on
+
+// clang-format off
+const char *const FRAGMENT_SHADER_TEXT =
+"#version 110\n"
+"varying vec3 color;\n"
+"void main()\n"
+"{\n"
+"    gl_FragColor = vec4(color, 1.0);\n"
+"}\n";
+// clang-format on
+
+} // namespace
 
 auto ExampleApplication::Draw() -> bool {
   bool sleep_when_inactive = DrawCommonElements();
@@ -39,23 +78,28 @@ auto ExampleApplication::Draw() -> bool {
       glClear(GL_COLOR_BUFFER_BIT); // we're not using the stencil buffer now
 
       // Draw the triangle
-      ourShader_->use();
+      mat4x4 m;
+      mat4x4 p;
+      mat4x4 mvp;
+
+      auto ratio = wsize.x / wsize.y;
+
+      mat4x4_identity(m);
+      mat4x4_rotate_Z(m, m, (float)glfwGetTime());
+      mat4x4_ortho(p, -ratio, ratio, -1.0F, 1.0F, 1.0F, -1.0F);
+      mat4x4_mul(mvp, p, m);
+
+      glUseProgram(program);
+      glUniformMatrix4fv(mvp_location, 1, GL_FALSE, reinterpret_cast<const GLfloat *>(mvp));
       glBindVertexArray(VAO);
       glDrawArrays(GL_TRIANGLES, 0, 3);
+
       glBindVertexArray(0);
-
       glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
-      // get the mouse position
-      ImVec2 pos = ImGui::GetCursorScreenPos();
 
-      // pass the texture of the FBO
-      // window.getRenderTexture() is the texture of the FBO
-      // the next parameter is the upper left corner for the uvs to be applied
-      // at the third parameter is the lower right corner the last two
-      // parameters are the UVs they have to be flipped (normally they would be
-      // (0,0);(1,1)
-      ImGui::GetWindowDrawList()->AddImage((ImTextureID) static_cast<uintptr_t>(texColorBuffer_),
-          pos, ImVec2(pos.x + wsize.x, pos.y + wsize.y), ImVec2(0, 1), ImVec2(1, 0));
+      ImVec2 pos = ImGui::GetCursorScreenPos();
+      ImGui::GetWindowDrawList()->AddImage(reinterpret_cast<ImTextureID>(texColorBuffer_), pos,
+          ImVec2(pos.x + wsize.x, pos.y + wsize.y), ImVec2(0, 1), ImVec2(1, 0));
     }
     ImGui::End();
   }
@@ -64,33 +108,37 @@ auto ExampleApplication::Draw() -> bool {
 }
 
 void ExampleApplication::AfterInit() {
-  // Build and compile our shader program
-  ourShader_ = new Shader("core.vs", "core.frag");
-
-  // set up vertex data (and buffer(s)) and configure vertex attributes
-  // ------------------------------------------------------------------
-  float vertices[] = {
-      // positions         // colors
-      0.5F, -0.5F, 0.0F, 1.0F, 0.0F, 0.0F,  // bottom right
-      -0.5F, -0.5F, 0.0F, 0.0F, 1.0F, 0.0F, // bottom left
-      0.0F, 0.5F, 0.0F, 0.0F, 0.0F, 1.0F    // top
-  };
 
   glGenVertexArrays(1, &VAO);
-  glGenBuffers(1, &VBO);
-  // bind the Vertex Array Object first, then bind and set vertex buffer(s), and
-  // then configure vertex attributes(s).
   glBindVertexArray(VAO);
 
+  glGenBuffers(1, &VBO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+  glBufferData(
+      GL_ARRAY_BUFFER, sizeof(VERTICES), static_cast<const void *>(VERTICES), GL_STATIC_DRAW);
 
-  // position attribute
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), nullptr);
-  glEnableVertexAttribArray(0);
-  // color attribute
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
-  glEnableVertexAttribArray(1);
+  auto vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+  glShaderSource(vertex_shader, 1, &VERTEX_SHADER_TEXT, nullptr);
+  glCompileShader(vertex_shader);
+
+  auto fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+  glShaderSource(fragment_shader, 1, &FRAGMENT_SHADER_TEXT, nullptr);
+  glCompileShader(fragment_shader);
+
+  program = glCreateProgram();
+  glAttachShader(program, vertex_shader);
+  glAttachShader(program, fragment_shader);
+  glLinkProgram(program);
+
+  mvp_location = glGetUniformLocation(program, "MVP");
+  vpos_location = glGetAttribLocation(program, "vPos");
+  vcol_location = glGetAttribLocation(program, "vCol");
+
+  glEnableVertexAttribArray(vpos_location);
+  glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]), nullptr);
+  glEnableVertexAttribArray(vcol_location);
+  glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]),
+      reinterpret_cast<const void *>(sizeof(float) * 2));
 
   // You can unbind the VAO afterwards so other VAO calls won't accidentally
   // modify this VAO, but this rarely happens. Modifying other VAOs requires a
@@ -124,6 +172,4 @@ void ExampleApplication::BeforeShutDown() {
   glDeleteBuffers(1, &VBO);
   glDeleteTextures(1, &texColorBuffer_);
   glDeleteFramebuffers(1, &frameBuffer_);
-
-  delete ourShader_;
 }

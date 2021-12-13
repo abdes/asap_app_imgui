@@ -39,7 +39,8 @@ protected:
 
 private:
   GLuint VBO = 0, VAO = 0;
+  GLuint program = 0;
+  GLint mvp_location = -1, vpos_location = -1, vcol_location = -1;
   GLuint frameBuffer_ = 0;
   GLuint texColorBuffer_ = 0;
-  Shader *ourShader_{nullptr};
 };
