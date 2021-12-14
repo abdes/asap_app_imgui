@@ -17,8 +17,8 @@ class ExampleApplication final : public ApplicationBase {
 public:
   ExampleApplication() = default;
 
-  ExampleApplication(const ExampleApplication&) = delete;
-  auto operator=(const ExampleApplication&) -> ExampleApplication& = delete;
+  ExampleApplication(const ExampleApplication &) = delete;
+  auto operator=(const ExampleApplication &) -> ExampleApplication & = delete;
 
   /// Not move constructible
   ExampleApplication(ExampleApplication &&) = delete;

@@ -26,25 +26,26 @@
 //#define IMGUI_API __declspec( dllimport )
 
 //---- Don't define obsolete functions/enums names. Consider enabling from time to time after
-//updating to avoid using soon-to-be obsolete function/names. #define
-//IMGUI_DISABLE_OBSOLETE_FUNCTIONS
+// updating to avoid using soon-to-be obsolete function/names. #define
+// IMGUI_DISABLE_OBSOLETE_FUNCTIONS
 
 //---- Don't implement demo windows functionality
 //(ShowDemoWindow()/ShowStyleEditor()/ShowUserGuide() methods will be empty)
 //---- It is very strongly recommended to NOT disable the demo windows during development. Please
-//read the comments in imgui_demo.cpp. #define IMGUI_DISABLE_DEMO_WINDOWS
+// read the comments in imgui_demo.cpp. #define IMGUI_DISABLE_DEMO_WINDOWS
 
 //---- Don't implement some functions to reduce linkage requirements.
 //#define IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS   // [Win32] Don't implement default
-//clipboard handler. Won't use and link with OpenClipboard/GetClipboardData/CloseClipboard etc.
+// clipboard handler. Won't use and link with OpenClipboard/GetClipboardData/CloseClipboard etc.
 //#define IMGUI_DISABLE_WIN32_DEFAULT_IME_FUNCTIONS         // [Win32] Don't implement default IME
-//handler. Won't use and link with ImmGetContext/ImmSetCompositionWindow. #define
-//IMGUI_DISABLE_FORMAT_STRING_FUNCTIONS             // Don't implement
-//ImFormatString/ImFormatStringV so you can implement them yourself if you don't want to link with
-//vsnprintf. #define IMGUI_DISABLE_MATH_FUNCTIONS                      // Don't implement
-//ImFabs/ImSqrt/ImPow/ImFmod/ImCos/ImSin/ImAcos/ImAtan2 wrapper so you can implement them yourself.
-//Declare your prototypes in imconfig.h. #define IMGUI_DISABLE_DEFAULT_ALLOCATORS // Don't implement
-//default allocators calling malloc()/free(). You will need to call ImGui::SetAllocatorFunctions().
+// handler. Won't use and link with ImmGetContext/ImmSetCompositionWindow. #define
+// IMGUI_DISABLE_FORMAT_STRING_FUNCTIONS             // Don't implement
+// ImFormatString/ImFormatStringV so you can implement them yourself if you don't want to link with
+// vsnprintf. #define IMGUI_DISABLE_MATH_FUNCTIONS                      // Don't implement
+// ImFabs/ImSqrt/ImPow/ImFmod/ImCos/ImSin/ImAcos/ImAtan2 wrapper so you can implement them yourself.
+// Declare your prototypes in imconfig.h. #define IMGUI_DISABLE_DEFAULT_ALLOCATORS // Don't
+// implement default allocators calling malloc()/free(). You will need to call
+// ImGui::SetAllocatorFunctions().
 
 //---- Include imgui_user.h at the end of imgui.h as a convenience
 //#define IMGUI_INCLUDE_IMGUI_USER_H
@@ -53,7 +54,7 @@
 //#define IMGUI_USE_BGRA_PACKED_COLOR
 
 //---- Avoid multiple STB libraries implementations, or redefine path/filenames to prioritize
-//another version
+// another version
 // By default the embedded implementations are declared static and not available outside of imgui
 // cpp files.
 //#define IMGUI_STB_TRUETYPE_FILENAME   "my_folder/stb_truetype.h"
@@ -62,7 +63,7 @@
 //#define IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
 
 //---- Define constructor and implicit cast operators to convert back<>forth from your math types
-//and ImVec2/ImVec4.
+// and ImVec2/ImVec4.
 // This will be inlined as part of ImVec2 and ImVec4 class declarations.
 /*
 #define IM_VEC2_CLASS_EXTRA                                                 \
@@ -75,10 +76,10 @@
 */
 
 //---- Use 32-bit vertex indices (default is 16-bit) to allow meshes with more than 64K vertices.
-//Render function needs to support it. #define ImDrawIdx unsigned int
+// Render function needs to support it. #define ImDrawIdx unsigned int
 
 //---- Tip: You can add extra functions within the ImGui:: namespace, here or in your own headers
-//files.
+// files.
 /*
 namespace ImGui
 {

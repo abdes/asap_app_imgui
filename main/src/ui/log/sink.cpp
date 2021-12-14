@@ -126,7 +126,7 @@ void ImGuiLogSink::Draw(const char *title, bool *open) {
     ImGui::SameLine();
     if (ImGui::Button(ICON_MDI_NOTIFICATION_CLEAR_ALL " Clear")) {
       Clear();
-}
+    }
     if (ImGui::IsItemHovered()) {
       ImGui::SetTooltip("Discard all messages");
     }
