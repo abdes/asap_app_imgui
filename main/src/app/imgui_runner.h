@@ -40,13 +40,13 @@ public:
   void LoadSetting();
   void SaveSetting() const;
 
-  void Windowed(int width, int height, char const *title);
-  void FullScreenWindowed(char const *title, int monitor);
-  void FullScreen(int width, int height, char const *title, int monitor, int refresh_rate);
+  void Windowed(int width, int height, const std::string &title);
+  void FullScreenWindowed(const std::string &title, int monitor);
+  void FullScreen(int width, int height, const std::string &title, int monitor, int refresh_rate);
 
   void EnableVsync(bool state = true);
   void MultiSample(int samples);
-  void SetWindowTitle(char const *title);
+  void SetWindowTitle(const std::string &title);
 
   void Run();
 

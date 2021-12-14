@@ -13,19 +13,31 @@
 #include "ui/style/theme.h"
 
 #include <GLFW/glfw3.h>
+#include <gsl/span>
 #include <imgui/imgui.h>
+#include <imgui/misc/cpp/imgui_stdlib.h>
 
 #include <cmath> // for rounding frame rate
 #include <sstream>
 
+using asap::app::Application;
+using asap::app::ImGuiRunner;
 using asap::ui::Font;
 using asap::ui::Theme;
-using asap::app::ImGuiRunner;
-using asap::app::Application;
 
 static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
 
 const char *const ApplicationBase::LOGGER_NAME = "main";
+
+namespace {
+constexpr float STATUS_BAR_HEIGHT = 16.0F;
+constexpr float STATUS_BAR_FPS_WIDTH = 45.0F;
+constexpr float HORIZONTAL_WINDOW_PADDING = 5.0F;
+constexpr float VERTICAL_WINDOW_PADDING = 5.0F;
+constexpr float TOOLBAR_HEIGHT = 30.0F;
+constexpr float ICON_HEIGHT = 18.0F;
+constexpr float ICON_WIDTH = 18.0F;
+} // namespace
 
 void ApplicationBase::Init(ImGuiRunner *runner) {
   runner_ = runner;
@@ -71,7 +83,7 @@ auto ApplicationBase::DrawCommonElements() -> bool {
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
     if (opt_fullscreen) {
       auto dockSpaceSize = viewport->Size;
-      dockSpaceSize.y -= 16.0F; // remove the status bar
+      dockSpaceSize.y -= STATUS_BAR_HEIGHT; // remove the status bar
       ImGui::SetNextWindowPos(viewport->Pos);
       ImGui::SetNextWindowSize(dockSpaceSize);
       ImGui::SetNextWindowViewport(viewport->ID);
@@ -109,18 +121,23 @@ auto ApplicationBase::DrawCommonElements() -> bool {
     //
     // Status bar
     //
-    DrawStatusBar(viewport->Size.x, 16.0F, 0.0F, viewport->Size.y - menu_height);
+    DrawStatusBar(viewport->Size.x, STATUS_BAR_HEIGHT, 0.0F, viewport->Size.y - menu_height);
 
-    if (show_logs_)
+    if (show_logs_) {
       DrawLogView();
-    if (show_settings_)
+    }
+    if (show_settings_) {
       DrawSettings();
-    if (show_docks_debug_)
+    }
+    if (show_docks_debug_) {
       DrawDocksDebug();
-    if (show_imgui_metrics_)
+    }
+    if (show_imgui_metrics_) {
       DrawImGuiMetrics();
-    if (show_imgui_demos_)
+    }
+    if (show_imgui_demos_) {
       DrawImGuiDemos();
+    }
   }
 
   ImGui::End();
@@ -130,7 +147,7 @@ auto ApplicationBase::DrawCommonElements() -> bool {
   return true;
 }
 
-float ApplicationBase::DrawMainMenu() {
+auto ApplicationBase::DrawMainMenu() -> float {
   auto menu_height = 0.0F;
 
   if (ImGui::BeginMainMenuBar()) {
@@ -201,10 +218,10 @@ void ApplicationBase::DrawStatusBar(float width, float height, float pos_x, floa
           ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoResize);
 
   // Call the derived class to add stuff to the status bar
-  DrawInsideStatusBar(width - 45.0F, height);
+  DrawInsideStatusBar(width - STATUS_BAR_FPS_WIDTH, height);
 
   // Draw the common stuff
-  ImGui::SameLine(width - 45.0F);
+  ImGui::SameLine(width - STATUS_BAR_FPS_WIDTH);
   Font font(Font::FAMILY_PROPORTIONAL);
   font.Normal().Regular().SmallSize();
   ImGui::PushFont(font.ImGuiFont());
@@ -231,25 +248,27 @@ void ApplicationBase::DrawImGuiDemos() {
 
 namespace {
 
-auto DrawDisplaySettingsTitle(ImGuiRunner *runner, char title[80]) -> bool {
+auto DrawDisplaySettingsTitle(ImGuiRunner *runner, std::string &title) -> bool {
   auto changed = false;
-  if (ImGui::InputText("Window Title", title, 79, ImGuiInputTextFlags_EnterReturnsTrue)) {
+  if (ImGui::InputText("Window Title", &title, ImGuiInputTextFlags_EnterReturnsTrue)) {
     changed = runner->GetWindowTitle() != title;
   }
   return changed;
 }
 
-bool DrawDisplaySettingsMode(int &display_mode) {
-  static const char *mode_items[] = {"Windowed", "Full Screen", "Full Screen Windowed"};
-  auto changed = ImGui::Combo("Display Mode", &display_mode, mode_items, IM_ARRAYSIZE(mode_items));
+auto DrawDisplaySettingsMode(int &display_mode) -> bool {
+  static const std::array<const char *, 3> mode_items{
+      "Windowed", "Full Screen", "Full Screen Windowed"};
+  auto changed = ImGui::Combo("Display Mode", &display_mode, mode_items.data(), mode_items.size());
   return changed;
 }
 
-bool DrawDisplaySettingsMonitor(ImGuiRunner *runner, GLFWmonitor *&monitor) {
+auto DrawDisplaySettingsMonitor(ImGuiRunner *runner, GLFWmonitor *&monitor) -> bool {
   auto changed = false;
   if (ImGui::BeginCombo("Monitor", glfwGetMonitorName(monitor))) {
     int count = 0;
-    GLFWmonitor **monitors = glfwGetMonitors(&count);
+    GLFWmonitor **glfw_monitors = glfwGetMonitors(&count);
+    auto monitors = gsl::span(glfw_monitors, count);
     for (int n = 0; n < count; n++) {
       bool is_selected = (monitors[n] == runner->GetMonitor());
       if (ImGui::Selectable(glfwGetMonitorName(monitors[n]), is_selected)) {
@@ -267,14 +286,14 @@ bool DrawDisplaySettingsMonitor(ImGuiRunner *runner, GLFWmonitor *&monitor) {
   return changed;
 }
 
-bool DrawDisplaySettingsWindowSize(ImGuiRunner *runner, int size[2]) {
-  auto input_changed = ImGui::InputInt2("Size", size);
-  auto current_pos =  runner->GetWindowSize();
+auto DrawDisplaySettingsWindowSize(ImGuiRunner *runner, std::array<int, 2> &size) -> bool {
+  auto input_changed = ImGui::InputInt2("Size", size.data());
+  auto current_pos = runner->GetWindowSize();
   auto changed = input_changed || (current_pos.first != size[0]) || (current_pos.second != size[1]);
   return changed;
 }
 
-bool DrawDisplaySettingsResolution(GLFWmonitor *monitor, const GLFWvidmode *&resolution) {
+auto DrawDisplaySettingsResolution(GLFWmonitor *monitor, const GLFWvidmode *&resolution) -> bool {
   auto changed = false;
   auto ostr = std::ostringstream();
   ostr << resolution->width << 'x' << resolution->height << " @ " << resolution->refreshRate
@@ -282,7 +301,8 @@ bool DrawDisplaySettingsResolution(GLFWmonitor *monitor, const GLFWvidmode *&res
   auto current_mode = ostr.str();
   if (ImGui::BeginCombo("Resolution", ostr.str().c_str())) {
     int count = 0;
-    const GLFWvidmode *video_modes = glfwGetVideoModes(monitor, &count);
+    const GLFWvidmode *glfw_video_modes = glfwGetVideoModes(monitor, &count);
+    auto const video_modes = gsl::span(glfw_video_modes, count);
     for (int n = 0; n < count; n++) {
       ostr = std::ostringstream();
       ostr << video_modes[n].width << 'x' << video_modes[n].height << " @ "
@@ -304,21 +324,23 @@ bool DrawDisplaySettingsResolution(GLFWmonitor *monitor, const GLFWvidmode *&res
   return changed;
 }
 
-int GetMonitorIndex(GLFWmonitor *monitor) {
+auto GetMonitorIndex(GLFWmonitor *monitor) -> int {
   int count = 0;
-  GLFWmonitor **monitors = glfwGetMonitors(&count);
+  GLFWmonitor **glfw_monitors = glfwGetMonitors(&count);
+  auto monitors = gsl::span(glfw_monitors, count);
   for (int n = 0; n < count; n++) {
-    if (monitors[n] == monitor)
+    if (monitors[n] == monitor) {
       return n;
+    }
   }
   return 0;
 }
 
 void ShowDisplaySettings(ImGuiRunner *runner) {
-  static char title[80];
+  static std::string title;
   static int display_mode = 0;
-  static GLFWmonitor *monitor = nullptr;
-  static int size[2] = {0, 0};
+  static GLFWmonitor *monitor = nullptr; // NOLINT
+  static std::array<int, 2> size{0, 0};
   static const GLFWvidmode *resolution = nullptr;
   static int samples = 0;
   static bool vsync = false;
@@ -329,8 +351,7 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
   if (reset_to_current) {
     reset_to_current = false;
 
-    auto copied = runner->GetWindowTitle().copy(title, 79);
-    title[copied] = '\0';
+    title = runner->GetWindowTitle();
 
     if (runner->IsWindowed() && runner->IsFullScreen()) {
       display_mode = 2;
@@ -345,8 +366,9 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
     size[1] = current_size.second;
 
     monitor = runner->GetMonitor();
-    if (!monitor)
+    if (monitor == nullptr) {
       monitor = glfwGetPrimaryMonitor();
+    }
 
     resolution = glfwGetVideoMode(monitor);
 
@@ -358,12 +380,14 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
   }
 
   // Toolbar
-  ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {5.0F, 2.0F});
+  ImGui::PushStyleVar(
+      ImGuiStyleVar_WindowPadding, {HORIZONTAL_WINDOW_PADDING, VERTICAL_WINDOW_PADDING});
   ImGui::PushStyleColor(ImGuiCol_ChildBg, (pending_changes)
                                               ? ImGui::GetStyleColorVec4(ImGuiCol_PlotLinesHovered)
                                               : ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
 
-  ImGui::BeginChild("Display Settings Toolbar", {ImGui::GetContentRegionAvailWidth(), 20}, true,
+  ImGui::BeginChild("Display Settings Toolbar",
+      {ImGui::GetContentRegionAvailWidth(), TOOLBAR_HEIGHT}, true,
       ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar |
           ImGuiWindowFlags_NoScrollWithMouse);
 
@@ -379,16 +403,16 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {1.0F, 1.0F});
 
     float right_align_pos = ImGui::GetContentRegionAvailWidth();
-    right_align_pos -= 18;
+    right_align_pos -= ICON_WIDTH;
     ImGui::SameLine(right_align_pos);
-    if (ImGui::Button(ICON_MDI_RESTORE, {18, 18})) {
+    if (ImGui::Button(ICON_MDI_RESTORE, {ICON_WIDTH, ICON_HEIGHT})) {
       reset_to_current = true;
     }
     right_align_pos -= ImGui::GetStyle().ItemSpacing.x;
 
-    right_align_pos -= 18;
+    right_align_pos -= ICON_WIDTH;
     ImGui::SameLine(right_align_pos);
-    if (ImGui::Button(ICON_MDI_CHECK_ALL, {18, 18})) {
+    if (ImGui::Button(ICON_MDI_CHECK_ALL, {ICON_WIDTH, ICON_HEIGHT})) {
       runner->EnableVsync(vsync);
       runner->MultiSample(samples);
       switch (display_mode) {
@@ -423,10 +447,10 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
 
   if (DrawDisplaySettingsTitle(runner, title)) {
     pending_changes = true;
-  };
+  }
   if (DrawDisplaySettingsMode(display_mode)) {
     pending_changes = true;
-  };
+  }
   if (display_mode == 1 || display_mode == 2) {
     if (DrawDisplaySettingsMonitor(runner, monitor)) {
       pending_changes = true;
@@ -459,10 +483,12 @@ void ShowStyleSettings() {
   }
   // Toolbar
   {
-    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {5.0F, 2.0F});
+    ImGui::PushStyleVar(
+        ImGuiStyleVar_WindowPadding, {HORIZONTAL_WINDOW_PADDING, VERTICAL_WINDOW_PADDING});
     ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg));
     {
-      ImGui::BeginChild("Style Settings Toolbar", {ImGui::GetContentRegionAvailWidth(), 20}, true,
+      ImGui::BeginChild("Style Settings Toolbar",
+          {ImGui::GetContentRegionAvailWidth(), TOOLBAR_HEIGHT}, true,
           ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar |
               ImGuiWindowFlags_NoScrollWithMouse);
       {
@@ -477,12 +503,12 @@ void ShowStyleSettings() {
         ImGui::PushStyleColor(ImGuiCol_Button, button_color);
 
         float right_align_pos = ImGui::GetContentRegionAvailWidth();
-        right_align_pos -= 18;
+        right_align_pos -= ICON_WIDTH;
         ImGui::SameLine(right_align_pos);
         Font font(Font::FAMILY_PROPORTIONAL);
         font.Italic().Light().LargeSize();
         ImGui::PushFont(font.ImGuiFont());
-        if (ImGui::Button(ICON_MDI_RESTORE, {18, 18})) {
+        if (ImGui::Button(ICON_MDI_RESTORE, {ICON_WIDTH, ICON_HEIGHT})) {
           reset_to_current = true;
         }
         ImGui::PopFont();
@@ -527,7 +553,7 @@ void ApplicationBase::DrawDocksDebug() {
   if (ImGui::Begin("Docks", &show_docks_debug_)) {
     ImGui::LabelText("TODO", "Get docking information from ImGui and populate this once the ImGui "
                              "programmatic access to docking is published as a stable API");
-    // TODO: generate docking information
+    // TODO(Abdessattar): generate docking information
   }
   ImGui::End();
 }

@@ -46,7 +46,7 @@ asap_add_library(
   SHARED
   WARNING
   SOURCES
-  # IMgui public Headers
+  # Imgui public Headers
   "imgui/imgui.h"
   "imgui/backends/imgui_impl_glfw.h"
   "imgui/backends/imgui_impl_opengl3.h"
@@ -68,7 +68,11 @@ asap_add_library(
   "include/KHR/khrplatform.h"
   "include/glad/gl.h"
   # Integration sources
-  "src/glad/gl.cpp")
+  "src/glad/gl.cpp"
+  # ImGui extensions
+  # wrappers for C++ standard library (STL) types (std::string, etc.)
+  "imgui/misc/cpp/imgui_stdlib.h"
+  "imgui/misc/cpp/imgui_stdlib.cpp")
 
 target_link_libraries(${MODULE_TARGET_NAME} PRIVATE asap::common PUBLIC glfw)
 

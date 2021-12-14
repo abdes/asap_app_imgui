@@ -80,7 +80,6 @@ asap_add_executable(
   src/application_base.h
   src/application_base.h
   src/application_base.cpp
-  src/linmath.h
   src/example_application.h
   src/example_application.cpp
   src/main.cpp
@@ -89,6 +88,7 @@ asap_add_executable(
 target_link_libraries(
   ${MODULE_TARGET_NAME}
   PRIVATE
+  GSL
   asap::common
   asap::logging
   cxxopts

@@ -19,9 +19,9 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 // clang-format on
 
-#include <cpptoml.h>
-
 #include <contract/contract.h>
+#include <cpptoml.h>
+#include <gsl/span>
 
 #include <chrono>  // for sleep timeout
 #include <csignal> // for signal handling
@@ -136,7 +136,7 @@ void ImGuiRunner::InitImGui() {
   ASLOG(debug, "  ImGui init done");
 }
 
-void ImGuiRunner::Windowed(int width, int height, char const *title) {
+void ImGuiRunner::Windowed(int width, int height, const std::string &title) {
   window_title_ = title;
 
   if (windowed_ && !full_screen_) {
@@ -149,7 +149,7 @@ void ImGuiRunner::Windowed(int width, int height, char const *title) {
   if (window_ == nullptr) {
     ASLOG(debug, "  starting in 'Windowed' mode: w={}, h={}, t='{}'", width, height, title);
     glfwWindowHint(GLFW_SAMPLES, MultiSample()); // multisampling
-    window_ = glfwCreateWindow(width, height, title, nullptr, nullptr);
+    window_ = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
     if (window_ == nullptr) {
       glfwTerminate();
       exit(EXIT_FAILURE);
@@ -162,7 +162,7 @@ void ImGuiRunner::Windowed(int width, int height, char const *title) {
     // Restore the window position when you switch to windowed mode
     glfwSetWindowMonitor(window_, nullptr, saved_position_.first, saved_position_.second, width,
         height, GLFW_DONT_CARE);
-    glfwSetWindowTitle(window_, title);
+    glfwSetWindowTitle(window_, title.data());
   }
 }
 
@@ -173,7 +173,8 @@ auto GetMonitorByNumber(int monitor) -> GLFWmonitor * {
     the_monitor = glfwGetPrimaryMonitor();
   } else {
     int count = 0;
-    GLFWmonitor **monitors = glfwGetMonitors(&count);
+    GLFWmonitor **glfw_monitors = glfwGetMonitors(&count);
+    auto monitors = gsl::span(glfw_monitors, count);
     if (monitor >= 0 && monitor < count) {
       the_monitor = monitors[monitor];
     } else {
@@ -187,7 +188,7 @@ auto GetMonitorByNumber(int monitor) -> GLFWmonitor * {
 }
 } // namespace
 
-void ImGuiRunner::FullScreenWindowed(char const *title, int monitor) {
+void ImGuiRunner::FullScreenWindowed(const std::string &title, int monitor) {
   window_title_ = title;
   windowed_ = true;
   full_screen_ = true;
@@ -204,7 +205,7 @@ void ImGuiRunner::FullScreenWindowed(char const *title, int monitor) {
     glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
     glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
     glfwWindowHint(GLFW_SAMPLES, MultiSample()); // multisampling
-    window_ = glfwCreateWindow(mode->width, mode->height, title, the_monitor, nullptr);
+    window_ = glfwCreateWindow(mode->width, mode->height, title.data(), the_monitor, nullptr);
     if (window_ == nullptr) {
       glfwTerminate();
       exit(EXIT_FAILURE);
@@ -220,11 +221,11 @@ void ImGuiRunner::FullScreenWindowed(char const *title, int monitor) {
     saved_position_ = GetWindowPosition();
 
     glfwSetWindowMonitor(window_, the_monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
-    glfwSetWindowTitle(window_, title);
+    glfwSetWindowTitle(window_, title.data());
   }
 }
 void ImGuiRunner::FullScreen(
-    int width, int height, char const *title, int monitor, int refresh_rate) {
+    int width, int height, const std::string &title, int monitor, int refresh_rate) {
   window_title_ = title;
   windowed_ = false;
   full_screen_ = true;
@@ -235,7 +236,7 @@ void ImGuiRunner::FullScreen(
         title, monitor, refresh_rate);
     glfwWindowHint(GLFW_REFRESH_RATE, refresh_rate);
     glfwWindowHint(GLFW_SAMPLES, MultiSample()); // multisampling
-    window_ = glfwCreateWindow(width, height, title, the_monitor, nullptr);
+    window_ = glfwCreateWindow(width, height, title.data(), the_monitor, nullptr);
     if (window_ == nullptr) {
       glfwTerminate();
       exit(EXIT_FAILURE);
@@ -251,7 +252,7 @@ void ImGuiRunner::FullScreen(
     saved_position_ = GetWindowPosition();
 
     glfwSetWindowMonitor(window_, the_monitor, 0, 0, width, height, refresh_rate);
-    glfwSetWindowTitle(window_, title);
+    glfwSetWindowTitle(window_, title.data());
   }
 }
 
@@ -367,10 +368,10 @@ void ImGuiRunner::MultiSample(int samples) {
 auto ImGuiRunner::GetWindowTitle() const -> std::string const & {
   return window_title_;
 }
-void ImGuiRunner::SetWindowTitle(char const *title) {
+void ImGuiRunner::SetWindowTitle(const std::string &title) {
   if (window_ != nullptr) {
     window_title_ = title;
-    glfwSetWindowTitle(window_, title);
+    glfwSetWindowTitle(window_, title.data());
   } else {
     ASLOG(error, "call SetWindowTitle() only after the window is created");
   }
@@ -399,7 +400,8 @@ auto ImGuiRunner::RefreshRate() const -> int {
 
 auto ImGuiRunner::GetMonitorId() const -> int {
   int count = 0;
-  GLFWmonitor **monitors = glfwGetMonitors(&count);
+  GLFWmonitor **glfw_monitors = glfwGetMonitors(&count);
+  auto monitors = gsl::span(glfw_monitors, count);
   while (--count >= 0 && monitors[count] != GetMonitor()) {
     ;
   }
@@ -496,8 +498,11 @@ void ImGuiRunner::LoadSetting() {
     ASLOG(info, "file {} does not exist", display_settings.string());
   }
 
-  int width = 800;
-  int height = 600;
+  constexpr int DEFAULT_WINDOW_WIDTH = 800;
+  constexpr int DEFAULT_WINDOW_HEIGHT = 600;
+
+  int width = DEFAULT_WINDOW_WIDTH;
+  int height = DEFAULT_WINDOW_HEIGHT;
   if (has_config) {
     ConfigSanityChecks(config);
 
@@ -516,12 +521,11 @@ void ImGuiRunner::LoadSetting() {
           height = *(size->get_as<int>("height"));
         }
       }
-      FullScreen(width, height,
-          display->get_as<std::string>("title").value_or("ASAP Application").c_str(),
+      FullScreen(width, height, display->get_as<std::string>("title").value_or("ASAP Application"),
           display->get_as<int>("monitor").value_or(0),
           display->get_as<int>("refresh-rate").value_or(0));
     } else if (mode == "Full Screen Windowed") {
-      FullScreenWindowed(display->get_as<std::string>("title").value_or("ASAP Application").c_str(),
+      FullScreenWindowed(display->get_as<std::string>("title").value_or("ASAP Application"),
           display->get_as<int>("monitor").value_or(0));
     } else if (mode == "Windowed") {
       auto size = display->get_table("size");
@@ -533,8 +537,7 @@ void ImGuiRunner::LoadSetting() {
           height = *(size->get_as<int>("height"));
         }
       }
-      Windowed(width, height,
-          display->get_as<std::string>("title").value_or("ASAP Application").c_str());
+      Windowed(width, height, display->get_as<std::string>("title").value_or("ASAP Application"));
     } else {
       Windowed(width, height, "ASAP Application");
     }

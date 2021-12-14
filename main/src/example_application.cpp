@@ -6,12 +6,16 @@
 //   https://opensource.org/licenses/BSD-3-Clause)
 
 #include "example_application.h"
-#include "linmath.h"
 
 #include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
+#include <glm/mat4x4.hpp>               // glm::mat4
+#include <glm/vec3.hpp>                 // glm::vec3
 #include <imgui/imgui.h>
 
 #include <cstdint> // for unitptr_t
+
+// NOLINTBEGIN(cppcoreguidelines-avoid-magic-numbers)
 
 namespace {
 const struct {
@@ -77,20 +81,16 @@ auto ExampleApplication::Draw() -> bool {
       glClearColor(0.2F, 0.2F, 0.3F, 1.0F);
       glClear(GL_COLOR_BUFFER_BIT); // we're not using the stencil buffer now
 
-      // Draw the triangle
-      mat4x4 m;
-      mat4x4 p;
-      mat4x4 mvp;
-
-      auto ratio = wsize.x / wsize.y;
-
-      mat4x4_identity(m);
-      mat4x4_rotate_Z(m, m, (float)glfwGetTime());
-      mat4x4_ortho(p, -ratio, ratio, -1.0F, 1.0F, 1.0F, -1.0F);
-      mat4x4_mul(mvp, p, m);
+      glm::mat4 Projection = glm::perspective(glm::radians(45.0F), 4.0F / 3.0F, 0.1F, 100.F);
+      glm::mat4 View = glm::translate(glm::mat4(1.0F), glm::vec3(0.0F, 0.0F, -1.0F));
+      View = glm::rotate(View, static_cast<float>(glfwGetTime()), glm::vec3(-1.0F, 0.0F, 0.0F));
+      View = glm::rotate(View, static_cast<float>(glfwGetTime()), glm::vec3(0.0F, 1.0F, 0.0F));
+      View = glm::rotate(View, static_cast<float>(glfwGetTime()), glm::vec3(0.0F, 0.0F, 1.0F));
+      glm::mat4 Model = glm::scale(glm::mat4(1.0F), glm::vec3(0.5F));
+      glm::mat4 mvp = Projection * View * Model;
 
       glUseProgram(program);
-      glUniformMatrix4fv(mvp_location, 1, GL_FALSE, reinterpret_cast<const GLfloat *>(mvp));
+      glUniformMatrix4fv(mvp_location, 1, GL_FALSE, &mvp[0][0]);
       glBindVertexArray(VAO);
       glDrawArrays(GL_TRIANGLES, 0, 3);
 
@@ -98,6 +98,7 @@ auto ExampleApplication::Draw() -> bool {
       glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
 
       ImVec2 pos = ImGui::GetCursorScreenPos();
+      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast, performance-no-int-to-ptr)
       ImGui::GetWindowDrawList()->AddImage(reinterpret_cast<ImTextureID>(texColorBuffer_), pos,
           ImVec2(pos.x + wsize.x, pos.y + wsize.y), ImVec2(0, 1), ImVec2(1, 0));
     }
@@ -138,6 +139,7 @@ void ExampleApplication::AfterInit() {
   glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]), nullptr);
   glEnableVertexAttribArray(vcol_location);
   glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]),
+      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast, performance-no-int-to-ptr)
       reinterpret_cast<const void *>(sizeof(float) * 2));
 
   // You can unbind the VAO afterwards so other VAO calls won't accidentally
@@ -173,3 +175,5 @@ void ExampleApplication::BeforeShutDown() {
   glDeleteTextures(1, &texColorBuffer_);
   glDeleteFramebuffers(1, &frameBuffer_);
 }
+
+// NOLINTEND(cppcoreguidelines-avoid-magic-numbers)
