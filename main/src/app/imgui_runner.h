@@ -53,10 +53,10 @@ public:
   [[nodiscard]] auto GetWindowTitle() const -> std::string const &;
   [[nodiscard]] auto IsFullScreen() const -> bool {
     return full_screen_;
-  };
+  }
   [[nodiscard]] auto IsWindowed() const -> bool {
     return windowed_;
-  };
+  }
   [[nodiscard]] auto GetMonitor() const -> GLFWmonitor *;
   [[nodiscard]] auto GetMonitorId() const -> int;
   [[nodiscard]] auto RefreshRate() const -> int;
@@ -65,7 +65,7 @@ public:
 
   [[nodiscard]] auto Vsync() const -> bool {
     return vsync_;
-  };
+  }
   [[nodiscard]] auto MultiSample() const -> int {
     return samples_;
   }

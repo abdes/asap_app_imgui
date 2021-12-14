@@ -30,6 +30,7 @@
 #include <utility>
 
 namespace {
+
 void glfw_error_callback(int error, const char *description) {
   auto &logger = asap::logging::Registry::GetLogger("main");
   ASLOG_TO_LOGGER(logger, critical, "Glfw Error {}: {}", error, description);
@@ -89,10 +90,12 @@ void ImGuiRunner::InitGraphics() {
 void ImGuiRunner::SetupContext() {
   ASAP_ASSERT(window_ != nullptr);
   glfwMakeContextCurrent(window_);
+
   if (gladLoadGL(static_cast<GLADloadfunc>(glfwGetProcAddress)) == 0) {
     ASLOG(error, "  failed to initialize OpenGL context!");
     throw std::runtime_error("failed to initialize OpenGL context");
   }
+
   ASLOG(debug, "  context setup done");
 }
 
@@ -403,7 +406,7 @@ auto ImGuiRunner::GetMonitorId() const -> int {
   GLFWmonitor **glfw_monitors = glfwGetMonitors(&count);
   auto monitors = gsl::span(glfw_monitors, count);
   while (--count >= 0 && monitors[count] != GetMonitor()) {
-    ;
+    // DO NOTHING
   }
   return count;
 }

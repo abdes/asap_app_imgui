@@ -6,6 +6,7 @@
 //   https://opensource.org/licenses/BSD-3-Clause)
 
 #include "example_application.h"
+#include "logging/logging.h"
 
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
@@ -31,11 +32,11 @@ const struct {
 
 // clang-format off
 const char *const VERTEX_SHADER_TEXT =
-"#version 110\n"
+"#version 150\n"
 "uniform mat4 MVP;\n"
-"attribute vec3 vCol;\n"
-"attribute vec2 vPos;\n"
-"varying vec3 color;\n"
+"in vec3 vCol;\n"
+"in vec2 vPos;\n"
+"out vec3 color;\n"
 "void main()\n"
 "{\n"
 "    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
@@ -45,13 +46,24 @@ const char *const VERTEX_SHADER_TEXT =
 
 // clang-format off
 const char *const FRAGMENT_SHADER_TEXT =
-"#version 110\n"
-"varying vec3 color;\n"
+"#version 150\n"
+"in vec3 color;\n"
+"out vec4 colorOut;\n"
 "void main()\n"
 "{\n"
-"    gl_FragColor = vec4(color, 1.0);\n"
+"    colorOut = vec4(color, 1.0);\n"
 "}\n";
 // clang-format on
+
+auto OpenGLErrorCheck() -> GLenum {
+  // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+  static auto &logger = asap::logging::Registry::GetLogger("main");
+  auto code = glGetError();
+  if (code != GL_NO_ERROR) {
+    ASLOG_TO_LOGGER(logger, error, "OpenGL error: {}", code);
+  }
+  return code;
+}
 
 } // namespace
 
@@ -75,7 +87,6 @@ auto ExampleApplication::Draw() -> bool {
       if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
         ASLOG(error, "ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
       }
-
       // Render
       // Clear the colorbuffer
       glClearColor(0.2F, 0.2F, 0.3F, 1.0F);
@@ -121,15 +132,60 @@ void ExampleApplication::AfterInit() {
   auto vertex_shader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertex_shader, 1, &VERTEX_SHADER_TEXT, nullptr);
   glCompileShader(vertex_shader);
+  GLint isCompiled = 0;
+  glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &isCompiled);
+  if (isCompiled == GL_FALSE) {
+    GLint maxLength = 0;
+    glGetShaderiv(vertex_shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+    // The maxLength includes the NULL character
+    std::vector<GLchar> errorLog(maxLength);
+    glGetShaderInfoLog(vertex_shader, maxLength, &maxLength, &errorLog[0]);
+
+    // Provide the infolog in whatever manor you deem best.
+    // Exit with failure.
+    ASLOG(error, "GL COMPILE ERROR: {}", errorLog.data());
+  }
 
   auto fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragment_shader, 1, &FRAGMENT_SHADER_TEXT, nullptr);
   glCompileShader(fragment_shader);
+  glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &isCompiled);
+  if (isCompiled == GL_FALSE) {
+    GLint maxLength = 0;
+    glGetShaderiv(fragment_shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+    // The maxLength includes the NULL character
+    std::vector<GLchar> errorLog(maxLength);
+    glGetShaderInfoLog(fragment_shader, maxLength, &maxLength, &errorLog[0]);
+
+    // Provide the infolog in whatever manor you deem best.
+    // Exit with failure.
+    ASLOG(error, "GL COMPILE ERROR: {}", errorLog.data());
+  }
 
   program = glCreateProgram();
   glAttachShader(program, vertex_shader);
   glAttachShader(program, fragment_shader);
   glLinkProgram(program);
+
+  GLint isLinked = 0;
+  glGetProgramiv(program, GL_LINK_STATUS, &isLinked);
+  if (isLinked == GL_FALSE) {
+    GLint maxLength = 0;
+    glGetProgramiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+
+    // The maxLength includes the NULL character
+    std::vector<GLchar> infoLog(maxLength);
+    glGetProgramInfoLog(program, maxLength, &maxLength, &infoLog[0]);
+
+    // The program is useless now. So delete it.
+    glDeleteProgram(program);
+
+    // Provide the infolog in whatever manner you deem best.
+    // Exit with failure.
+    ASLOG(error, "GL LINK ERROR: {}", infoLog.data());
+  }
 
   mvp_location = glGetUniformLocation(program, "MVP");
   vpos_location = glGetAttribLocation(program, "vPos");
