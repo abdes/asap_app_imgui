@@ -68,11 +68,10 @@ You can also use any of the cmake options, generators, etc...
 ```cmake
 # Project options
 option(BUILD_SHARED_LIBS        "Build shared instead of static libraries."              ON)
-option(OPTION_BUILD_TESTS       "Build tests."                                           ON)
-option(OPTION_BUILD_DOCS        "Build documentation."                                   OFF)
-option(OPTION_BUILD_EXAMPLES    "Build examples."                                        OFF)
+option(ASAP_BUILD_TESTS         "Build tests."                                           OFF)
+option(ASAP_BUILD_EXAMPLES      "Build examples."                                        OFF)
 option(ASAP_WITH_GOOGLE_ASAN    "Instrument code with address sanitizer"                 OFF)
 option(ASAP_WITH_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitizer"      OFF)
 option(ASAP_WITH_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
-option(ASAP_WITH_VALGRIND    "Builds targets with valgrind profilers added"              OFF)
+option(ASAP_WITH_VALGRIND       "Builds targets with valgrind profilers added"           OFF)
 ```

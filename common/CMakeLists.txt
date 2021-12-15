@@ -87,7 +87,7 @@ asap_add_sanitizers(${MODULE_TARGET_NAME})
 # Tests
 # --------------------------------------------------------------------------------------------------
 
-if(OPTION_BUILD_TESTS)
+if(ASAP_BUILD_TESTS)
   add_subdirectory(test)
 endif()
 
