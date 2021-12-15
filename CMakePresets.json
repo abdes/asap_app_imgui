@@ -20,7 +20,8 @@
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       },
       "cacheVariables": {
-        "OPTION_SELF_CONTAINED": "ON"
+        "ASAP_BUILD_TESTS": "ON",
+        "ASAP_BUILD_EXAMPLES": "ON"
       }
     },
     {
@@ -36,7 +37,8 @@
       "description": "Release build",
       "hidden": true,
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "ASAP_BUILD_EXAMPLES": "OFF"
       }
     },
     {

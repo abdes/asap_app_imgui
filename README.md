@@ -75,14 +75,12 @@ cmake -DBUILD_SHARED_LIBS=OFF ..
 ```cmake
 # Project options
 option(BUILD_SHARED_LIBS        "Build shared instead of static libraries."              ON)
-option(OPTION_SELF_CONTAINED    "Create a self-contained install with all dependencies." OFF)
-option(OPTION_BUILD_TESTS       "Build tests."                                           ON)
-option(OPTION_BUILD_DOCS        "Build documentation."                                   OFF)
-option(OPTION_BUILD_EXAMPLES    "Build examples."                                        OFF)
+option(ASAP_BUILD_TESTS         "Build tests."                                           OFF)
+option(ASAP_BUILD_EXAMPLES      "Build examples."                                        OFF)
 option(ASAP_WITH_GOOGLE_ASAN    "Instrument code with address sanitizer"                 OFF)
 option(ASAP_WITH_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitizer"      OFF)
 option(ASAP_WITH_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
-option(ASAP_WITH_VALGRIND    "Builds targets with valgrind profilers added"              OFF)
+option(ASAP_WITH_VALGRIND       "Builds targets with valgrind profilers added"           OFF)
 ```
 
 The code is portable across Linux (g++ and clang), OS X and Visual Studio 2017.
