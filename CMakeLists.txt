@@ -62,7 +62,6 @@ message("=> Project : ${META_NAME_VERSION}")
 # Project options
 # cmake-format: off
 option(BUILD_SHARED_LIBS        "Build shared instead of static libraries."              ON)
-option(OPTION_SELF_CONTAINED    "Create a self-contained install with all dependencies." OFF)
 option(OPTION_BUILD_TESTS       "Build tests."                                           ON)
 option(OPTION_BUILD_DOCS        "Build documentation."                                   OFF)
 option(OPTION_BUILD_EXAMPLES    "Build examples."                                        OFF)

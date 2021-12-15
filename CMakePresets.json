@@ -15,9 +15,6 @@
       "installDir": "${sourceDir}/out/install/${presetName}",
       "environment": {
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
-      },
-      "cacheVariables": {
-        "OPTION_SELF_CONTAINED": "ON"
       }
     },
     {
