@@ -302,9 +302,6 @@ endif()
 add_subdirectory(common)
 add_subdirectory(logging)
 
-# For packaging
-add_subdirectory(deploy)
-
 # ==================================================================================================
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
 # ==================================================================================================
