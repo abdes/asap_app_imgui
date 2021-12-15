@@ -41,7 +41,7 @@ jobs:
 
     - name: Build
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --target build-all-tests --config ${{env.BUILD_TYPE}}
+      run: cmake --build ${{github.workspace}}/build --target build-all-tests --config ${{env.BUILD_TYPE}} -DASAP_BUILD_TESTS=ON
       
     - name: Test
       working-directory: ${{github.workspace}}/build
