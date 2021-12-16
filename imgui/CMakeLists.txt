@@ -106,6 +106,9 @@ target_compile_definitions(${MODULE_TARGET_NAME}
     $<$<BOOL:${BUILD_SHARED_LIBS}>:GLAD_API_CALL_EXPORT>
   )
 
+# Generate module config files for cmake and pkgconfig
+asap_create_module_config_files()
+
 # ------------------------------------------------------------------------------
 # Tests
 # ------------------------------------------------------------------------------
@@ -129,6 +132,8 @@ asap_with_doxygen(
 # ==================================================================================================
 # Deployment instructions
 # ==================================================================================================
+
+set(TARGETS_EXPORT_NAME "${MODULE_TARGET_NAME}Targets")
 
 # Library
 install(
