@@ -32,6 +32,8 @@ function(asap_set_compile_definitions target)
 
   if(MSVC)
     list(APPEND all_flags "NOMINMAX" "WIN32_LEAN_AND_MEAN=1" "_WIN32_WINNT=0x0600")
+    # Disabling warning for not using "secure-but-not-standard" STL algos
+    list(APPEND all_flags "_CRT_SECURE_NO_WARNINGS" "_SCL_SECURE_NO_WARNINGS")
   endif()
 
   if(x_REMOVE)
