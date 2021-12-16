@@ -83,6 +83,9 @@ add_library(asap::${META_MODULE_NAME} ALIAS ${MODULE_TARGET_NAME})
 # Add support for (optional) code quality tools
 asap_add_sanitizers(${MODULE_TARGET_NAME})
 
+# Generate module config files for cmake and pkgconfig
+asap_create_module_config_files()
+
 # --------------------------------------------------------------------------------------------------
 # Tests
 # --------------------------------------------------------------------------------------------------
@@ -105,6 +108,8 @@ asap_with_sphinx(${META_PROJECT_NAME}_${META_MODULE_NAME})
 # ==================================================================================================
 # Deployment instructions
 # ==================================================================================================
+
+set(TARGETS_EXPORT_NAME "${MODULE_TARGET_NAME}Targets")
 
 # Library
 install(
