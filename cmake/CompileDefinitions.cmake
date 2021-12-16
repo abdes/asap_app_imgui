@@ -30,6 +30,9 @@ function(asap_set_compile_definitions target)
 
   list(APPEND all_flags "ASAP_CONTRACT_${OPTION_CONTRACT_MODE}")
 
+  # Provide a way to distinguish between debug and release builds via preprocessor define
+  list(APPEND all_flags "$<$<CONFIG:Debug>:ASAP_IS_DEBUG_BUILD>")
+
   if(MSVC)
     list(APPEND all_flags "NOMINMAX" "WIN32_LEAN_AND_MEAN=1" "_WIN32_WINNT=0x0600")
     # Disabling warning for not using "secure-but-not-standard" STL algos
