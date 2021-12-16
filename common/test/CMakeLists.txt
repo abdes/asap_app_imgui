@@ -20,6 +20,7 @@ asap_add_test(
   VALGRIND_MEMCHECK
   SRCS
   "flag_ops_test.cpp"
+  "singleton_test.cpp"
   "main.cpp"
   LINK
   asap::common
