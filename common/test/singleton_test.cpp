@@ -65,7 +65,7 @@ TEST(Singleton, OneSingleInstanceInMultiThreads) {
     }));
   }
 
-  std::for_each(workers.begin(), workers.end(), [](std::thread &t) { t.join(); });
+  std::for_each(workers.begin(), workers.end(), [](std::thread &thr) { thr.join(); });
 }
 
 } // namespace
