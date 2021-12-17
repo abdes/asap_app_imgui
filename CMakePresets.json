@@ -14,7 +14,8 @@
       "binaryDir": "${sourceDir}/out/build/${presetName}",
       "installDir": "${sourceDir}/out/install/${presetName}",
       "environment": {
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "caexcludepath": "${sourceDir}/third_party;${sourceDir}/out"
       },
       "cacheVariables": {
         "ASAP_BUILD_TESTS": "ON",
