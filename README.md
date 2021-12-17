@@ -1,4 +1,4 @@
-# Starter project for C++ with cmake 
+# Starter project for C++ with cmake
 
 ![Start Now!!](doc/_static/logo.png "ASAP Logo")
 
@@ -9,18 +9,17 @@
 
 ## Overview
 
-- cmake as the build system with or without presets
+- `CMake` as the build system with or without presets
 - cross-platform portability on Linux, OS X and Windows
 - multiple compilers: clang, g++ and MSVC
 - modular structure with each module self-contained in a subdirectory within the project
-- build helpers in common/cmake to facilitate declaration of library, exe, test modules, for the
+- `CMake` build helpers to facilitate declaration of library, exe, test modules, for the
   end-to-end lifecycle including doc generation, test, packaging etc...
 - common facilities (common module) for platform specifics, assertions support, logging
 - unit testing with Google Test
 - code coverage with clang or g++
 - zero-touch valgrind, clang-tidy, clang-format, google sanitizers, etc.
-
-Development can be done locally or in a dev container with vscode.
+- development can be done locally or in a dev container with vscode.
 
 ## Getting the code
 
@@ -35,7 +34,7 @@ NOTES:
 
 ## Requirements
 
-Make sure you have a C++ compiler with C++-14 capabilities at least. Gnu, Clang and MSVC all can do
+Make sure you have a C++ compiler with C++-17 capabilities at least. Gnu, Clang and MSVC all can do
 that with a recent version.
 
 ## Enabling husky/commitlint/standard-version
@@ -54,16 +53,9 @@ npm install -g standard-version
 mkdir _build && cd _build && cmake .. && cmake --build .
 ```
 
-You can also use any of the cmake options, generators, etc...
+or just use one of the predefined `CMake` presets. Detailed instructions are in the project
+documentation, and many useful commands are listed [here](https://abdes.github.io/asap/master/html/01-getting-started/useful-commands.html).
 
-By default the build will create shared libraries. If you want static libraries, pass
--DBUILD_SHARED_LIBS=OFF to cmake during configuration:
-
-```bash
-cmake -DBUILD_SHARED_LIBS=OFF ..
-```
-
-You can also use any of the cmake options, generators, etc...
 
 ```cmake
 # Project options
