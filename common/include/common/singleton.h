@@ -40,9 +40,9 @@ namespace asap {
  *
  * Example:
  * ```
- * class MyVars: public asap::singleton<MyVars> {
+ * class MyVars: public asap::Singleton<MyVars> {
  * public:
- *   explicit MyVars(typename asap::singleton<MyVars>::token) {}
+ *   explicit MyVars(typename asap::Singleton<MyVars>::token) {}
  *   long var1;
  * };
  * ```
