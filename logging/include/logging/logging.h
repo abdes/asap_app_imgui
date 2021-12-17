@@ -119,9 +119,17 @@ public:
     return logger_->level();
   }
 
-  /// Default format for all loggers.
-  /// @see https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
-  static const char *const DEFAULT_LOG_FORMAT;
+  /*!
+   * \brief Set the log format pattern for this logger.
+   *
+   * \param [in] format log format pattern.
+   *
+   * \see DEFAULT_LOG_FORMAT
+   * \see https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
+   */
+  void SetFormat(const std::string &format) {
+    logger_->set_pattern(format);
+  }
 
 private:
   /*!
@@ -148,6 +156,17 @@ private:
   /// Logger objects are created only by the Registry class.
   friend class Registry;
 };
+
+// -------------------------------------------------------------------------------------------------
+// Default constants
+// -------------------------------------------------------------------------------------------------
+
+/// Default format for all loggers.
+/// \see https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
+constexpr const char *DEFAULT_LOG_FORMAT = "[%Y-%m-%d %T.%e] [%t] [%^%l%$] [%n] %v";
+
+/// Default logging level.
+constexpr Logger::Level DEFAULT_LOG_LEVEL = Logger::Level::trace;
 
 // -------------------------------------------------------------------------------------------------
 // DelegatingSink
@@ -208,6 +227,18 @@ public:
     auto tmp = sink_delegate_;
     sink_delegate_ = std::move(new_sink);
     return tmp;
+  }
+
+  /*!
+   * \brief Set the log format pattern for this logger.
+   *
+   * \param [in] format log format pattern.
+   *
+   * \see DEFAULT_LOG_FORMAT
+   * \see https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
+   */
+  void SetFormat(const std::string &format) {
+    sink_delegate_->set_pattern(format);
   }
 
 protected:
@@ -287,7 +318,7 @@ public:
    *
    * \param [in] log_level the logging severity to be applied to all registered loggers.
    */
-  void SetLogLevel(spdlog::level::level_enum log_level);
+  void SetLogLevel(Logger::Level log_level);
 
   /*!
    * \brief Change the format string used by the registered loggers.
@@ -348,6 +379,12 @@ private:
 
   /// The delegating sink used internally to enable swapping of sinks at runtime.
   std::shared_ptr<DelegatingSink> delegating_sink_;
+
+  /// The default logging level, used for any newly created logger.
+  Logger::Level log_level_{DEFAULT_LOG_LEVEL};
+
+  /// The default logging level, used for any newly created logger.
+  std::string log_format_{DEFAULT_LOG_FORMAT};
 };
 
 // -------------------------------------------------------------------------------------------------

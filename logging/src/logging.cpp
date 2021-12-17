@@ -36,20 +36,13 @@ ASAP_DIAGNOSTIC_POP
 namespace asap::logging {
 
 // -------------------------------------------------------------------------------------------------
-// Static members initialization
-// -------------------------------------------------------------------------------------------------
-
-/// The default logging format
-const char *const Logger::DEFAULT_LOG_FORMAT = "[%Y-%m-%d %T.%e] [%t] [%^%l%$] [%n] %v";
-
-// -------------------------------------------------------------------------------------------------
 // Logger
 // -------------------------------------------------------------------------------------------------
 
 Logger::Logger(const std::string &name, const spdlog::sink_ptr &sink) {
   logger_ = std::make_shared<spdlog::logger>(name, sink);
   logger_->set_pattern(DEFAULT_LOG_FORMAT);
-  logger_->set_level(spdlog::level::trace);
+  logger_->set_level(static_cast<spdlog::level::level_enum>(DEFAULT_LOG_LEVEL));
   // Ensure that critical errors, especially ASSERT/PANIC, get flushed
   logger_->flush_on(spdlog::level::critical);
 }
@@ -62,6 +55,8 @@ auto Registry::GetLogger(std::string const &name) -> spdlog::logger & {
   if (search == all_loggers_.end()) {
     auto new_logger = all_loggers_.emplace(name, Logger(name, delegating_sink_));
     search = new_logger.first;
+    search->second.SetLevel(static_cast<spdlog::level::level_enum>(log_level_));
+    search->second.SetFormat(log_format_);
   }
   return *(search->second.logger_);
 }
@@ -81,13 +76,6 @@ ASAP_PRAGMA(GCC diagnostic ignored "-Wundefined-func-template")
 #endif
 DelegatingSink::DelegatingSink(spdlog::sink_ptr delegate) : sink_delegate_(std::move(delegate)) {
 }
-ASAP_DIAGNOSTIC_POP
-
-DelegatingSink::~DelegatingSink() = default;
-
-// -------------------------------------------------------------------------------------------------
-// Registry
-// -------------------------------------------------------------------------------------------------
 
 namespace {
 auto CreateDelegatingSink() -> DelegatingSink * {
@@ -97,14 +85,24 @@ auto CreateDelegatingSink() -> DelegatingSink * {
 #else
   auto default_sink = std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>();
 #endif
-
+  default_sink->set_pattern(DEFAULT_LOG_FORMAT);
   return new DelegatingSink(default_sink);
 }
 } // namespace
 
+DelegatingSink::~DelegatingSink() = default;
+
+ASAP_DIAGNOSTIC_POP
+
+// -------------------------------------------------------------------------------------------------
+// Registry
+// -------------------------------------------------------------------------------------------------
+
 Registry::Registry(typename asap::Singleton<Registry>::token /*unused*/)
     : delegating_sink_(CreateDelegatingSink()) {
   CreatePredefinedLoggers();
+  SetLogLevel(DEFAULT_LOG_LEVEL);
+  SetLogFormat(DEFAULT_LOG_FORMAT);
 }
 
 void Registry::PushSink(spdlog::sink_ptr sink) {
@@ -112,6 +110,7 @@ void Registry::PushSink(spdlog::sink_ptr sink) {
   auto &sinks = sinks_;
   // Push the current sink on the stack and use the new one
   sinks.emplace(delegating_sink_->SwapSink(std::move(sink)));
+  delegating_sink_->SetFormat(log_format_);
 }
 
 void Registry::PopSink() {
@@ -121,22 +120,27 @@ void Registry::PopSink() {
     auto &sink = sinks_.top();
     // Assign this previous sink to the delegating sink
     delegating_sink_->SwapSink(sink);
+    delegating_sink_->SetFormat(log_format_);
     sinks_.pop();
   }
 }
 
-void Registry::SetLogLevel(spdlog::level::level_enum log_level) {
+void Registry::SetLogLevel(Logger::Level log_level) {
   std::lock_guard<std::recursive_mutex> lock(loggers_mutex_);
-  for (auto &log : all_loggers_) {
-    // Thread safe
-    log.second.SetLevel(log_level);
+  if (log_level != log_level_) {
+    log_level_ = log_level;
+    for (auto &log : all_loggers_) {
+      // Thread safe
+      log.second.SetLevel(static_cast<spdlog::level::level_enum>(log_level));
+    }
   }
 }
 
 void Registry::SetLogFormat(const std::string &log_format) {
-  std::lock_guard<std::recursive_mutex> lock(loggers_mutex_);
-  for (auto &log : all_loggers_) {
-    log.second.logger_->set_pattern(log_format);
+  std::lock_guard<std::mutex> lock(sinks_mutex_);
+  if (log_format_ != log_format) {
+    log_format_ = log_format;
+    delegating_sink_->SetFormat(log_format_);
   }
 }
 
