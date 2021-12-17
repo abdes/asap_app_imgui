@@ -287,4 +287,5 @@
   "cmakeFormat.args": [
     "--config-file=${workspaceFolder}/.cmake-format.yaml"
   ],
+  "rewrap.reformat": true,
 }
