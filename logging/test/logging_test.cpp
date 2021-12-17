@@ -88,7 +88,7 @@ ASAP_DIAGNOSTIC_POP
 // NOLINTNEXTLINE
 TEST(Logging, LoggingByExtendingLoggable) {
   auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
-  Registry::PushSink(test_sink_ptr);
+  Registry::instance().PushSink(test_sink_ptr);
 
   Foo foo;
   auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
@@ -97,13 +97,13 @@ TEST(Logging, LoggingByExtendingLoggable) {
   EXPECT_THAT(msg.empty(), IsFalse());
   EXPECT_THAT(msg.find("Foo constructor"), Ne(std::string::npos));
 
-  Registry::PopSink();
+  Registry::instance().PopSink();
 }
 
 // NOLINTNEXTLINE
 TEST(Logging, LoggingFromMultipleThreadsWorks) {
   auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
-  Registry::PushSink(test_sink_ptr);
+  Registry::instance().PushSink(test_sink_ptr);
   spdlog::set_pattern("%v");
 
   std::thread th1([]() {
@@ -114,7 +114,7 @@ TEST(Logging, LoggingFromMultipleThreadsWorks) {
   });
   std::thread th2([]() {
     constexpr int LOG_ITERATIONS = 5;
-    auto &test_logger = Registry::GetLogger("testing");
+    auto &test_logger = Registry::instance().GetLogger("testing");
     for (auto ii = 0; ii < LOG_ITERATIONS; ++ii) {
       ASLOG_TO_LOGGER(test_logger, trace, "THREAD_2: {}", ii);
     }
@@ -143,15 +143,15 @@ TEST(Logging, LoggingFromMultipleThreadsWorks) {
   EXPECT_THAT(expected_seq_th1, Eq(5));
   EXPECT_THAT(expected_seq_th2, Eq(5));
 
-  Registry::PopSink();
+  Registry::instance().PopSink();
 }
 
 // NOLINTNEXTLINE
 TEST(Logging, LogToLoggerWithParameters) {
   auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
-  Registry::PushSink(test_sink_ptr);
+  Registry::instance().PushSink(test_sink_ptr);
 
-  auto &test_logger = Registry::GetLogger("testing");
+  auto &test_logger = Registry::instance().GetLogger("testing");
 
   auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
 
@@ -184,7 +184,7 @@ TEST(Logging, LogToLoggerWithParameters) {
   EXPECT_THAT(test_sink->out_.str(), ContainsRegex("message 1 2 3 4"));
   test_sink->Reset();
 
-  Registry::PopSink();
+  Registry::instance().PopSink();
 }
 
 class MockSink : public spdlog::sinks::sink {
@@ -214,29 +214,29 @@ TEST(Logging, SinkPushPop) {
   auto *first_mock = dynamic_cast<MockSink *>(first_sink_ptr.get());
   auto *second_mock = dynamic_cast<MockSink *>(second_sink_ptr.get());
 
-  auto &test_logger = Registry::GetLogger("testing");
+  auto &test_logger = Registry::instance().GetLogger("testing");
 
-  Registry::PushSink(first_sink_ptr);
+  Registry::instance().PushSink(first_sink_ptr);
   ASLOG_TO_LOGGER(test_logger, debug, "message");
   EXPECT_THAT(first_mock->called_, Eq(1));
   first_mock->Reset();
   second_mock->Reset();
 
-  Registry::PushSink(second_sink_ptr);
+  Registry::instance().PushSink(second_sink_ptr);
   ASLOG_TO_LOGGER(test_logger, debug, "message");
   EXPECT_THAT(first_mock->called_, Eq(0));
   EXPECT_THAT(second_mock->called_, Eq(1));
   first_mock->Reset();
   second_mock->Reset();
 
-  Registry::PopSink();
+  Registry::instance().PopSink();
   ASLOG_TO_LOGGER(test_logger, debug, "message");
   EXPECT_THAT(first_mock->called_, Eq(1));
   EXPECT_THAT(second_mock->called_, Eq(0));
   first_mock->Reset();
   second_mock->Reset();
 
-  Registry::PopSink();
+  Registry::instance().PopSink();
   ASLOG_TO_LOGGER(test_logger, debug, "message");
   EXPECT_THAT(first_mock->called_, Eq(0));
   EXPECT_THAT(second_mock->called_, Eq(0));
