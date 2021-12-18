@@ -24,7 +24,7 @@ asap_declare_module(
   VERSION_MAJOR
   "1"
   VERSION_MINOR
-  "0"
+  "1"
   VERSION_PATCH
   "0")
 
