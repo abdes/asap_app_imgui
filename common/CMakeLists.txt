@@ -76,15 +76,21 @@ target_include_directories(
 
 target_compile_features(${MODULE_TARGET_NAME} PUBLIC cxx_std_17)
 
+# common comes directly from asap and is usually kept as is. It is more convenient to simply use it
+# as asap::common
+add_library(asap::${META_MODULE_NAME} ALIAS ${MODULE_TARGET_NAME})
 
 # Add support for (optional) code quality tools
 asap_add_sanitizers(${MODULE_TARGET_NAME})
+
+# Generate module config files for cmake and pkgconfig
+asap_create_module_config_files()
 
 # --------------------------------------------------------------------------------------------------
 # Tests
 # --------------------------------------------------------------------------------------------------
 
-if(OPTION_BUILD_TESTS)
+if(ASAP_BUILD_TESTS)
   add_subdirectory(test)
 endif()
 
@@ -93,15 +99,17 @@ endif()
 # --------------------------------------------------------------------------------------------------
 
 asap_with_doxygen(
-  ${META_PROJECT_NAME}_${META_MODULE_NAME} "\"Common Module\""
+  ${MODULE_TARGET_NAME} "\"Common Module\""
   "\"Provides common basic building blocks such as portability, assertions, etc.\""
   "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-asap_with_sphinx(${META_PROJECT_NAME}_${META_MODULE_NAME})
+asap_with_sphinx(${MODULE_TARGET_NAME})
 
 # ==================================================================================================
 # Deployment instructions
 # ==================================================================================================
+
+set(TARGETS_EXPORT_NAME "${MODULE_TARGET_NAME}Targets")
 
 # Library
 install(

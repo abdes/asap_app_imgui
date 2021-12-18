@@ -41,4 +41,4 @@ auto TestAssertAudit(const int *ptr) -> int {
   return *ptr;
 }
 
-}  // namespace asap::contract::testing
+} // namespace asap::contract::testing

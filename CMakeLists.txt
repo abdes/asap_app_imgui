@@ -62,14 +62,12 @@ message("=> Project : ${META_NAME_VERSION}")
 # Project options
 # cmake-format: off
 option(BUILD_SHARED_LIBS        "Build shared instead of static libraries."              ON)
-option(OPTION_SELF_CONTAINED    "Create a self-contained install with all dependencies." OFF)
-option(OPTION_BUILD_TESTS       "Build tests."                                           ON)
-option(OPTION_BUILD_DOCS        "Build documentation."                                   OFF)
-option(OPTION_BUILD_EXAMPLES    "Build examples."                                        OFF)
+option(ASAP_BUILD_TESTS         "Build tests."                                           OFF)
+option(ASAP_BUILD_EXAMPLES      "Build examples."                                        OFF)
 option(ASAP_WITH_GOOGLE_ASAN    "Instrument code with address sanitizer"                 OFF)
 option(ASAP_WITH_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitizer"      OFF)
 option(ASAP_WITH_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
-option(ASAP_WITH_VALGRIND    "Builds targets with valgrind profilers added"              OFF)
+option(ASAP_WITH_VALGRIND       "Builds targets with valgrind profilers added"           OFF)
 # cmake-format: on
 
 # --------------------------------------------------------------------------------------------------
@@ -291,8 +289,15 @@ if(SPHINX_FOUND)
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html)
   add_custom_target(copy_doc_index ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
 
-  add_dependencies(master_sphinx ${META_PROJECT_NAME}_common_sphinx
-                   ${META_PROJECT_NAME}_logging_sphinx copy_doc_index)
+  add_dependencies(master_sphinx
+    copy_doc_index
+    # Hardcode `asap` in the module name as we do not want this prefix to change with the forked
+    # project name.
+    asap_common_sphinx
+    asap_logging_sphinx
+    # Add more submodule documentation targets after this, using variables in the target names
+    # consistently with the module's CMakeLists.txt.
+    )
 
 endif()
 
@@ -302,9 +307,6 @@ endif()
 
 add_subdirectory(common)
 add_subdirectory(logging)
-
-# For packaging
-add_subdirectory(deploy)
 
 # ==================================================================================================
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...

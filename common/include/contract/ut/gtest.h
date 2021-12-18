@@ -37,7 +37,7 @@
  * violation and if not, the test is immediately terminated.
  *
  * If the statement does not produce a violation contract, execution is aborted.
- * 
+ *
  * \note The implementation of this macro is not thread safe.
  *
  * \param call the statement to test.
@@ -54,7 +54,7 @@
  * Use ASSERT_VIOLATES_CONTRACT when the condition must hold - if it doesn't the test stops right
  * there. Use this when the remainder of the test doesn't have semantic meaning without this
  * condition holding.
- * 
+ *
  * \note The implementation of this macro is not thread safe.
  *
  * \param call the statement to test.
@@ -70,7 +70,7 @@
  *
  * Use EXPECT when the condition should hold, but in cases where it doesn't we can still get value
  * out of continuing the test. The test will still ultimately fail at the end, though.
- * 
+ *
  * \note The implementation of this macro is not thread safe.
  *
  * \param call the statement to test.

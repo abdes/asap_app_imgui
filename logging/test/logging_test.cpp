@@ -48,22 +48,27 @@ namespace {
 template <typename Mutex> class TestSink : public spdlog::sinks::base_sink<Mutex> {
 public:
   void Reset() {
+    out_.str("");
     out_.clear();
     called_ = 0;
+    flushed_ = 0;
   }
 
   std::ostringstream out_;
   int called_{0};
+  int flushed_{0};
 
 protected:
   void sink_it_(const spdlog::details::log_msg &msg) override {
     ++called_;
-    out_.write(msg.payload.data(), static_cast<std::streamsize>(msg.payload.size()));
-    out_.write("\n", 1);
+    spdlog::memory_buf_t formatted;
+    spdlog::sinks::base_sink<Mutex>::formatter_->format(msg, formatted);
+    out_ << fmt::to_string(formatted);
   }
 
   void flush_() override {
     out_.flush();
+    ++flushed_;
   }
 };
 
@@ -72,8 +77,8 @@ using TestSink_st = TestSink<spdlog::details::null_mutex>;
 
 class Foo : Loggable<Foo> {
 public:
-  Foo() {
-    ASLOG(trace, "Foo constructor");
+  static void LogSomethingTrace(const std::string &msg) {
+    ASLOG(trace, "{}", msg);
   }
 
   static const char *const LOGGER_NAME;
@@ -88,22 +93,77 @@ ASAP_DIAGNOSTIC_POP
 // NOLINTNEXTLINE
 TEST(Logging, LoggingByExtendingLoggable) {
   auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
-  Registry::PushSink(test_sink_ptr);
-
-  Foo foo;
+  Registry::instance().PushSink(test_sink_ptr);
   auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
+
+  Foo::LogSomethingTrace("Hello");
   EXPECT_THAT(test_sink->called_, IsTrue());
   auto msg = test_sink->out_.str();
   EXPECT_THAT(msg.empty(), IsFalse());
-  EXPECT_THAT(msg.find("Foo constructor"), Ne(std::string::npos));
+  EXPECT_THAT(msg.find("Hello"), Ne(std::string::npos));
+  test_sink->Reset();
 
-  Registry::PopSink();
+  Registry::instance().PopSink();
+}
+
+// NOLINTNEXTLINE
+TEST(Logging, RegistrySetLogLevel) {
+  auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
+  Registry::instance().PushSink(test_sink_ptr);
+  auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
+
+  // We can set the log level of all loggers through the registry and it will cascade down to each
+  // existing logger.
+  Registry::instance().SetLogLevel(Logger::Level::off);
+  auto &test_logger = Registry::instance().GetLogger("testing");
+  ASLOG_TO_LOGGER(test_logger, debug, "Hello");
+  EXPECT_THAT(test_sink->called_, IsFalse());
+  auto msg = test_sink->out_.str();
+  EXPECT_THAT(msg.empty(), IsTrue());
+  test_sink->Reset();
+
+  // Any new logger created after the log level was set will also use the new log level.
+  auto &new_logger = Registry::instance().GetLogger("new_logger");
+  ASLOG_TO_LOGGER(new_logger, error, "Hello");
+  EXPECT_THAT(test_sink->called_, IsFalse());
+  msg = test_sink->out_.str();
+  EXPECT_THAT(msg.empty(), IsTrue());
+  test_sink->Reset();
+
+  Registry::instance().SetLogLevel(Logger::Level::trace);
+  Registry::instance().PopSink();
+}
+
+// NOLINTNEXTLINE
+TEST(Logging, RegistrySetLogFormat) {
+  auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
+  Registry::instance().PushSink(test_sink_ptr);
+  auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
+
+  // We can set the log format of all loggers through the registry and it will cascade down to each
+  // existing logger.
+  Registry::instance().SetLogFormat("TEST_PATTERN %v");
+  auto &test_logger = Registry::instance().GetLogger("testing");
+  ASLOG_TO_LOGGER(test_logger, error, "Hello");
+  auto msg = test_sink->out_.str();
+  EXPECT_THAT(msg.find("TEST_PATTERN"), Ne(std::string::npos));
+
+  // Pushing a new sink, will also apply the format pattern to it.
+  auto second_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
+  Registry::instance().PushSink(second_sink_ptr);
+  auto *second_sink = dynamic_cast<TestSink_mt *>(second_sink_ptr.get());
+  ASLOG_TO_LOGGER(test_logger, error, "Hello");
+  msg = second_sink->out_.str();
+  EXPECT_THAT(msg.find("TEST_PATTERN"), Ne(std::string::npos));
+
+  Registry::instance().SetLogFormat(DEFAULT_LOG_FORMAT);
+  Registry::instance().PopSink();
 }
 
 // NOLINTNEXTLINE
 TEST(Logging, LoggingFromMultipleThreadsWorks) {
   auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
-  Registry::PushSink(test_sink_ptr);
+  Registry::instance().PushSink(test_sink_ptr);
   spdlog::set_pattern("%v");
 
   std::thread th1([]() {
@@ -114,7 +174,7 @@ TEST(Logging, LoggingFromMultipleThreadsWorks) {
   });
   std::thread th2([]() {
     constexpr int LOG_ITERATIONS = 5;
-    auto &test_logger = Registry::GetLogger("testing");
+    auto &test_logger = Registry::instance().GetLogger("testing");
     for (auto ii = 0; ii < LOG_ITERATIONS; ++ii) {
       ASLOG_TO_LOGGER(test_logger, trace, "THREAD_2: {}", ii);
     }
@@ -143,15 +203,15 @@ TEST(Logging, LoggingFromMultipleThreadsWorks) {
   EXPECT_THAT(expected_seq_th1, Eq(5));
   EXPECT_THAT(expected_seq_th2, Eq(5));
 
-  Registry::PopSink();
+  Registry::instance().PopSink();
 }
 
 // NOLINTNEXTLINE
 TEST(Logging, LogToLoggerWithParameters) {
   auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
-  Registry::PushSink(test_sink_ptr);
+  Registry::instance().PushSink(test_sink_ptr);
 
-  auto &test_logger = Registry::GetLogger("testing");
+  auto &test_logger = Registry::instance().GetLogger("testing");
 
   auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
 
@@ -184,7 +244,7 @@ TEST(Logging, LogToLoggerWithParameters) {
   EXPECT_THAT(test_sink->out_.str(), ContainsRegex("message 1 2 3 4"));
   test_sink->Reset();
 
-  Registry::PopSink();
+  Registry::instance().PopSink();
 }
 
 class MockSink : public spdlog::sinks::sink {
@@ -214,34 +274,61 @@ TEST(Logging, SinkPushPop) {
   auto *first_mock = dynamic_cast<MockSink *>(first_sink_ptr.get());
   auto *second_mock = dynamic_cast<MockSink *>(second_sink_ptr.get());
 
-  auto &test_logger = Registry::GetLogger("testing");
+  auto &test_logger = Registry::instance().GetLogger("testing");
 
-  Registry::PushSink(first_sink_ptr);
+  Registry::instance().PushSink(first_sink_ptr);
   ASLOG_TO_LOGGER(test_logger, debug, "message");
   EXPECT_THAT(first_mock->called_, Eq(1));
   first_mock->Reset();
   second_mock->Reset();
 
-  Registry::PushSink(second_sink_ptr);
+  Registry::instance().PushSink(second_sink_ptr);
   ASLOG_TO_LOGGER(test_logger, debug, "message");
   EXPECT_THAT(first_mock->called_, Eq(0));
   EXPECT_THAT(second_mock->called_, Eq(1));
   first_mock->Reset();
   second_mock->Reset();
 
-  Registry::PopSink();
+  Registry::instance().PopSink();
   ASLOG_TO_LOGGER(test_logger, debug, "message");
   EXPECT_THAT(first_mock->called_, Eq(1));
   EXPECT_THAT(second_mock->called_, Eq(0));
   first_mock->Reset();
   second_mock->Reset();
 
-  Registry::PopSink();
+  Registry::instance().PopSink();
   ASLOG_TO_LOGGER(test_logger, debug, "message");
   EXPECT_THAT(first_mock->called_, Eq(0));
   EXPECT_THAT(second_mock->called_, Eq(0));
 }
 
+#ifndef NDEBUG
+// NOLINTNEXTLINE
+TEST(Logging, FileNameShortening) {
+  auto file_name = std::string{"0123456789----------"};
+  // Make it really long......
+  constexpr int NUMBER_OF_APPENDS = 10;
+  for (int ii = 0; ii < NUMBER_OF_APPENDS; ii++) {
+    file_name.append("++++++++++");
+  }
+  file_name.append("really_long_file_name");
+  auto msg = asap::logging::FormatFileAndLine(file_name.c_str(), INTERNAL_LINE_STRING);
+  EXPECT_THAT(msg.empty(), IsFalse());
+  EXPECT_THAT(msg.find("0123456..."), Ne(std::string::npos));
+  EXPECT_THAT(msg.find("really_long_file_name"), Ne(std::string::npos));
+}
+#endif // NDEBUG
+
+// NOLINTNEXTLINE
+TEST(Logging, DelegatingSinkFlush) {
+  auto test_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
+  Registry::instance().PushSink(test_sink_ptr);
+  auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
+  auto &test_logger = Registry::instance().GetLogger("testing");
+  test_logger.flush();
+  ASSERT_THAT(test_sink->flushed_, Eq(1));
+}
+
 } // namespace
 
-}  // namespace asap::logging
+} // namespace asap::logging

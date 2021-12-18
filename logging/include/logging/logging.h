@@ -6,15 +6,16 @@
 //   https://opensource.org/licenses/BSD-3-Clause)
 
 /*!
- * @file logging.h
- * 
- * @brief Types and and macros used for logging.
+ * \file logging.h
+ *
+ * \brief Types and macros used for logging.
  */
 
 #pragma once
 
-#include <common/compilers.h>
-#include <logging/asap_logging_api.h>
+#include "common/compilers.h"
+#include "common/singleton.h"
+#include "logging/asap_logging_api.h"
 
 #include <stack>         // for stacking sinks
 #include <string>        // for std::string
@@ -37,22 +38,21 @@ ASAP_DIAGNOSTIC_POP
 /// Namespace for logging related APIs.
 namespace asap::logging {
 
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Logger
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 /**
- * @brief Logger wrapper for a spdlog logger.
+ * \brief Logger wrapper for a spdlog logger.
  */
 class ASAP_LOGGING_API Logger {
 public:
   /*!
-   * @brief A simple mapping between Logger severity levels and spdlog severity
-   * levels.
+   * \brief A simple mapping between Logger severity levels and spdlog severity levels.
    *
-   * The only reason for this mapping is to go around the fact that spdlog
-   * defines level as err but the method to log at err level is called
-   * LOGGER.error not LOGGER.err. All other levels are fine.
+   * The only reason for this mapping is to go around the fact that spdlog defines level as err but
+   * the method to log at err level is called LOGGER.error not LOGGER.err. All other levels are
+   * fine.
    */
   enum class Level {
     trace = spdlog::level::trace,
@@ -71,8 +71,7 @@ public:
   auto operator=(const Logger &) -> Logger & = delete;
 
   /// Move constructor
-  Logger(Logger &&other) noexcept
-      : logger_(std::move(other.logger_)), logger_mutex_(std::move(other.logger_mutex_)) {
+  Logger(Logger &&other) noexcept : logger_(std::move(other.logger_)) {
   }
 
   /// Move assignment
@@ -85,104 +84,117 @@ public:
   ~Logger();
 
   /*!
-   * @brief Implementation of the swap operation.
+   * \brief Implementation of the swap operation.
    *
-   * @param other Logger object to swap with.
+   * \param other Logger object to swap with.
    */
   void swap(Logger &other) {
     std::swap(logger_, other.logger_);
   }
 
   /*!
-   * @brief Get this logger's name.
+   * \brief Get this logger's name.
    *
-   * @return the logger name.
+   * \return the logger name.
    */
   [[nodiscard]] auto Name() const -> const std::string & {
     return logger_->name();
   }
 
   /*!
-   * @brief Set the logging level for this logger (e.g. debug, warning...).
+   * \brief Set the logging level for this logger (e.g. debug, warning...).
    *
-   * @param [in] level logging level.
+   * \param [in] level logging level.
    */
   void SetLevel(spdlog::level::level_enum level) {
     logger_->set_level(level);
   }
 
   /*!
-   * @brief Get the logging level for this logger.
+   * \brief Get the logging level for this logger.
    *
-   * @return This logger's logging level.
+   * \return This logger's logging level.
    */
   [[nodiscard]] auto GetLevel() const -> spdlog::level::level_enum {
     return logger_->level();
   }
 
-  /// Default format for all loggers.
-  /// @see https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
-  static const char *const DEFAULT_LOG_FORMAT;
+  /*!
+   * \brief Set the log format pattern for this logger.
+   *
+   * \param [in] format log format pattern.
+   *
+   * \see DEFAULT_LOG_FORMAT
+   * \see https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
+   */
+  void SetFormat(const std::string &format) {
+    logger_->set_pattern(format);
+  }
 
 private:
   /*!
-   * @brief Create a Logger with the given name and make it use the given sink
-   * for its log messages.
+   * \brief Create a Logger with the given name and make it use the given sink for its log messages.
    *
-   * Logger objects cannot be created directly. Instead, use the Registry class
-   * to obtain a Logger for a specific name.
+   * Logger objects cannot be created directly. Instead, use the Registry class to obtain a Logger
+   * for a specific name.
    *
-   * In spdlog, loggers get assigned a sink or several sinks only at creation
-   * and have to continue using that sink for the rest of their lifetime.
-   * The Registry class offer an extension feature that allows to dynamically
-   * switch the current sink. See Registry::PushSink() and Registry::PopSink().
+   * In spdlog, loggers get assigned a sink or several sinks only at creation and have to continue
+   * using that sink for the rest of their lifetime. The Registry class offer an extension feature
+   * that allows to dynamically switch the current sink. See Registry::PushSink() and
+   * Registry::PopSink().
    *
-   * @param [in] name the logger name.
-   * @param [in] sink the sink to be used by this logger.
+   * \param [in] name the logger name.
+   * \param [in] sink the sink to be used by this logger.
    *
-   * @see Registry::GetLogger(std::string)
+   * \see Registry::GetLogger(std::string)
    */
-  Logger(std::string name, spdlog::sink_ptr sink);
+  Logger(const std::string &name, const spdlog::sink_ptr &sink);
 
   /// The underlying spdlog::logger instance.
   std::shared_ptr<spdlog::logger> logger_;
-  /// Synchronization lock used to synchronize logging over this logger from
-  /// multiple threads.
-  std::unique_ptr<std::mutex> logger_mutex_{};
 
   /// Logger objects are created only by the Registry class.
   friend class Registry;
 };
 
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
+// Default constants
+// -------------------------------------------------------------------------------------------------
+
+/// Default format for all loggers.
+/// \see https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
+constexpr const char *DEFAULT_LOG_FORMAT = "[%Y-%m-%d %T.%e] [%t] [%^%l%$] [%n] %v";
+
+/// Default logging level.
+constexpr Logger::Level DEFAULT_LOG_LEVEL = Logger::Level::trace;
+
+// -------------------------------------------------------------------------------------------------
 // DelegatingSink
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 /*!
- * @brief A logging sink implementation that delegates all its logging calls
- * to an encapsulated delegate.
+ * \brief A logging sink implementation that delegates all its logging calls to an encapsulated
+ * delegate.
  *
- * This class is used to work around the limitation of spdlog that forces the
- * same sink(s) to be used for the lifetime of a logger. Two important
- * application scenarios require the sink to be changed after the logger object
- * is created:
- *   - If the application starts logging early to console and then later needs
- *     to log to some different sink after the proper resources for that sink
- *     have been initialized (e.g. GUI),
- *   - If the application needs to temporarily switch logging output to a
- *     different sink (e.g. dumping diagnostic data) and then switch back to
- *     original sink after it's done. This requires two loggers in the current
- *     implementation.
+ * This class is used to work around the limitation of spdlog that forces the same sink(s) to be
+ * used for the lifetime of a logger. Two important application scenarios require the sink to be
+ * changed after the logger object is created:
+ *
+ * - If the application starts logging early to console and then later needs to log to some
+ *   different sink after the proper resources for that sink have been initialized (e.g. GUI),
+ *
+ * - If the application needs to temporarily switch logging output to a different sink (e.g. dumping
+ *   diagnostic data) and then switch back to original sink after it's done. This requires two
+ *   loggers in the current implementation.
  *
  * The DelegatingSink class supports switching its delegate at any time.
  */
 class DelegatingSink : public spdlog::sinks::base_sink<std::mutex> {
 public:
   /*!
-   * @brief Create a DelegatingSink which delegates all its logging to the given
-   * delegate sink.
+   * \brief Create a DelegatingSink which delegates all its logging to the given delegate sink.
    *
-   * @param [in] delegate the sink to which logging calls will be delegated.
+   * \param [in] delegate the sink to which logging calls will be delegated.
    */
   explicit DelegatingSink(spdlog::sink_ptr delegate);
 
@@ -205,10 +217,10 @@ public:
   ~DelegatingSink() override;
 
   /*!
-   * @brief Use the given sink as a new delegate and return the old one.
+   * \brief Use the given sink as a new delegate and return the old one.
    *
-   * @param new_sink the new delegate.
-   * @return the previously used delegate.
+   * \param new_sink the new delegate.
+   * \return the previously used delegate.
    */
   auto SwapSink(spdlog::sink_ptr new_sink) -> spdlog::sink_ptr {
     std::lock_guard<std::mutex> lock(mutex_);
@@ -217,13 +229,25 @@ public:
     return tmp;
   }
 
+  /*!
+   * \brief Set the log format pattern for this logger.
+   *
+   * \param [in] format log format pattern.
+   *
+   * \see DEFAULT_LOG_FORMAT
+   * \see https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
+   */
+  void SetFormat(const std::string &format) {
+    sink_delegate_->set_pattern(format);
+  }
+
 protected:
   /// @name base_sink interface
   //@{
   /*!
-   * @brief Process the given log message.
+   * \brief Process the given log message.
    *
-   * @param msg log message to be processed.
+   * \param msg log message to be processed.
    */
   void sink_it_(const spdlog::details::log_msg &msg) override {
     sink_delegate_->log(msg);
@@ -240,31 +264,29 @@ private:
   spdlog::sink_ptr sink_delegate_;
 };
 
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Registry
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 /*!
- * @brief A registry of all named loggers and the single point of access to the
- * logging API.
+ * \brief A registry of all named loggers and the single point of access to the logging API.
  *
- * The logging registry creates and manages all the named loggers in the
- * application. It can be used to:
- *   - obtain any registered logger by its name,
- *   - set logging level for all registered loggers,
- *   - change the logging format,
- *   - manage a stack of sinks where the current sink can be temporarily
- *     swapped with another sink, to be restored later
+ * The logging registry creates and manages all the named loggers in the application. It can be used
+ * to:
+ * - obtain any registered logger by its name,
+ * - set logging level for all registered loggers,
+ * - change the logging format,
+ * - manage a stack of sinks where the current sink can be temporarily swapped with another sink, to
+ *   be restored later
  *
- * The Registry creates a default sink at startup to be used by all registered
- * loggers, until an explicit call to PushSink() is made. The default sink is
- * a console logger (color).
+ * The Registry creates a default sink at startup to be used by all registered loggers, until an
+ * explicit call to PushSink() is made. The default sink is a console logger (color).
  *
  * Example:
  * ```
  * {
- *   auto &logger =
- *     asap::logging::Registry::GetLogger("testing");
+ *   auto &registry = asap::logging::Registry::instance();
+ *   auto &logger = regsitry.GetLogger("testing");
  *   ASLOG_TO_LOGGER(debug, "starting...");
  *
  *   // Initialize a complex GUI system
@@ -272,147 +294,145 @@ private:
  *
  *   // Start logging to the graphical console
  *   auto ui_console = std::make_shared<MyCustomSink>();
- *   asap::logging::Registry::PushSink(ui_console);
+ *   regsitry.PushSink(ui_console);
  *
  *   ...
  *
  *   // Shutdown the GUI, switch back to the primitive logging sink
- *   asap::logging::Registry::PopSink()
+ *   regsitry.PopSink()
  * ```
  *
- * @todo TODO: Add Init() method with format, sinks and level
+ * \todo TODO: Add Init() method with format, sinks and level
  */
-class ASAP_LOGGING_API Registry {
+class ASAP_LOGGING_API Registry : public Singleton<Registry> {
 public:
   /*!
-   * @brief Sets the minimum log severity required to print messages.
-   *
-   * Messages below this loglevel will be suppressed.
-   *
-   * @param [in] log_level the logging severity to be applied to all registered
-   * loggers.
+   * \brief Automatic conversion helper for the singleton base class.
    */
-  static void SetLogLevel(spdlog::level::level_enum log_level);
+  explicit Registry(typename asap::Singleton<Registry>::token /*unused*/);
 
   /*!
-   * @brief Change the format string used by the registered loggers.
+   * \brief Sets the minimum log severity required to print messages.
    *
-   * @param [in] log_format new format string.
+   * Messages below this log level will be suppressed.
    *
-   * @see https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
+   * \param [in] log_level the logging severity to be applied to all registered loggers.
    */
-  static void SetLogFormat(const std::string &log_format);
+  void SetLogLevel(Logger::Level log_level);
 
   /*!
-   * @brief Get a logger by its name.
+   * \brief Change the format string used by the registered loggers.
    *
-   * This method automatically registers a new logger for the given name if no
-   * corresponding one has been already registered.
+   * \param [in] log_format new format string.
    *
-   * @param [in] name the name of the logger to fetch.
-   *
-   * @return The logger corresponding to the given name.
+   * \see https://github.com/gabime/spdlog/wiki/3.-Custom-formatting
    */
-  static auto GetLogger(std::string const &name) -> spdlog::logger &;
-
-  /// API access to the collection of registered loggers.
-  static auto Loggers() -> std::unordered_map<std::string, Logger> &;
+  void SetLogFormat(const std::string &log_format);
 
   /*!
-   * @brief Use the given sink for all subsequent logging operations until a
-   * call to PopSink() is made.
+   * \brief Get a logger by its name.
    *
-   * This method, together with PopSink(), enable to switch sinks at runtime
-   * temporarily or permanently for all registered loggers.
+   * This method automatically registers a new logger for the given name if no corresponding one has
+   * been already registered.
    *
-   * @param [in] sink new sink to replace the existing one. The existing one is
-   * pushed on top of an internally managed stack of sinks.
+   * \param [in] name the name of the logger to fetch.
    *
-   * @see PopSink()
+   * \return The logger corresponding to the given name.
    */
-  static void PushSink(spdlog::sink_ptr sink);
+  auto GetLogger(std::string const &name) -> spdlog::logger &;
 
   /*!
-   * @brief Restore the top of sinks stack as the current sink for all
-   * registered loggers.
+   * \brief Use the given sink for all subsequent logging operations until a call to PopSink() is
+   * made.
    *
-   * @see PushSink(spdlog::sink_ptr)
+   * This method, together with PopSink(), enable to switch sinks at runtime temporarily or
+   * permanently for all registered loggers.
+   *
+   * \param [in] sink new sink to replace the existing one. The existing one is pushed on top of an
+   * internally managed stack of sinks.
+   *
+   * \see PopSink()
    */
-  static void PopSink();
+  void PushSink(spdlog::sink_ptr sink);
+
+  /*!
+   * \brief Restore the top of sinks stack as the current sink for all registered loggers.
+   *
+   * \see PushSink(spdlog::sink_ptr)
+   */
+  void PopSink();
 
 private:
-  // The following methods all use a simple pattern to implement static data
-  // members for this singleton class. An implementation detail method does the
-  // expensive initialization of the static data member. That detail method is
-  // never used in the rest of the class except from the second method which
-  // provides the API to access the static data member. That second method also
-  // caches the static member to optimize the call.
+  /// The collection of loggers.
+  std::unordered_map<std::string, Logger> all_loggers_;
+  /// A synchronization object for concurrent access to the collection of loggers.
+  mutable std::recursive_mutex loggers_mutex_;
 
-  /// Internal initialization of the static collection of loggers.
-  static auto predefined_loggers_() -> std::unordered_map<std::string, Logger> &;
-  /// A synchronization object for concurrent access to the collection of
-  /// loggers.
-  static std::recursive_mutex loggers_mutex_;
+  /// Create the predefined loggers such as `main`, `misc` and `testing`.
+  void CreatePredefinedLoggers();
 
-  /// API access to the stack of sinks. We don't do any expensive initialization
-  /// here, so no need for a second level of access.
-  static auto sinks_() -> std::stack<spdlog::sink_ptr> &;
+  /// API access to the stack of sinks. We don't do any expensive initialization here, so no need
+  /// for a second level of access.
+  std::stack<spdlog::sink_ptr> sinks_;
   /// A synchronization object for concurrent access to the collection of sinks.
-  static std::mutex sinks_mutex_;
+  mutable std::mutex sinks_mutex_;
 
-  /// API access to the delegating sink.
-  static auto delegating_sink() -> std::shared_ptr<DelegatingSink> &;
-  /// Internal initialization of the static delegating sink.
-  static auto delegating_sink_() -> DelegatingSink *;
+  /// The delegating sink used internally to enable swapping of sinks at runtime.
+  std::shared_ptr<DelegatingSink> delegating_sink_;
+
+  /// The default logging level, used for any newly created logger.
+  Logger::Level log_level_{DEFAULT_LOG_LEVEL};
+
+  /// The default logging level, used for any newly created logger.
+  std::string log_format_{DEFAULT_LOG_FORMAT};
 };
 
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Loggable
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 /*!
- * @brief Mixin class that allows any class to perform logging with a logger of
- * a particular name.
+ * \brief Mixin class that allows any class to perform logging with a logger of a particular name.
  */
 template <typename T> class ASAP_LOGGING_TEMPLATE_API Loggable {
 protected:
   /*!
-   * @brief Do not use this directly, use macros defined below.
-   * @return spdlog::logger& the static log instance to use for class local
-   * logging.
+   * \brief Do not use this directly, use macros defined below.
+   *
+   * \return spdlog::logger& the static log instance to use for class local logging.
    */
   static auto internal_log_do_not_use_read_comment() -> spdlog::logger & {
-    static spdlog::logger &instance = Registry::GetLogger(T::LOGGER_NAME);
+    // NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
+    static spdlog::logger &instance = Registry::instance().GetLogger(T::LOGGER_NAME);
     return instance;
   }
 };
 
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Internal Helper Macros
-// ---------------------------------------------------------------------------
+// For internal use only; use the convenience macros below instead.
+// -------------------------------------------------------------------------------------------------
 
-// Base logging macros. It is expected that users will use the
-// convenience macros below rather than invoke these directly.
 #if !defined(DOXYGEN_DOCUMENTATION_BUILD)
 
 // Convert the line macro to a string literal for concatenation in log macros.
-#define DO_STRINGIZE(x) STRINGIZE(x)
-#define STRINGIZE(x) #x
-#define LINE_STRING DO_STRINGIZE(__LINE__)
+#define INTERNAL_DO_STRINGIZE(x) INTERNAL_STRINGIZE(x)
+#define INTERNAL_STRINGIZE(x) #x
+#define INTERNAL_LINE_STRING INTERNAL_DO_STRINGIZE(__LINE__)
 #ifndef NDEBUG
 auto ASAP_LOGGING_API FormatFileAndLine(char const *file, char const *line) -> std::string;
-#define LOG_PREFIX asap::logging::FormatFileAndLine(__FILE__, LINE_STRING)
+#define INTERNAL_LOG_PREFIX asap::logging::FormatFileAndLine(__FILE__, INTERNAL_LINE_STRING)
 #else
-#define LOG_PREFIX " "
+#define INTERNAL_LOG_PREFIX " "
 #endif // NDEBUG
 
 #define ASLOG_COMP_LEVEL(LOGGER, LEVEL)                                                            \
   (static_cast<spdlog::level::level_enum>(asap::logging::Logger::Level::LEVEL) >=                  \
       ((LOGGER).level()))
 
-// Compare levels before invoking logger. This is an optimization to avoid
-// executing expressions computing log contents when they would be suppressed.
-// The same filtering will also occur in spdlog::logger.
+// Compare levels before invoking logger. This is an optimization to avoid executing expressions
+// computing log contents when they would be suppressed. The same filtering will also occur in
+// spdlog::logger.
 
 #define INTERNAL_SELECT(                                                                           \
     PREFIX, _13, _12, _11, _10, _9, _8, _7, _6, _5, _4, _3, _2, _1, SUFFIX, ...)                   \
@@ -424,8 +444,9 @@ auto ASAP_LOGGING_API FormatFileAndLine(char const *file, char const *line) -> s
 
 #define INTERNAL_ASLOG_1(LOGGER) LOGGER.debug("no logger level - no message")
 #define INTERNAL_ASLOG_2(LOGGER, LEVEL) LOGGER.LEVEL("no message")
-#define INTERNAL_ASLOG_3(LOGGER, LEVEL, MSG) LOGGER.LEVEL("{}" MSG, LOG_PREFIX)
-#define INTERNAL_ASLOG_N(LOGGER, LEVEL, MSG, ...) LOGGER.LEVEL("{}" MSG, LOG_PREFIX, __VA_ARGS__)
+#define INTERNAL_ASLOG_3(LOGGER, LEVEL, MSG) LOGGER.LEVEL("{}" MSG, INTERNAL_LOG_PREFIX)
+#define INTERNAL_ASLOG_N(LOGGER, LEVEL, MSG, ...)                                                  \
+  LOGGER.LEVEL("{}" MSG, INTERNAL_LOG_PREFIX, __VA_ARGS__)
 
 #ifndef NDEBUG
 #define ASLOG_COMP_AND_LOG(LOGGER, LEVEL, ...)                                                     \
@@ -443,20 +464,20 @@ auto ASAP_LOGGING_API FormatFileAndLine(char const *file, char const *line) -> s
   } while (0)
 #endif // NDEBUG
 
-#define GET_MISC_LOGGER() asap::logging::Registry::GetLogger("misc")
+#define ASAP_GET_MISC_LOGGER() asap::logging::Registry::instance().GetLogger("misc")
 
 #endif // DOXYGEN_DOCUMENTATION_BUILD
 
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // User Convenience Macros
-// ---------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 /// @name Logging macros
 //@{
 
 /**
- * Check the class logger level against the provided one. Resolves to true if
- * the class logger level is <= to the given level.
+ * Check the class logger level against the provided one. Resolves to true if the class logger level
+ * is <= to the given level.
  */
 #define ASLOG_CHECK_LEVEL(LEVEL) ASLOG_COMP_LEVEL(ASLOGGER(), LEVEL)
 
@@ -481,11 +502,11 @@ auto ASAP_LOGGING_API FormatFileAndLine(char const *file, char const *line) -> s
 #define ASLOG_TO_LOGGER(LOGGER, LEVEL, ...) ASLOG_COMP_AND_LOG(LOGGER, LEVEL, __VA_ARGS__)
 
 /**
- * Convenience macro to log to the misc logger, which allows for logging without
- * direct access to a logger.
+ * Convenience macro to log to the misc logger, which allows for logging without direct access to a
+ * logger.
  */
-#define ASLOG_MISC(LEVEL, ...) ASLOG_TO_LOGGER(GET_MISC_LOGGER(), LEVEL, __VA_ARGS__)
+#define ASLOG_MISC(LEVEL, ...) ASLOG_TO_LOGGER(ASAP_GET_MISC_LOGGER(), LEVEL, __VA_ARGS__)
 
 //@}
 
-}  // namespace asap::logging
+} // namespace asap::logging

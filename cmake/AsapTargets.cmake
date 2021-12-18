@@ -59,12 +59,10 @@ macro(asap_declare_module)
 endmacro()
 
 # --------------------------------------------------------------------------------------------------
-# CMake package config
+# CMake/pkgconfig config files
 # --------------------------------------------------------------------------------------------------
 
-macro(_module_cmake_config_files)
-  set(TARGETS_EXPORT_NAME "${MODULE_TARGET_NAME}Targets")
-
+function(_module_cmake_config_files)
   # generate the config file that includes the exports
   configure_package_config_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/config.cmake.in
@@ -77,55 +75,75 @@ macro(_module_cmake_config_files)
     "${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}ConfigVersion.cmake"
     VERSION "${META_MODULE_VERSION}"
     COMPATIBILITY AnyNewerVersion)
-endmacro()
+endfunction()
 
-# --------------------------------------------------------------------------------------------------
-# Pkg-config file.
-# --------------------------------------------------------------------------------------------------
-
-macro(_module_pkgconfig_files)
+function(_module_pkgconfig_files)
   set(MODULE_PKGCONFIG_FILE ${MODULE_TARGET_NAME}.pc)
   get_target_property(TARGET_DEBUG_POSTFIX ${MODULE_TARGET_NAME} DEBUG_POSTFIX)
   set(MODULE_LINK_LIBS "-l${MODULE_TARGET_NAME}${TARGET_DEBUG_POSTFIX}")
   configure_file(config.pc.in ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_PKGCONFIG_FILE} @ONLY)
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_PKGCONFIG_FILE}
           DESTINATION ${ASAP_INSTALL_PKGCONFIG})
-endmacro()
+endfunction()
 
-macro(asap_add_library target)
+function(asap_create_module_config_files)
+  _module_cmake_config_files()
+  _module_pkgconfig_files()
+endfunction()
+
+# --------------------------------------------------------------------------------------------------
+# Target creation helpers
+# --------------------------------------------------------------------------------------------------
+
+function(asap_add_library target)
   swift_add_library("${target}" ${ARGN})
 
   # We can refer to this target either with its standalone target name or with a project scoped name
   # (<project>::<module>) which we will alias to the target name.
-  add_library("${META_PROJECT_NAME}::${META_MODULE_NAME}" ALIAS ${MODULE_TARGET_NAME})
+  add_library("${META_PROJECT_NAME}::${META_MODULE_NAME}" ALIAS ${target})
   asap_set_compile_definitions(${target})
 
   set_target_properties(
-    ${MODULE_TARGET_NAME}
+    ${target}
     PROPERTIES FOLDER "Libraries"
                VERSION ${META_MODULE_VERSION}
                SOVERSION ${META_MODULE_VERSION_MAJOR}
                DEBUG_POSTFIX "d")
 
   # Generate export headers for the library
-  asap_generate_export_headers(${MODULE_TARGET_NAME} ${META_MODULE_NAME})
+  asap_generate_export_headers(${target} ${META_MODULE_NAME})
+endfunction()
 
-  _module_cmake_config_files()
-  _module_pkgconfig_files()
-endmacro()
-
-macro(asap_add_executable target)
+function(asap_add_executable target)
   swift_add_executable("${target}" ${ARGN})
-endmacro()
+  asap_set_compile_definitions(${target})
+  set_target_properties(${target} PROPERTIES FOLDER "Executables")
+endfunction()
 
-macro(asap_add_tool target)
+function(asap_add_tool target)
   swift_add_tool("${target}" ${ARGN})
-endmacro()
+  asap_set_compile_definitions(${target})
+  set_target_properties(${target} PROPERTIES FOLDER "Tools")
+endfunction()
 
-macro(asap_add_tool_library target)
+function(asap_add_tool_library target)
   swift_add_tool_library("${target}" ${ARGN})
-endmacro()
+  asap_set_compile_definitions(${target})
+  set_target_properties(
+    ${target}
+    PROPERTIES FOLDER "Tool Libraries"
+               VERSION ${META_MODULE_VERSION}
+               SOVERSION ${META_MODULE_VERSION_MAJOR}
+               DEBUG_POSTFIX "d")
+endfunction()
 
-macro(asap_add_test_library target)
+function(asap_add_test_library target)
   swift_add_test_library("${target}" ${ARGN})
-endmacro()
+  asap_set_compile_definitions(${target})
+  set_target_properties(
+    ${target}
+    PROPERTIES FOLDER "Test Libraries"
+               VERSION ${META_MODULE_VERSION}
+               SOVERSION ${META_MODULE_VERSION_MAJOR}
+               DEBUG_POSTFIX "d")
+endfunction()

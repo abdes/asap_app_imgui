@@ -20,9 +20,10 @@ asap_add_test(
   VALGRIND_MEMCHECK
   SRCS
   "flag_ops_test.cpp"
+  "singleton_test.cpp"
   "main.cpp"
   LINK
-  ${META_PROJECT_NAME}::common
+  asap::common
   gtest_main
   gmock_main
   COMMENT

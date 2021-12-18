@@ -7,7 +7,7 @@
 
 /*!
  * \file compilers.h
- * 
+ *
  * \brief Compiler detection, diagnostics and feature helpers.
  */
 
@@ -36,16 +36,16 @@
 #else // DOXYGEN_DOCUMENTATION_BUILD
 /*!
  * \brief Clang compiler detection macro.
- * 
+ *
  * This macro is only defined if the compiler in use is a Clang compiler (including Apple Clang).
- * 
+ *
  * Example
  * ```
  * #if defined(ASAP_CLANG_VERSION)
  * // Do things for clang
  * #endif
  * ```
- * 
+ *
  * \see ASAP_CLANG_VERSION_CHECK
  */
 #define ASAP_CLANG_VERSION 0
@@ -66,7 +66,7 @@
  * \brief Clang compiler version check macro.
  *
  * This macro is always defined, and provides a convenient way to check for features based on the
- * version number. 
+ * version number.
  *
  * \note In most cases for clang, you shouldn't test its version number, you should use the feature
  * checking macros (https://clang.llvm.org/docs/LanguageExtensions.html#feature-checking-macros).
@@ -104,16 +104,16 @@
 #else // DOXYGEN_DOCUMENTATION_BUILD
 /*!
  * \brief MSVC compiler detection macro.
- * 
+ *
  * This macro is only defined if the compiler in use is Microsoft Visual Studio C++ compiler.
- * 
+ *
  * Example
  * ```
  * #if defined(ASAP_MSVC_VERSION)
  * // Do things for MSVC
  * #endif
  * ```
- * 
+ *
  * \see ASAP_MSVC_VERSION_CHECK
  */
 #define ASAP_MSVC_VERSION 0
@@ -138,7 +138,7 @@
  * \brief MSVC compiler version check macro.
  *
  * This macro is always defined, and provides a convenient way to check for features based on the
- * version number. 
+ * version number.
  *
  * Example
  * ```
@@ -146,7 +146,7 @@
  * // Do a thing that only MSVC 16+ supports
  * #endif
  * ```
- * 
+ *
  * \return true (1) if the current compiler corresponds to the macro name, and the compiler version
  * is greater than or equal to the provided values.
  *
@@ -207,7 +207,7 @@
  * \brief GNU like compiler version check macro.
  *
  * This macro is always defined, and provides a convenient way to check for features based on the
- * version number. 
+ * version number.
  *
  * Example
  * ```
@@ -215,7 +215,7 @@
  * // Do a thing that only GNU-like compiler 9+ supports
  * #endif
  * ```
- * 
+ *
  * \return true (1) if the current compiler corresponds to the macro name, and the compiler version
  * is greater than or equal to the provided values.
  *
@@ -234,17 +234,17 @@
 #else // DOXYGEN_DOCUMENTATION_BUILD
 /*!
  * \brief GCC compiler detection macro.
- * 
+ *
  * This macro is only defined if the compiler in use is GNU C/C++ compiler. Any other compilers that
  * masquerade as `__GNUC__` but define another known compiler symbol are excluded.
- * 
+ *
  * Example
  * ```
  * #if defined(ASAP_GCC_VERSION)
  * // Do things for GCC/G++
  * #endif
  * ```
- * 
+ *
  * \see ASAP_GCC_VERSION_CHECK
  */
 #define ASAP_GCC_VERSION 0
@@ -264,7 +264,7 @@
  * \brief GCC/G++ compiler version check macro.
  *
  * This macro is always defined, and provides a convenient way to check for features based on the
- * version number. 
+ * version number.
  *
  * Example
  * ```
@@ -272,7 +272,7 @@
  * // Do a thing that only GCC 11+ supports
  * #endif
  * ```
- * 
+ *
  * \return true (1) if the current compiler corresponds to the macro name, and the compiler version
  * is greater than or equal to the provided values.
  *
@@ -302,7 +302,7 @@
  * #else
  * #  define DEPRECATED(msg)
  * #endif
- *  
+ *
  * DEPRECATED("foo() has been deprecated") void foo();
  * ```
  *
@@ -400,9 +400,9 @@
 #endif
 /*!
  * \def ASAP_PRAGMA
- * 
+ *
  * \brief Produce a `pragma` directive for the compiler.
- * 
+ *
  * Pragma directives specify machine-specific or operating system-specific compiler features. There
  * are different ways compilers support the specification of pragmas and this macro will simply
  * abstract these ways in a single generic way.
@@ -433,9 +433,9 @@
 #endif
 /*!
  * \def ASAP_DIAGNOSTIC_PUSH
- * 
+ *
  * \brief Remember the current state of the compiler's diagnostics.
- * 
+ *
  * Example
  * ```
  * ASAP_DIAGNOSTIC_PUSH
@@ -445,15 +445,15 @@
  * const char *const FOO = "foo";
  * ASAP_DIAGNOSTIC_POP
  * ```
- * 
+ *
  * \see ASAP_DIAGNOSTIC_POP
  */
 
 /*!
  * \def ASAP_DIAGNOSTIC_POP
- * 
+ *
  * \brief Return the state of the compiler's diagnostics to the value from the last push.
- * 
+ *
  * Example
  * ```
  * ASAP_DIAGNOSTIC_PUSH
@@ -463,7 +463,7 @@
  * const char *const FOO = "foo";
  * ASAP_DIAGNOSTIC_POP
  * ```
- * 
+ *
  * \see ASAP_DIAGNOSTIC_PUSH
  */
 
@@ -536,7 +536,7 @@
  *
  * \brief Inform the compiler/analyzer that the code should never be reached (even with invalid
  * input).
- * 
+ *
  * Example
  * ```
  * switch (foo) {
@@ -569,7 +569,7 @@
  *   case FOO_QUX:
  *     return 0;
  *   }
- * 
+ *
  * ASAP_UNREACHABLE_RETURN(0);
  * }
  * ```
@@ -584,7 +584,7 @@
  *
  * Note that the compiler is free to assume that the expression never evaluates to true and
  * therefore can elide code paths where it does evaluate to true.
- * 
+ *
  * Example
  * ```
  * unsigned sum_small(unsigned data[], size_t count) {

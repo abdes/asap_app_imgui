@@ -62,13 +62,20 @@ target_include_directories(
          $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
+# logging comes directly from asap and is usually kept as is. It is more convenient to simply use it
+# as asap::logging
+add_library(asap::${META_MODULE_NAME} ALIAS ${MODULE_TARGET_NAME})
+
 asap_add_sanitizers(${MODULE_TARGET_NAME})
+
+# Generate module config files for cmake and pkgconfig
+asap_create_module_config_files()
 
 # --------------------------------------------------------------------------------------------------
 # Tests
 # --------------------------------------------------------------------------------------------------
 
-if(OPTION_BUILD_TESTS)
+if(ASAP_BUILD_TESTS)
   add_subdirectory(test)
 endif()
 
@@ -77,15 +84,17 @@ endif()
 # --------------------------------------------------------------------------------------------------
 
 asap_with_doxygen(
-  ${META_PROJECT_NAME}_${META_MODULE_NAME} "\"Logging Module\""
+  ${MODULE_TARGET_NAME} "\"Logging Module\""
   "\"Provides logging APIs around spdlog.\""
   "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-asap_with_sphinx(${META_PROJECT_NAME}_${META_MODULE_NAME})
+asap_with_sphinx(${MODULE_TARGET_NAME})
 
 # ==================================================================================================
 # Deployment instructions
 # ==================================================================================================
+
+set(TARGETS_EXPORT_NAME "${MODULE_TARGET_NAME}Targets")
 
 # Library
 install(

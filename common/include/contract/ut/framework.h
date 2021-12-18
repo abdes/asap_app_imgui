@@ -7,8 +7,8 @@
 
 /*!
  * \file framework.h
- * 
- * \brief Declaration for the unit testing support for contract checking. 
+ *
+ * \brief Declaration for the unit testing support for contract checking.
  */
 
 #pragma once

@@ -11,6 +11,9 @@
 
 #include <common/compilers.h>
 
+#include <gmock/gmock-matchers.h>
+#include <gmock/gmock.h>
+#include <gtest/gtest-matchers.h>
 #include <gtest/gtest.h>
 
 // Disable compiler and linter warnings originating from the unit test framework and for which we
@@ -24,9 +27,7 @@ ASAP_DIAGNOSTIC_PUSH
 #endif
 // NOLINTBEGIN(used-but-marked-unused)
 
-namespace asap {
-namespace contract {
-
+namespace asap::contract {
 namespace {
 
 // NOLINTNEXTLINE
@@ -59,10 +60,36 @@ TEST(GoogleTestDeathMacros, NestedChecks) {
   CHECK_VIOLATES_CONTRACT(Violator(nullptr));
 }
 
-} // namespace
+// NOLINTNEXTLINE
+TEST(GoogleTestDeathMacros, VerboseTestPrintsViolationInfo) {
+  class ErrorOutputRedirect {
+  public:
+    explicit ErrorOutputRedirect(std::streambuf *new_buffer) : old(std::cerr.rdbuf(new_buffer)) {
+    }
 
-} // namespace contract
-} // namespace asap
+    ErrorOutputRedirect(const ErrorOutputRedirect&) = delete;
+    ErrorOutputRedirect(const ErrorOutputRedirect&&) = delete;
+    auto operator=(const ErrorOutputRedirect&) -> ErrorOutputRedirect& = delete;
+    auto operator=(const ErrorOutputRedirect&&) -> ErrorOutputRedirect& = delete;
+
+    ~ErrorOutputRedirect() {
+      std::cerr.rdbuf(old);
+    }
+
+  private:
+    std::streambuf *old;
+  };
+
+  std::stringstream buffer;
+  ErrorOutputRedirect output(buffer.rdbuf());
+  SetVerbosity(Verbosity::VERBOSE);
+  CHECK_VIOLATES_CONTRACT(testing::TestExpectDefault(nullptr));
+  auto text = buffer.str();
+  EXPECT_THAT(text, ::testing::ContainsRegex("violated"));
+}
+
+} // namespace
+} // namespace asap::contract
 
 auto main(int argc, char **argv) -> int {
   asap::contract::PrepareForTesting();
