@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](http://github.com/abdes/asap/compare/v3.0.0...v3.1.0) (2021-12-18)
+
+
+### ⚠ BREAKING CHANGES
+
+* The logging `Registry` is now implemented as a singleton class and therefore it needs to be
+  accessed via its instance() method. All other methods in its interface are not static anymore.
+* Prefix the build options with `ASAP_` to make them unique and avoid clashing with other projects
+  that may use the generic `OPTION_xxx` names. Additionally, the build presets now always activate
+  building of tests and examples except in release builds where examples are not built.
+* The cmake option `OPTION_SELF_CONTAINED` is no longer relevant as we believe that 3rd party
+  dependencies should be installed using their own projects. In the wrostcase scenario, they should
+  be explicitly added as install instructions to the project in a visible and documented way.
+
+### Features
+
+* add support for .editorconfig ([5a7a689](http://github.com/abdes/asap/commit/5a7a6892f7c05798e79c6f81e9eef3b0a6256ca1))
+* provide a way to distinguish between debug and release builds via preprocessor define ([bbd84a2](http://github.com/abdes/asap/commit/bbd84a2c32c9833f79b442e202b647f93946b105))
+
+
+### Bug Fixes
+
+* adjust doc target names to work in renamed projects ([60acc65](http://github.com/abdes/asap/commit/60acc65fcc8d529a69f3617d792376be3e54b6ce))
+* cmake option was placed in the wrong command ([b634b15](http://github.com/abdes/asap/commit/b634b153db975a8bc8715e82f7fafdc214504cfa))
+* clean the logging API implementation ([25535c7](http://github.com/abdes/asap/commit/25535c76c0586d53f7c6c55db250a251f0c5390b))
+
+
 ## [3.0.0](http://github.com/abdes/asap/compare/v2.0.1...v3.0.0) (2021-12-08)
 
 
