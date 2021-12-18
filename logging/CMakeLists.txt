@@ -84,11 +84,11 @@ endif()
 # --------------------------------------------------------------------------------------------------
 
 asap_with_doxygen(
-  ${META_PROJECT_NAME}_${META_MODULE_NAME} "\"Logging Module\""
+  ${MODULE_TARGET_NAME} "\"Logging Module\""
   "\"Provides logging APIs around spdlog.\""
   "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-asap_with_sphinx(${META_PROJECT_NAME}_${META_MODULE_NAME})
+asap_with_sphinx(${MODULE_TARGET_NAME})
 
 # ==================================================================================================
 # Deployment instructions

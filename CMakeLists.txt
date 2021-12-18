@@ -289,8 +289,15 @@ if(SPHINX_FOUND)
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html)
   add_custom_target(copy_doc_index ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
 
-  add_dependencies(master_sphinx ${META_PROJECT_NAME}_common_sphinx
-                   ${META_PROJECT_NAME}_logging_sphinx copy_doc_index)
+  add_dependencies(master_sphinx
+    copy_doc_index
+    # Hardcode `asap` in the module name as we do not want this prefix to change with the forked
+    # project name.
+    asap_common_sphinx
+    asap_logging_sphinx
+    # Add more submodule documentation targets after this, using variables in the target names
+    # consistently with the module's CMakeLists.txt.
+    )
 
 endif()
 
