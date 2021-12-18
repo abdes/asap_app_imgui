@@ -17,14 +17,16 @@ Developer Guides
 
    build
    devflow
+   modules
 
 :doc:`Build <build>`
 --------------------
-
 *using the build system to build the project targets and manage its artifacts.*
-
 
 :doc:`Development workflow <devflow>`
 -------------------------------------
-
 *a possible workflow to manage the development and release processes in the project.*
+
+:doc:`Modules <modules>`
+-------------------------------------
+*understand how to add/remove modules and how they get integrated into the build system.*
