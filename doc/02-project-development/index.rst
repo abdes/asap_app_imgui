@@ -18,6 +18,7 @@ Developer Guides
    build
    devflow
    modules
+   third_party
 
 :doc:`Build <build>`
 --------------------
@@ -30,3 +31,7 @@ Developer Guides
 :doc:`Modules <modules>`
 -------------------------------------
 *understand how to add/remove modules and how they get integrated into the build system.*
+
+:doc:`Third-party modules <modules>`
+-------------------------------------
+*understand how to add/remove third party libraries/modules from the project.*
