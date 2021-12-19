@@ -99,8 +99,15 @@ endif()
 # --------------------------------------------------------------------------------------------------
 
 asap_with_doxygen(
-  ${MODULE_TARGET_NAME} "\"Common Module\""
+  MODULE_NAME
+  ${MODULE_TARGET_NAME}
+  VERSION
+  ${META_MODULE_VERSION}
+  TITLE
+  "\"Common Module\""
+  BRIEF
   "\"Provides common basic building blocks such as portability, assertions, etc.\""
+  INPUT_PATH
   "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 asap_with_sphinx(${MODULE_TARGET_NAME})
