@@ -54,7 +54,7 @@ asap_add_library(
 target_link_libraries(
   ${MODULE_TARGET_NAME}
   PRIVATE Microsoft.GSL::GSL
-  PUBLIC ${META_PROJECT_NAME}::common spdlog::spdlog)
+  PUBLIC asap::common spdlog::spdlog)
 
 target_include_directories(
   ${MODULE_TARGET_NAME}
