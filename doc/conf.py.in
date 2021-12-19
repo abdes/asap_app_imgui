@@ -116,10 +116,10 @@ html_favicon = "_static/favicon.ico"
 html_last_updated_fmt = None
 
 html_theme_options = {
-    "repository_url": 'https://github.com/@META_GITHUB_USER@/@META_GITHUB_REPO@',
+    "repository_url": '@META_GITHUB_REPO@',
     "use_repository_button": True,
     "use_issues_button": True,
-    "use_edit_page_button": True,
+    "use_edit_page_button": False,
     "use_download_button": True,
     "use_fullscreen_button": True,
     # We don't want the default navigation bar footer to be displayed on every

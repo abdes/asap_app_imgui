@@ -114,7 +114,7 @@ html_theme_options = {
     "repository_url": '@META_GITHUB_REPO@',
     "use_repository_button": True,
     "use_issues_button": True,
-    "use_edit_page_button": True,
+    "use_edit_page_button": False,
     "use_download_button": True,
     "use_fullscreen_button": True,
     # We don't want the default navigation bar footer to be displayed on every
