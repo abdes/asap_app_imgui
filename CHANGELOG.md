@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.2](http://github.com/abdes/asap/compare/v3.1.1...v3.1.2) (2021-12-19)
+
+
+### Features
+
+* doxygen snippets from `test` or `examples` source directories ([85b8000](http://github.com/abdes/asap/commit/85b8000e91dd105c0f90a62b1824957b68ce9c03))
+
+
+### Bug Fixes
+
+* **doc:** wrong chapter title in logging module page ([5966912](http://github.com/abdes/asap/commit/59669122d3ea8565878667e6f09b124bc7da1b99))
+* doxygen doc generation uses wrong module info ([8833474](http://github.com/abdes/asap/commit/8833474402c523a3f2eda10b8927da46989f4bba))
+* need to hardcode `asap` when linking `common` ([e038a70](http://github.com/abdes/asap/commit/e038a702ce8727fa1a6c8b3a45cb4bb211281db5))
+
 ## [3.1.1](http://github.com/abdes/asap/compare/v3.1.0...v3.1.1) (2021-12-19)
 
 ### Documentation
