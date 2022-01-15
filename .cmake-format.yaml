@@ -1,6 +1,6 @@
 parse: {}
 format:
-  line_width: 100
+  line_width: 80
   tab_size: 2
   use_tabchars: false
   fractional_tab_policy: use-space

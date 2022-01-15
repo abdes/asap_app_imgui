@@ -1,19 +1,14 @@
-# ~~~
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
 # SPDX-License-Identifier: BSD-3-Clause
-
-# ~~~
-#        Copyright The Authors 2018.
-#    Distributed under the 3-Clause BSD License.
-#    (See accompanying file LICENSE or copy at
-#   https://opensource.org/licenses/BSD-3-Clause)
-# ~~~
-
+# ===-----------------------------------------------------------------------===#
 
 include_guard(GLOBAL)
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Set a common set of compile definitions
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 function(asap_set_compile_definitions target)
   set(argOption)
@@ -30,11 +25,13 @@ function(asap_set_compile_definitions target)
 
   list(APPEND all_flags "ASAP_CONTRACT_${OPTION_CONTRACT_MODE}")
 
-  # Provide a way to distinguish between debug and release builds via preprocessor define
+  # Provide a way to distinguish between debug and release builds via
+  # preprocessor define
   list(APPEND all_flags "$<$<CONFIG:Debug>:ASAP_IS_DEBUG_BUILD>")
 
   if(MSVC)
-    list(APPEND all_flags "NOMINMAX" "WIN32_LEAN_AND_MEAN=1" "_WIN32_WINNT=0x0600")
+    list(APPEND all_flags "NOMINMAX" "WIN32_LEAN_AND_MEAN=1"
+         "_WIN32_WINNT=0x0600")
     # Disabling warning for not using "secure-but-not-standard" STL algos
     list(APPEND all_flags "_CRT_SECURE_NO_WARNINGS" "_SCL_SECURE_NO_WARNINGS")
   endif()

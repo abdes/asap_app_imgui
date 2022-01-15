@@ -1,28 +1,25 @@
-# ~~~
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
 # SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
-# ~~~
-#        Copyright The Authors 2018.
-#    Distributed under the 3-Clause BSD License.
-#    (See accompanying file LICENSE or copy at
-#   https://opensource.org/licenses/BSD-3-Clause)
-# ~~~
-
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # CMake basic options
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-# It's time to move on! We require 3.14 for modern CMake with nice quality of life features and
-# simpler scripts.
+# It's time to move on! We require 3.14 for modern CMake with nice quality of
+# life features and simpler scripts.
 cmake_minimum_required(VERSION 3.14)
 
-# List of directories specifying a search path for CMake modules to be loaded by the the include()
-# or find_package() commands before checking the default modules that come with CMake.
+# List of directories specifying a search path for CMake modules to be loaded by
+# the the include() or find_package() commands before checking the default
+# modules that come with CMake.
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Project description and (meta) information
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 # Get git revision
 find_package(Git REQUIRED)
@@ -55,9 +52,9 @@ string(TOUPPER ${META_PROJECT_ID} META_PROJECT_ID)
 
 message("=> Project : ${META_NAME_VERSION}")
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Project configuration options
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 # Project options
 # cmake-format: off
@@ -70,9 +67,9 @@ option(ASAP_WITH_GOOGLE_TSAN    "Instrument code with thread sanitizer"         
 option(ASAP_WITH_VALGRIND       "Builds targets with valgrind profilers added"           OFF)
 # cmake-format: on
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Project Declaration
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 # Generate folders for IDE targets (e.g., VisualStudio solutions)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -92,9 +89,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 # Create version file
 file(WRITE "${PROJECT_BINARY_DIR}/VERSION" "${META_NAME_VERSION}")
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Additional CMake modules
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 # Register general cmake commands
 include(AsapTargets)
@@ -107,20 +104,22 @@ include(Valgrind)
 include(ClangFormat)
 include(ClangTidy)
 
-# The default build type provided by CMake is to include no compiler flags for optimization. For
-# some projects you may want to set a default build type so that you do not have to remember to set
-# it.
+# The default build type provided by CMake is to include no compiler flags for
+# optimization. For some projects you may want to set a default build type so
+# that you do not have to remember to set it.
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-  message(STATUS "Setting build type to 'RelWithDebInfo' as none was specified.")
+  message(
+    STATUS "Setting build type to 'RelWithDebInfo' as none was specified.")
   set(CMAKE_BUILD_TYPE
       RelWithDebInfo
       CACHE STRING "Choose the type of build." FORCE)
   # Set the possible values of build type for cmake-gui
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel"
-                                               "RelWithDebInfo")
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
+                                               "MinSizeRel" "RelWithDebInfo")
 endif()
 
-# If no contract mode is specified, we set the contract mode based on the build type.
+# If no contract mode is specified, we set the contract mode based on the build
+# type.
 if(NOT OPTION_CONTRACT_MODE)
   if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(OPTION_CONTRACT_MODE
@@ -136,18 +135,21 @@ if(NOT OPTION_CONTRACT_MODE)
         CACHE STRING "Contract mode for assertions (common module).")
   endif()
 endif()
-message("-- Building for ${CMAKE_BUILD_TYPE} with OPTION_CONTRACT_MODE : ${OPTION_CONTRACT_MODE}")
+message(
+  "-- Building for ${CMAKE_BUILD_TYPE} with OPTION_CONTRACT_MODE : ${OPTION_CONTRACT_MODE}"
+)
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Deployment/installation setup
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 # Get project name
 set(project ${META_PROJECT_NAME})
 
 # Check for system dir install
 set(SYSTEM_DIR_INSTALL FALSE)
-if("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr" OR "${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr/local")
+if("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr" OR "${CMAKE_INSTALL_PREFIX}"
+                                                STREQUAL "/usr/local")
   set(SYSTEM_DIR_INSTALL TRUE)
   set(ASAP_INSTALL_PREFIX_FULL_PATH ${CMAKE_INSTALL_PREFIX})
 else()
@@ -191,7 +193,8 @@ endif()
 # cmake-format: on
 
 # Set runtime path
-set(CMAKE_SKIP_BUILD_RPATH FALSE) # Add absolute path to all dependencies for BUILD
+set(CMAKE_SKIP_BUILD_RPATH FALSE) # Add absolute path to all dependencies for
+                                  # BUILD
 set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
@@ -204,56 +207,60 @@ if(NOT SYSTEM_DIR_INSTALL)
   endif()
 endif()
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Third party modules
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 add_subdirectory(third_party)
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Clean compiler settings and options
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-  # remove default warning level from CMAKE_CXX_FLAGS_INIT CMake adds compiler warning levels by
-  # default and for MSVC, it uses /W3 which we want to override with /W4. The override does make
-  # MSVC complain though, so we just strip any argument already added by cmake before we set ours.
+  # remove default warning level from CMAKE_CXX_FLAGS_INIT CMake adds compiler
+  # warning levels by default and for MSVC, it uses /W3 which we want to
+  # override with /W4. The override does make MSVC complain though, so we just
+  # strip any argument already added by cmake before we set ours.
   string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif()
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Top level code generation
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 # Generate version-header
-configure_file(templates/version.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h)
+configure_file(templates/version.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h)
 
-# Generate a clangd configuration file that points to the compilation database in the cmake build
-# directory. We need to do this as the build directory is different for every preset and can be
-# different as well when the user decides to build somewhere else.
-# Currently we cannot configure this properly in vscode settings.
-# See https://github.com/clangd/vscode-clangd/issues/48
+# Generate a clangd configuration file that points to the compilation database
+# in the cmake build directory. We need to do this as the build directory is
+# different for every preset and can be different as well when the user decides
+# to build somewhere else. Currently we cannot configure this properly in vscode
+# settings. See https://github.com/clangd/vscode-clangd/issues/48
 configure_file(.clangd.in ${CMAKE_SOURCE_DIR}/.clangd @ONLY)
 
-
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Test targets
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-# enable CTest.  This will set BUILD_TESTING to ON unless otherwise specified on the command line
+# enable CTest.  This will set BUILD_TESTING to ON unless otherwise specified on
+# the command line
 include(CTest)
 enable_testing()
-asap_add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest* /usr/*)
+asap_add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest*
+                                   /usr/*)
 
 include(FetchContent)
-# We make sure that we have 'thirdparty' in the name so that the targets get excluded from the
-# generated target lists for the various tools.
+# We make sure that we have 'thirdparty' in the name so that the targets get
+# excluded from the generated target lists for the various tools.
 set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG # GoogleTest now follows the Abseil Live at Head philosophy. We recommend using the latest
-          # commit in the main branch in your projects.
+  GIT_TAG # GoogleTest now follows the Abseil Live at Head philoqqsophy. We
+          # recommend using the latest commit in the main branch in your
+          # projects.
           origin/main)
 # For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt
@@ -262,9 +269,9 @@ set(gtest_force_shared_crt
 FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
-# ==================================================================================================
+# ==============================================================================
 # Documentation - doxygen, sphinx/breathe/exhale
-# ==================================================================================================
+# ==============================================================================
 
 # Doxygen
 set(DOXYGEN_BUILD_DIR "${CMAKE_BINARY_DIR}/dox")
@@ -280,44 +287,46 @@ include(SphinxGeneration)
 if(SPHINX_FOUND)
   asap_with_sphinx("master")
 
-  # Add a target for copying the index.html from the doc dir to the sphinx build dir. A dependency
-  # on this target will be added to the master sphinx target.
+  # Add a target for copying the index.html from the doc dir to the sphinx build
+  # dir. A dependency on this target will be added to the master sphinx target.
   add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html
             ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html)
-  add_custom_target(copy_doc_index ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
+  add_custom_target(copy_doc_index ALL
+                    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
 
-  add_dependencies(master_sphinx
+  add_dependencies(
+    master_sphinx
     copy_doc_index
-    # Hardcode `asap` in the module name as we do not want this prefix to change with the forked
-    # project name.
+    # Hardcode `asap` in the module name as we do not want this prefix to change
+    # with the forked project name.
     asap_common_sphinx
     asap_logging_sphinx
-    # Add more submodule documentation targets after this, using variables in the target names
-    # consistently with the module's CMakeLists.txt.
-    )
+    # Add more submodule documentation targets after this, using variables in
+    # the target names consistently with the module's CMakeLists.txt.
+  )
 
 endif()
 
-# ==================================================================================================
+# ==============================================================================
 # Project modules
-# ==================================================================================================
+# ==============================================================================
 
 add_subdirectory(common)
 add_subdirectory(logging)
 
-# ==================================================================================================
+# ==============================================================================
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
-# ==================================================================================================
+# ==============================================================================
 
 asap_setup_clang_format()
 asap_create_clang_tidy_targets()
 
-# ==================================================================================================
+# ==============================================================================
 # Deployment (global project files)
-# ==================================================================================================
+# ==============================================================================
 
 # Install version file
 install(
@@ -325,7 +334,8 @@ install(
   DESTINATION ${ASAP_INSTALL_ROOT}
   COMPONENT runtime)
 
-# Deploy generated top level headers (always in `asap` directory even when forked)
+# Deploy generated top level headers (always in `asap` directory even when
+# forked)
 install(
   DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/asap
   DESTINATION ${ASAP_INSTALL_INCLUDE}

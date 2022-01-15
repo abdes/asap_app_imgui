@@ -1,16 +1,15 @@
-# ~~~
-#        Copyright The Authors 2018-2021.
-#    Distributed under the 3-Clause BSD License.
-#    (See accompanying file LICENSE or copy at
-#   https://opensource.org/licenses/BSD-3-Clause)
-# ~~~
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
+# SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
-# ==================================================================================================
+# ==============================================================================
 # Build instructions
-# ==================================================================================================
+# ==============================================================================
 
-# If running with google sanitizers, skill all these targets as they are abort and segmentation
-# fault tests that do not make sense to run under sanitizers
+# If running with google sanitizers, skill all these targets as they are abort
+# and segmentation fault tests that do not make sense to run under sanitizers
 if(ASAP_WITH_GOOGLE_ASAN
    OR ASAP_WITH_GOOGLE_UBSAN
    OR ASAP_WITH_GOOGLE_TSAN)
@@ -19,13 +18,14 @@ endif()
 
 function(_remove_contract_mode target)
   get_target_property(defs ${target} COMPILE_DEFINITIONS)
-  list(REMOVE_ITEM defs ASAP_CONTRACT_DEFAULT ASAP_CONTRACT_AUDIT ASAP_CONTRACT_OFF)
+  list(REMOVE_ITEM defs ASAP_CONTRACT_DEFAULT ASAP_CONTRACT_AUDIT
+       ASAP_CONTRACT_OFF)
   set_property(TARGET ${target} PROPERTY COMPILE_DEFINITIONS ${defs})
 endfunction()
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Unit Test Macros
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 set(target_name ${MODULE_TARGET_NAME}_contract_ut_test)
 
@@ -46,16 +46,16 @@ asap_add_test(
   COMMENT
   "Contract unit test macros tests")
 
-# Remove any existing contract mode compiler definition and force the mode to DEFAULT for this
-# target.
+# Remove any existing contract mode compiler definition and force the mode to
+# DEFAULT for this target.
 _remove_contract_mode(${target_name})
 target_compile_definitions(${target_name} PRIVATE ASAP_CONTRACT_DEFAULT)
 
 gtest_discover_tests(${target_name})
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Default mode tests
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 set(target_name ${MODULE_TARGET_NAME}_contract_default_test)
 
@@ -79,16 +79,16 @@ asap_add_test(
   COMMENT
   "Contract unit tests in DEFAULT build mode")
 
-# Remove any existing contract mode compiler definition and force the mode to DEFAULT for this
-# target.
+# Remove any existing contract mode compiler definition and force the mode to
+# DEFAULT for this target.
 _remove_contract_mode(${target_name})
 target_compile_definitions(${target_name} PRIVATE ASAP_CONTRACT_DEFAULT)
 
 gtest_discover_tests(${target_name})
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # OFF mode tests
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 set(target_name ${MODULE_TARGET_NAME}_contract_off_test)
 
@@ -111,15 +111,16 @@ asap_add_test(
   COMMENT
   "Contract unit tests in OFF build mode")
 
-# Remove any existing contract mode compiler definition and force the mode to OFF for this target.
+# Remove any existing contract mode compiler definition and force the mode to
+# OFF for this target.
 _remove_contract_mode(${target_name})
 target_compile_definitions(${target_name} PRIVATE ASAP_CONTRACT_OFF)
 
 gtest_discover_tests(${target_name})
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Audit mode tests
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 set(target_name ${MODULE_TARGET_NAME}_contract_audit_test)
 
@@ -142,7 +143,8 @@ asap_add_test(
   COMMENT
   "Contract unit tests in AUDIT build mode")
 
-# Remove any existing contract mode compiler definition and force the mode to AUDIT for this target.
+# Remove any existing contract mode compiler definition and force the mode to
+# AUDIT for this target.
 _remove_contract_mode(${target_name})
 target_compile_definitions(${target_name} PRIVATE ASAP_CONTRACT_AUDIT)
 

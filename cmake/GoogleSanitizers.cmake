@@ -1,22 +1,19 @@
-# ~~~
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
 # SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
-# ~~~
-#        Copyright The Authors 2018.
-#    Distributed under the 3-Clause BSD License.
-#    (See accompanying file LICENSE or copy at
-#   https://opensource.org/licenses/BSD-3-Clause)
-# ~~~
-
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Google Sanitizers https://github.com/google/sanitizers
 #
-# This module simplifies the use of Google Sanitizers (Address, Undefined Behavior and Thread) in
-# the build. The Memory sanitizer is not supported because it requires all code, including third
-# party and system libraries to be built with it.
+# This module simplifies the use of Google Sanitizers (Address, Undefined
+# Behavior and Thread) in the build. The Memory sanitizer is not supported
+# because it requires all code, including third party and system libraries to be
+# built with it.
 #
-# A target can be instrumented with any of the sanitizers by calling the corresponding function with
-# the target name:
+# A target can be instrumented with any of the sanitizers by calling the
+# corresponding function with the target name:
 # ~~~
 #    address sanitizer            : asap_add_google_asan(target)
 #    undefined behavior sanitizer : asap_add_google_ubsan(target)
@@ -26,12 +23,13 @@
 #
 # ASAN and UBSAN can be run together, but TSAN must be run separately.
 #
-# Not all compilers support all sanitizers. It is the responsibility of the caller to call these
-# functions when the selected compiler does support the requested sanitizer. Failure to do so will
-# not abort the CMake generation, but will print a message when the compiler does not support the
-# requested sanitizer.
+# Not all compilers support all sanitizers. It is the responsibility of the
+# caller to call these functions when the selected compiler does support the
+# requested sanitizer. Failure to do so will not abort the CMake generation, but
+# will print a message when the compiler does not support the requested
+# sanitizer.
 #
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 # ---- Internal function to check for compiler support of the sanitizer flags --
 
@@ -58,7 +56,8 @@ function(_check_sanitizer_flags _flag _var)
     set(ENV{${v}} C)
   endforeach()
   check_compiler_flag_common_patterns(_common_patterns)
-  check_cxx_source_compiles("int main() { return 0; }" ${_var} ${_common_patterns})
+  check_cxx_source_compiles("int main() { return 0; }" ${_var}
+                            ${_common_patterns})
   foreach(v IN LISTS _locale_vars)
     set(ENV{${v}} ${_locale_vars_saved_${v}})
   endforeach()
@@ -79,12 +78,14 @@ WARNING: ${sanitizer} Sanitizer was requested but is not working!\n\
 --   2- Make sure ${sanitizer_lib} is installed.")
 endmacro()
 
-# ---- Address Sanitizer ---------------------------------------------------------------------------
+# ---- Address Sanitizer
+# ---------------------------------------------------------------------------
 
 function(asap_add_google_asan target)
-  # In order to use AddressSanitizer you will need to compile and link your program using clang with
-  # the -fsanitize=address switch. To get a reasonable performance add -O1 or higher. To get nicer
-  # stack traces in error messages add -fno-omit-frame-pointer.
+  # In order to use AddressSanitizer you will need to compile and link your
+  # program using clang with the -fsanitize=address switch. To get a reasonable
+  # performance add -O1 or higher. To get nicer stack traces in error messages
+  # add -fno-omit-frame-pointer.
   set(SANITIZER_FLAGS_ASAN "-fsanitize=address" "-fno-omit-frame-pointer")
 
   if(NOT DEFINED COMPILER_SUPPORTS_ASAN)
@@ -101,19 +102,23 @@ function(asap_add_google_asan target)
     if(NOT TARGET internal_asan)
       add_library(internal_asan INTERFACE IMPORTED)
       set_target_properties(
-        internal_asan PROPERTIES INTERFACE_COMPILE_OPTIONS "${SANITIZER_FLAGS_ASAN}"
-                                 INTERFACE_LINK_OPTIONS "${SANITIZER_FLAGS_ASAN}")
+        internal_asan
+        PROPERTIES INTERFACE_COMPILE_OPTIONS "${SANITIZER_FLAGS_ASAN}"
+                   INTERFACE_LINK_OPTIONS "${SANITIZER_FLAGS_ASAN}")
     endif()
     target_link_libraries(${target} PRIVATE internal_asan)
   endif()
 endfunction()
 
-# ---- Undefined Behavior Sanitizer ----------------------------------------------------------------
+# ---- Undefined Behavior Sanitizer
+# ----------------------------------------------------------------
 
 function(asap_add_google_ubsan target)
-  # To use UBSan, compile and link your program with -fsanitize=undefined. To get nicer output for
-  # file names, we'll only keep the last 3 components of the path.
-  set(SANITIZER_FLAGS_UBSAN "-fsanitize=undefined" "-fsanitize-undefined-strip-path-components=-2")
+  # To use UBSan, compile and link your program with -fsanitize=undefined. To
+  # get nicer output for file names, we'll only keep the last 3 components of
+  # the path.
+  set(SANITIZER_FLAGS_UBSAN "-fsanitize=undefined"
+                            "-fsanitize-undefined-strip-path-components=-2")
 
   if(NOT DEFINED COMPILER_SUPPORTS_UBSAN)
     # We'll use these flags to detect if the compiler supports ASan or not
@@ -129,14 +134,16 @@ function(asap_add_google_ubsan target)
     if(NOT TARGET internal_ubsan)
       add_library(internal_ubsan INTERFACE IMPORTED)
       set_target_properties(
-        internal_ubsan PROPERTIES INTERFACE_COMPILE_OPTIONS "${SANITIZER_FLAGS_UBSAN}"
-                                  INTERFACE_LINK_OPTIONS "${SANITIZER_FLAGS_UBSAN}")
+        internal_ubsan
+        PROPERTIES INTERFACE_COMPILE_OPTIONS "${SANITIZER_FLAGS_UBSAN}"
+                   INTERFACE_LINK_OPTIONS "${SANITIZER_FLAGS_UBSAN}")
     endif()
     target_link_libraries(${target} PRIVATE internal_ubsan)
   endif()
 endfunction()
 
-# ---- Thread Sanitizer ----------------------------------------------------------------------------
+# ---- Thread Sanitizer
+# ----------------------------------------------------------------------------
 
 function(asap_add_google_tsan target)
   # To use TSan, compile and link your program with -fsanitize=thread.
@@ -156,14 +163,16 @@ function(asap_add_google_tsan target)
     if(NOT TARGET internal_tsan)
       add_library(internal_tsan INTERFACE IMPORTED)
       set_target_properties(
-        internal_tsan PROPERTIES INTERFACE_COMPILE_OPTIONS "${SANITIZER_FLAGS_TSAN}"
-                                 INTERFACE_LINK_OPTIONS "${SANITIZER_FLAGS_TSAN}")
+        internal_tsan
+        PROPERTIES INTERFACE_COMPILE_OPTIONS "${SANITIZER_FLAGS_TSAN}"
+                   INTERFACE_LINK_OPTIONS "${SANITIZER_FLAGS_TSAN}")
     endif()
     target_link_libraries(${target} PRIVATE internal_tsan)
   endif()
 endfunction()
 
-# ---- Helper to activate all sanitizers -----------------------------------------------------------
+# ---- Helper to activate all sanitizers
+# -----------------------------------------------------------
 
 function(asap_add_sanitizers target)
   if(ASAP_WITH_GOOGLE_ASAN)

@@ -1,23 +1,21 @@
-# ~~~
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
 # SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
-# ~~~
-#        Copyright The Authors 2018.
-#    Distributed under the 3-Clause BSD License.
-#    (See accompanying file LICENSE or copy at
-#   https://opensource.org/licenses/BSD-3-Clause)
-# ~~~
-
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Documentation with Sphinx/Breathe/Exhale
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-# To avoid indiscriminately generating documentation for all modules in the project, including third
-# party modules and stuff for which we don't want documentation to be generated, we provide here the
-# basic tools to add breathe/exhale capabilities to a module. Additionally, exhale can only process
+# To avoid indiscriminately generating documentation for all modules in the
+# project, including third party modules and stuff for which we don't want
+# documentation to be generated, we provide here the basic tools to add
+# breathe/exhale capabilities to a module. Additionally, exhale can only process
 # one module at a time, so we need to have the generation run for each module.
 #
-# Doxygen is run separately NOT by exhale. Sphinx targets must be run after doxygen.
+# Doxygen is run separately NOT by exhale. Sphinx targets must be run after
+# doxygen.
 #
 # To use in a submodule or in the master module add the following:
 #
@@ -51,13 +49,17 @@ if(SPHINX_FOUND)
     # Add a target for building the sphinx documentation of the module
     add_custom_target(
       ${TARGET_NAME}_sphinx
-      COMMAND ${SPHINX_EXECUTABLE} -q -b html -c "${EXHALE_TARGET_WORKDIR}" -d "${SPHINX_CACHE_DIR}"
-              "${CMAKE_CURRENT_SOURCE_DIR}/doc" "${SPHINX_TARGET_WORKDIR}/html"
+      COMMAND
+        ${SPHINX_EXECUTABLE} -q -b html -c "${EXHALE_TARGET_WORKDIR}" -d
+        "${SPHINX_CACHE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/doc"
+        "${SPHINX_TARGET_WORKDIR}/html"
       WORKING_DIRECTORY "${SPHINX_TARGET_WORKDIR}"
       VERBATIM
       COMMENT "Generating `sphinx` documentation for `${TARGET_NAME}`")
-    set_target_properties(${TARGET_NAME}_sphinx PROPERTIES EXCLUDE_FROM_ALL TRUE)
-    # Finally add the module sphinx target as a dependency for the overall sphinx target
+    set_target_properties(${TARGET_NAME}_sphinx PROPERTIES EXCLUDE_FROM_ALL
+                                                           TRUE)
+    # Finally add the module sphinx target as a dependency for the overall
+    # sphinx target
     add_dependencies(sphinx ${TARGET_NAME}_sphinx)
 
     # Install sphinx master docs
@@ -67,8 +69,8 @@ if(SPHINX_FOUND)
       COMPONENT docs)
 
   endmacro()
-  # We only build documentation through explicit invocation of the sphinx target as it is pretty
-  # heavy and requires doxygen to be run before it is invoked.
+  # We only build documentation through explicit invocation of the sphinx target
+  # as it is pretty heavy and requires doxygen to be run before it is invoked.
   set_target_properties(sphinx PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
 else(SPHINX_FOUND)

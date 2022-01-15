@@ -1,9 +1,8 @@
-/*     SPDX-License-Identifier: BSD-3-Clause     */
-
-//        Copyright The Authors 2021.
-//    Distributed under the 3-Clause BSD License.
-//    (See accompanying file LICENSE or copy at
-//   https://opensource.org/licenses/BSD-3-Clause)
+//===----------------------------------------------------------------------===//
+// Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+// copy at https://opensource.org/licenses/BSD-3-Clause).
+// SPDX-License-Identifier: BSD-3-Clause
+//===----------------------------------------------------------------------===//
 
 /*!
  * \file contract.cpp
@@ -21,15 +20,16 @@
 
 namespace asap::contract {
 
-// ---------------------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Unit Testing stuff
-// ---------------------------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 namespace {
 
 void PrintViolation(const Violation *violation) {
-  std::cerr << violation->file << ":" << violation->line << ": in " << violation->function << ": "
-            << violation->type << " '" << violation->condition << "' violated" << std::endl;
+  std::cerr << violation->file << ":" << violation->line << ": in "
+            << violation->function << ": " << violation->type << " '"
+            << violation->condition << "' violated" << std::endl;
 }
 
 [[noreturn]] void DefaultViolationHandler(const Violation *violation) {
@@ -88,9 +88,11 @@ void PrepareForTesting() {
 }
 
 // Internal implementation of the singleton violation handler.
-class ViolationHandler_impl : public ViolationHandler, public Singleton<ViolationHandler_impl> {
+class ViolationHandler_impl : public ViolationHandler,
+                              public Singleton<ViolationHandler_impl> {
 public:
-  explicit ViolationHandler_impl(typename Singleton<ViolationHandler_impl>::token /*unused*/) {
+  explicit ViolationHandler_impl(
+      typename Singleton<ViolationHandler_impl>::token /*unused*/) {
   }
 
   void HandleViolation(const Violation *violation) override;

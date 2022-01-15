@@ -1,20 +1,17 @@
-# ~~~
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
 # SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
-# ~~~
-#        Copyright The Authors 2018.
-#    Distributed under the 3-Clause BSD License.
-#    (See accompanying file LICENSE or copy at
-#   https://opensource.org/licenses/BSD-3-Clause)
-# ~~~
-
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # API Documentation
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-# To avoid indiscriminately generating documentation for all modules in the project, including third
-# party modules and stuff for which we don't want documentation to be generated, we provide here the
-# basic tools to add doxygen capabilities to a module.
+# To avoid indiscriminately generating documentation for all modules in the
+# project, including third party modules and stuff for which we don't want
+# documentation to be generated, we provide here the basic tools to add doxygen
+# capabilities to a module.
 #
 # To use in a specific CmakeLists.txt add the following:
 #
@@ -51,7 +48,7 @@ if(DOXYGEN_FOUND)
       if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples")
         list(APPEND DOXY_EXAMPLE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/examples")
       endif()
-      string(REPLACE ";"  ", " DOXY_EXAMPLE_PATH "${DOXY_EXAMPLE_PATH}")
+      string(REPLACE ";" ", " DOXY_EXAMPLE_PATH "${DOXY_EXAMPLE_PATH}")
 
       if(NOT EXISTS "${DOXYGEN_BUILD_DIR}/${DOXY_OUTPUT_DIR}")
         file(MAKE_DIRECTORY "${DOXYGEN_BUILD_DIR}/${DOXY_OUTPUT_DIR}")
@@ -59,7 +56,10 @@ if(DOXYGEN_FOUND)
       configure_file("${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in"
                      "${DOXYGEN_BUILD_DIR}/${MODULE_NAME}_Doxyfile" @ONLY)
     else()
-      message(STATUS "WARNING: The '${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in' file does not exist!")
+      message(
+        STATUS
+          "WARNING: The '${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in' file does not exist!"
+      )
     endif()
   endfunction()
 
@@ -67,7 +67,8 @@ if(DOXYGEN_FOUND)
     add_custom_target(
       ${MODULE_NAME}_dox
       COMMAND ${CMAKE_COMMAND} -E remove -f "${MODULE_NAME}_Doxyfile.out"
-      COMMAND ${CMAKE_COMMAND} -E copy "${MODULE_NAME}_Doxyfile" "${MODULE_NAME}_Doxyfile.out"
+      COMMAND ${CMAKE_COMMAND} -E copy "${MODULE_NAME}_Doxyfile"
+              "${MODULE_NAME}_Doxyfile.out"
       COMMAND ${DOXYGEN_EXECUTABLE} "${MODULE_NAME}_Doxyfile.out"
       COMMAND ${CMAKE_COMMAND} -E remove -f "${MODULE_NAME}_Doxyfile.out"
       WORKING_DIRECTORY "${DOXYGEN_BUILD_DIR}"
@@ -82,7 +83,8 @@ if(DOXYGEN_FOUND)
     set(oneValueArgs MODULE_NAME VERSION TITLE BRIEF INPUT_PATH)
     set(multiValueArgs)
 
-    cmake_parse_arguments(x "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+    cmake_parse_arguments(x "${options}" "${oneValueArgs}" "${multiValueArgs}"
+                          ${ARGN})
 
     if(NOT DEFINED x_MODULE_NAME)
       message(FATAL_ERROR "Module name is required.")
@@ -104,14 +106,16 @@ if(DOXYGEN_FOUND)
     endif()
 
     # Substitute variables in the doxygen config file for the target
-    _configure_doxyfile(${x_MODULE_NAME} ${x_VERSION} ${x_TITLE} ${x_BRIEF} ${x_INPUT_PATH})
+    _configure_doxyfile(${x_MODULE_NAME} ${x_VERSION} ${x_TITLE} ${x_BRIEF}
+                        ${x_INPUT_PATH})
     # Add the target as a dependency to the master dox target
     _add_doxygen_target(${x_MODULE_NAME})
   endfunction()
 
-  # We'll make a special script to collect all doxygen warnings from submodules and print them at
-  # the end of the doxygen run. This mwill make it easier to detect if there were doxygen warnings
-  # in the project and eventually fail the build in a CI environment for example.
+  # We'll make a special script to collect all doxygen warnings from submodules
+  # and print them at the end of the doxygen run. This mwill make it easier to
+  # detect if there were doxygen warnings in the project and eventually fail the
+  # build in a CI environment for example.
 
   set(COLLECT_WARNINGS_SCRIPT "${DOXYGEN_BUILD_DIR}/collect_warnings.cmake")
   # cmake-format: off
@@ -134,8 +138,8 @@ if(DOXYGEN_FOUND)
 
   # The master doxygen target
   add_custom_target(dox)
-  # We don't want it to be rebuilt everytime we build all. Need to explicitly request it to be
-  # built.
+  # We don't want it to be rebuilt everytime we build all. Need to explicitly
+  # request it to be built.
   set_target_properties(dox PROPERTIES EXCLUDE_FROM_ALL TRUE)
   # Custom command to collect warnings and print them
   add_custom_command(

@@ -1,16 +1,12 @@
-# ~~~
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
 # SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
-# ~~~
-#        Copyright The Authors 2018.
-#    Distributed under the 3-Clause BSD License.
-#    (See accompanying file LICENSE or copy at
-#   https://opensource.org/licenses/BSD-3-Clause)
-# ~~~
-
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Meta information about the this module
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 asap_declare_module(
   MODULE_NAME
@@ -28,16 +24,16 @@ asap_declare_module(
   VERSION_PATCH
   "0")
 
-# ==================================================================================================
+# ==============================================================================
 # Build instructions
-# ==================================================================================================
+# ==============================================================================
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Main module target
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
-# Hardcode `asap` in the module name as we do not want this prefix to change with the forked project
-# name.
+# Hardcode `asap` in the module name as we do not want this prefix to change
+# with the forked project name.
 set(MODULE_TARGET_NAME "asap_${META_MODULE_NAME}")
 
 asap_add_library(
@@ -58,12 +54,13 @@ target_link_libraries(
 
 target_include_directories(
   ${MODULE_TARGET_NAME}
-  PUBLIC $<INSTALL_INTERFACE:include> $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  PUBLIC $<INSTALL_INTERFACE:include>
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
          $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-# logging comes directly from asap and is usually kept as is. It is more convenient to simply use it
-# as asap::logging
+# logging comes directly from asap and is usually kept as is. It is more
+# convenient to simply use it as asap::logging
 add_library(asap::${META_MODULE_NAME} ALIAS ${MODULE_TARGET_NAME})
 
 asap_add_sanitizers(${MODULE_TARGET_NAME})
@@ -71,17 +68,17 @@ asap_add_sanitizers(${MODULE_TARGET_NAME})
 # Generate module config files for cmake and pkgconfig
 asap_create_module_config_files()
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Tests
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 if(ASAP_BUILD_TESTS)
   add_subdirectory(test)
 endif()
 
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # API Documentation
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 asap_with_doxygen(
   MODULE_NAME
@@ -97,9 +94,9 @@ asap_with_doxygen(
 
 asap_with_sphinx(${MODULE_TARGET_NAME})
 
-# ==================================================================================================
+# ==============================================================================
 # Deployment instructions
-# ==================================================================================================
+# ==============================================================================
 
 set(TARGETS_EXPORT_NAME "${MODULE_TARGET_NAME}Targets")
 
@@ -134,6 +131,7 @@ install(
   COMPONENT dev)
 
 # Package configuration files
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}Config.cmake
-              ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}ConfigVersion.cmake
-        DESTINATION ${ASAP_INSTALL_CMAKE}/${META_MODULE_NAME})
+install(
+  FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}Config.cmake
+        ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}ConfigVersion.cmake
+  DESTINATION ${ASAP_INSTALL_CMAKE}/${META_MODULE_NAME})

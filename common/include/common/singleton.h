@@ -1,9 +1,8 @@
-/*     SPDX-License-Identifier: BSD-3-Clause     */
-
-//        Copyright The Authors 2021.
-//    Distributed under the 3-Clause BSD License.
-//    (See accompanying file LICENSE or copy at
-//   https://opensource.org/licenses/BSD-3-Clause)
+//===----------------------------------------------------------------------===//
+// Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+// copy at https://opensource.org/licenses/BSD-3-Clause).
+// SPDX-License-Identifier: BSD-3-Clause
+//===----------------------------------------------------------------------===//
 
 /*!
  * \file singleton.h
@@ -21,22 +20,25 @@
 namespace asap {
 
 /*!
- * \brief Templated singleton design pattern implementation with thread-safe lazy initialization.
+ * \brief Templated singleton design pattern implementation with thread-safe
+ * lazy initialization.
  *
- * This singleton implementation follows Scott Meyers' approach. This approach is founded on C++'s
- * guarantee that local static objects are initialized when the object's definition is first
- * encountered during a call to that function." ... "As a bonus, if you never call a function
- * emulating a non-local static object, you never incur the cost of constructing and destructing the
- * object.
+ * This singleton implementation follows Scott Meyers' approach. This approach
+ * is founded on C++'s guarantee that local static objects are initialized when
+ * the object's definition is first encountered during a call to that function."
+ * ... "As a bonus, if you never call a function emulating a non-local static
+ * object, you never incur the cost of constructing and destructing the object.
  *
- * To avoid that the single instance is always initialized before main whether it is used or not, we
- * introduce the use of a smart pointer (`unique_ptr`) to wrap the single instance.
+ * To avoid that the single instance is always initialized before main whether
+ * it is used or not, we introduce the use of a smart pointer (`unique_ptr`) to
+ * wrap the single instance.
  *
- * The problem is that the make_unique_ptr/make_shared_ptr of the C++11 standard library cannot work
- * on private constructors, but the direct solution is not concise (and it is difficult to achieve
- * cross-compiler compatibility). Instead we use a token to deny users directly constructing a
- * class and we ask derived classes to implement a special constructor to implicitly convert a token
- * into the derived class.
+ * The problem is that the make_unique_ptr/make_shared_ptr of the C++11 standard
+ * library cannot work on private constructors, but the direct solution is not
+ * concise (and it is difficult to achieve cross-compiler compatibility).
+ * Instead we use a token to deny users directly constructing a class and we ask
+ * derived classes to implement a special constructor to implicitly convert a
+ * token into the derived class.
  *
  * Example:
  * ```
@@ -80,11 +82,12 @@ protected:
 };
 
 template <typename T> inline auto Singleton<T>::instance() -> T & {
-  // We do expect a clang compiler warning here about the exit time destructor required for this
-  // statement. The risk present here is that some other singleton destructor would use contract
-  // validation macros after the violation handler is destroyed.
-  // We can't really fix this warning and just stroing a function pointer instead of a function
-  // object would create way too many more warnings...
+  // We do expect a clang compiler warning here about the exit time destructor
+  // required for this statement. The risk present here is that some other
+  // singleton destructor would use contract validation macros after the
+  // violation handler is destroyed. We can't really fix this warning and just
+  // stroing a function pointer instead of a function object would create way
+  // too many more warnings...
   //
   // ==> It is acceptable to not use contract checks in singleton destructors.
 #if defined(__clang__)

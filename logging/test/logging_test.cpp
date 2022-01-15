@@ -1,9 +1,8 @@
-/*     SPDX-License-Identifier: BSD-3-Clause     */
-
-//        Copyright The Authors 2018.
-//    Distributed under the 3-Clause BSD License.
-//    (See accompanying file LICENSE or copy at
-//   https://opensource.org/licenses/BSD-3-Clause)
+//===----------------------------------------------------------------------===//
+// Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+// copy at https://opensource.org/licenses/BSD-3-Clause).
+// SPDX-License-Identifier: BSD-3-Clause
+//===----------------------------------------------------------------------===//
 
 #include "logging/logging.h"
 
@@ -20,9 +19,9 @@
 #include <spdlog/sinks/base_sink.h>
 #include <spdlog/spdlog.h>
 
-// Disable compiler and linter warnings originating from the unit test framework and for which we
-// cannot do anything.
-// Additionally every TEST or TEST_X macro usage must be preceded by a '// NOLINTNEXTLINE'.
+// Disable compiler and linter warnings originating from the unit test framework
+// and for which we cannot do anything. Additionally every TEST or TEST_X macro
+// usage must be preceded by a '// NOLINTNEXTLINE'.
 ASAP_DIAGNOSTIC_PUSH
 #if defined(__clang__) && ASAP_HAS_WARNING("-Wused-but-marked-unused")
 #pragma clang diagnostic ignored "-Wused-but-marked-unused"
@@ -37,15 +36,17 @@ using ::testing::IsFalse;
 using ::testing::IsTrue;
 using ::testing::Ne;
 
-// spdlog puts template definitions in separate files from the .h files. We ned to declare the
-// template explicit instantiation present in the implementation files to avoid compiler warnings.
+// spdlog puts template definitions in separate files from the .h files. We ned
+// to declare the template explicit instantiation present in the implementation
+// files to avoid compiler warnings.
 extern template class spdlog::sinks::base_sink<std::mutex>;
 
 namespace asap::logging {
 
 namespace {
 
-template <typename Mutex> class TestSink : public spdlog::sinks::base_sink<Mutex> {
+template <typename Mutex>
+class TestSink : public spdlog::sinks::base_sink<Mutex> {
 public:
   void Reset() {
     out_.str("");
@@ -112,8 +113,8 @@ TEST(Logging, RegistrySetLogLevel) {
   Registry::instance().PushSink(test_sink_ptr);
   auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
 
-  // We can set the log level of all loggers through the registry and it will cascade down to each
-  // existing logger.
+  // We can set the log level of all loggers through the registry and it will
+  // cascade down to each existing logger.
   Registry::instance().SetLogLevel(Logger::Level::off);
   auto &test_logger = Registry::instance().GetLogger("testing");
   ASLOG_TO_LOGGER(test_logger, debug, "Hello");
@@ -122,7 +123,8 @@ TEST(Logging, RegistrySetLogLevel) {
   EXPECT_THAT(msg.empty(), IsTrue());
   test_sink->Reset();
 
-  // Any new logger created after the log level was set will also use the new log level.
+  // Any new logger created after the log level was set will also use the new
+  // log level.
   auto &new_logger = Registry::instance().GetLogger("new_logger");
   ASLOG_TO_LOGGER(new_logger, error, "Hello");
   EXPECT_THAT(test_sink->called_, IsFalse());
@@ -140,8 +142,8 @@ TEST(Logging, RegistrySetLogFormat) {
   Registry::instance().PushSink(test_sink_ptr);
   auto *test_sink = dynamic_cast<TestSink_mt *>(test_sink_ptr.get());
 
-  // We can set the log format of all loggers through the registry and it will cascade down to each
-  // existing logger.
+  // We can set the log format of all loggers through the registry and it will
+  // cascade down to each existing logger.
   Registry::instance().SetLogFormat("TEST_PATTERN %v");
   auto &test_logger = Registry::instance().GetLogger("testing");
   ASLOG_TO_LOGGER(test_logger, error, "Hello");
@@ -149,7 +151,8 @@ TEST(Logging, RegistrySetLogFormat) {
   EXPECT_THAT(msg.find("TEST_PATTERN"), Ne(std::string::npos));
 
   // Pushing a new sink, will also apply the format pattern to it.
-  auto second_sink_ptr = std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
+  auto second_sink_ptr =
+      std::shared_ptr<spdlog::sinks::sink>(new TestSink_mt());
   Registry::instance().PushSink(second_sink_ptr);
   auto *second_sink = dynamic_cast<TestSink_mt *>(second_sink_ptr.get());
   ASLOG_TO_LOGGER(test_logger, error, "Hello");
@@ -190,12 +193,14 @@ TEST(Logging, LoggingFromMultipleThreadsWorks) {
   auto expected_seq_th2 = 0;
   while (std::getline(msg_reader, line)) {
     if (line.find("THREAD_1") != std::string::npos) {
-      EXPECT_THAT(line.find(std::string("THREAD_1: ") + std::to_string(expected_seq_th1)),
+      EXPECT_THAT(line.find(std::string("THREAD_1: ") +
+                            std::to_string(expected_seq_th1)),
           Ne(std::string::npos));
       ++expected_seq_th1;
     }
     if (line.find("THREAD_2") != std::string::npos) {
-      EXPECT_THAT(line.find(std::string("THREAD_2: ") + std::to_string(expected_seq_th2)),
+      EXPECT_THAT(line.find(std::string("THREAD_2: ") +
+                            std::to_string(expected_seq_th2)),
           Ne(std::string::npos));
       ++expected_seq_th2;
     }
@@ -256,7 +261,8 @@ public:
   }
   void set_pattern(const std::string & /*pattern*/) override {
   }
-  void set_formatter(std::unique_ptr<spdlog::formatter> /*sink_formatter*/) override {
+  void set_formatter(
+      std::unique_ptr<spdlog::formatter> /*sink_formatter*/) override {
   }
 
   void Reset() {
@@ -312,7 +318,8 @@ TEST(Logging, FileNameShortening) {
     file_name.append("++++++++++");
   }
   file_name.append("really_long_file_name");
-  auto msg = asap::logging::FormatFileAndLine(file_name.c_str(), INTERNAL_LINE_STRING);
+  auto msg =
+      asap::logging::FormatFileAndLine(file_name.c_str(), INTERNAL_LINE_STRING);
   EXPECT_THAT(msg.empty(), IsFalse());
   EXPECT_THAT(msg.find("0123456..."), Ne(std::string::npos));
   EXPECT_THAT(msg.find("really_long_file_name"), Ne(std::string::npos));

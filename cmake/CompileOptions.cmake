@@ -1,20 +1,16 @@
-# ~~~
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
 # SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
-# ~~~
-#        Copyright The Authors 2018.
-#    Distributed under the 3-Clause BSD License.
-#    (See accompanying file LICENSE or copy at
-#   https://opensource.org/licenses/BSD-3-Clause)
-# ~~~
-
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Set a common set of compiler options and warning flags
-# --------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 
 #
-# Call swift_set_compile_options() for any target to set the Swift default set of compiler options.
-# This includes
+# Call swift_set_compile_options() for any target to set the Swift default set
+# of compiler options. This includes
 # ~~~
 # - exceptions disabled
 # - rtti disabled
@@ -23,8 +19,8 @@
 # - Extensive set of enabled warnings
 # ~~~
 #
-# Exceptions and/or RTTI can be selectively enabled for a target be passing EXCEPTIONS and/or RTTI
-# as a parameter, eg
+# Exceptions and/or RTTI can be selectively enabled for a target be passing
+# EXCEPTIONS and/or RTTI as a parameter, eg
 #
 # ~~~
 #    swift_set_compile_options(sample-target EXCEPTIONS RTTI)
@@ -32,17 +28,18 @@
 #
 # will enable exceptions and rtti for sample-target only
 #
-# Warning flags can be removed from the default set by passing REMOVE followed by a list of warning
-# flags, eg
+# Warning flags can be removed from the default set by passing REMOVE followed
+# by a list of warning flags, eg
 #
 # ~~~
 #    swift_set_compile_options(sample-target REMOVE -Wconversion)
 # ~~~
 #
-# will prevent -Wconversion from being passed to the compiler for sample-target only
+# will prevent -Wconversion from being passed to the compiler for sample-target
+# only
 #
-# Similarly extra options can be given by passing ADD followed by a list of warning flags (or other
-# compiler options), eg
+# Similarly extra options can be given by passing ADD followed by a list of
+# warning flags (or other compiler options), eg
 #
 # ~~~
 #    swift_set_compile_options(sample-target ADD -Wformat=2)
@@ -50,7 +47,8 @@
 #
 # will pass -Wformat=2 to the compiler for sample-target only
 #
-# By default -Werror is set, but this can be prevented by passing WARNING as a parameter, eg
+# By default -Werror is set, but this can be prevented by passing WARNING as a
+# parameter, eg
 #
 # ~~~
 #    swift_set_compile_options(sample-target WARNING)
@@ -58,13 +56,14 @@
 #
 # will disable warnings-as-errors for sample-target only
 #
-# All flags will be checked for suitability with the in-use compilers before being selected. This is
-# important since Swift code tends to be compiled with a wide variety of compilers which may not
-# support the same set of flags and options. Therefore, it should be preferred to use this function
-# to set compiler flags and options rather than target_compile_options()
+# All flags will be checked for suitability with the in-use compilers before
+# being selected. This is important since Swift code tends to be compiled with a
+# wide variety of compilers which may not support the same set of flags and
+# options. Therefore, it should be preferred to use this function to set
+# compiler flags and options rather than target_compile_options()
 #
-# NOTE: user's can call on EXTRA_FLAGS to augment the default list of flags before flags are removed
-# with REMOVE and subsequently added with ADD.
+# NOTE: user's can call on EXTRA_FLAGS to augment the default list of flags
+# before flags are removed with REMOVE and subsequently added with ADD.
 #
 
 include(CheckCCompilerFlag)
@@ -93,10 +92,14 @@ function(swift_set_compile_options)
 
   foreach(flag ${x_ADD} ${x_REMOVE})
     if(${flag} STREQUAL "-Werror")
-      message(FATAL_ERROR "Do not specify -Werror directly, use WARNING to disable -Werror")
+      message(
+        FATAL_ERROR
+          "Do not specify -Werror directly, use WARNING to disable -Werror")
     endif()
     if(${flag} STREQUAL "-Wno-error")
-      message(FATAL_ERROR "Do not specify -Wno-error directly, use WARNING to disable -Werror")
+      message(
+        FATAL_ERROR
+          "Do not specify -Wno-error directly, use WARNING to disable -Werror")
     endif()
   endforeach()
 

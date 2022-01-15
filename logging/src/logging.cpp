@@ -1,9 +1,8 @@
-/*     SPDX-License-Identifier: BSD-3-Clause     */
-
-//        Copyright The Authors 2018.
-//    Distributed under the 3-Clause BSD License.
-//    (See accompanying file LICENSE or copy at
-//   https://opensource.org/licenses/BSD-3-Clause)
+//===----------------------------------------------------------------------===//
+// Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+// copy at https://opensource.org/licenses/BSD-3-Clause).
+// SPDX-License-Identifier: BSD-3-Clause
+//===----------------------------------------------------------------------===//
 
 /*!
  * \file logging.cpp
@@ -20,8 +19,8 @@
 #include <sstream> // std::ostringstream
 #include <utility>
 
-// spdlog causes a bunch of compiler warnings we can't do anything about except temporarily
-// disabling them
+// spdlog causes a bunch of compiler warnings we can't do anything about except
+// temporarily disabling them
 ASAP_DIAGNOSTIC_PUSH
 #if defined(__clang__)
 ASAP_PRAGMA(GCC diagnostic ignored "-Weverything")
@@ -35,9 +34,9 @@ ASAP_DIAGNOSTIC_POP
 
 namespace asap::logging {
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Logger
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 Logger::Logger(const std::string &name, const spdlog::sink_ptr &sink) {
   logger_ = std::make_shared<spdlog::logger>(name, sink);
@@ -53,7 +52,8 @@ auto Registry::GetLogger(std::string const &name) -> spdlog::logger & {
   std::lock_guard<std::recursive_mutex> lock(loggers_mutex_);
   auto search = all_loggers_.find(name);
   if (search == all_loggers_.end()) {
-    auto new_logger = all_loggers_.emplace(name, Logger(name, delegating_sink_));
+    auto new_logger =
+        all_loggers_.emplace(name, Logger(name, delegating_sink_));
     search = new_logger.first;
     search->second.SetLevel(static_cast<spdlog::level::level_enum>(log_level_));
     search->second.SetFormat(log_format_);
@@ -61,29 +61,33 @@ auto Registry::GetLogger(std::string const &name) -> spdlog::logger & {
   return *(search->second.logger_);
 }
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // DelegatingSink
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
-// This mess is created because of the way spdlog is organizing its source code based on header only
-// builds vs library builds. The issue is that spdlog places the template definitions in a separate
-// file and explicitly instantiates them, so we have no problem at link, but we do have a problem
-// with clang (rightfully) complaining that the template definitions are not available when the
-// template needs to be instantiated here.
+// This mess is created because of the way spdlog is organizing its source code
+// based on header only builds vs library builds. The issue is that spdlog
+// places the template definitions in a separate file and explicitly
+// instantiates them, so we have no problem at link, but we do have a problem
+// with clang (rightfully) complaining that the template definitions are not
+// available when the template needs to be instantiated here.
 ASAP_DIAGNOSTIC_PUSH
 #if defined(__clang__)
 ASAP_PRAGMA(GCC diagnostic ignored "-Wundefined-func-template")
 #endif
-DelegatingSink::DelegatingSink(spdlog::sink_ptr delegate) : sink_delegate_(std::move(delegate)) {
+DelegatingSink::DelegatingSink(spdlog::sink_ptr delegate)
+    : sink_delegate_(std::move(delegate)) {
 }
 
 namespace {
 auto CreateDelegatingSink() -> DelegatingSink * {
   // Add a default console sink
 #if defined _WIN32 && !defined(__cplusplus_winrt)
-  auto default_sink = std::make_shared<spdlog::sinks::wincolor_stdout_sink_mt>();
+  auto default_sink =
+      std::make_shared<spdlog::sinks::wincolor_stdout_sink_mt>();
 #else
-  auto default_sink = std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>();
+  auto default_sink =
+      std::make_shared<spdlog::sinks::ansicolor_stdout_sink_mt>();
 #endif
   default_sink->set_pattern(DEFAULT_LOG_FORMAT);
   return new DelegatingSink(default_sink);
@@ -94,9 +98,9 @@ DelegatingSink::~DelegatingSink() = default;
 
 ASAP_DIAGNOSTIC_POP
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Registry
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 Registry::Registry(typename asap::Singleton<Registry>::token /*unused*/)
     : delegating_sink_(CreateDelegatingSink()) {
@@ -115,7 +119,8 @@ void Registry::PushSink(spdlog::sink_ptr sink) {
 
 void Registry::PopSink() {
   std::lock_guard<std::mutex> lock(sinks_mutex_);
-  ASAP_ASSERT(!sinks_.empty() && "call to PopSink() not matching a previous call to PushSink()");
+  ASAP_ASSERT(!sinks_.empty() &&
+              "call to PopSink() not matching a previous call to PushSink()");
   if (!sinks_.empty()) {
     auto &sink = sinks_.top();
     // Assign this previous sink to the delegating sink
@@ -150,13 +155,13 @@ void Registry::CreatePredefinedLoggers() {
   all_loggers_.emplace("main", Logger("main", delegating_sink_));
 }
 
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 // Helper for file name and line number formatting
-// -------------------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 #ifndef NDEBUG
 /*!
- * \brief Make a string with the soruce code file name and line number at which the log message was
- * produced.
+ * \brief Make a string with the soruce code file name and line number at which
+ * the log message was produced.
  *
  * \param file source code file name.
  * \param line source code line number.
@@ -171,14 +176,15 @@ auto FormatFileAndLine(char const *file, char const *line) -> std::string {
   std::ostringstream ostr;
   std::string fstr(file);
   if (fstr.length() > FILE_MAX_LENGTH) {
-    fstr =
-        fstr.substr(0, FILE_TOO_LONG_PREFIX_LENGTH)
-            .append("...")
-            .append(fstr.substr(fstr.length() - FILE_MAX_LENGTH + FILE_TOO_LONG_PREFIX_FULL_LENGTH,
-                FILE_MAX_LENGTH - FILE_TOO_LONG_PREFIX_FULL_LENGTH));
+    fstr = fstr.substr(0, FILE_TOO_LONG_PREFIX_LENGTH)
+               .append("...")
+               .append(fstr.substr(fstr.length() - FILE_MAX_LENGTH +
+                                       FILE_TOO_LONG_PREFIX_FULL_LENGTH,
+                   FILE_MAX_LENGTH - FILE_TOO_LONG_PREFIX_FULL_LENGTH));
   }
   ostr << "[" << std::setw(FILE_MAX_LENGTH) << std::right << fstr << ":"
-       << std::setw(LINE_NUMBER_WIDTH) << std::setfill('0') << std::right << line << "] ";
+       << std::setw(LINE_NUMBER_WIDTH) << std::setfill('0') << std::right
+       << line << "] ";
   return ostr.str();
 }
 #endif // NDEBUG

@@ -1,9 +1,8 @@
-/*     SPDX-License-Identifier: BSD-3-Clause     */
-
-//        Copyright The Authors 2021.
-//    Distributed under the 3-Clause BSD License.
-//    (See accompanying file LICENSE or copy at
-//   https://opensource.org/licenses/BSD-3-Clause)
+//===----------------------------------------------------------------------===//
+// Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+// copy at https://opensource.org/licenses/BSD-3-Clause).
+// SPDX-License-Identifier: BSD-3-Clause
+//===----------------------------------------------------------------------===//
 
 #include "common/singleton.h"
 
@@ -17,9 +16,9 @@
 #include <thread>
 #include <vector>
 
-// Disable compiler and linter warnings originating from the unit test framework and for which we
-// cannot do anything.
-// Additionally every TEST or TEST_X macro usage must be preceded by a '// NOLINTNEXTLINE'.
+// Disable compiler and linter warnings originating from the unit test framework
+// and for which we cannot do anything. Additionally every TEST or TEST_X macro
+// usage must be preceded by a '// NOLINTNEXTLINE'.
 ASAP_DIAGNOSTIC_PUSH
 #if defined(__clang__) && ASAP_HAS_WARNING("-Wused-but-marked-unused")
 #pragma clang diagnostic ignored "-Wused-but-marked-unused"
@@ -35,12 +34,14 @@ class TheOne : public Singleton<TheOne> {
 public:
   explicit TheOne(typename Singleton<TheOne>::token /*unused*/) {
   }
-  [[nodiscard]] auto data() const -> const std::chrono::high_resolution_clock::time_point & {
+  [[nodiscard]] auto data() const
+      -> const std::chrono::high_resolution_clock::time_point & {
     return data_;
   }
 
 private:
-  std::chrono::high_resolution_clock::time_point data_ = std::chrono::high_resolution_clock::now();
+  std::chrono::high_resolution_clock::time_point data_ =
+      std::chrono::high_resolution_clock::now();
 };
 
 // NOLINTNEXTLINE
@@ -65,7 +66,8 @@ TEST(Singleton, OneSingleInstanceInMultiThreads) {
     }));
   }
 
-  std::for_each(workers.begin(), workers.end(), [](std::thread &thr) { thr.join(); });
+  std::for_each(
+      workers.begin(), workers.end(), [](std::thread &thr) { thr.join(); });
 }
 
 } // namespace
