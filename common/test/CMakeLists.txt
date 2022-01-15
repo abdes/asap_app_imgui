@@ -17,6 +17,7 @@ asap_add_test(
   SRCS
   "flag_ops_test.cpp"
   "singleton_test.cpp"
+  "overload_test.cpp"
   "main.cpp"
   LINK
   asap::common

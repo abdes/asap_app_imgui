@@ -15,3 +15,4 @@ API reference
    C++ language <api/cpp>
    Mask/Flags manipulation <api/flags>
    Contract checking API <api/contract>
+   Overload pattern <api/overload>
