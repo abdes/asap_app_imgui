@@ -46,14 +46,13 @@ TEST(Overload, ExampleWithDefault) {
       char_value, int_value, uint_value, float_value, double_value};
 
   auto TypeOfIntegral = Overload{
-      // (2)
       [&](char value) { EXPECT_THAT(value, Eq(char_value)); },
       [&](float value) { EXPECT_THAT(value, Eq(float_value)); },
       [&](double value) { EXPECT_THAT(value, Eq(double_value)); },
       [&](auto value) { EXPECT_THAT(static_cast<int>(value), Eq(int_value)); },
   };
 
-  for (auto value : variants) { // (3)
+  for (auto value : variants) {
     std::visit(TypeOfIntegral, value);
   }
   //! [Example Overload with default]
