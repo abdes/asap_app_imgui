@@ -12,6 +12,8 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
+#include <variant>
+
 // Disable compiler and linter warnings originating from the unit test framework
 // and for which we cannot do anything. Additionally every TEST or TEST_X macro
 // usage must be preceded by a '// NOLINTNEXTLINE'.
