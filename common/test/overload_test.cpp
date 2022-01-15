@@ -50,7 +50,7 @@ TEST(Overload, ExampleWithDefault) {
       [&](char value) { EXPECT_THAT(value, Eq(char_value)); },
       [&](float value) { EXPECT_THAT(value, Eq(float_value)); },
       [&](double value) { EXPECT_THAT(value, Eq(double_value)); },
-      [&](auto value) { EXPECT_THAT(value, Eq(int_value)); },
+      [&](auto value) { EXPECT_THAT(static_cast<int>(value), Eq(int_value)); },
   };
 
   for (auto value : variants) { // (3)
