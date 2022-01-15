@@ -98,7 +98,7 @@
   // Format file when pasting
   "editor.formatOnPaste": false,
   // Format file on save
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   // Automatically display inline suggestions in the editor
   "editor.inlineSuggest.enabled": true,
   // Whether to display a small panel with parameter document and type information when entering
