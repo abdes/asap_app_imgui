@@ -154,7 +154,6 @@ function(swift_set_compile_options)
       -Wshadow
       -Wsign-conversion
       -Wsign-promo
-      -Wswitch-default
       -Wundef
       -Werror
       -Wno-unused)
