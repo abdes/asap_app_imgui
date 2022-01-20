@@ -3,7 +3,7 @@
      * with overline, for chapters
      = for sections
      - for subsections
-     ^ for subsubsections
+     ^ for sub-subsections
      " for paragraphs
 
 ###################
@@ -41,18 +41,21 @@ Parts of the documentation
 :doc:`Getting Started! <01-getting-started/index>`
 --------------------------------------------------
 
-*start here to understand how to use this project as a starter for your own project*
+*start here to understand how to use this project as a starter for your own
+project*
 
 :doc:`Project Development <02-project-development/index>`
 ---------------------------------------------------------
 
-*refer to this part of the documentation to understand the build system specifics for this project,
-the development workflow, coding and unit testing guidelines*
+*refer to this part of the documentation to understand the build system
+specifics for this project, the development workflow, coding and unit testing
+guidelines*
 
 :doc:`Documentation <03-documentation/index>`
 ---------------------------------------------------
-*refer to this part of the documentation to understand how project documentation is structured and
-built from source using `doxygen` and `sphinx`.*
+
+*refer to this part of the documentation to understand how project documentation
+is structured and built from source using `doxygen` and `sphinx`.*
 
 :doc:`Library Modules <04-library-modules/index>`
 -------------------------------------------------

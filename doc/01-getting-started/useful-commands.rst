@@ -3,7 +3,7 @@
      * with overline, for chapters
      = for sections
      - for subsections
-     ^ for subsections
+     ^ for sub-subsections
      " for paragraphs
 
 .. _useful-commands:
@@ -16,10 +16,10 @@ Know the useful commands
 
 Last Updated on |date|
 
-With your project properly forked->renamed->cloned, here are a couple of useful commands you can
-immediately try out to see the project in action. Many of these commands will be extensively
-documented in later chapters.
- 
+With your project properly forked->renamed->cloned, here are a couple of useful
+commands you can immediately try out to see the project in action. Many of these
+commands will be extensively documented in later chapters.
+
 List all available `cmake` presets
   .. code:: bash
 
@@ -31,8 +31,8 @@ List all available `cmake` presets
 
   .. tip::
 
-    on a Linux or macOS system, the list of available presets will change. For example on Linux, the
-    list would like like this:
+    on a Linux or macOS system, the list of available presets will change. For
+    example on Linux, the list would like like this:
 
     .. code:: bash
 

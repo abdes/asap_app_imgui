@@ -3,18 +3,17 @@
      * with overline, for chapters
      = for sections
      - for subsections
-     ^ for subsubsections
+     ^ for sub-subsections
      " for paragraphs
 
 *******************
 Development Process
 *******************
 
-Version control
-===============
-We use Git and we require a recent version of the git tools to take advantage of
-enhanced features and avoid unnecessary bugs. It is strongly recommended to use
-the latest available version of git on the supported platforms.
+Version control =============== We use Git and we require a recent version of
+the git tools to take advantage of enhanced features and avoid unnecessary bugs.
+It is strongly recommended to use the latest available version of git on the
+supported platforms.
 
 Cloning for the first time
 --------------------------
@@ -104,8 +103,8 @@ release branch.  Instead, the process is:
      - git pull
 
    * - 7
-     - Merge into master from the develop branch (no fast-forward => ensure there is always a
-       dedicated merge commit)
+     - Merge into master from the develop branch (no fast-forward => ensure
+       there is always a dedicated merge commit)
 
        .. code-block:: shell
 
@@ -114,11 +113,12 @@ release branch.  Instead, the process is:
 .. tip::
   :class: margin
 
-  This will generate the changelog, update version numbers in `CMakeLists.txt`, and create a
-  new tag.
+  This will generate the changelog, update version numbers in `CMakeLists.txt`,
+  and create a new tag.
 
-  See `Conventional Commits <https://www.conventionalcommits.org/en/v1.0.0/>`_ for more information
-  on how conventional commit messages can simplify changelog preparation.
+  See `Conventional Commits <https://www.conventionalcommits.org/en/v1.0.0/>`_
+  for more information on how conventional commit messages can simplify
+  changelog preparation.
 
 .. list-table::
    :widths: 10 90
@@ -135,8 +135,8 @@ release branch.  Instead, the process is:
 
          npx standard-version --skip.commit --skip.tag
 
-       Check the generated changelog and edit if needed. Verify the updated version number is
-       correct.
+       Check the generated changelog and edit if needed. Verify the updated
+       version number is correct.
 
        Commit the cnhages and push to the remote.
 
@@ -147,8 +147,9 @@ release branch.  Instead, the process is:
 
        .. note::
 
-          These steps can be automatic with standard-version, but it is recommended to not automate them as
-          often the generated changelog needs some refinements before it is committed and a release tag is
+          These steps can be automatic with standard-version, but it is
+          recommended to not automate them as often the generated changelog
+          needs some refinements before it is committed and a release tag is
           made.
 
 .. list-table::
@@ -156,7 +157,8 @@ release branch.  Instead, the process is:
    :header-rows: 0
 
    * - 9
-     - Create a new tag on the `master` branch with appropriate label and push it to the remote.
+     - Create a new tag on the `master` branch with appropriate label and push
+       it to the remote.
 
        .. code-block:: shell
 
@@ -164,7 +166,8 @@ release branch.  Instead, the process is:
           git push origin M.m.p
 
    * - 10
-     - Merge master back into develop to include the merge commit (see --no-ff notes below)
+     - Merge master back into develop to include the merge commit (see --no-ff
+       notes below)
 
        .. code-block:: shell
 

@@ -16,8 +16,8 @@ lambdas can not be implicitly overloaded.
 
 In C++14 you could derive from lambdas and build similar helper types, but only
 with C++17 you can significantly reduce boilerplate code and limit potential
-errors. With C++20 we’ll get even shorter syntax as CTAD will work with
-aggregates.
+errors. With C++20 we’ll get even shorter syntax as CTAD (*Class Template
+Argument Deduction*) will work with aggregates.
 
 You can read more in the proposal for overload `P0051
 <https://wg21.link/P0051>`_ (it was not accepted for C++20, but it’s worth to
