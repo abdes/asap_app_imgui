@@ -8,34 +8,29 @@
 # Build instructions
 # ==============================================================================
 
-set(MAIN_TEST_TARGET_NAME ${MODULE_TARGET_NAME}_test)
+set(target_name ${MODULE_TARGET_NAME}_mixin_test)
 
 asap_add_test(
-  ${MAIN_TEST_TARGET_NAME}
+  ${target_name}
   UNIT_TEST
   VALGRIND_MEMCHECK
   SRCS
-  "flag_ops_test.cpp"
-  "singleton_test.cpp"
-  "overload_test.cpp"
-  "main.cpp"
+  # sources
+  "mixin_chained_init_test.cpp"
+  "mixin_curry_test.cpp"
+  "mixin_interfaces_test.cpp"
+  "mixin_top_test.cpp"
+  "../main.cpp"
   LINK
   asap::common
-  gtest_main
-  gmock_main
+  gtest
+  gmock
   COMMENT
-  "ASAP common unit tests")
+  "Mixin support library unit tests")
 
-# Target specific compiler features
-target_compile_features(${MAIN_TEST_TARGET_NAME} PRIVATE cxx_constexpr)
-
-gtest_discover_tests(${MAIN_TEST_TARGET_NAME})
+gtest_discover_tests(${target_name})
 
 # Add support for (optional) code quality tools
-asap_add_sanitizers(${MAIN_TEST_TARGET_NAME})
-swift_add_valgrind_massif(${MAIN_TEST_TARGET_NAME})
-swift_add_valgrind_callgrind(${MAIN_TEST_TARGET_NAME})
-
-# Also build the tests programs in subdirectories
-add_subdirectory(contract)
-add_subdirectory(mixin)
+asap_add_sanitizers(${target_name})
+swift_add_valgrind_massif(${target_name})
+swift_add_valgrind_callgrind(${target_name})

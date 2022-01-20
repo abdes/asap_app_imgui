@@ -57,6 +57,7 @@ asap_add_library(
   "include/common/singleton.h"
   "include/common/flag_ops.h"
   "include/common/overload.h"
+  "include/common/mixin.h"
   # contract module
   "include/contract/contract.h"
   "include/contract/ut/gtest.h"

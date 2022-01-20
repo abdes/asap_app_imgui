@@ -20,3 +20,4 @@ API reference
    Mask/Flags manipulation <api/flags>
    Contract checking API <api/contract>
    Overload pattern <api/overload>
+   Mixin library <api/mixin>
