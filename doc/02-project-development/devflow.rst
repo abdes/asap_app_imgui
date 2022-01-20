@@ -10,10 +10,12 @@
 Development Process
 *******************
 
-Version control =============== We use Git and we require a recent version of
-the git tools to take advantage of enhanced features and avoid unnecessary bugs.
-It is strongly recommended to use the latest available version of git on the
-supported platforms.
+Version control
+===============
+
+We use Git and we require a recent version of the git tools to take advantage of
+enhanced features and avoid unnecessary bugs. It is strongly recommended to use
+the latest available version of git on the supported platforms.
 
 Cloning for the first time
 --------------------------

@@ -188,8 +188,8 @@ The `asap` starter project offers two alternatives for the development
 methodology:
 
 - **Develop everything on the local environment**. All necessary tools,
-compilers, code, etc. reside
-  on the developer desktop and are shared across projects.
+  compilers, code, etc. reside on the developer desktop and are shared across
+  projects.
 
 - **Developing inside a Container**. This is a VS Code feature that allows
   developers to package a local development tool stack into the internals of a
