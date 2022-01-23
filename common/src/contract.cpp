@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 
 /*!
- * \file contract.cpp
+ * \file
  *
  * \brief Implementation details for the contract checking API.
  */

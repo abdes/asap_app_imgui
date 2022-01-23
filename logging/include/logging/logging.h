@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 
 /*!
- * \file logging.h
+ * \file
  *
  * \brief Types and macros used for logging.
  */

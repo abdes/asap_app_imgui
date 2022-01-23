@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 
 /*!
- * \file logging.cpp
+ * \file
  *
  * \brief Implementation details for the logging API.
  */

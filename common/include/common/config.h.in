@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 
 /*!
- * \file config.h
+ * \file
  *
  * \brief Contains useful compiler definitions produced during project configure
  * time.

@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 
 /*!
- * \file singleton.h
+ * \file
  *
  * \brief C++ template based singleton interface declarations.
  */

@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 
 /*!
- * \file framework.h
+ * \file
  *
  * \brief Declaration for the unit testing support for contract checking.
  */

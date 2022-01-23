@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 
 /*!
- * \file gtest.h
+ * \file
  *
  * \brief Macros used with Google Test unit testing framework to test contract
  * checking assertions without the need for death tests.

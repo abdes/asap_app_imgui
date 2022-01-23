@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 
 /*!
- * \file compilers.h
+ * \file
  *
  * \brief Compiler detection, diagnostics and feature helpers.
  */

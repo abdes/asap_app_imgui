@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 
 /*!
- * \file flag_ops.h
+ * \file
  *
  * \brief C++ template API for bit flags manipulation.
  */

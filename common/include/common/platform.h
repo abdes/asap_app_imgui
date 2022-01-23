@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 
 /*!
- * \file platform.h
+ * \file
  *
  * \brief Contains compiler definitions and macros for platform detection.
  */

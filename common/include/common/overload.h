@@ -5,9 +5,10 @@
 //===----------------------------------------------------------------------===//
 
 /*!
- * \file flag_ops.h
+ * \file
  *
- * \brief C++ template API for bit flags manipulation.
+ * \brief C++ overload pattern to enable lambda overloads when visiting
+ * variants.
  */
 
 #pragma once

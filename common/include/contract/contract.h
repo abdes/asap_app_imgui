@@ -6,7 +6,7 @@
 
 // clang-format off
 /*!
- * \file contract.h
+ * \file
  *
  * \brief Types and and macros used for contract checking.
  *
