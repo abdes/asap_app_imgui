@@ -135,7 +135,8 @@ function(swift_set_compile_options)
       -Wno-padded
       -Wno-documentation-unknown-command
       -Wno-switch-enum
-      -Wno-unused-macros)
+      -Wno-unused-macros
+      -Wno-disabled-macro-expansion)
   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     # using GCC
     list(
