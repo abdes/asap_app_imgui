@@ -58,11 +58,13 @@ asap_add_library(
   "include/common/flag_ops.h"
   "include/common/overload.h"
   "include/common/mixin.h"
+  "include/common/fsm.h"
   # contract module
   "include/contract/contract.h"
   "include/contract/ut/gtest.h"
   "include/contract/ut/framework.h"
   # Sources
+  "src/fsm.cpp"
   "src/contract.cpp")
 
 target_link_libraries(${MODULE_TARGET_NAME} PRIVATE Microsoft.GSL::GSL)

@@ -21,3 +21,4 @@ API reference
    Contract checking API <api/contract>
    Overload pattern <api/overload>
    Mixin library <api/mixin>
+   State Machine library <api/fsm>

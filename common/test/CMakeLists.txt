@@ -18,6 +18,8 @@ asap_add_test(
   "flag_ops_test.cpp"
   "singleton_test.cpp"
   "overload_test.cpp"
+  "fsm_test.cpp"
+  "fsm_example_test.cpp"
   "main.cpp"
   LINK
   asap::common
