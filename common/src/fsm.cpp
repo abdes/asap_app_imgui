@@ -17,7 +17,7 @@ auto asap::fsm::StateMachineError::What() const -> const char * {
   return what_ ? what_.value().c_str() : "unspecified state machine error";
 }
 
-auto asap::fsm::DoNothing::data() -> const std::any & {
+auto asap::fsm::DoNothing::data() noexcept -> const std::any & {
   ASAP_DIAGNOSTIC_PUSH
 #if defined(ASAP_CLANG_VERSION)
   ASAP_PRAGMA(clang diagnostic ignored "-Wexit-time-destructors")

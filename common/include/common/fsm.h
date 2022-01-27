@@ -135,7 +135,7 @@ private:
  * event loop which calls the state machine's `Handle()` method. The latter
  * dispatches the event to the current state, which returns a specific action
  * that gets executed to eventually transition to a new state. Event handlers,
- * the action execution, and anything inside could throw execptions to report
+ * the action execution, and anything inside could throw exceptions to report
  * errors that are *all* caught and translated into an execution status returned
  * to the event production loop.
  *
@@ -171,7 +171,7 @@ public:
    * unrecoverable error in a state.
    *
    * When the error that was reported is derived from StateMachineError (as
-   * recommended), an explanatory message from the error execption will be
+   * recommended), an explanatory message from the error exception will be
    * placed in the error_message field of the returned status. Otherwise, the
    * message will simply be a generic message with no specific error
    * information.
@@ -333,11 +333,12 @@ public:
     }
   }
 
-  [[nodiscard]] auto data() const -> const std::any & {
+  [[nodiscard]] auto data() const noexcept -> const std::any & {
     return data_;
   }
 
-  template <typename ActionType> [[nodiscard]] auto IsA() const -> bool {
+  template <typename ActionType>
+  [[nodiscard]] auto IsA() const noexcept -> bool {
     return std::is_same_v<ActionType, TransitionTo<TargetState>>;
   }
 
@@ -415,9 +416,10 @@ struct ASAP_COMMON_API DoNothing {
       Machine & /*unused*/, State & /*unused*/, const Event & /*unused*/) {
   }
 
-  [[nodiscard]] static auto data() -> const std::any &;
+  [[nodiscard]] static auto data() noexcept -> const std::any &;
 
-  template <typename ActionType> [[nodiscard]] auto IsA() const -> bool {
+  template <typename ActionType>
+  [[nodiscard]] auto IsA() const noexcept -> bool {
     return std::is_same_v<ActionType, DoNothing>;
   }
 
@@ -441,7 +443,7 @@ struct ASAP_COMMON_API DoNothing {
 /*!
  * \brief The action to be used to report an error from an event handler.
  *
- * Throwing an exception from event handlers to report an eror is not
+ * Throwing an exception from event handlers to report an error is not
  * recommended as it will break the interface of the event handlers (expected to
  * return an action to be executed) and make the unit testing more complicated.
  *
@@ -458,11 +460,12 @@ struct ASAP_COMMON_API ReportError {
     throw std::any_cast<StateMachineError>(error_);
   }
 
-  [[nodiscard]] auto data() const -> const std::any & {
+  [[nodiscard]] auto data() const noexcept -> const std::any & {
     return error_;
   }
 
-  template <typename ActionType> [[nodiscard]] auto IsA() const -> bool {
+  template <typename ActionType>
+  [[nodiscard]] auto IsA() const noexcept -> bool {
     return std::is_same_v<ActionType, ReportError>;
   }
 
@@ -521,13 +524,14 @@ template <typename... Actions> struct ASAP_COMMON_TEMPLATE_API OneOf {
         option);
   }
 
-  [[nodiscard]] auto data() const -> const std::any & {
+  [[nodiscard]] auto data() const noexcept -> const std::any & {
     return std::visit(
         [](auto &action) noexcept -> const std::any & { return action.data(); },
         option);
   }
 
-  template <typename ActionType> [[nodiscard]] auto IsA() const -> bool {
+  template <typename ActionType>
+  [[nodiscard]] auto IsA() const noexcept -> bool {
     // Here we use a visitor to check if one of the alternatives satisfies the
     // requested type instead of using
     // `std::holds_alternative<ActionType>(option)` because we do not want a
