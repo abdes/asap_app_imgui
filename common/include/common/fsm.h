@@ -55,20 +55,22 @@ struct ExecutionComplete {};
  *
  * \see StateMachine::Handle
  */
-class ASAP_COMMON_API StateMachineError {
+class StateMachineError {
 public:
-  StateMachineError() = default;
-  explicit StateMachineError(std::string description)
+  ASAP_COMMON_API StateMachineError() = default;
+  explicit ASAP_COMMON_API StateMachineError(std::string description)
       : what_{std::move(description)} {
   }
 
-  StateMachineError(const StateMachineError &) = default;
-  StateMachineError(StateMachineError &&) = default;
+  ASAP_COMMON_API StateMachineError(const StateMachineError &) = default;
+  ASAP_COMMON_API StateMachineError(StateMachineError &&) = default;
 
-  auto operator=(const StateMachineError &) -> StateMachineError & = default;
-  auto operator=(StateMachineError &&) -> StateMachineError & = default;
+  auto ASAP_COMMON_API operator=(const StateMachineError &)
+      -> StateMachineError & = default;
+  auto ASAP_COMMON_API operator=(StateMachineError &&)
+      -> StateMachineError & = default;
 
-  virtual ~StateMachineError() noexcept = default;
+  virtual ASAP_COMMON_API ~StateMachineError() noexcept = default;
 
   /*!
    * \brief Provides an explanatory message about the error.
@@ -82,14 +84,14 @@ public:
    * from which it is obtained is destroyed, or until a non-const member
    * function on the exception object is called.
    */
-  [[nodiscard]] virtual auto What() const -> const char *;
+  [[nodiscard]] virtual auto ASAP_COMMON_API What() const -> const char *;
 
 protected:
   /*!
    * \brief Called from derived exception classes to populate the error message
    * with meaningful information.
    */
-  void What(std::string description) {
+  void ASAP_COMMON_API What(std::string description) {
     what_.emplace(std::move(description));
   }
 
@@ -450,7 +452,7 @@ struct ASAP_COMMON_API DoNothing {
  * Instead, the event handler would use this action to report the error,
  * providing the error explanatory message in the form of the action's data.
  */
-struct ASAP_COMMON_API ReportError {
+struct ReportError {
   explicit ReportError(StateMachineError error) : error_(std::move(error)) {
   }
 
