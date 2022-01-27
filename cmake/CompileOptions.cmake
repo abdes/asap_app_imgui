@@ -162,7 +162,7 @@ function(swift_set_compile_options)
       -Werror
       -Wno-unused)
     if(NOT DEFINED CMAKE_CXX_CLANG_TIDY)
-      list(APPEND all_flags -Wlogical-op -Wnoexcept -Wstrict-null-sentinel)
+      list(APPEND all_flags -Wlogical-op -Wstrict-null-sentinel)
     endif()
   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # using Visual Studio C++
