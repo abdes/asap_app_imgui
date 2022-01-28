@@ -28,7 +28,7 @@ ASAP_DIAGNOSTIC_PUSH
 ASAP_PRAGMA(GCC diagnostic ignored "-Wswitch-default")
 ASAP_PRAGMA(GCC diagnostic ignored "-Wstrict-overflow")
 #elif defined(__clang__)
-ASAP_PRAGMA(GCC diagnostic ignored "-Weverything")
+ASAP_PRAGMA(clang diagnostic ignored "-Weverything")
 #endif
 #include <spdlog/sinks/base_sink.h>
 #include <spdlog/spdlog.h>
