@@ -65,9 +65,9 @@ public:
   ASAP_COMMON_API StateMachineError(const StateMachineError &) = default;
   ASAP_COMMON_API StateMachineError(StateMachineError &&) = default;
 
-  auto ASAP_COMMON_API operator=(const StateMachineError &)
+  ASAP_COMMON_API auto operator=(const StateMachineError &)
       -> StateMachineError & = default;
-  auto ASAP_COMMON_API operator=(StateMachineError &&)
+  ASAP_COMMON_API auto operator=(StateMachineError &&)
       -> StateMachineError & = default;
 
   virtual ASAP_COMMON_API ~StateMachineError() noexcept = default;
@@ -84,14 +84,14 @@ public:
    * from which it is obtained is destroyed, or until a non-const member
    * function on the exception object is called.
    */
-  [[nodiscard]] virtual auto ASAP_COMMON_API What() const -> const char *;
+  [[nodiscard]] virtual ASAP_COMMON_API auto What() const -> const char *;
 
 protected:
   /*!
    * \brief Called from derived exception classes to populate the error message
    * with meaningful information.
    */
-  void ASAP_COMMON_API What(std::string description) {
+  ASAP_COMMON_API void What(std::string description) {
     what_.emplace(std::move(description));
   }
 
