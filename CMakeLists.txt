@@ -279,8 +279,6 @@ include(DoxGeneration)
 
 # Sphinx/breathe/exhale
 set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx")
-set(SPHINX_CACHE_DIR "${SPHINX_BUILD_DIR}/_doctrees")
-set(SPHINX_HTML_DIR "${SPHINX_BUILD_DIR}/html")
 include(SphinxGeneration)
 
 # Setup sphinx doc master target and add other submodules as dependencies
