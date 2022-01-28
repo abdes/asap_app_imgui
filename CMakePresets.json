@@ -266,7 +266,7 @@
         "dox",
         "sphinx"
       ],
-      "verbose": true
+      "verbose": false
     },
     {
       "name": "dev-windows",
