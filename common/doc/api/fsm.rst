@@ -58,10 +58,6 @@ therefore report errors as exceptions.
 .. doxygenclass:: asap::fsm::StateMachineError
    :members:
 
-.. doxygenstruct:: asap::fsm::EventNotConsumed
-
-.. doxygenstruct:: asap::fsm::ExecutionComplete
-
 State Machine State Types
 =========================
 

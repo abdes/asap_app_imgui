@@ -33,18 +33,60 @@
 namespace asap::fsm {
 
 /*!
- * \brief Special "exception" used solely to report to the state machine (the
- * exceptional case) of an event not being consumed by the current state and
- * therefore it needs to be re-issued by the event production loop.
+ * \brief The event production loop should continue execution normally.
  */
-struct EventNotConsumed {};
+struct Continue {};
 
 /*!
- * \brief Special "exception" used solely to report to the state machine (the
- * exceptional case) of reaching the final state and not being ready to accept
- * any more events.
+ * \brief The state machine completed its execution with no error and
+ * transitioned into a final state that does not wish to process any more
+ * events.
+ *
+ * This status requires the event production loop to  complete its execution.
+ * No more events should be fed into the state machine.
+ *
+ * \note The behavior if events keep coming after this point is state machine
+ * implementation dependant.
  */
-struct ExecutionComplete {};
+struct Terminate {};
+
+/*!
+ * \brief The event production loop should immediately terminate due to an
+ * unrecoverable error in a state.
+ *
+ * When the error that was reported is derived from StateMachineError (as
+ * recommended), an explanatory message from the error exception will be
+ * placed in the error_message field of the returned status. Otherwise, the
+ * message will simply be a generic message with no specific error
+ * information.
+ *
+ * To report errors from event handlers, it is preferred to use the
+ * ReportError action rather than directly throwing an exception. This will
+ * keep the interface of the event handlers consistent (always returning an
+ * action) and make the testability of the states much easier.
+ *
+ * \note Continuing to send events after this point would probably create even
+ * more errors and is an undefined behavior.
+ */
+struct TerminateWithError {
+  std::string error_message;
+};
+
+/*!
+ * \brief The event production loop should reissue the last event.
+ *
+ * This happens in situations where the event produces a state transition and
+ * the new state prefers to handle the event inside an event handler rather
+ * than inside the `OnEnter` method.
+ */
+struct ReissueEvent {};
+
+/*!
+ * \brief The execution status of the state machine, communicated back to the
+ * event production loop after each event is handled by the state machine.
+ */
+using Status =
+    std::variant<Continue, Terminate, TerminateWithError, ReissueEvent>;
 
 /*!
  * \brief The base class for exceptions thrown by state machine implementations.
@@ -152,59 +194,6 @@ private:
 template <typename... States> class ASAP_COMMON_TEMPLATE_API StateMachine {
 public:
   /*!
-   * \brief The event production loop should continue execution normally.
-   */
-  struct Continue {};
-  /*!
-   * \brief The state machine completed its execution with no error and
-   * transitioned into a final state that does not wish to process any more
-   * events.
-   *
-   * This status requires the event production loop to  complete its execution.
-   * No more events should be fed into the state machine.
-   *
-   * \note The behavior if events keep coming after this point is state machine
-   * implementation dependant.
-   */
-  struct Terminate {};
-
-  /*!
-   * The event production loop should immediately terminate due to an
-   * unrecoverable error in a state.
-   *
-   * When the error that was reported is derived from StateMachineError (as
-   * recommended), an explanatory message from the error exception will be
-   * placed in the error_message field of the returned status. Otherwise, the
-   * message will simply be a generic message with no specific error
-   * information.
-   *
-   * To report errors from event handlers, it is preferred to use the
-   * ReportError action rather than directly throwing an exception. This will
-   * keep the interface of the event handlers consistent (always returning an
-   * action) and make the testability of the states much easier.
-   *
-   * \note Continuing to send events after this point would probably create even
-   * more errors and is an undefined behavior.
-   */
-  struct TerminateWithError {
-    std::string error_message;
-  };
-  /*!
-   * \brief The event production loop should reissue the last event.
-   *
-   * This happens in situations where the event produces a state transition and
-   * the new state prefers to handle the event inside an event handler rather
-   * than inside the `OnEnter` method.
-   */
-  struct ReissueEvent {};
-  /*!
-   * \brief The execution status of the state machine, communicated back to the
-   * event production loop after each event is handled by the state machine.
-   */
-  using Status =
-      std::variant<Continue, Terminate, TerminateWithError, ReissueEvent>;
-
-  /*!
    * \brief Construct a new State Machine object with the given states, starting
    * at the first state in the list.
    *
@@ -227,7 +216,7 @@ public:
    *
    * A special case is when an event results in a state transition but the new
    * state prefers to handle the event in one of its handlers rather than in the
-   * `OnEnter` methos. That particular situation corresponds to the execution
+   * `OnEnter` method. That particular situation corresponds to the execution
    * status `ReissueEvent` which requires the event production loop to reissue
    * that same event again.
    */
@@ -235,14 +224,7 @@ public:
     auto passEventToState = [this, &event](auto statePtr) noexcept {
       try {
         auto action = statePtr->Handle(event);
-        action.Execute(*this, *statePtr, event);
-        return Status{Continue{}};
-      } catch (const EventNotConsumed & /*err*/) {
-        return Status{ReissueEvent{}};
-      } catch (const ExecutionComplete & /*err*/) {
-        return Status{Terminate{}};
-      } catch (const StateMachineError &err) {
-        return Status{TerminateWithError{err.What()}};
+        return action.Execute(*this, *statePtr, event);
       } catch (...) {
         return Status{TerminateWithError{"another error"}};
       }
@@ -304,6 +286,11 @@ private:
  * (it uses [SFINAE](https://en.cppreference.com/w/cpp/language/sfinae) to
  * detect if such a method exists).
  *
+ * The requirement on the `OnLeave` method is to return a `State` object that
+ * can only be one of `Continue`, `Terminate` or `TerminateWithError`. The
+ * `OnEnter` method on the other hand can return any of the possible values of
+ * `Status`.
+ *
  * **Example**
  *
  * \snippet fsm_test.cpp TransitionTo example
@@ -325,13 +312,25 @@ public:
   }
 
   template <typename Machine, typename State, typename Event>
-  void Execute(Machine &machine, State &prevState, const Event &event) {
-    Leave(prevState, event);
-    TargetState &newState = machine.template TransitionTo<TargetState>();
-    if (data_.has_value()) {
-      Enter(newState, event, data_);
-    } else {
-      Enter(newState, event);
+  auto Execute(Machine &machine, State &prevState, const Event &event)
+      -> Status {
+    try {
+      // Call OnLeave and if it fails or requests termination, do not transition
+      // to the next state.
+      Status status = Leave(prevState, event);
+      if (std::holds_alternative<Terminate>(status) ||
+          std::holds_alternative<TerminateWithError>(status)) {
+        return status;
+      }
+      TargetState &newState = machine.template TransitionTo<TargetState>();
+      if (data_.has_value()) {
+        return Enter(newState, event, data_);
+      }
+      return Enter(newState, event);
+    } catch (const StateMachineError& err) {
+      // This is a shortcut for OnLeave and OnEnter to simply throw a
+      // StateMachineError or a derived exception when an error occurs.
+      return TerminateWithError{err.What()};
     }
   }
 
@@ -363,7 +362,8 @@ public:
 private:
   // This overload is always in the set of overloads. Ellipsis parameter has the
   // lowest ranking for overload resolution.
-  template <typename... Args> void Leave(Args... /*unused*/) {
+  template <typename... Args> auto Leave(Args... /*unused*/) -> Status {
+    return Continue{};
   }
 
   // SFINAE: This overload is for states that implement `onLeave` with an event
@@ -376,7 +376,8 @@ private:
 
   // This overload is always in the set of overloads. Ellipsis parameter has the
   // lowest ranking for overload resolution.
-  template <typename... Args> void Enter(Args... /*unused*/) {
+  template <typename... Args> auto Enter(Args... /*unused*/) -> Status {
+    return Continue{};
   }
 
   // SFINAE: This overload is for states that implement `onEnter` with an event
@@ -414,8 +415,9 @@ private:
  */
 struct ASAP_COMMON_API DoNothing {
   template <typename Machine, typename State, typename Event>
-  void Execute(
-      Machine & /*unused*/, State & /*unused*/, const Event & /*unused*/) {
+  auto Execute(Machine & /*unused*/, State & /*unused*/,
+      const Event & /*unused*/) -> Status {
+    return Continue{};
   }
 
   [[nodiscard]] static auto data() noexcept -> const std::any &;
@@ -457,9 +459,9 @@ struct ReportError {
   }
 
   template <typename Machine, typename State, typename Event>
-  void Execute(
-      Machine & /*unused*/, State & /*unused*/, const Event & /*unused*/) {
-    throw std::any_cast<StateMachineError>(error_);
+  auto Execute(Machine & /*unused*/, State & /*unused*/,
+      const Event & /*unused*/) -> Status {
+    return TerminateWithError{std::any_cast<StateMachineError>(error_).What()};
   }
 
   [[nodiscard]] auto data() const noexcept -> const std::any & {
@@ -520,9 +522,10 @@ template <typename... Actions> struct ASAP_COMMON_TEMPLATE_API OneOf {
   }
 
   template <typename Machine, typename State, typename Event>
-  void Execute(Machine &machine, State &state, const Event &event) {
-    std::visit([&machine, &state, &event](
-                   auto &action) { action.Execute(machine, state, event); },
+  auto Execute(Machine &machine, State &state, const Event &event) -> Status {
+    return std::visit(
+        [&machine, &state, &event](
+            auto &action) { return action.Execute(machine, state, event); },
         option);
   }
 
@@ -572,7 +575,8 @@ private:
 };
 
 /*!
- * \brief A concept to identify if a paticular type is a OneOf<...Actions> type.
+ * \brief A concept to identify if a particular type is a OneOf<...Actions>
+ * type.
  */
 template <typename T> struct is_one_of : std::false_type {};
 template <typename... Actions>

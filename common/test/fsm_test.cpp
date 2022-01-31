@@ -48,16 +48,17 @@ TEST(StateMachine, MachineHandleEventRelaysToStateAndExecutesReturnedAction) {
   // This abstraction is only here to manage the circular dependencies created
   // by mocking the TestAction class.
   struct Action { // NOLINT
-    virtual void Execute(
-        Machine &machine, FirstState &state, const TestEvent &event) = 0;
+    virtual auto Execute(Machine &machine, FirstState &state,
+        const TestEvent &event) -> Status = 0;
 
   protected:
     ~Action() = default;
   };
 
   struct TestAction {
-    void Execute(Machine &machine, FirstState &state, const TestEvent &event) {
-      mock_->Execute(machine, state, event);
+    auto Execute(Machine &machine, FirstState &state, const TestEvent &event)
+        -> Status {
+      return mock_->Execute(machine, state, event);
     }
     const std::shared_ptr<Action> mock_;
   };
@@ -82,7 +83,7 @@ TEST(StateMachine, MachineHandleEventRelaysToStateAndExecutesReturnedAction) {
   struct MockAction final : public Action {
     // NOLINTNEXTLINE
     MOCK_METHOD(
-        void, Execute, (Machine &, FirstState &, const TestEvent &), ());
+        Status, Execute, (Machine &, FirstState &, const TestEvent &), ());
   };
 
   auto mock_state = std::make_shared<MockState>();
@@ -187,8 +188,9 @@ TEST(StateMachine, WillExample) {
       : Will<ByDefault<DoNothing>, On<EventOne, TransitionTo<SecondState>>> {};
 
   struct SpecialAction {
-    void Execute(Machine & /*machine*/, SecondState & /*state*/,
-        const EventTwo & /*event*/) {
+    static auto Execute(Machine & /*machine*/, SecondState & /*state*/,
+        const EventTwo & /*event*/) -> Status {
+      return Continue{};
     }
   };
 
@@ -227,8 +229,9 @@ TEST(StateMachine, OneOfExample) {
   struct SecondState : Will<ByDefault<DoNothing>> {};
 
   struct SpecialAction {
-    void Execute(Machine & /*machine*/, FirstState & /*state*/,
-        const SpecialEvent & /*event*/) {
+    static auto Execute(Machine & /*machine*/, FirstState & /*state*/,
+        const SpecialEvent & /*event*/) -> Status {
+      return Continue{};
     }
   };
 
@@ -303,9 +306,9 @@ TEST(StateMachine, TransitionToExample) {
 
   struct ExampleMockState {
     // NOLINTNEXTLINE
-    MOCK_METHOD(void, OnEnter, (const TransitionEvent &), ());
+    MOCK_METHOD(Status, OnEnter, (const TransitionEvent &), ());
     // NOLINTNEXTLINE
-    MOCK_METHOD(void, OnLeave, (const TransitionEvent &), ());
+    MOCK_METHOD(Status, OnLeave, (const TransitionEvent &), ());
   };
 
   struct FirstState;
@@ -318,8 +321,8 @@ TEST(StateMachine, TransitionToExample) {
     }
     // We only implement the OnLeave method, but that's ok.
     // The action will only call whatever is implemented.
-    void OnLeave(const TransitionEvent &event) {
-      mock_->OnLeave(event);
+    auto OnLeave(const TransitionEvent &event) -> Status {
+      return mock_->OnLeave(event);
     }
 
   private:
@@ -332,8 +335,8 @@ TEST(StateMachine, TransitionToExample) {
     }
     // We only implement the OnEnter method, but that's ok.
     // The action will only call whatever is implemented.
-    void OnEnter(const TransitionEvent &event) {
-      mock_->OnEnter(event);
+    auto OnEnter(const TransitionEvent &event) -> Status {
+      return mock_->OnEnter(event);
     }
 
   private:
@@ -347,8 +350,12 @@ TEST(StateMachine, TransitionToExample) {
 
   TransitionEvent event{};
 
-  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event))).Times(1);
-  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event))).Times(1);
+  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(Continue{}));
+  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(Status{Continue{}}));
   machine.Handle(event);
   ASSERT_THAT(machine.IsIn<SecondState>(), IsTrue());
   //! [TransitionTo example]
@@ -361,9 +368,9 @@ TEST(StateMachine, TransitionToWithDataExample) {
 
   struct ExampleMockState {
     // NOLINTNEXTLINE
-    MOCK_METHOD(void, OnEnter, (const TransitionEvent &, int), ());
+    MOCK_METHOD(Status, OnEnter, (const TransitionEvent &, int), ());
     // NOLINTNEXTLINE
-    MOCK_METHOD(void, OnLeave, (const TransitionEvent &), ());
+    MOCK_METHOD(Status, OnLeave, (const TransitionEvent &), ());
   };
 
   struct FirstState;
@@ -376,8 +383,8 @@ TEST(StateMachine, TransitionToWithDataExample) {
     }
     // We only implement the OnLeave method, but that's ok.
     // The action will only call whatever is implemented.
-    void OnLeave(const TransitionEvent &event) {
-      mock_->OnLeave(event);
+    auto OnLeave(const TransitionEvent &event) -> Status {
+      return mock_->OnLeave(event);
     }
 
     // This special handler allows for passing data via the
@@ -398,12 +405,12 @@ TEST(StateMachine, TransitionToWithDataExample) {
     }
     // This implementation expects data to be passed from the
     // previous state.
-    void OnEnter(const TransitionEvent &event, std::any data) {
+    auto OnEnter(const TransitionEvent &event, std::any data) -> Status {
       EXPECT_THAT(std::any_cast<int>(data), Eq(1));
       // Mocking methods with std::any arguments will fail to compile with clang
       // and there is no fix for it from gmock. Just specifically cast the
       // std::any before forwarding to the mock.
-      mock_->OnEnter(event, std::any_cast<int>(data));
+      return mock_->OnEnter(event, std::any_cast<int>(data));
     }
 
   private:
@@ -417,11 +424,200 @@ TEST(StateMachine, TransitionToWithDataExample) {
 
   TransitionEvent event{};
 
-  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event))).Times(1);
-  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event), ::testing::_)).Times(1);
+  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(Continue{}));
+  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event), ::testing::_))
+      .Times(1)
+      .WillOnce(Return(Status{Continue{}}));
   machine.Handle(event);
   ASSERT_THAT(machine.IsIn<SecondState>(), IsTrue());
   //! [TransitionTo with data example]
+}
+
+struct StateMachineTransitionToErrors : public ::testing::Test {
+  struct TransitionEvent {};
+
+  struct ExampleMockState {
+    // NOLINTNEXTLINE
+    MOCK_METHOD(Status, OnEnter, (const TransitionEvent &), ());
+    // NOLINTNEXTLINE
+    MOCK_METHOD(Status, OnLeave, (const TransitionEvent &), ());
+  };
+
+  struct FirstState;
+  struct SecondState;
+  using Machine = StateMachine<FirstState, SecondState>;
+
+  struct FirstState : Will<On<TransitionEvent, TransitionTo<SecondState>>> {
+    explicit FirstState(std::shared_ptr<ExampleMockState> mock)
+        : mock_{std::move(mock)} {
+    }
+    // We only implement the OnLeave method, but that's ok.
+    // The action will only call whatever is implemented.
+    auto OnLeave(const TransitionEvent &event) -> Status {
+      return mock_->OnLeave(event);
+    }
+
+  private:
+    const std::shared_ptr<ExampleMockState> mock_;
+  };
+
+  struct SecondState : Will<ByDefault<DoNothing>> {
+    explicit SecondState(std::shared_ptr<ExampleMockState> mock)
+        : mock_{std::move(mock)} {
+    }
+    // We only implement the OnEnter method, but that's ok.
+    // The action will only call whatever is implemented.
+    auto OnEnter(const TransitionEvent &event) -> Status {
+      return mock_->OnEnter(event);
+    }
+
+  private:
+    const std::shared_ptr<ExampleMockState> mock_;
+  };
+
+  std::shared_ptr<ExampleMockState> mock_initial_state =
+      std::make_shared<ExampleMockState>();
+  std::shared_ptr<ExampleMockState> mock_another_state =
+      std::make_shared<ExampleMockState>();
+  Machine machine{
+      FirstState{mock_initial_state}, SecondState{mock_another_state}};
+};
+
+// NOLINTNEXTLINE
+TEST_F(StateMachineTransitionToErrors, OnLeaveReturnsTerminate) {
+  TransitionEvent event{};
+
+  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(Terminate{}));
+  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event))).Times(0);
+  auto status = machine.Handle(event);
+  ASSERT_THAT(machine.IsIn<SecondState>(), IsFalse());
+  EXPECT_THAT(std::holds_alternative<Terminate>(status), IsTrue());
+}
+
+// NOLINTNEXTLINE
+TEST_F(StateMachineTransitionToErrors, OnLeaveReturnsTerminateWithError) {
+  TransitionEvent event{};
+
+  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(TerminateWithError{"error"}));
+  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event))).Times(0);
+  auto status = machine.Handle(event);
+  ASSERT_THAT(machine.IsIn<SecondState>(), IsFalse());
+  EXPECT_THAT(std::holds_alternative<TerminateWithError>(status), IsTrue());
+  EXPECT_THAT(std::get<TerminateWithError>(status).error_message, Eq("error"));
+}
+
+// NOLINTNEXTLINE
+TEST_F(StateMachineTransitionToErrors, OnLeaveThrowsStateMachineError) {
+  TransitionEvent event{};
+
+  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
+      .Times(1)
+      .WillOnce(testing::Throw(StateMachineError("error")));
+  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event))).Times(0);
+  auto status = machine.Handle(event);
+  ASSERT_THAT(machine.IsIn<SecondState>(), IsFalse());
+  EXPECT_THAT(std::holds_alternative<TerminateWithError>(status), IsTrue());
+  EXPECT_THAT(std::get<TerminateWithError>(status).error_message, Eq("error"));
+}
+
+// NOLINTNEXTLINE
+TEST_F(StateMachineTransitionToErrors, OnLeaveThrowsOtherError) {
+  TransitionEvent event{};
+
+  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
+      .Times(1)
+      .WillOnce(testing::Throw(std::exception("error")));
+  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event))).Times(0);
+  auto status = machine.Handle(event);
+  ASSERT_THAT(machine.IsIn<SecondState>(), IsFalse());
+  EXPECT_THAT(std::holds_alternative<TerminateWithError>(status), IsTrue());
+  EXPECT_THAT(
+      std::get<TerminateWithError>(status).error_message, Eq("another error"));
+}
+
+// NOLINTNEXTLINE
+TEST_F(StateMachineTransitionToErrors, OnEnterReturnsTerminate) {
+  TransitionEvent event{};
+
+  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(Continue{}));
+  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(Terminate{}));
+  auto status = machine.Handle(event);
+  ASSERT_THAT(machine.IsIn<SecondState>(), IsTrue());
+  EXPECT_THAT(std::holds_alternative<Terminate>(status), IsTrue());
+}
+
+// NOLINTNEXTLINE
+TEST_F(StateMachineTransitionToErrors, OnEnterReturnsTerminateWithError) {
+  TransitionEvent event{};
+
+  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(Continue{}));
+  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(TerminateWithError{"error"}));
+  auto status = machine.Handle(event);
+  ASSERT_THAT(machine.IsIn<SecondState>(), IsTrue());
+  EXPECT_THAT(std::holds_alternative<TerminateWithError>(status), IsTrue());
+  EXPECT_THAT(std::get<TerminateWithError>(status).error_message, Eq("error"));
+}
+
+// NOLINTNEXTLINE
+TEST_F(StateMachineTransitionToErrors, OnEnterReturnsReissueEvent) {
+  TransitionEvent event{};
+
+  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(Continue{}));
+  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(ReissueEvent{}));
+  auto status = machine.Handle(event);
+  ASSERT_THAT(machine.IsIn<SecondState>(), IsTrue());
+  EXPECT_THAT(std::holds_alternative<ReissueEvent>(status), IsTrue());
+}
+
+// NOLINTNEXTLINE
+TEST_F(StateMachineTransitionToErrors, OnEnterThrowsStateMachineError) {
+  TransitionEvent event{};
+
+  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(Continue{}));
+  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event)))
+      .Times(1)
+      .WillOnce(::testing::Throw(StateMachineError("error")));
+  auto status = machine.Handle(event);
+  ASSERT_THAT(machine.IsIn<SecondState>(), IsTrue());
+  EXPECT_THAT(std::holds_alternative<TerminateWithError>(status), IsTrue());
+  EXPECT_THAT(std::get<TerminateWithError>(status).error_message, Eq("error"));
+}
+
+// NOLINTNEXTLINE
+TEST_F(StateMachineTransitionToErrors, OnEnterThrowsOtherError) {
+  TransitionEvent event{};
+
+  EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
+      .Times(1)
+      .WillOnce(Return(Continue{}));
+  EXPECT_CALL(*mock_another_state, OnEnter(Ref(event)))
+      .Times(1)
+      .WillOnce(::testing::Throw(std::exception("error")));
+  auto status = machine.Handle(event);
+  ASSERT_THAT(machine.IsIn<SecondState>(), IsTrue());
+  EXPECT_THAT(std::holds_alternative<TerminateWithError>(status), IsTrue());
+  EXPECT_THAT(
+      std::get<TerminateWithError>(status).error_message, Eq("another error"));
 }
 
 // NOLINTNEXTLINE

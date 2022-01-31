@@ -65,8 +65,9 @@ struct LockedState : ByDefault<DoNothing> {
   explicit LockedState(uint32_t key) : key_(key) {
   }
 
-  void OnEnter(const LockEvent &event) {
+  auto OnEnter(const LockEvent &event) -> Status {
     key_ = event.newKey;
+    return Continue{};
   }
 
   //! [State Handle method]
