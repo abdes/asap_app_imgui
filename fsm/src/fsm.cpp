@@ -11,7 +11,7 @@
  */
 
 #include <common/compilers.h>
-#include <common/fsm.h>
+#include <fsm/fsm.h>
 
 auto asap::fsm::StateMachineError::What() const -> const char * {
   return what_ ? what_.value().c_str() : "unspecified state machine error";

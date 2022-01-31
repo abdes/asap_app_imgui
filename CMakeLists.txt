@@ -314,6 +314,7 @@ endif()
 
 add_subdirectory(common)
 add_subdirectory(logging)
+add_subdirectory(fsm)
 
 # ==============================================================================
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...

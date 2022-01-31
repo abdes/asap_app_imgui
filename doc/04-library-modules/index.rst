@@ -15,3 +15,6 @@ Library Modules
 
 :doc:`logging <logging:api>`
 ============================
+
+:doc:`fsm <fsm:api>`
+====================

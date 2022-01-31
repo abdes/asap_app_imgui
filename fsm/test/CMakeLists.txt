@@ -15,19 +15,21 @@ asap_add_test(
   UNIT_TEST
   VALGRIND_MEMCHECK
   SRCS
-  "flag_ops_test.cpp"
-  "singleton_test.cpp"
-  "overload_test.cpp"
+  "fsm_test.cpp"
+  "fsm_example_test.cpp"
   "main.cpp"
   LINK
   asap::common
   gtest_main
   gmock_main
   COMMENT
-  "ASAP common unit tests")
+  "ASAP state machine module unit tests")
 
 # Target specific compiler features
 target_compile_features(${MAIN_TEST_TARGET_NAME} PRIVATE cxx_constexpr)
+
+# Target specific libraries
+target_link_libraries(${MAIN_TEST_TARGET_NAME} PRIVATE asap::fsm)
 
 gtest_discover_tests(${MAIN_TEST_TARGET_NAME})
 
@@ -35,7 +37,3 @@ gtest_discover_tests(${MAIN_TEST_TARGET_NAME})
 asap_add_sanitizers(${MAIN_TEST_TARGET_NAME})
 swift_add_valgrind_massif(${MAIN_TEST_TARGET_NAME})
 swift_add_valgrind_callgrind(${MAIN_TEST_TARGET_NAME})
-
-# Also build the tests programs in subdirectories
-add_subdirectory(contract)
-add_subdirectory(mixin)

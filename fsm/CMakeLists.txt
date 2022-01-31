@@ -10,9 +10,9 @@
 
 asap_declare_module(
   MODULE_NAME
-  "common"
+  "fsm"
   DESCRIPTION
-  "Common functionality for asap based projects"
+  "C++17 template-based framework for finite state machines implementation"
   GITHUB_REPO
   "https://github.com/abdes/asap"
   AUTHOR_MAINTAINER
@@ -20,18 +20,9 @@ asap_declare_module(
   VERSION_MAJOR
   "1"
   VERSION_MINOR
-  "1"
+  "0"
   VERSION_PATCH
   "0")
-
-# ------------------------------------------------------------------------------
-# Code generation
-# ------------------------------------------------------------------------------
-
-# Generate config-header
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/${META_MODULE_NAME}/config.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/include/${META_MODULE_NAME}/config.h)
 
 # ==============================================================================
 # Build instructions
@@ -52,20 +43,11 @@ asap_add_library(
   WARNING
   SOURCES
   # Headers
-  "include/common/platform.h"
-  "include/common/compilers.h"
-  "include/common/singleton.h"
-  "include/common/flag_ops.h"
-  "include/common/overload.h"
-  "include/common/mixin.h"
-  # contract module
-  "include/contract/contract.h"
-  "include/contract/ut/gtest.h"
-  "include/contract/ut/framework.h"
+  "include/fsm/fsm.h"
   # Sources
-  "src/contract.cpp")
+  "src/fsm.cpp")
 
-target_link_libraries(${MODULE_TARGET_NAME} PRIVATE Microsoft.GSL::GSL)
+target_link_libraries(${MODULE_TARGET_NAME} PUBLIC asap::common)
 
 target_include_directories(
   ${MODULE_TARGET_NAME}
@@ -104,9 +86,9 @@ asap_with_doxygen(
   VERSION
   ${META_MODULE_VERSION}
   TITLE
-  "\"Common Module\""
+  "\"Finite State Machines\""
   BRIEF
-  "\"Provides common basic building blocks such as portability, assertions, etc.\""
+  "\"Provides a framework to help implement type-safe finite state machines.\""
   INPUT_PATH
   "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
 

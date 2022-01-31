@@ -4,7 +4,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 //===----------------------------------------------------------------------===//
 
-#include <common/fsm.h>
+#include <fsm/fsm.h>
 
 #include <common/compilers.h>
 #include <exception>

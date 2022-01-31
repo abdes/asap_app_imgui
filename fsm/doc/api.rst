@@ -14,10 +14,8 @@ API reference
    :maxdepth: 2
    :hidden:
 
-   Platform detection <api/platform>
-   Compiler detection <api/compilers>
-   C++ language <api/cpp>
-   Mask/Flags manipulation <api/flags>
-   Contract checking API <api/contract>
-   Overload pattern <api/overload>
-   Mixin library <api/mixin>
+   State Machine library <api/fsm>
+
+The state machine API is provided through the classes and types in the
+<fsm/fsm.h> header file. Detailed descriptions of the classes and their
+functionality are provided in the <api/fsm> document.

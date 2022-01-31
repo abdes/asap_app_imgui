@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include <common/asap_common_api.h>
+#include <fsm/asap_fsm_api.h>
 
 #include <any>
 #include <exception>
@@ -99,20 +99,18 @@ using Status =
  */
 class StateMachineError {
 public:
-  ASAP_COMMON_API StateMachineError() = default;
-  explicit ASAP_COMMON_API StateMachineError(std::string description)
+  StateMachineError() = default;
+  explicit StateMachineError(std::string description)
       : what_{std::move(description)} {
   }
 
-  ASAP_COMMON_API StateMachineError(const StateMachineError &) = default;
-  ASAP_COMMON_API StateMachineError(StateMachineError &&) = default;
+  StateMachineError(const StateMachineError &) = default;
+  StateMachineError(StateMachineError &&) = default;
 
-  ASAP_COMMON_API auto operator=(const StateMachineError &)
-      -> StateMachineError & = default;
-  ASAP_COMMON_API auto operator=(StateMachineError &&)
-      -> StateMachineError & = default;
+  auto operator=(const StateMachineError &) -> StateMachineError & = default;
+  auto operator=(StateMachineError &&) -> StateMachineError & = default;
 
-  virtual ASAP_COMMON_API ~StateMachineError() noexcept = default;
+  virtual ~StateMachineError() noexcept = default;
 
   /*!
    * \brief Provides an explanatory message about the error.
@@ -126,14 +124,14 @@ public:
    * from which it is obtained is destroyed, or until a non-const member
    * function on the exception object is called.
    */
-  [[nodiscard]] virtual ASAP_COMMON_API auto What() const -> const char *;
+  [[nodiscard]] virtual ASAP_FSM_API auto What() const -> const char *;
 
 protected:
   /*!
    * \brief Called from derived exception classes to populate the error message
    * with meaningful information.
    */
-  ASAP_COMMON_API void What(std::string description) {
+  ASAP_FSM_API void What(std::string description) {
     what_.emplace(std::move(description));
   }
 
@@ -191,7 +189,7 @@ private:
  *
  * \snippet fsm_example_test.cpp Full State Machine Example
  */
-template <typename... States> class ASAP_COMMON_TEMPLATE_API StateMachine {
+template <typename... States> class ASAP_FSM_TEMPLATE_API StateMachine {
 public:
   /*!
    * \brief Construct a new State Machine object with the given states, starting
@@ -305,7 +303,7 @@ private:
  *
  * \snippet fsm_test.cpp TransitionTo with data example
  */
-template <typename TargetState> struct ASAP_COMMON_TEMPLATE_API TransitionTo {
+template <typename TargetState> struct ASAP_FSM_TEMPLATE_API TransitionTo {
 public:
   // NOLINTNEXTLINE(google-explicit-constructor, hicpp-explicit-conversions)
   TransitionTo(std::any data = {}) : data_{std::move(data)} {
@@ -327,7 +325,7 @@ public:
         return Enter(newState, event, data_);
       }
       return Enter(newState, event);
-    } catch (const StateMachineError& err) {
+    } catch (const StateMachineError &err) {
       // This is a shortcut for OnLeave and OnEnter to simply throw a
       // StateMachineError or a derived exception when an error occurs.
       return TerminateWithError{err.What()};
@@ -413,7 +411,7 @@ private:
  * focus on implementing those event handlers that make sense for that
  * particular state.
  */
-struct ASAP_COMMON_API DoNothing {
+struct ASAP_FSM_API DoNothing {
   template <typename Machine, typename State, typename Event>
   auto Execute(Machine & /*unused*/, State & /*unused*/,
       const Event & /*unused*/) -> Status {
@@ -513,7 +511,7 @@ constexpr auto supports_alternative() -> bool {
  *
  * \snippet fsm_test.cpp OneOf example
  */
-template <typename... Actions> struct ASAP_COMMON_TEMPLATE_API OneOf {
+template <typename... Actions> struct ASAP_FSM_TEMPLATE_API OneOf {
   template <typename T,
       std::enable_if<!std::is_base_of<OneOf,
           typename std::remove_reference<T>::type>::value> * = nullptr>
@@ -592,7 +590,7 @@ template <typename T> constexpr bool is_one_of_v = is_one_of<T>::value;
  * \snippet fsm_test.cpp OneOf example
  */
 template <typename Action>
-struct ASAP_COMMON_TEMPLATE_API Maybe : public OneOf<Action, DoNothing> {
+struct ASAP_FSM_TEMPLATE_API Maybe : public OneOf<Action, DoNothing> {
   using OneOf<Action, DoNothing>::OneOf;
 };
 
@@ -613,7 +611,7 @@ struct is_one_of<Maybe<Actions...>> : std::true_type {};
  *
  * \snippet fsm_test.cpp ByDefault example
  */
-template <typename Action> struct ASAP_COMMON_TEMPLATE_API ByDefault {
+template <typename Action> struct ASAP_FSM_TEMPLATE_API ByDefault {
   template <typename Event>
   auto Handle(const Event & /*unused*/) const -> Action {
     return Action{};
@@ -628,7 +626,7 @@ template <typename Action> struct ASAP_COMMON_TEMPLATE_API ByDefault {
  *
  * \snippet fsm_test.cpp On example
  */
-template <typename Event, typename Action> struct ASAP_COMMON_TEMPLATE_API On {
+template <typename Event, typename Action> struct ASAP_FSM_TEMPLATE_API On {
   auto Handle(const Event & /*event*/) const -> Action {
     return {};
   }
@@ -643,7 +641,7 @@ template <typename Event, typename Action> struct ASAP_COMMON_TEMPLATE_API On {
  * \snippet fsm_test.cpp Will example
  */
 template <typename... Handlers>
-struct ASAP_COMMON_TEMPLATE_API Will : Handlers... {
+struct ASAP_FSM_TEMPLATE_API Will : Handlers... {
   using Handlers::Handle...;
 };
 
