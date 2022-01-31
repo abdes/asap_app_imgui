@@ -18,3 +18,6 @@ Library Modules
 
 :doc:`fsm <fsm:api>`
 ====================
+
+:doc:`textwrap <textwrap:api>`
+==============================

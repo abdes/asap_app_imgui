@@ -19,18 +19,16 @@
 
 # -- Project information -----------------------------------------------------
 
-project = u'@META_PROJECT_NAME@'
-copyright = u'2018, @META_AUTHOR_ORGANIZATION@'
+project = u'asap/@META_MODULE_NAME@'
+copyright = u'2018, The Authors'
 
 # The short X.Y version
-version = u'@META_VERSION@'
-# The full version, including alpha/beta/rc tags
-release = u'@META_VERSION@ (@META_VERSION_REVISION@)'
+version = u'@META_MODULE_VERSION@'
 
-rst_epilog = """
+rst_prolog = """
 .. |version| replace:: {0}
-.. |release| replace:: {1}
-""".format(version, release)
+""".format(version)
+
 
 # -- General configuration ---------------------------------------------------
 
@@ -48,8 +46,14 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx-prompt',
     'sphinx_copybutton',
-    'myst_parser'
+    'breathe',
 ]
+
+# Setup the breathe extension
+breathe_projects = {
+    "asap_@META_MODULE_NAME@": "@DOXYGEN_BUILD_DIR@/asap_@META_MODULE_NAME@/xml"
+}
+breathe_default_project = "asap_@META_MODULE_NAME@"
 
 # Tell sphinx what the primary language being documented is.
 primary_domain = 'cpp'
@@ -95,9 +99,9 @@ pygments_style = 'sphinx'
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_book_theme"
+html_theme = 'sphinx_book_theme'
 
-html_title = u'Start Now!'
+html_title = u'Text Wrapper'
 html_logo = "_static/logo.png"
 html_favicon = "_static/favicon.ico"
 
@@ -107,6 +111,7 @@ html_favicon = "_static/favicon.ico"
 html_last_updated_fmt = None
 
 html_theme_options = {
+    "path_to_docs": "docs",
     "repository_url": '@META_GITHUB_REPO@',
     "use_repository_button": True,
     "use_issues_button": True,
@@ -119,23 +124,6 @@ html_theme_options = {
 }
 
 # -- Extension configuration -------------------------------------------------
-
-# -- Options for intersphinx extension ---------------------------------------
-
-intersphinx_mapping = {
-    'common': (
-        '@SPHINX_BUILD_DIR@/asap_common/html',
-        '@SPHINX_BUILD_DIR@/asap_common/html/objects.inv'),
-    'logging': (
-        '@SPHINX_BUILD_DIR@/asap_logging/html',
-        '@SPHINX_BUILD_DIR@/asap_logging/html/objects.inv'),
-    'fsm': (
-        '@SPHINX_BUILD_DIR@/asap_fsm/html',
-        '@SPHINX_BUILD_DIR@/asap_fsm/html/objects.inv'),
-    'textwrap': (
-        '@SPHINX_BUILD_DIR@/asap_textwrap/html',
-        '@SPHINX_BUILD_DIR@/asap_textwrap/html/objects.inv')
-}
 
 # -- Options for todo extension ----------------------------------------------
 

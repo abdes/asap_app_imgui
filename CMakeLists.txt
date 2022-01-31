@@ -315,6 +315,7 @@ endif()
 add_subdirectory(common)
 add_subdirectory(logging)
 add_subdirectory(fsm)
+add_subdirectory(textwrap)
 
 # ==============================================================================
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...

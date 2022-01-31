@@ -14,6 +14,7 @@
 #include <gmock/gmock-spec-builders.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
+#include <stdexcept>
 
 // Disable compiler and linter warnings originating from the unit test framework
 // and for which we cannot do anything. Additionally, every TEST or TEST_X macro
@@ -532,7 +533,7 @@ TEST_F(StateMachineTransitionToErrors, OnLeaveThrowsOtherError) {
 
   EXPECT_CALL(*mock_initial_state, OnLeave(Ref(event)))
       .Times(1)
-      .WillOnce(testing::Throw(std::exception("error")));
+      .WillOnce(testing::Throw(std::runtime_error("error")));
   EXPECT_CALL(*mock_another_state, OnEnter(Ref(event))).Times(0);
   auto status = machine.Handle(event);
   ASSERT_THAT(machine.IsIn<SecondState>(), IsFalse());
@@ -612,7 +613,7 @@ TEST_F(StateMachineTransitionToErrors, OnEnterThrowsOtherError) {
       .WillOnce(Return(Continue{}));
   EXPECT_CALL(*mock_another_state, OnEnter(Ref(event)))
       .Times(1)
-      .WillOnce(::testing::Throw(std::exception("error")));
+      .WillOnce(::testing::Throw(std::runtime_error("error")));
   auto status = machine.Handle(event);
   ASSERT_THAT(machine.IsIn<SecondState>(), IsTrue());
   EXPECT_THAT(std::holds_alternative<TerminateWithError>(status), IsTrue());
