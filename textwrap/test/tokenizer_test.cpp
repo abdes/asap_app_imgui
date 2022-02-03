@@ -169,6 +169,31 @@ INSTANTIATE_TEST_SUITE_P(AllOff, TokenizerScenariosTest,
         {
           {TokenType::ParagraphMark, ""}
         }},
+      ParamType{" \n\n",
+        "\t", false, false, false,
+        {
+          {TokenType::WhiteSpace, " "},
+          {TokenType::ParagraphMark, ""}
+        }},
+      ParamType{" \t\n \n\n \t\n \n",
+        "\t", false, false, false,
+        {
+          {TokenType::WhiteSpace, " \t\n "},
+          {TokenType::ParagraphMark, ""},
+          {TokenType::WhiteSpace, " \t\n \n"}
+        }},
+      ParamType{"\n\n\n",
+        "\t", false, false, false,
+        {
+          {TokenType::ParagraphMark, ""},
+          {TokenType::WhiteSpace, "\n"},
+        }},
+      ParamType{"\n\n\n\n",
+        "\t", false, false, false,
+        {
+          {TokenType::ParagraphMark, ""},
+          {TokenType::ParagraphMark, ""}
+        }},
       ParamType{"very-very-long-word",
         "\t", false, false, false,
         {
@@ -183,7 +208,7 @@ INSTANTIATE_TEST_SUITE_P(AllOff, TokenizerScenariosTest,
           {TokenType::WhiteSpace, "\t"},
           {TokenType::Chunk, "a-a-a"},
           {TokenType::ParagraphMark, ""},
-          {TokenType::ParagraphMark, ""},
+          {TokenType::WhiteSpace, "\n"},
           {TokenType::Chunk, "2."},
           {TokenType::WhiteSpace, "\t"},
           {TokenType::Chunk, "bbb"},

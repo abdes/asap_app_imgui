@@ -307,7 +307,6 @@ TEST_F(TextWrapperTest, IndentEmptyStringNotIndented) {
   const auto *text = "";
   TextWrapper wrapper = TextWrapper::Create()
                             .Width(column_width)
-                            .TrimLines()
                             .IndentWith()
                             .Initially("==== ")
                             .Then("---- ");
@@ -323,7 +322,7 @@ TEST_F(TextWrapperTest, IndentEmptyLineNotIndented) {
                             .IndentWith()
                             .Initially("==== ")
                             .Then("---- ");
-  EXPECT_THAT(wrapper.Fill(text).value(), Eq("==== hello\n\n==== world!"));
+  EXPECT_THAT(wrapper.Fill(text).value(), Eq("==== hello\n\n==== \nworld!"));
 }
 
 } // namespace

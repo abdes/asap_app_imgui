@@ -14,7 +14,6 @@
 
 #include <common/compilers.h>
 #include <common/overload.h>
-#include <contract/contract.h>
 #include <fsm/fsm.h>
 #include <logging/logging.h>
 
@@ -350,6 +349,23 @@ struct WhiteSpaceState : public Will<On<InputEnd, TransitionTo<FinalState>>,
 
   auto Handle(const WhiteSpaceChar &event) -> DoNothing {
     ASLOG_TO_LOGGER(logger_, debug, "WhiteSpaceState.Handle {}", event);
+    if (event.value == '\n') {
+      if (last_was_newline_) {
+        ASLOG_TO_LOGGER(
+            logger_, debug, "WhiteSpaceState.Handle - new paragraph");
+        token_.pop_back();
+        if (!token_.empty()) {
+          DispatchToConsumer(TokenType::WhiteSpace);
+        }
+        DispatchToConsumer(TokenType::ParagraphMark);
+        token_ = "";
+        last_was_newline_ = false;
+        return DoNothing{};
+      }
+      last_was_newline_ = true;
+    } else {
+      last_was_newline_ = false;
+    }
     if (event.value == '\t') {
       if (tab_ == "\t" && replace_ws_) {
         token_.push_back(' ');
@@ -357,22 +373,6 @@ struct WhiteSpaceState : public Will<On<InputEnd, TransitionTo<FinalState>>,
         token_.append(tab_);
       }
       return DoNothing{};
-    }
-    if (event.value == '\n') {
-      if (last_was_newline_) {
-        ASLOG_TO_LOGGER(
-            logger_, debug, "WhiteSpaceState.Handle - new paragraph");
-        if (!token_.empty()) { // cases with 3+ successive `\n`
-          token_.pop_back();
-        }
-        if (!token_.empty()) {
-          DispatchToConsumer(TokenType::WhiteSpace);
-        }
-        token_ = "";
-        DispatchToConsumer(TokenType::ParagraphMark);
-        return DoNothing{};
-      }
-      last_was_newline_ = true;
     }
     token_.push_back(event.value);
     return DoNothing{};
