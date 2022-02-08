@@ -327,36 +327,40 @@ asap_create_clang_tidy_targets()
 # ==============================================================================
 # Deployment (global project files)
 # ==============================================================================
+set(runtime "${META_PROJECT_NAME}_runtime")
+set(dev "${META_PROJECT_NAME}_dev")
+set(meta "${META_PROJECT_NAME}_meta")
+set(data "${META_PROJECT_NAME}_date")
 
 # Install version file
 install(
   FILES "${PROJECT_BINARY_DIR}/VERSION"
   DESTINATION ${ASAP_INSTALL_ROOT}
-  COMPONENT runtime)
+  COMPONENT ${runtime})
 
 # Deploy generated top level headers (always in `asap` directory even when
 # forked)
 install(
   DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/asap
   DESTINATION ${ASAP_INSTALL_INCLUDE}
-  COMPONENT dev)
+  COMPONENT ${dev})
 
 # Install the project meta files
 install(
   FILES AUTHORS
   DESTINATION ${ASAP_INSTALL_ROOT}
-  COMPONENT runtime)
+  COMPONENT meta)
 install(
   FILES LICENSE
   DESTINATION ${ASAP_INSTALL_ROOT}
-  COMPONENT runtime)
+  COMPONENT meta)
 install(
   FILES README.md
   DESTINATION ${ASAP_INSTALL_ROOT}
-  COMPONENT runtime)
+  COMPONENT meta)
 
-# Install runtime data
+# Install data
 install(
   DIRECTORY ${PROJECT_SOURCE_DIR}/data
   DESTINATION ${ASAP_INSTALL_DATA}
-  COMPONENT runtime)
+  COMPONENT ${data})
