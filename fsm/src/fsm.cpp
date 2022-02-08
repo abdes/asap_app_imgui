@@ -12,8 +12,10 @@
 
 #include <common/compilers.h>
 #include <fsm/fsm.h>
+#include <gsl/gsl>
 
 #include <utility>
+#include <stdexcept>
 
 namespace asap::fsm {
 
@@ -22,6 +24,11 @@ public:
   explicit Impl() = default;
   explicit Impl(std::string description) : what_{std::move(description)} {
   }
+  Impl(const Impl &) = default;
+  Impl(Impl &&) noexcept = default;
+  auto operator=(const Impl &) -> Impl & = default;
+  auto operator=(Impl &&) noexcept -> Impl & = default;
+  virtual ~Impl() = default;
 
   [[nodiscard]] auto What() const -> const char * {
     return what_ ? what_.value().c_str() : "unspecified state machine error";
@@ -33,22 +40,52 @@ private:
 
 StateMachineError::StateMachineError() : pimpl(new Impl()) {
 }
+
 StateMachineError::StateMachineError(std::string description)
     : pimpl(new Impl(std::move(description))) {
 }
-StateMachineError::StateMachineError(const StateMachineError &) = default;
-StateMachineError::StateMachineError(StateMachineError &&) noexcept = default;
-auto StateMachineError::operator=(const StateMachineError &)
-    -> StateMachineError & = default;
-auto StateMachineError::operator=(StateMachineError &&) noexcept
-    -> StateMachineError & = default;
+
+StateMachineError::StateMachineError(const StateMachineError &other)
+    : pimpl(new Impl(*other.pimpl)) {
+}
+
+StateMachineError::StateMachineError(StateMachineError &&other) noexcept
+    : pimpl(other.pimpl) {
+  other.pimpl = nullptr;
+}
+
+auto StateMachineError::operator=(const StateMachineError &rhs)
+    -> StateMachineError & {
+  if (&rhs == this) {
+    return *this;
+  }
+  delete pimpl;
+  pimpl = nullptr;
+  pimpl = gsl::owner<Impl*>(new Impl(*rhs.pimpl));
+  return *this;
+}
+
+auto StateMachineError::operator=(StateMachineError &&rhs) noexcept
+    -> StateMachineError & {
+  if (&rhs == this) {
+    return *this;
+  }
+  delete pimpl;
+  pimpl = rhs.pimpl;
+  rhs.pimpl = nullptr;
+  return *this;
+}
+
 StateMachineError::~StateMachineError() noexcept {
   delete pimpl;
   pimpl = nullptr;
 }
 
 auto StateMachineError::What() const -> const char * {
-  return pimpl->What();
+  if (pimpl != nullptr) {
+    return pimpl->What();
+  }
+  return nullptr;
 }
 
 auto DoNothing::data() noexcept -> const std::any & {

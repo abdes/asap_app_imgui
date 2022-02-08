@@ -47,7 +47,7 @@ asap_add_library(
   # Sources
   "src/fsm.cpp")
 
-target_link_libraries(${MODULE_TARGET_NAME} PUBLIC asap::common)
+target_link_libraries(${MODULE_TARGET_NAME} PRIVATE Microsoft.GSL::GSL PUBLIC asap::common)
 
 target_include_directories(
   ${MODULE_TARGET_NAME}

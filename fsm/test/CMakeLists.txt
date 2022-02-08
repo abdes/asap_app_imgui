@@ -15,6 +15,7 @@ asap_add_test(
   UNIT_TEST
   VALGRIND_MEMCHECK
   SRCS
+  "state_machine_error_test.cpp"
   "fsm_test.cpp"
   "fsm_example_test.cpp"
   "main.cpp"

@@ -105,7 +105,7 @@ public:
   StateMachineError(const StateMachineError &);
   StateMachineError(StateMachineError &&) noexcept;
 
-  auto operator=(const StateMachineError &) -> StateMachineError &;
+  auto operator=(const StateMachineError&) -> StateMachineError &;
   auto operator=(StateMachineError &&) noexcept -> StateMachineError &;
 
   virtual ~StateMachineError() noexcept;
