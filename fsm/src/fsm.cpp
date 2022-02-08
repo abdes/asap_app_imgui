@@ -14,8 +14,8 @@
 #include <fsm/fsm.h>
 #include <gsl/gsl>
 
-#include <utility>
 #include <stdexcept>
+#include <utility>
 
 namespace asap::fsm {
 
@@ -28,7 +28,7 @@ public:
   Impl(Impl &&) noexcept = default;
   auto operator=(const Impl &) -> Impl & = default;
   auto operator=(Impl &&) noexcept -> Impl & = default;
-  virtual ~Impl() = default;
+  virtual ~Impl();
 
   [[nodiscard]] auto What() const -> const char * {
     return what_ ? what_.value().c_str() : "unspecified state machine error";
@@ -37,6 +37,9 @@ public:
 private:
   std::optional<std::string> what_;
 };
+// Out-of-line so we get the vtable to be emitted only once and avoid clang
+// warning :-)
+StateMachineError::Impl::~Impl() = default;
 
 StateMachineError::StateMachineError() : pimpl(new Impl()) {
 }
@@ -61,7 +64,7 @@ auto StateMachineError::operator=(const StateMachineError &rhs)
   }
   delete pimpl;
   pimpl = nullptr;
-  pimpl = gsl::owner<Impl*>(new Impl(*rhs.pimpl));
+  pimpl = gsl::owner<Impl *>(new Impl(*rhs.pimpl));
   return *this;
 }
 
