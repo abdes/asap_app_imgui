@@ -283,7 +283,7 @@ include(SphinxGeneration)
 
 # Setup sphinx doc master target and add other submodules as dependencies
 if(SPHINX_FOUND)
-  asap_with_sphinx("master")
+  asap_with_sphinx("${META_PROJECT_NAME}")
 
   # Add a target for copying the index.html from the doc dir to the sphinx build
   # dir. A dependency on this target will be added to the master sphinx target.
@@ -296,7 +296,7 @@ if(SPHINX_FOUND)
                     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
 
   add_dependencies(
-    master_sphinx
+    ${META_PROJECT_NAME}_sphinx
     copy_doc_index
     # Hardcode `asap` in the module name as we do not want this prefix to change
     # with the forked project name.
