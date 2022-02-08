@@ -13,11 +13,45 @@
 #include <common/compilers.h>
 #include <fsm/fsm.h>
 
-auto asap::fsm::StateMachineError::What() const -> const char * {
-  return what_ ? what_.value().c_str() : "unspecified state machine error";
+#include <utility>
+
+namespace asap::fsm {
+
+class StateMachineError::Impl {
+public:
+  explicit Impl() = default;
+  explicit Impl(std::string description) : what_{std::move(description)} {
+  }
+
+  [[nodiscard]] auto What() const -> const char * {
+    return what_ ? what_.value().c_str() : "unspecified state machine error";
+  }
+
+private:
+  std::optional<std::string> what_;
+};
+
+StateMachineError::StateMachineError() : pimpl(new Impl()) {
+}
+StateMachineError::StateMachineError(std::string description)
+    : pimpl(new Impl(std::move(description))) {
+}
+StateMachineError::StateMachineError(const StateMachineError &) = default;
+StateMachineError::StateMachineError(StateMachineError &&) noexcept = default;
+auto StateMachineError::operator=(const StateMachineError &)
+    -> StateMachineError & = default;
+auto StateMachineError::operator=(StateMachineError &&) noexcept
+    -> StateMachineError & = default;
+StateMachineError::~StateMachineError() noexcept {
+  delete pimpl;
+  pimpl = nullptr;
 }
 
-auto asap::fsm::DoNothing::data() noexcept -> const std::any & {
+auto StateMachineError::What() const -> const char * {
+  return pimpl->What();
+}
+
+auto DoNothing::data() noexcept -> const std::any & {
   ASAP_DIAGNOSTIC_PUSH
 #if defined(ASAP_CLANG_VERSION)
   ASAP_PRAGMA(clang diagnostic ignored "-Wexit-time-destructors")
@@ -27,3 +61,5 @@ auto asap::fsm::DoNothing::data() noexcept -> const std::any & {
   ASAP_DIAGNOSTIC_POP
   return data_;
 }
+
+} // namespace asap::fsm

@@ -97,20 +97,18 @@ using Status =
  *
  * \see StateMachine::Handle
  */
-class StateMachineError {
+class ASAP_FSM_API StateMachineError {
 public:
-  StateMachineError() = default;
-  explicit StateMachineError(std::string description)
-      : what_{std::move(description)} {
-  }
+  StateMachineError();
+  explicit StateMachineError(std::string description);
 
-  StateMachineError(const StateMachineError &) = default;
-  StateMachineError(StateMachineError &&) = default;
+  StateMachineError(const StateMachineError &);
+  StateMachineError(StateMachineError &&) noexcept;
 
-  auto operator=(const StateMachineError &) -> StateMachineError & = default;
-  auto operator=(StateMachineError &&) -> StateMachineError & = default;
+  auto operator=(const StateMachineError &) -> StateMachineError &;
+  auto operator=(StateMachineError &&) noexcept -> StateMachineError &;
 
-  virtual ~StateMachineError() noexcept = default;
+  virtual ~StateMachineError() noexcept;
 
   /*!
    * \brief Provides an explanatory message about the error.
@@ -124,19 +122,18 @@ public:
    * from which it is obtained is destroyed, or until a non-const member
    * function on the exception object is called.
    */
-  [[nodiscard]] virtual ASAP_FSM_API auto What() const -> const char *;
-
-protected:
-  /*!
-   * \brief Called from derived exception classes to populate the error message
-   * with meaningful information.
-   */
-  ASAP_FSM_API void What(std::string description) {
-    what_.emplace(std::move(description));
-  }
+  [[nodiscard]] virtual auto What() const -> const char *;
 
 private:
-  std::optional<std::string> what_;
+  // Internal implementation class.
+  // We're using the pimpl idiom here because this is a throwable class, that
+  // will create issues with MSVC/clang/GCC when it comes to visibility. The
+  // whole class must be exported for GCC/clang and MSVC does not like exported
+  // classes with members using a type that is not an exported class.
+  class Impl;
+
+  // Pointer to the internal implementation
+  Impl *pimpl;
 };
 
 /*!

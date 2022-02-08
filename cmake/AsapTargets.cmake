@@ -111,7 +111,10 @@ function(asap_add_library target)
     PROPERTIES FOLDER "Libraries"
                VERSION ${META_MODULE_VERSION}
                SOVERSION ${META_MODULE_VERSION_MAJOR}
-               DEBUG_POSTFIX "d")
+               DEBUG_POSTFIX "d"
+               CXX_VISIBILITY_PRESET hidden
+               VISIBILITY_INLINES_HIDDEN YES
+  )
 
   # Generate export headers for the library
   asap_generate_export_headers(${target} ${META_MODULE_NAME})
