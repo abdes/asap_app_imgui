@@ -87,8 +87,8 @@
 
 // Exclude internal macros from doxygen documentation
 #if !defined(DOXYGEN_DOCUMENTATION_BUILD)
-#define ASAP_INTERNAL_FATAL_CHECK(cond, msg) ASSERT_TRUE(cond) << msg;
-#define ASAP_INTERNAL_NON_FATAL_CHECK(cond, msg) EXPECT_TRUE(cond) << msg;
+#define ASAP_INTERNAL_FATAL_CHECK(cond, msg) ASSERT_TRUE(cond) << (msg);
+#define ASAP_INTERNAL_NON_FATAL_CHECK(cond, msg) EXPECT_TRUE(cond) << (msg);
 #endif // DOXYGEN_DOCUMENTATION_BUILD
 
 // NOLINTEND(cppcoreguidelines-macro-usage)

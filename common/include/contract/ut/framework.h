@@ -44,7 +44,7 @@ void ASAP_COMMON_API SetVerbosity(enum Verbosity verbosity);
  * handler that allows to test the contract checking assertions without the need
  * for sophisticated death test features from the unit testing framework.
  *
- * Here is an example of its usage with the Google Test frameowk:
+ * Here is an example of its usage with the Google Test framework:
  *
  * ```
  * auto main(int argc, char **argv) -> int {
@@ -97,14 +97,12 @@ extern ASAP_COMMON_API jmp_buf jmp_env;
     if (!setjmp(&asap::contract::details::jmp_env[0])) {                       \
       call;                                                                    \
       /* This will never be reached if a violation occurs. The handler will    \
-       * call longjmp with a */                                                \
-      /* non - zero return value, causing the other branch after setjmp to be  \
-       * executed.         */                                                  \
+       * call longjmp with a non-zero return value, causing the other branch   \
+       * after setjmp to be */                                                 \
       violation_detected = 0;                                                  \
     } else {                                                                   \
       /* This branch is executed when longjmp from the handler returns a       \
-       * non-zero value         */                                             \
-      /* indicating a violation has occured. */                                \
+       * non-zero value indicating a violation has occurred. */                \
       violation_detected = 1;                                                  \
     }                                                                          \
     check(violation_detected == (expected), msg);                              \

@@ -38,11 +38,11 @@ namespace asap::contract {
 
 /// Encapsulates the information related to a contract violation.
 struct ASAP_COMMON_API Violation {
-  /// The name of the source file in which the violation occured.
+  /// The name of the source file in which the violation occurred.
   const char *file;
-  /// The line number at which the violation occured.
+  /// The line number at which the violation occurred.
   size_t line;
-  /// The function name inside which the contract violation occured.
+  /// The function name inside which the contract violation occurred.
   const char *function;
   /// The type of the violation (`precondition`, `postcondition` or
   /// `assertion`).
@@ -56,7 +56,7 @@ struct ASAP_COMMON_API Violation {
  * at runtime.
  *
  * We expect to have a single violation handler instance in the system, although
- * its iomplementation can be changed at runtime. Therefore, the interface
+ * its implementation can be changed at runtime. Therefore, the interface
  * clearly deletes the copy constructors and assignment operators.
  *
  * \see GetViolationHandler
@@ -258,7 +258,7 @@ ASAP_COMMON_API auto GetViolationHandler() -> ViolationHandler &;
 #endif
 #endif
 
-#if defined(_MSC_VER)
+#if defined(_MSVC_VER)
 #define INTERNAL_ASAP_CONTRACT_HAVE_BUILTIN_ASSUME 1
 #endif
 
