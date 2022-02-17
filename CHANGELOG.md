@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.1](http://github.com/abdes/asap/compare/v4.0.1...v4.0.0) (2022-02-17)
+
+* update the GitHub action for windows build to 2022
+
 ## [4.0.0](http://github.com/abdes/asap/compare/v3.1.2...v4.0.0) (2022-02-17)
 
 ### Features
