@@ -104,7 +104,13 @@ function(asap_add_library target)
   # project scoped name (<project>::<module>) which we will alias to the target
   # name.
   add_library("${META_PROJECT_NAME}::${META_MODULE_NAME}" ALIAS ${target})
-  asap_set_compile_definitions(${target})
+  get_target_property(type ${target} TYPE)
+  if (NOT ${type} STREQUAL "INTERFACE_LIBRARY")
+    # Set some common private compiler defines
+    asap_set_compile_definitions(${target})
+    # Generate export headers for the library
+    asap_generate_export_headers(${target} ${META_MODULE_NAME})
+  endif()
 
   set_target_properties(
     ${target}
@@ -115,9 +121,6 @@ function(asap_add_library target)
                CXX_VISIBILITY_PRESET hidden
                VISIBILITY_INLINES_HIDDEN YES
   )
-
-  # Generate export headers for the library
-  asap_generate_export_headers(${target} ${META_MODULE_NAME})
 endfunction()
 
 function(asap_add_executable target)

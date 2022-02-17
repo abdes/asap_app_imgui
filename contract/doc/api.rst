@@ -6,9 +6,12 @@
      ^ for sub-subsections
      " for paragraphs
 
-###############
-Library Modules
-###############
+*************
+API reference
+*************
 
-:doc:`common <common:api>`
-==========================
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+
+   Contract checking API <api/contract>

@@ -252,13 +252,13 @@ asap_add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest*
                                    /usr/*)
 
 include(FetchContent)
-# We make sure that we have 'thirdparty' in the name so that the targets get
+# We make sure that we have 'third_party' in the name so that the targets get
 # excluded from the generated target lists for the various tools.
 set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
 FetchContent_Declare(
   googletest
   GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG # GoogleTest now follows the Abseil Live at Head philoqqsophy. We
+  GIT_TAG # GoogleTest now follows the Abseil Live at Head philosophy. We
           # recommend using the latest commit in the main branch in your
           # projects.
           origin/main)
@@ -301,7 +301,6 @@ if(SPHINX_FOUND)
     # Hardcode `asap` in the module name as we do not want this prefix to change
     # with the forked project name.
     asap_common_sphinx
-    asap_logging_sphinx
     # Add more submodule documentation targets after this, using variables in
     # the target names consistently with the module's CMakeLists.txt.
   )
@@ -313,9 +312,7 @@ endif()
 # ==============================================================================
 
 add_subdirectory(common)
-add_subdirectory(logging)
-add_subdirectory(fsm)
-add_subdirectory(textwrap)
+add_subdirectory(contract)
 
 # ==============================================================================
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...

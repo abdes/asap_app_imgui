@@ -16,7 +16,6 @@ asap_add_test(
   VALGRIND_MEMCHECK
   SRCS
   "flag_ops_test.cpp"
-  "singleton_test.cpp"
   "overload_test.cpp"
   "main.cpp"
   LINK
@@ -37,5 +36,4 @@ swift_add_valgrind_massif(${MAIN_TEST_TARGET_NAME})
 swift_add_valgrind_callgrind(${MAIN_TEST_TARGET_NAME})
 
 # Also build the tests programs in subdirectories
-add_subdirectory(contract)
 add_subdirectory(mixin)

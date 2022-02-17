@@ -10,9 +10,9 @@
 
 asap_declare_module(
   MODULE_NAME
-  "common"
+  "contract"
   DESCRIPTION
-  "Common functionality for asap based projects"
+  "Contract checking API"
   GITHUB_REPO
   "https://github.com/abdes/asap"
   AUTHOR_MAINTAINER
@@ -20,18 +20,9 @@ asap_declare_module(
   VERSION_MAJOR
   "1"
   VERSION_MINOR
-  "1"
+  "0"
   VERSION_PATCH
   "0")
-
-# ------------------------------------------------------------------------------
-# Code generation
-# ------------------------------------------------------------------------------
-
-# Generate config-header
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/${META_MODULE_NAME}/config.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/include/${META_MODULE_NAME}/config.h)
 
 # ==============================================================================
 # Build instructions
@@ -45,17 +36,29 @@ configure_file(
 # with the forked project name.
 set(MODULE_TARGET_NAME "asap_${META_MODULE_NAME}")
 
-asap_add_library(${MODULE_TARGET_NAME} INTERFACE WARNING)
+asap_add_library(
+  ${MODULE_TARGET_NAME}
+  STATIC
+  SHARED
+  WARNING
+  SOURCES
+  "include/contract/contract.h"
+  "include/contract/ut/gtest.h"
+  "include/contract/ut/framework.h"
+  # Sources
+  "src/contract.cpp"
+  "src/contract_ut.cpp")
 
-target_link_libraries(${MODULE_TARGET_NAME} INTERFACE Microsoft.GSL::GSL)
+target_link_libraries(${MODULE_TARGET_NAME} PUBLIC asap::common)
 
 target_include_directories(
   ${MODULE_TARGET_NAME}
-  INTERFACE $<INSTALL_INTERFACE:include>
+  PUBLIC $<INSTALL_INTERFACE:include>
          $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>)
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_compile_features(${MODULE_TARGET_NAME} INTERFACE cxx_std_17)
+target_compile_features(${MODULE_TARGET_NAME} PUBLIC cxx_std_17)
 
 # common comes directly from asap and is usually kept as is. It is more
 # convenient to simply use it as asap::common
@@ -65,7 +68,7 @@ add_library(asap::${META_MODULE_NAME} ALIAS ${MODULE_TARGET_NAME})
 asap_add_sanitizers(${MODULE_TARGET_NAME})
 
 # Generate module config files for cmake and pkgconfig
-asap_create_module_config_files()
+#asap_create_module_config_files()
 
 # ------------------------------------------------------------------------------
 # Tests
@@ -85,9 +88,9 @@ asap_with_doxygen(
   VERSION
   ${META_MODULE_VERSION}
   TITLE
-  "\"Common Module\""
+  "\"Contract checking API\""
   BRIEF
-  "\"Provides common basic building blocks such as portability, assertions, etc.\""
+  "\"Provides macros and implementation for the contract checking API.\""
   INPUT_PATH
   "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
 
