@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](http://github.com/abdes/asap/compare/v3.1.2...v4.0.0) (2022-02-17)
+
+### Features
+
+* overload pattern for variant visitation on the fly ([53ea7cc](http://github.com/abdes/asap/commit/53ea7cc74e89913cbf59eda2e30bd36c356e6acd))
+* refactor: trim the project to the bare minimum([8d48a56](https://github.com/abdes/asap/commit/8d48a56ef0db2359aa80b5e5b2854802dc6a45f0))
+
+  The intention from the asap base project is to be a template starter repo that
+  can be cloned and used for new projects. The bare minimum is the cmake build
+  infrastructure, documentation, the common submodule and the contract checking
+  assertions submodule.
+
+  Contract checking library is now in a separate submodule to keep the common
+  module as minimal as possible. Projects that do not intend to use contract
+  checking will not have to depend on it.
+
+### Bug Fixes
+
+* use separate sphinx cache dir for each module ([03f36fc](http://github.com/abdes/asap/commit/03f36fc96c78c51b441feb9a7b9c70d19a2125c7))
+
 ## [3.1.2](http://github.com/abdes/asap/compare/v3.1.1...v3.1.2) (2021-12-19)
 
 
