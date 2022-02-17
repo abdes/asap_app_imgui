@@ -3,7 +3,7 @@
      * with overline, for chapters
      = for sections
      - for subsections
-     ^ for subsections
+     ^ for sub-subsections
      " for paragraphs
 
 *******************
@@ -14,38 +14,44 @@ Third party modules
 
 Last Updated on |date|
 
-The `asap` project fully leverage the opensource development model by allowing to easily add third
-party libraries. We want to increase reuse of existing software but not at the cost of adding
-unnecessary complexity to the build environment.
+The `asap` project fully leverage the open source development model by allowing
+to easily add third party libraries. We want to increase reuse of existing
+software but not at the cost of adding unnecessary complexity to the build
+environment.
 
-C++ does not provide any built-in package management mechanism like what we can find in
-`Rust <https://doc.rust-lang.org/cargo/>`_ or `Go <https://go.dev/doc/modules/managing-dependencies>`_.
+C++ does not provide any built-in package management mechanism like what we can
+find in `Rust <https://doc.rust-lang.org/cargo/>`_ or `Go
+<https://go.dev/doc/modules/managing-dependencies>`_.
 
-Over time, many workaround were used to deal with this gap, including git submodules, independent
-package managers such as `conan <https://conan.io/>`_, or even copying the thrid party code or
-binaries into the project.
+Over time, many workaround were used to deal with this gap, including git
+submodules, independent package managers such as `conan <https://conan.io/>`_,
+or even copying the third party code or binaries into the project.
 
-If we want to have any level of real dependency management, we'll need some kind of package
-management. But then, the package manager itself becomes a dependency. Everyone that wants to build
-our project has to install the correct version. If you’re using CI, you have to set up everything
-on the build server as well, which can be a pain.
+If we want to have any level of real dependency management, we'll need some kind
+of package management. But then, the package manager itself becomes a
+dependency. Everyone that wants to build our project has to install the correct
+version. If you’re using CI, you have to set up everything on the build server
+as well, which can be a pain.
 
-It would be nice if we can achieve our goals with just cmake, and that's what we're gonna do. We'll
-go through at least 3 methods of integrating third party libraries/modules.
+It would be nice if we can achieve our goals with just CMake, and that's what
+we're gonna do. We'll go through at least 3 methods of integrating third party
+libraries/modules.
 
 CMake ExternalProject
 =====================
 
-CMake introduced a module called ExternalProject in version 3.0. ExternalProject wraps dependencies
-into a CMake target and allows managing foreign code from your CMakeLists.txt.
+CMake introduced a module called ExternalProject in version 3.0. ExternalProject
+wraps dependencies into a CMake target and allows managing foreign code from
+your CMakeLists.txt.
 
-To use it, one must add a target via ExternalProject_Add(). CMake will then run the following steps
-for this target:
+To use it, one must add a target via ExternalProject_Add(). CMake will then run
+the following steps for this target:
 
-:DOWNLOAD: Download the dependency. Here one can use a version control system or download from an
-  URL.
+:DOWNLOAD: Download the dependency. Here one can use a version control system or
+  download from an URL.
 
-:UPDATE: Update the downloaded code if anything changed since the last CMake run.
+:UPDATE: Update the downloaded code if anything changed since the last CMake
+  run.
 
 :CONFIGURE: Configure the project code.
 
@@ -55,68 +61,76 @@ for this target:
 
 :TEST: (optional) Run tests.
 
-All the above commands are configurable. ExternalProject also allows for custom steps. For more
-information, have a look at the `documentation <https://cmake.org/cmake/help/latest/module/ExternalProject.html>`_.
+All the above commands are configurable. ExternalProject also allows for custom
+steps. For more information, have a look at the `documentation
+<https://cmake.org/cmake/help/latest/module/ExternalProject.html>`_.
 
-This definitely works with one smal issue: when using ExternalProject, all its steps will run at
-build time. This means that CMake downloads and builds your dependencies after the generation step.
-So your dependencies will not be available yet when CMake configures your project. If this is
-acceptable, then ExtenralProject is a go.
+This definitely works with one small issue: when using ExternalProject, all its
+steps will run at build time. This means that CMake downloads and builds your
+dependencies after the generation step. So your dependencies will not be
+available yet when CMake configures your project. If this is acceptable, then
+`ExternalProject` is a go.
 
 CMake FetchContent
 ==================
 
-With version 3.11 CMake introduced a new module:
-`FetchContent <https://cmake.org/cmake/help/latest/module/FetchContent.html>`_. The module offers
-the same functionality as ExternalProject but will download dependencies before the configure step.
+With version 3.11 CMake introduced a new module: `FetchContent
+<https://cmake.org/cmake/help/latest/module/FetchContent.html>`_. The module
+offers the same functionality as ExternalProject but will download dependencies
+before the configure step.
 
-Here is an example of how to use it to fetch, configure, build and make available the Google Test
-libraries in the project.
+Here is an example of how to use it to fetch, configure, build and make
+available the Google Test libraries in the project.
 
-.. code-block:: cmake
+.. code-block:: CMake
 
   include(FetchContent)
-  # We make sure that we have 'thirdparty' in the name so that the targets get excluded from the
-  # generated target lists for the various tools.
+  # We make sure that we have 'thirdparty' in the name so that the targets get
+  # excluded from the generated target lists for the various tools.
   set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG # GoogleTest now follows the Abseil Live at Head philosophy. We recommend using the latest
-            # commit in the main branch in your projects.
-            origin/main)
+    GIT_TAG # GoogleTest now follows the Abseil Live at Head philosophy. We
+            # recommend using the latest commit in the main branch in your
+            # projects.
+    origin/main)
   # For Windows: Prevent overriding the parent project's compiler/linker settings
   set(gtest_force_shared_crt
       ON
       CACHE BOOL "" FORCE)
   FetchContent_MakeAvailable(googletest)
 
-`FetchContent` works very well but there are a couple of things to keep in mind when using it:
+`FetchContent` works very well but there are a couple of things to keep in mind
+when using it:
 
 - **Downloading requires an internet connection**
-  Of course, you have to be online for first downloading your dependencies. Compared to using
-  git submodules, this requirement is now hidden. So you might forget about it when building your
-  code. To mitigate this problem, there are options we can use:
+  Of course, you have to be online for first downloading your dependencies.
+  Compared to using git submodules, this requirement is now hidden. So you might
+  forget about it when building your code. To mitigate this problem, there are
+  options we can use:
 
   - `FETCHCONTENT_FULLY_DISCONNECTED=ON` will skip the DOWNLOAD and UPDATE steps
   - `FETCHCONTENT_UPDATES_DISCONNECTED=ON` will skip the UPDATE step
 
 - **The library has to be installable**
-  Every once in a while you will come across libraries that are missing the call to install() in
-  their CMakeLists.txt. In this case, FetchContent does not know how to copy the built code into the
-  install folder and will fail.
+  Every once in a while you will come across libraries that are missing the call
+  to install() in their CMakeLists.txt. In this case, FetchContent does not know
+  how to copy the built code into the install folder and will fail.
 
-FetchContent works best with CMake based dependencies. I haven’t had a chance to test it with
-libraries that are not built with CMake. But I would expect that some extra configuration is necessary to make it work.
+FetchContent works best with CMake based dependencies. I haven’t had a chance to
+test it with libraries that are not built with CMake. But I would expect that
+some extra configuration is necessary to make it work.
 
 Git submodules
 ==============
 
-For dependencies with a modern CMake setup, this is enough to make it available to your project.
-Several of the thrid party dependencies used in `asap` are integrated this way. It's very simple to
-integrate in the master project CMakeLists.txt, just like adding a regular module in a subdirectory.
+For dependencies with a modern CMake setup, this is enough to make it available
+to your project. Several of the third party dependencies used in `asap` are
+integrated this way. It's very simple to integrate in the master project
+CMakeLists.txt, just like adding a regular module in a subdirectory.
 
-.. code-block:: cmake
+.. code-block:: CMake
 
   # ---------------------------------------------
   # Third party modules
@@ -124,9 +138,10 @@ integrate in the master project CMakeLists.txt, just like adding a regular modul
 
   add_subdirectory(third_party)
 
-To keep third party modules configuration in a single place, all modules are located under the
-```third_party``` subdirectory. That directory has a `CMakeLists.txt` file which only contains
-configuration for third party modules before they are included. Here is an example for `spdlog`:
+To keep third party modules configuration in a single place, all modules are
+located under the ```third_party``` subdirectory. That directory has a
+`CMakeLists.txt` file which only contains configuration for third party modules
+before they are included. Here is an example for `spdlog`:
 
 .. code-block::
 
@@ -157,18 +172,20 @@ configuration for third party modules before they are included. Here is an examp
 
   add_subdirectory(spdlog)
 
-This approach also works well and is the preferred approach for modules that use cmake as their
-build system. It does however require some familiarity with git submodules.
+This approach also works well and is the preferred approach for modules that use
+CMake as their build system. It does however require some familiarity with git
+submodules.
 
 .. tip::
 
-  Visit the `Git Submodule Tutorial <https://git.wiki.kernel.org/index.php/GitSubmoduleTutorial>`_.
+  Visit the `Git Submodule Tutorial
+  <https://git.wiki.kernel.org/index.php/GitSubmoduleTutorial>`_.
 
 Git configuration
 -----------------
 
-To make the work with git submodules more reliable, it is strongly recommended to have the following
-git configuration setup:
+To make the work with git submodules more reliable, it is strongly recommended
+to have the following git configuration setup:
 
 .. prompt:: shell, $
 
@@ -184,12 +201,13 @@ Adding submodules is easy:
 
   git submodule add https://github.com/gabime/spdlog.git
 
-This will have created a .gitmodules in the project directory if none already exists. Future
-cloning of the project will automatically add the submodules while fetching the project repo.
+This will have created a .gitmodules in the project directory if none already
+exists. Future cloning of the project will automatically add the submodules
+while fetching the project repo.
 
-By default, submodules will add the subproject into a directory named the same as the repository,
-in this case `spdlog`. You can add a different path at the end of the command if you want it to go
-elsewhere.
+By default, submodules will add the sub-project into a directory named the same
+as the repository, in this case `spdlog`. You can add a different path at the
+end of the command if you want it to go elsewhere.
 
 Finally we can commit the changes.
 
@@ -200,13 +218,15 @@ Finally we can commit the changes.
 Grabbing updates
 ----------------
 
-When pulling updates from the conatiner repo's remote, Git auto-fetches, but does not auto-update.
-The local cache is up-to-date with the submodule’s remote, but the submodule’s working directory
-stays with its former contents. Although this auto-fetching is limited to already-known submodules:
-any new ones, not yet copied into local configuration, are not auto-fetched.
+When pulling updates from the container repo's remote, Git auto-fetches, but
+does not auto-update. The local cache is up-to-date with the submodule’s remote,
+but the submodule’s working directory stays with its former contents. Although
+this auto-fetching is limited to already-known submodules: any new ones, not yet
+copied into local configuration, are not auto-fetched.
 
-If you don’t explicitly update the submodule’s working directory, your next container commit will
-regress the submodule. Is is therefore mandatory that you finalize the update.
+If you don’t explicitly update the submodule’s working directory, your next
+container commit will regress the submodule. Is is therefore mandatory that you
+finalize the update.
 
 .. prompt:: shell, $
 

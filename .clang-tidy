@@ -12,6 +12,7 @@ Checks: >
     readability-*,
     -cppcoreguidelines-macro-usage,
     -hicpp-signed-bitwise,
+    -hicpp-exception-baseclass,
     -readability-function-cognitive-complexity,
     -google-runtime-references
 HeaderFilterRegex: ".*/[common|logging]/.*"

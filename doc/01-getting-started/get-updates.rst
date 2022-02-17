@@ -3,7 +3,7 @@
      * with overline, for chapters
      = for sections
      - for subsections
-     ^ for subsections
+     ^ for sub-subsections
      " for paragraphs
 
 .. _get-updates:
@@ -16,17 +16,18 @@ Get updates
 
 Last Updated on |date|
 
-If you have properly followed the instructions when :ref:`get-the-code`, you should have a fork
-setup with the original `asap` as its upstream, thus allowing you to sync updates that may have been
-made in `asap` after you forked it.
+If you have properly followed the instructions when :ref:`get-the-code`, you
+should have a fork setup with the original `asap` as its upstream, thus allowing
+you to sync updates that may have been made in `asap` after you forked it.
 
-Syncing your fork to keep it up-to-date with the upstream repository can be done from the Github web
-UI or from the command line. Both methods are described in detail at the GitHub `Syncing a fork
+Syncing your fork to keep it up-to-date with the upstream repository can be done
+from the Github web UI or from the command line. Both methods are described in
+detail at the GitHub `Syncing a fork
 <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork>`_
 documentation page.
 
-The following steps provide a summary of the command line method, assuming that the branch being
-worked on in your forked project is the `develop` branch.
+The following steps provide a summary of the command line method, assuming that
+the branch being worked on in your forked project is the `develop` branch.
 
 .. prompt:: bash $ auto
 
@@ -40,7 +41,7 @@ worked on in your forked project is the `develop` branch.
     3d8ca08..a085b56  develop    -> upstream/develop
 
 .. prompt:: bash $ auto
-  
+
   $ git checkout develop
   Switched to branch 'main'
 
@@ -54,5 +55,6 @@ worked on in your forked project is the `develop` branch.
 
 .. tip::
 
-  The example uses `upstream/master` as the branch with which the fork is kept in sync. You may want
-  to use `upstream/develop` if you want to live on the cutting edge of `asap` features.
+  The example uses `upstream/master` as the branch with which the fork is kept
+  in sync. You may want to use `upstream/develop` if you want to live on the
+  cutting edge of `asap` features.

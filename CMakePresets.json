@@ -8,7 +8,7 @@
   "configurePresets": [
     {
       "name": "base",
-      "description": "Using compilers: C = /usr/bin/clang-14, CXX = /usr/bin/clang++-14",
+      "description": "Base preset",
       "hidden": true,
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/out/build/${presetName}",
@@ -120,7 +120,12 @@
         "debug",
         "compiler-clang",
         "code-coverage"
-      ]
+      ],
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
+      }
     },
     {
       "name": "dev-mac",
@@ -145,7 +150,12 @@
         "debug",
         "compiler-clang",
         "code-coverage"
-      ]
+      ],
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
+      }
     },
     {
       "name": "dev-gcc",
@@ -155,7 +165,12 @@
         "debug",
         "compiler-gcc",
         "code-coverage"
-      ]
+      ],
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
+      }
     },
     {
       "name": "dev-valgrind",
@@ -176,6 +191,11 @@
           "Linux",
           "Darwin"
         ]
+      },
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
       }
     },
     {
@@ -198,6 +218,11 @@
           "Linux",
           "Darwin"
         ]
+      },
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
       }
     },
     {
@@ -218,6 +243,11 @@
           "Linux",
           "Darwin"
         ]
+      },
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
       }
     },
     {
@@ -236,7 +266,12 @@
         "base",
         "release",
         "compiler-clang"
-      ]
+      ],
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
+      }
     },
     {
       "name": "rel-mac",
@@ -266,7 +301,7 @@
         "dox",
         "sphinx"
       ],
-      "verbose": true
+      "verbose": false
     },
     {
       "name": "dev-windows",

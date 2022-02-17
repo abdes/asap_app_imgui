@@ -32,15 +32,6 @@ rst_epilog = """
 .. |release| replace:: {1}
 """.format(version, release)
 
-intersphinx_mapping = {
-    'common': (
-        '@SPHINX_BUILD_DIR@/asap_common/html',
-        '@SPHINX_BUILD_DIR@/asap_common/html/objects.inv'),
-    'logging': (
-        '@SPHINX_BUILD_DIR@/asap_logging/html',
-        '@SPHINX_BUILD_DIR@/asap_logging/html/objects.inv')
-}
-
 # -- General configuration ---------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -131,8 +122,11 @@ html_theme_options = {
 
 # -- Options for intersphinx extension ---------------------------------------
 
-# Example configuration for intersphinx: refer to the Python standard library.
-#intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {
+    'common': (
+        '@SPHINX_BUILD_DIR@/asap_common/html',
+        '@SPHINX_BUILD_DIR@/asap_common/html/objects.inv')
+}
 
 # -- Options for todo extension ----------------------------------------------
 

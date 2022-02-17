@@ -3,7 +3,7 @@
      * with overline, for chapters
      = for sections
      - for subsections
-     ^ for subsubsections
+     ^ for sub-subsections
      " for paragraphs
 
 ###############
@@ -12,6 +12,3 @@ Library Modules
 
 :doc:`common <common:api>`
 ==========================
-
-:doc:`logging <logging:api>`
-============================

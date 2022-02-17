@@ -3,7 +3,7 @@
      * with overline, for chapters
      = for sections
      - for subsections
-     ^ for subsubsections
+     ^ for sub-subsections
      " for paragraphs
 
 ################
@@ -26,11 +26,13 @@ Developer Guides
 
 :doc:`Development workflow <devflow>`
 -------------------------------------
-*a possible workflow to manage the development and release processes in the project.*
+*a possible workflow to manage the development and release processes in the
+project.*
 
 :doc:`Modules <modules>`
 -------------------------------------
-*understand how to add/remove modules and how they get integrated into the build system.*
+*understand how to add/remove modules and how they get integrated into the build
+system.*
 
 :doc:`Third-party modules <modules>`
 -------------------------------------

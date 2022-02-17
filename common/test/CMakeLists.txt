@@ -1,16 +1,12 @@
-# ~~~
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
 # SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
-# ~~~
-#        Copyright The Authors 2018.
-#    Distributed under the 3-Clause BSD License.
-#    (See accompanying file LICENSE or copy at
-#   https://opensource.org/licenses/BSD-3-Clause)
-# ~~~
-
-# ==================================================================================================
+# ==============================================================================
 # Build instructions
-# ==================================================================================================
+# ==============================================================================
 
 set(MAIN_TEST_TARGET_NAME ${MODULE_TARGET_NAME}_test)
 
@@ -20,7 +16,7 @@ asap_add_test(
   VALGRIND_MEMCHECK
   SRCS
   "flag_ops_test.cpp"
-  "singleton_test.cpp"
+  "overload_test.cpp"
   "main.cpp"
   LINK
   asap::common
@@ -39,5 +35,5 @@ asap_add_sanitizers(${MAIN_TEST_TARGET_NAME})
 swift_add_valgrind_massif(${MAIN_TEST_TARGET_NAME})
 swift_add_valgrind_callgrind(${MAIN_TEST_TARGET_NAME})
 
-# Also build the tests programs in contract subdirectory
-add_subdirectory(contract)
+# Also build the tests programs in subdirectories
+add_subdirectory(mixin)
