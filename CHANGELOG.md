@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.2](http://github.com/abdes/asap/compare/v4.0.1...v4.0.2) (2022-02-17)
+
+This is a patch update to fix minor issues in the documentation files and to 
+refactor the docs for easier maintenance and use in forked projects.
+
+### Bug Fixes
+
+* contract api docs now in contract module ([d3366bd](http://github.com/abdes/asap/commit/d3366bd846d66486b2fcf98f36fd741452be8516))
+* keep `src` even when empty for doxygen not to complain ([be28f42](http://github.com/abdes/asap/commit/be28f429eddde8f258a08e84722e4fcaf975b384))
+
 ## [4.0.1](http://github.com/abdes/asap/compare/v4.0.1...v4.0.0) (2022-02-17)
 
 * update the GitHub action for windows build to 2022
