@@ -125,7 +125,10 @@ html_theme_options = {
 intersphinx_mapping = {
     'common': (
         '@SPHINX_BUILD_DIR@/asap_common/html',
-        '@SPHINX_BUILD_DIR@/asap_common/html/objects.inv')
+        '@SPHINX_BUILD_DIR@/asap_common/html/objects.inv'),
+    'contract': (
+        '@SPHINX_BUILD_DIR@/asap_contract/html',
+        '@SPHINX_BUILD_DIR@/asap_contract/html/objects.inv'),
 }
 
 # -- Options for todo extension ----------------------------------------------

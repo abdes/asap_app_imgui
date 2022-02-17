@@ -15,7 +15,7 @@ Modules
 Last Updated on |date|
 
 The `asap` project architecture adopts a modular approach as described in
-:doc:`/01-getting-started/structure` document. This structure allows you to
+:doc:`/getting-started/structure` document. This structure allows you to
 easily add, remove and compose modules inside the project.
 
 Adding a module
