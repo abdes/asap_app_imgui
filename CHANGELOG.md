@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.1.1](http://github.com/abdes/asap/compare/v4.1.0...v4.1.1) (2022-02-18)
+
+* docs: use submodule documentation deployment urls for inter-sphinx
+  configuration. using the local build directory will result in the deployed
+  documentation to still be dependent on the build paths.
+
 ## [4.1.0](http://github.com/abdes/asap/compare/v4.0.2...v4.1.0) (2022-02-18)
 
 * improvements and bug fixes in the documentation
