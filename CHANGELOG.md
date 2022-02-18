@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [4.0.2](http://github.com/abdes/asap/compare/v4.0.1...v4.0.2) (2022-02-17)
+## [4.0.2](http://github.com/abdes/asap/compare/v4.0.1...v4.0.2) (2022-02-17)
 
 This is a patch update to fix minor issues in the documentation files and to 
 refactor the docs for easier maintenance and use in forked projects.
