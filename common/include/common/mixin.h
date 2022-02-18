@@ -11,10 +11,10 @@
  *
  * The idea with mix-ins is to provide a bunch of primitive classes, where each
  * of them models a basic orthogonal concept, and be able to stick them together
- * to compose more complex classes with just the functionality you want -- sort
- * of like Lego. The primitive classes themselves are meant to be used as
- * building blocks. This is extensible since later on you can add other
- * primitive classes to the collection without affecting the existing ones.
+ * to compose more complex classes with just the functionality you want. The
+ * primitive classes themselves are meant to be used as building blocks. This is
+ * extensible since later on you can add other primitive classes to the
+ * collection without affecting the existing ones.
  *
  * A technique for doing this in C++ is using templates and inheritance. The
  * basic idea here is you connect these building blocks together by providing
