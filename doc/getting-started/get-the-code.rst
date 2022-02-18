@@ -60,7 +60,7 @@ of GitHub to fork the `asap` project.
   recommended to do it immediately after the fork.
 
   Follow the instructions described in `Renaming a repository
-  <https://docs.github.com/en/get-started/quickstart/fork-a-repo>`_ document
+  <https://docs.github.com/en/repositories/creating-and-managing-repositories/renaming-a-repository>`_ document
   from the GitHub documentation.
 
 2. Clone your fork
