@@ -332,7 +332,6 @@ endif()
 # project specifically asks for them
 set(ASAP_COMMON_INSTALL ON)
 add_subdirectory(common)
-add_subdirectory(contract)
 
 # ==============================================================================
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
