@@ -22,7 +22,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.9'
+          python-version: "3.9"
 
       - name: Upgrade pip
         run: |
@@ -51,12 +51,12 @@ jobs:
 
       - name: Build doxygen documentation
         # Build your program with the given configuration
-        run: cmake --build ${{github.workspace}}/build --target dox
+        run: cmake --build ${{github.workspace}}/build --target asap_all_dox
 
       - name: Build sphinx documentation
         # Build your program with the given configuration
-        run: cmake --build ${{github.workspace}}/build --target sphinx
-      
+        run: cmake --build ${{github.workspace}}/build --target asap_all_sphinx
+
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
