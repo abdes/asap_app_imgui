@@ -316,7 +316,7 @@ if(SPHINX_FOUND)
                       DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
 
     add_dependencies(
-      ${META_PROJECT_NAME}_master_sphinx copy_doc_index
+      ${META_PROJECT_ID}_master_sphinx copy_doc_index
       # Add more submodule documentation targets after this, using variables in
       # the target names consistently with the module's CMakeLists.txt.
     )
