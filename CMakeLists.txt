@@ -50,7 +50,17 @@ set(META_CMAKE_INIT_SHA      "${GIT_REV}")
 string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} META_PROJECT_ID)
 string(TOUPPER ${META_PROJECT_ID} META_PROJECT_ID)
 
-message("=> Project : ${META_NAME_VERSION}")
+# Determine if this is built as a subproject  or if it is the master project.
+if(NOT DEFINED ${META_PROJECT_ID}_MASTER_PROJECT)
+  set(${META_PROJECT_ID}_MASTER_PROJECT OFF)
+  if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(${META_PROJECT_ID}_MASTER_PROJECT ON)
+  endif()
+endif()
+
+message(
+  "=> Project : ${META_NAME_VERSION} - master: ${${META_PROJECT_ID}_MASTER_PROJECT}"
+)
 
 # ------------------------------------------------------------------------------
 # Project configuration options
@@ -66,6 +76,10 @@ option(ASAP_WITH_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitiz
 option(ASAP_WITH_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
 option(ASAP_WITH_VALGRIND       "Builds targets with valgrind profilers added"           OFF)
 # cmake-format: on
+
+option(${META_PROJECT_ID}_INSTALL
+       "Generate the install target for this project."
+       ${${META_PROJECT_ID}_MASTER_PROJECT})
 
 # ------------------------------------------------------------------------------
 # Project Declaration
@@ -266,6 +280,9 @@ FetchContent_Declare(
 set(gtest_force_shared_crt
     ON
     CACHE BOOL "" FORCE)
+set(INSTALL_GTEST
+    OFF
+    CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 include(GoogleTest)
 
@@ -301,7 +318,6 @@ if(SPHINX_FOUND)
     # Hardcode `asap` in the module name as we do not want this prefix to change
     # with the forked project name.
     asap_common_sphinx
-    asap_contract_sphinx
     # Add more submodule documentation targets after this, using variables in
     # the target names consistently with the module's CMakeLists.txt.
   )
@@ -312,8 +328,10 @@ endif()
 # Project modules
 # ==============================================================================
 
+# By default the common module will not define install targets unless the
+# project specifically asks for them
+set(ASAP_COMMON_INSTALL ON)
 add_subdirectory(common)
-add_subdirectory(contract)
 
 # ==============================================================================
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
@@ -325,40 +343,49 @@ asap_create_clang_tidy_targets()
 # ==============================================================================
 # Deployment (global project files)
 # ==============================================================================
-set(runtime "${META_PROJECT_NAME}_runtime")
-set(dev "${META_PROJECT_NAME}_dev")
-set(meta "${META_PROJECT_NAME}_meta")
-set(data "${META_PROJECT_NAME}_date")
 
-# Install version file
-install(
-  FILES "${PROJECT_BINARY_DIR}/VERSION"
-  DESTINATION ${ASAP_INSTALL_ROOT}
-  COMPONENT ${runtime})
+if(${META_PROJECT_ID}_INSTALL)
+  set(runtime "${META_PROJECT_NAME}_runtime")
+  set(dev "${META_PROJECT_NAME}_dev")
+  set(meta "${META_PROJECT_NAME}_meta")
+  set(data "${META_PROJECT_NAME}_date")
 
-# Deploy generated top level headers (always in `asap` directory even when
-# forked)
-install(
-  DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/asap
-  DESTINATION ${ASAP_INSTALL_INCLUDE}
-  COMPONENT ${dev})
+  # Install version file
+  install(
+    FILES "${PROJECT_BINARY_DIR}/VERSION"
+    DESTINATION ${ASAP_INSTALL_ROOT}
+    COMPONENT ${runtime})
 
-# Install the project meta files
-install(
-  FILES AUTHORS
-  DESTINATION ${ASAP_INSTALL_ROOT}
-  COMPONENT meta)
-install(
-  FILES LICENSE
-  DESTINATION ${ASAP_INSTALL_ROOT}
-  COMPONENT meta)
-install(
-  FILES README.md
-  DESTINATION ${ASAP_INSTALL_ROOT}
-  COMPONENT meta)
+  # Deploy generated top level headers (always in `asap` directory even when
+  # forked)
+  install(
+    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/asap
+    DESTINATION ${ASAP_INSTALL_INCLUDE}
+    COMPONENT ${dev})
 
-# Install data
-install(
-  DIRECTORY ${PROJECT_SOURCE_DIR}/data
-  DESTINATION ${ASAP_INSTALL_DATA}
-  COMPONENT ${data})
+  # Install the project meta files
+  install(
+    FILES AUTHORS
+    DESTINATION ${ASAP_INSTALL_ROOT}
+    COMPONENT meta)
+  install(
+    FILES LICENSE
+    DESTINATION ${ASAP_INSTALL_ROOT}
+    COMPONENT meta)
+  install(
+    FILES README.md
+    DESTINATION ${ASAP_INSTALL_ROOT}
+    COMPONENT meta)
+
+  # Install master docs
+  install(
+    DIRECTORY ${SPHINX_BUILD_DIR}/master
+    DESTINATION ${ASAP_INSTALL_DOC}
+    COMPONENT master_docs)
+
+  # Install data
+  install(
+    DIRECTORY ${PROJECT_SOURCE_DIR}/data
+    DESTINATION ${ASAP_INSTALL_DATA}
+    COMPONENT ${data})
+endif()

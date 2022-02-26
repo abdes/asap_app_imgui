@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [4.1.1](http://github.com/abdes/asap/compare/v4.1.0...v4.1.1) (2022-02-18)
+## [4.1.1](http://github.com/abdes/asap/compare/v4.1.0...v4.1.1) (2022-02-18)
 
 * docs: use submodule documentation deployment urls for inter-sphinx
   configuration. using the local build directory will result in the deployed
@@ -72,14 +72,17 @@ refactor the docs for easier maintenance and use in forked projects.
 
 ### ⚠ BREAKING CHANGES
 
-* The logging `Registry` is now implemented as a singleton class and therefore it needs to be
-  accessed via its instance() method. All other methods in its interface are not static anymore.
-* Prefix the build options with `ASAP_` to make them unique and avoid clashing with other projects
-  that may use the generic `OPTION_xxx` names. Additionally, the build presets now always activate
-  building of tests and examples except in release builds where examples are not built.
-* The cmake option `OPTION_SELF_CONTAINED` is no longer relevant as we believe that 3rd party
-  dependencies should be installed using their own projects. In the wrostcase scenario, they should
-  be explicitly added as install instructions to the project in a visible and documented way.
+* The logging `Registry` is now implemented as a singleton class and therefore
+  it needs to be accessed via its instance() method. All other methods in its
+  interface are not static anymore.
+* Prefix the build options with `ASAP_` to make them unique and avoid clashing
+  with other projects that may use the generic `OPTION_xxx` names. Additionally,
+  the build presets now always activate building of tests and examples except in
+  release builds where examples are not built.
+* The cmake option `OPTION_SELF_CONTAINED` is no longer relevant as we believe
+  that 3rd party dependencies should be installed using their own projects. In
+  the worst case scenario, they should be explicitly added as install
+  instructions to the project in a visible and documented way.
 
 ### Features
 
@@ -99,19 +102,21 @@ refactor the docs for easier maintenance and use in forked projects.
 
 ### ⚠ BREAKING CHANGES
 
-* The project requires C++17 as it is widely available in compilers now. Logical traits such as
-  conjunction, disjunction and negation are available from the <type_traits> standard include.
-* major redesign of the cmake build system, many macros and functions have been changed and the
-  build system overall has been simplified.
-* `catch2` has been replaced by Google Test/Mock, which provides more features, less compiler
-  warnings and is more popular. Catch2 or any other framework can still be easily added to an `asap`
-  based project.
-* `hedely` was removed from `common` and was replaced by a much lighter new file `compilers.h`.
-* `nowide` was removed from `common` and will be replaced by the standalone boost nowide library
-  when needed.
-* `filesystem` footprint is too large to be included by default in `asap` starter project. It will
-  be provided separately and a mechanism to easily add it into an `asap` based project will be
-  implemented in a future update.
+* The project requires C++17 as it is widely available in compilers now. Logical
+  traits such as conjunction, disjunction and negation are available from the
+  <type_traits> standard include.
+* major redesign of the cmake build system, many macros and functions have been
+  changed and the build system overall has been simplified.
+* `catch2` has been replaced by Google Test/Mock, which provides more features,
+  less compiler warnings and is more popular. Catch2 or any other framework can
+  still be easily added to an `asap` based project.
+* `hedely` was removed from `common` and was replaced by a much lighter new file
+  `compilers.h`.
+* `nowide` was removed from `common` and will be replaced by the standalone
+  boost nowide library when needed.
+* `filesystem` footprint is too large to be included by default in `asap`
+  starter project. It will be provided separately and a mechanism to easily add
+  it into an `asap` based project will be implemented in a future update.
 
 ### Features
 
@@ -130,8 +135,8 @@ refactor the docs for easier maintenance and use in forked projects.
 * remove logical traits backport
   ([5ed0fe6](http://github.com/abdes/asap/commit/5ed0fe6e9e03399e640221a285f87a1a8a015cd1))
 
-* significantly enhance the documentation, both doxygen based for APIs and sphinx based for the
-  project docs
+* significantly enhance the documentation, both doxygen based for APIs and
+  sphinx based for the project docs
 
 ### Bug Fixes
 
@@ -167,7 +172,7 @@ refactor the docs for easier maintenance and use in forked projects.
 
 * Refactoring of cmake build files.
 * Remove additional warnings from code.
-* Documenattion.
+* Documentation.
 
 ### ⚠ BREAKING CHANGES
 
