@@ -384,8 +384,10 @@ if(${META_PROJECT_ID}_INSTALL)
     COMPONENT master_docs)
 
   # Install data
-  install(
-    DIRECTORY ${PROJECT_SOURCE_DIR}/data
-    DESTINATION ${ASAP_INSTALL_DATA}
-    COMPONENT ${data})
+  if (EXISTS ${PROJECT_SOURCE_DIR}/data)
+    install(
+      DIRECTORY ${PROJECT_SOURCE_DIR}/data
+      DESTINATION ${ASAP_INSTALL_DATA}
+      COMPONENT ${data})
+  endif()
 endif()
