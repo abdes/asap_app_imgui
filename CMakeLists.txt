@@ -315,9 +315,6 @@ if(SPHINX_FOUND)
   add_dependencies(
     master_sphinx
     copy_doc_index
-    # Hardcode `asap` in the module name as we do not want this prefix to change
-    # with the forked project name.
-    asap_common_sphinx
     # Add more submodule documentation targets after this, using variables in
     # the target names consistently with the module's CMakeLists.txt.
   )
@@ -328,10 +325,7 @@ endif()
 # Project modules
 # ==============================================================================
 
-# By default the common module will not define install targets unless the
-# project specifically asks for them
-set(ASAP_COMMON_INSTALL ON)
-add_subdirectory(common)
+# Add project modules here
 
 # ==============================================================================
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
