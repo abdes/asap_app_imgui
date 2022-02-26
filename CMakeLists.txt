@@ -338,7 +338,8 @@ add_subdirectory(common)
 # ==============================================================================
 
 asap_setup_clang_format()
-asap_create_clang_tidy_targets()
+# Enable this target when the project has library with source files (.cpp)
+#asap_create_clang_tidy_targets()
 
 # ==============================================================================
 # Deployment (global project files)
@@ -384,8 +385,10 @@ if(${META_PROJECT_ID}_INSTALL)
     COMPONENT master_docs)
 
   # Install data
-  install(
-    DIRECTORY ${PROJECT_SOURCE_DIR}/data
-    DESTINATION ${ASAP_INSTALL_DATA}
-    COMPONENT ${data})
+  if (EXISTS ${PROJECT_SOURCE_DIR}/data)
+    install(
+      DIRECTORY ${PROJECT_SOURCE_DIR}/data
+      DESTINATION ${ASAP_INSTALL_DATA}
+      COMPONENT ${data})
+  endif()
 endif()
