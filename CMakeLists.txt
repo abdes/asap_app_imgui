@@ -48,7 +48,7 @@ set(META_CMAKE_INIT_SHA      "${GIT_REV}")
 # cmake-format: on
 
 string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} META_PROJECT_ID)
-string(TOUPPER ${META_PROJECT_ID} META_PROJECT_ID)
+string(TOLOWER ${META_PROJECT_ID} META_PROJECT_ID)
 
 # Determine if this is built as a subproject  or if it is the master project.
 if(NOT DEFINED ${META_PROJECT_ID}_MASTER_PROJECT)
