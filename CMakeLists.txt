@@ -225,6 +225,27 @@ endif()
 # Third party modules
 # ------------------------------------------------------------------------------
 
+include(FetchContent)
+# We make sure that we have 'third_party' in the name so that the targets get
+# excluded from the generated target lists for the various tools.
+set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
+FetchContent_Declare(
+  googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG # GoogleTest now follows the Abseil Live at Head philosophy. We
+          # recommend using the latest commit in the main branch in your
+          # projects.
+          origin/main)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt
+    ON
+    CACHE BOOL "" FORCE)
+set(INSTALL_GTEST
+    OFF
+    CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+include(GoogleTest)
+
 add_subdirectory(third_party)
 
 # ------------------------------------------------------------------------------
@@ -264,27 +285,6 @@ include(CTest)
 enable_testing()
 asap_add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest*
                                    /usr/*)
-
-include(FetchContent)
-# We make sure that we have 'third_party' in the name so that the targets get
-# excluded from the generated target lists for the various tools.
-set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
-FetchContent_Declare(
-  googletest
-  GIT_REPOSITORY https://github.com/google/googletest.git
-  GIT_TAG # GoogleTest now follows the Abseil Live at Head philosophy. We
-          # recommend using the latest commit in the main branch in your
-          # projects.
-          origin/main)
-# For Windows: Prevent overriding the parent project's compiler/linker settings
-set(gtest_force_shared_crt
-    ON
-    CACHE BOOL "" FORCE)
-set(INSTALL_GTEST
-    OFF
-    CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googletest)
-include(GoogleTest)
 
 # ==============================================================================
 # Documentation - doxygen, sphinx/breathe/exhale
