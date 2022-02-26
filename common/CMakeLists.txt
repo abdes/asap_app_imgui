@@ -47,8 +47,6 @@ set(MODULE_TARGET_NAME "asap_${META_MODULE_NAME}")
 
 asap_add_library(${MODULE_TARGET_NAME} INTERFACE WARNING)
 
-target_link_libraries(${MODULE_TARGET_NAME} INTERFACE Microsoft.GSL::GSL)
-
 target_include_directories(
   ${MODULE_TARGET_NAME}
   INTERFACE $<INSTALL_INTERFACE:include>
@@ -97,50 +95,50 @@ asap_with_sphinx(${MODULE_TARGET_NAME})
 # Deployment instructions
 # ==============================================================================
 
-set(TARGETS_EXPORT_NAME "${MODULE_TARGET_NAME}Targets")
-set(runtime "${MODULE_TARGET_NAME}_runtime")
-set(dev "${MODULE_TARGET_NAME}_dev")
+if(ASAP_COMMON_INSTALL)
+  set(TARGETS_EXPORT_NAME "${MODULE_TARGET_NAME}Targets")
+  set(runtime "${MODULE_TARGET_NAME}_runtime")
+  set(dev "${MODULE_TARGET_NAME}_dev")
 
-# Library
-install(
-  TARGETS ${MODULE_TARGET_NAME}
-  EXPORT "${TARGETS_EXPORT_NAME}"
-  COMPONENT dev
-  RUNTIME DESTINATION ${ASAP_INSTALL_BIN} COMPONENT ${runtime}
-  LIBRARY DESTINATION ${ASAP_INSTALL_SHARED} COMPONENT ${runtime}
-  ARCHIVE DESTINATION ${ASAP_INSTALL_LIB} COMPONENT ${dev})
+  # Library
+  install(
+    TARGETS ${MODULE_TARGET_NAME}
+    EXPORT "${TARGETS_EXPORT_NAME}"
+    COMPONENT dev
+    RUNTIME DESTINATION ${ASAP_INSTALL_BIN} COMPONENT ${runtime}
+    LIBRARY DESTINATION ${ASAP_INSTALL_SHARED} COMPONENT ${runtime}
+    ARCHIVE DESTINATION ${ASAP_INSTALL_LIB} COMPONENT ${dev})
 
-# Header files
-install(
-  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/${META_MODULE_NAME}
-  DESTINATION ${ASAP_INSTALL_INCLUDE}
-  COMPONENT ${dev}
-  FILES_MATCHING
-  PATTERN "*.h")
+  # Header files
+  install(
+    DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/${META_MODULE_NAME}
+    DESTINATION ${ASAP_INSTALL_INCLUDE}
+    COMPONENT ${dev}
+    FILES_MATCHING
+    PATTERN "*.h")
 
-# Contract library Header files
-install(
-  DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/contract
-  DESTINATION ${ASAP_INSTALL_INCLUDE}
-  COMPONENT ${dev}
-  FILES_MATCHING
-  PATTERN "*.h")
+  # Generated header files
+  install(
+    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/${META_MODULE_NAME}
+    DESTINATION ${ASAP_INSTALL_INCLUDE}
+    COMPONENT ${dev})
 
-# Generated header files
-install(
-  DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/${META_MODULE_NAME}
-  DESTINATION ${ASAP_INSTALL_INCLUDE}
-  COMPONENT ${dev})
+  # Target config
+  install(
+    EXPORT ${TARGETS_EXPORT_NAME}
+    NAMESPACE ${META_PROJECT_NAME}::
+    DESTINATION ${ASAP_INSTALL_CMAKE}/${META_MODULE_NAME}
+    COMPONENT ${dev})
 
-# Target config
-install(
-  EXPORT ${TARGETS_EXPORT_NAME}
-  NAMESPACE ${META_PROJECT_NAME}::
-  DESTINATION ${ASAP_INSTALL_CMAKE}/${META_MODULE_NAME}
-  COMPONENT ${dev})
+  # Package configuration files
+  install(
+    FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}Config.cmake
+          ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}ConfigVersion.cmake
+    DESTINATION ${ASAP_INSTALL_CMAKE}/${META_MODULE_NAME})
 
-# Package configuration files
-install(
-  FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}Config.cmake
-        ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_TARGET_NAME}ConfigVersion.cmake
-  DESTINATION ${ASAP_INSTALL_CMAKE}/${META_MODULE_NAME})
+  # Docs
+  install(
+    DIRECTORY ${SPHINX_BUILD_DIR}/${MODULE_TARGET_NAME}
+    DESTINATION ${ASAP_INSTALL_DOC}
+    COMPONENT ${MODULE_TARGET_NAME}_docs)
+endif()

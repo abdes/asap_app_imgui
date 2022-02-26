@@ -62,12 +62,6 @@ if(SPHINX_FOUND)
     # sphinx target
     add_dependencies(sphinx ${TARGET_NAME}_sphinx)
 
-    # Install sphinx docs
-    install(
-      DIRECTORY ${SPHINX_BUILD_DIR}/${TARGET_NAME}
-      DESTINATION ${ASAP_INSTALL_DOC}
-      COMPONENT ${TARGET_NAME}_docs)
-
   endmacro()
   # We only build documentation through explicit invocation of the sphinx target
   # as it is pretty heavy and requires doxygen to be run before it is invoked.
