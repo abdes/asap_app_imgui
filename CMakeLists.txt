@@ -300,24 +300,27 @@ include(SphinxGeneration)
 
 # Setup sphinx doc master target and add other submodules as dependencies
 if(SPHINX_FOUND)
-  asap_with_sphinx(master)
+  asap_with_sphinx(${META_PROJECT_NAME}_master)
 
   # Add a target for copying the index.html from the doc dir to the sphinx build
   # dir. A dependency on this target will be added to the master sphinx target.
-  add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html
-            ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html)
-  add_custom_target(copy_doc_index ALL
-                    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
+  # !! Only if this is the master project
+  if(${META_PROJECT_ID}_MASTER_PROJECT)
+    add_custom_command(
+      OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
+      COMMAND
+        ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html
+        ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html)
+    add_custom_target(copy_doc_index ALL
+                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
 
-  add_dependencies(
-    master_sphinx
-    copy_doc_index
-    # Add more submodule documentation targets after this, using variables in
-    # the target names consistently with the module's CMakeLists.txt.
-  )
+    add_dependencies(
+      ${META_PROJECT_NAME}_master_sphinx copy_doc_index
+      # Add more submodule documentation targets after this, using variables in
+      # the target names consistently with the module's CMakeLists.txt.
+    )
+  endif()
 
 endif()
 
@@ -333,7 +336,7 @@ endif()
 
 asap_setup_clang_format()
 # Enable this target when the project has library with source files (.cpp)
-#asap_create_clang_tidy_targets()
+# asap_create_clang_tidy_targets()
 
 # ==============================================================================
 # Deployment (global project files)
@@ -379,7 +382,7 @@ if(${META_PROJECT_ID}_INSTALL)
     COMPONENT master_docs)
 
   # Install data
-  if (EXISTS ${PROJECT_SOURCE_DIR}/data)
+  if(EXISTS ${PROJECT_SOURCE_DIR}/data)
     install(
       DIRECTORY ${PROJECT_SOURCE_DIR}/data
       DESTINATION ${ASAP_INSTALL_DATA}
