@@ -84,8 +84,10 @@ function(_module_pkgconfig_files)
   set(MODULE_LINK_LIBS "-l${MODULE_TARGET_NAME}${TARGET_DEBUG_POSTFIX}")
   configure_file(config.pc.in
                  ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_PKGCONFIG_FILE} @ONLY)
-  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_PKGCONFIG_FILE}
-          DESTINATION ${ASAP_INSTALL_PKGCONFIG})
+  if(${META_PROJECT_ID}_INSTALL)
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_PKGCONFIG_FILE}
+            DESTINATION ${ASAP_INSTALL_PKGCONFIG})
+  endif()
 endfunction()
 
 function(asap_create_module_config_files)
@@ -105,7 +107,7 @@ function(asap_add_library target)
   # name.
   add_library("${META_PROJECT_NAME}::${META_MODULE_NAME}" ALIAS ${target})
   get_target_property(type ${target} TYPE)
-  if (NOT ${type} STREQUAL "INTERFACE_LIBRARY")
+  if(NOT ${type} STREQUAL "INTERFACE_LIBRARY")
     # Set some common private compiler defines
     asap_set_compile_definitions(${target})
     # Generate export headers for the library
@@ -119,8 +121,7 @@ function(asap_add_library target)
                SOVERSION ${META_MODULE_VERSION_MAJOR}
                DEBUG_POSTFIX "d"
                CXX_VISIBILITY_PRESET hidden
-               VISIBILITY_INLINES_HIDDEN YES
-  )
+               VISIBILITY_INLINES_HIDDEN YES)
 endfunction()
 
 function(asap_add_executable target)
