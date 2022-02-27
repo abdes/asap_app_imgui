@@ -216,9 +216,11 @@ include(SphinxGeneration)
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
 # ------------------------------------------------------------------------------
 
-asap_setup_clang_format()
-# Enable this target when the project has library with source files (.cpp)
-# asap_create_clang_tidy_targets()
+if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
+  asap_setup_clang_format()
+  # Enable this target when the project has library with source files (.cpp)
+  # asap_create_clang_tidy_targets()
+endif()
 
 # ==============================================================================
 # Third party modules
