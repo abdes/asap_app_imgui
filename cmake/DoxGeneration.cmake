@@ -64,6 +64,7 @@ if(DOXYGEN_FOUND)
   endfunction()
 
   function(_add_doxygen_target MODULE_NAME)
+    message(STATUS "[doxygen] Adding module doxygen target: ${MODULE_NAME}_dox")
     add_custom_target(
       ${MODULE_NAME}_dox
       COMMAND ${CMAKE_COMMAND} -E remove -f "${MODULE_NAME}_Doxyfile.out"
@@ -112,42 +113,46 @@ if(DOXYGEN_FOUND)
     _add_doxygen_target(${x_MODULE_NAME})
   endfunction()
 
-  # We'll make a special script to collect all doxygen warnings from submodules
-  # and print them at the end of the doxygen run. This mwill make it easier to
-  # detect if there were doxygen warnings in the project and eventually fail the
-  # build in a CI environment for example.
+  if(NOT TARGET dox)
+    # The master doxygen target
+    message(STATUS "[doxygen] Adding master doxygen target: dox")
+    add_custom_target(dox)
+    # We don't want it to be rebuilt everytime we build all. Need to explicitly
+    # request it to be built.
+    set_target_properties(dox PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
-  set(COLLECT_WARNINGS_SCRIPT "${DOXYGEN_BUILD_DIR}/collect_warnings.cmake")
-  # cmake-format: off
-  file(WRITE "${COLLECT_WARNINGS_SCRIPT}" " \
-  # Collect warnings from submodules into the consolidated warnings file\n \
-  file(WRITE \"${DOXYGEN_BUILD_DIR}/${MODULE_NAME}/doxygen_warnings.txt\" \"\")\n \
-  file(GLOB_RECURSE DOX_MODULES \"module_warnings.txt\")\n \
-  foreach(MODULE \${DOX_MODULES})\n \
-    message(\"  collecting doxygen warnings from \${MODULE}\")\n \
-    file(READ \"\${MODULE}\" MODULE_WARNINGS)\n \
-    file(APPEND \"${DOXYGEN_BUILD_DIR}/doxygen_warnings.txt\" \"\${MODULE_WARNINGS}\")\n \
-  endforeach(MODULE)\n \
-  file(READ \"${DOXYGEN_BUILD_DIR}/doxygen_warnings.txt\" ALL_WARNINGS)\n \
-  string(COMPARE NOTEQUAL \"\${ALL_WARNINGS}\" \"\" DOXYGEN_HAD_WARNINGS)\n \
-  if(DOXYGEN_HAD_WARNINGS)\n \
-    # Print the warnings\n \
-    message(\"\${ALL_WARNINGS}\")\n \
-  endif(DOXYGEN_HAD_WARNINGS)\n")
-  # cmake-format: on
+    # We'll make a special script to collect all doxygen warnings from
+    # submodules and print them at the end of the doxygen run. This mwill make
+    # it easier to detect if there were doxygen warnings in the project and
+    # eventually fail the build in a CI environment for example.
 
-  # The master doxygen target
-  add_custom_target(dox)
-  # We don't want it to be rebuilt everytime we build all. Need to explicitly
-  # request it to be built.
-  set_target_properties(dox PROPERTIES EXCLUDE_FROM_ALL TRUE)
-  # Custom command to collect warnings and print them
-  add_custom_command(
-    TARGET dox
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -P "${COLLECT_WARNINGS_SCRIPT}"
-    WORKING_DIRECTORY "${DOXYGEN_BUILD_DIR}"
-    COMMENT "Running post-build command for dox")
+    set(COLLECT_WARNINGS_SCRIPT "${DOXYGEN_BUILD_DIR}/collect_warnings.cmake")
+    # cmake-format: off
+    file(WRITE "${COLLECT_WARNINGS_SCRIPT}" " \
+    # Collect warnings from submodules into the consolidated warnings file\n \
+    file(WRITE \"${DOXYGEN_BUILD_DIR}/${MODULE_NAME}/doxygen_warnings.txt\" \"\")\n \
+    file(GLOB_RECURSE DOX_MODULES \"module_warnings.txt\")\n \
+    foreach(MODULE \${DOX_MODULES})\n \
+      message(\"  collecting doxygen warnings from \${MODULE}\")\n \
+      file(READ \"\${MODULE}\" MODULE_WARNINGS)\n \
+      file(APPEND \"${DOXYGEN_BUILD_DIR}/doxygen_warnings.txt\" \"\${MODULE_WARNINGS}\")\n \
+    endforeach(MODULE)\n \
+    file(READ \"${DOXYGEN_BUILD_DIR}/doxygen_warnings.txt\" ALL_WARNINGS)\n \
+    string(COMPARE NOTEQUAL \"\${ALL_WARNINGS}\" \"\" DOXYGEN_HAD_WARNINGS)\n \
+    if(DOXYGEN_HAD_WARNINGS)\n \
+      # Print the warnings\n \
+      message(\"\${ALL_WARNINGS}\")\n \
+    endif(DOXYGEN_HAD_WARNINGS)\n")
+    # cmake-format: on
+
+    # Custom command to collect warnings and print them
+    add_custom_command(
+      TARGET dox
+      POST_BUILD
+      COMMAND ${CMAKE_COMMAND} -P "${COLLECT_WARNINGS_SCRIPT}"
+      WORKING_DIRECTORY "${DOXYGEN_BUILD_DIR}"
+      COMMENT "Running post-build command for dox")
+  endif()
 
 else()
   message(STATUS "WARNING: Doxygen package is not available on this system!")
