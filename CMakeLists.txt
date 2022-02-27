@@ -46,6 +46,7 @@ set(META_VERSION             "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META
 set(META_NAME_VERSION        "${META_PROJECT_NAME} v${META_VERSION} (${META_VERSION_REVISION})")
 set(META_CMAKE_INIT_SHA      "${GIT_REV}")
 # cmake-format: on
+
 string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} META_PROJECT_ID)
 string(TOUPPER ${META_PROJECT_ID} META_PROJECT_ID)
 
@@ -53,7 +54,7 @@ string(TOUPPER ${META_PROJECT_ID} META_PROJECT_ID)
 if(NOT DEFINED ${META_PROJECT_ID}_IS_MASTER_PROJECT)
   set(${META_PROJECT_ID}_IS_MASTER_PROJECT OFF)
   if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-    set(${META_PROJECT_ID}_IS_MASTER_PROJECT TRUE)
+    set(${META_PROJECT_ID}_IS_MASTER_PROJECT ON)
   endif()
 endif()
 
@@ -197,7 +198,6 @@ configure_file(.clangd.in ${CMAKE_SOURCE_DIR}/.clangd @ONLY)
 # enable CTest.  This will set BUILD_TESTING to ON unless otherwise specified on
 # the command line
 include(CTest)
-enable_testing()
 asap_add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest*
                                    /usr/*)
 
@@ -217,9 +217,11 @@ include(SphinxGeneration)
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
 # ------------------------------------------------------------------------------
 
-asap_setup_clang_format()
-# Enable this target when the project has library with source files (.cpp)
-# asap_create_clang_tidy_targets()
+if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
+  asap_setup_clang_format()
+  # Enable this target when the project has library with source files (.cpp)
+  # asap_create_clang_tidy_targets()
+endif()
 
 # ==============================================================================
 # Third party modules
