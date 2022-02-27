@@ -64,6 +64,7 @@ if(DOXYGEN_FOUND)
   endfunction()
 
   function(_add_doxygen_target MODULE_NAME)
+    message(STATUS "[doxygen] Adding module doxygen target: ${MODULE_NAME}_dox")
     add_custom_target(
       ${MODULE_NAME}_dox
       COMMAND ${CMAKE_COMMAND} -E remove -f "${MODULE_NAME}_Doxyfile.out"
@@ -75,7 +76,7 @@ if(DOXYGEN_FOUND)
       COMMENT "Generating doxygen documentation for \"${MODULE_NAME}\""
       VERBATIM)
     set_target_properties(${MODULE_NAME}_dox PROPERTIES EXCLUDE_FROM_ALL TRUE)
-    add_dependencies(${META_PROJECT_ID}_all_dox ${MODULE_NAME}_dox)
+    add_dependencies(dox ${MODULE_NAME}_dox)
   endfunction()
 
   function(asap_with_doxygen)
@@ -112,14 +113,14 @@ if(DOXYGEN_FOUND)
     _add_doxygen_target(${x_MODULE_NAME})
   endfunction()
 
-  # The master doxygen target
-  message(STATUS "Adding master doxygen target: ${META_PROJECT_ID}_all_dox")
-  add_custom_target(${META_PROJECT_ID}_all_dox)
-  # We don't want it to be rebuilt everytime we build all. Need to explicitly
-  # request it to be built.
-  set_target_properties(${META_PROJECT_ID}_all_dox PROPERTIES EXCLUDE_FROM_ALL TRUE)
+  if(NOT TARGET dox)
+    # The master doxygen target
+    message(STATUS "[doxygen] Adding master doxygen target: dox")
+    add_custom_target(dox)
+    # We don't want it to be rebuilt everytime we build all. Need to explicitly
+    # request it to be built.
+    set_target_properties(dox PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
-  if(${META_PROJECT_ID}_MASTER_PROJECT)
     # We'll make a special script to collect all doxygen warnings from
     # submodules and print them at the end of the doxygen run. This mwill make
     # it easier to detect if there were doxygen warnings in the project and
@@ -146,11 +147,11 @@ if(DOXYGEN_FOUND)
 
     # Custom command to collect warnings and print them
     add_custom_command(
-      TARGET ${META_PROJECT_ID}_all_dox
+      TARGET dox
       POST_BUILD
       COMMAND ${CMAKE_COMMAND} -P "${COLLECT_WARNINGS_SCRIPT}"
       WORKING_DIRECTORY "${DOXYGEN_BUILD_DIR}"
-      COMMENT "Running post-build command for ${META_PROJECT_ID}_all_dox")
+      COMMENT "Running post-build command for dox")
   endif()
 
 else()

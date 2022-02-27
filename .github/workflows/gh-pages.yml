@@ -51,11 +51,11 @@ jobs:
 
       - name: Build doxygen documentation
         # Build your program with the given configuration
-        run: cmake --build ${{github.workspace}}/build --target asap_all_dox
+        run: cmake --build ${{github.workspace}}/build --target dox
 
       - name: Build sphinx documentation
         # Build your program with the given configuration
-        run: cmake --build ${{github.workspace}}/build --target asap_all_sphinx
+        run: cmake --build ${{github.workspace}}/build --target sphinx
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
