@@ -110,11 +110,6 @@ include(AsapTargets)
 include(BuildHelpers)
 include(GenerateExportHeader)
 include(CompileOptions)
-include(GoogleSanitizers)
-include(CodeCoverage)
-include(Valgrind)
-include(ClangFormat)
-include(ClangTidy)
 
 # Override the ${META_PROJECT_ID}_INSTALL option to ON/OFF to respectively force
 # install/no-install behavior for this project. This is particularly useful when
@@ -158,6 +153,31 @@ message(
 )
 
 # ------------------------------------------------------------------------------
+# Testing
+# ------------------------------------------------------------------------------
+
+if(ASAP_BUILD_TESTS)
+  include(GoogleSanitizers)
+  include(CodeCoverage)
+  asap_add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest*
+                                     /usr/*)
+  include(Valgrind)
+  include(GoogleTest)
+endif()
+
+# ------------------------------------------------------------------------------
+# Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
+# ------------------------------------------------------------------------------
+
+if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
+  include(ClangFormat)
+  include(ClangTidy)
+  asap_setup_clang_format()
+  # Enable this target when the project has library with source files (.cpp)
+  # asap_create_clang_tidy_targets()
+endif()
+
+# ------------------------------------------------------------------------------
 # RPATH setup
 # ------------------------------------------------------------------------------
 
@@ -192,16 +212,6 @@ configure_file(templates/version.h.in
 configure_file(.clangd.in ${CMAKE_SOURCE_DIR}/.clangd @ONLY)
 
 # ------------------------------------------------------------------------------
-# Test targets
-# ------------------------------------------------------------------------------
-
-# enable CTest.  This will set BUILD_TESTING to ON unless otherwise specified on
-# the command line
-include(CTest)
-asap_add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest*
-                                   /usr/*)
-
-# ------------------------------------------------------------------------------
 # Documentation - doxygen, sphinx/breathe/exhale
 # ------------------------------------------------------------------------------
 
@@ -212,16 +222,6 @@ include(DoxGeneration)
 # Sphinx/breathe/exhale
 set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx")
 include(SphinxGeneration)
-
-# ------------------------------------------------------------------------------
-# Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
-# ------------------------------------------------------------------------------
-
-if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
-  asap_setup_clang_format()
-  # Enable this target when the project has library with source files (.cpp)
-  # asap_create_clang_tidy_targets()
-endif()
 
 # ==============================================================================
 # Third party modules
