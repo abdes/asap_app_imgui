@@ -152,6 +152,11 @@ message(
   "-- Building for ${CMAKE_BUILD_TYPE} with OPTION_CONTRACT_MODE : ${OPTION_CONTRACT_MODE}"
 )
 
+include(FetchContent)
+# We make sure that we have 'third_party' in the name so that the targets get
+# excluded from the generated target lists for the various tools.
+set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
+
 # ------------------------------------------------------------------------------
 # Testing
 # ------------------------------------------------------------------------------
@@ -162,7 +167,9 @@ if(ASAP_BUILD_TESTS)
   asap_add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest*
                                      /usr/*)
   include(Valgrind)
+  include(FetchGoogleTest)
   include(GoogleTest)
+  include(CTest)
 endif()
 
 # ------------------------------------------------------------------------------
