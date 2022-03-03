@@ -2,8 +2,7 @@
 
 ![Start Now!!](doc/_static/logo.png "ASAP Logo")
 
-[![Linux Build (Ubuntu latest)](https://github.com/abdes/asap/actions/workflows/linux-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap/actions/workflows/linux-build.yml)
-[![Windows Build (latest)](https://github.com/abdes/asap/actions/workflows/windows-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap/actions/workflows/windows-build.yml)
+[![Build Matrix](https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap/actions/workflows/cmake-build.yml)
 
 ## [Project Documentation](https://abdes.github.io/asap/)
 
