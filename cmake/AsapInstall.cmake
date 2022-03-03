@@ -73,19 +73,6 @@ if(${META_PROJECT_ID}_INSTALL)
     set(data "${META_PROJECT_NAME}_data")
     set(docs "${META_PROJECT_NAME}_docs")
 
-    # Install version file
-    install(
-      FILES "${PROJECT_BINARY_DIR}/VERSION"
-      DESTINATION ${ASAP_INSTALL_ROOT}
-      COMPONENT ${runtime})
-
-    # Deploy generated top level headers (always in `asap` directory even when
-    # forked)
-    install(
-      DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/asap
-      DESTINATION ${ASAP_INSTALL_INCLUDE}
-      COMPONENT ${dev})
-
     # Install the project meta files
     install(
       FILES AUTHORS
@@ -104,10 +91,12 @@ if(${META_PROJECT_ID}_INSTALL)
     string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} project_id)
     string(TOLOWER ${project_id} project_id)
     set(master_sphinx_target ${project_id}_master)
-    install(
-      DIRECTORY ${SPHINX_BUILD_DIR}/${master_sphinx_target}
-      DESTINATION ${ASAP_INSTALL_DOC}
-      COMPONENT ${docs})
+    if(EXISTS ${SPHINX_BUILD_DIR}/${master_sphinx_target})
+      install(
+        DIRECTORY ${SPHINX_BUILD_DIR}/${master_sphinx_target}
+        DESTINATION ${ASAP_INSTALL_DOC}
+        COMPONENT ${docs})
+    endif()
 
     # Install data
     if(EXISTS ${PROJECT_SOURCE_DIR}/data)
