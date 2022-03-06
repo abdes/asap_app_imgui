@@ -19,7 +19,7 @@ jobs:
           - {
               name: "Windows Latest MSVC",
               os: windows-latest,
-              artifact: "windows_msvc.7z",
+              artifact: "Windows-MSVC.7z",
               build_type: "Release",
               cc: "cl",
               cxx: "cl",
@@ -30,7 +30,7 @@ jobs:
           - {
               name: "Ubuntu_GCC_10",
               os: ubuntu-latest,
-              artifact: "ubuntu_gcc10.7z",
+              artifact: "Linux.7z",
               build_type: "Release",
               cc: "gcc-10",
               cxx: "g++-10",
@@ -40,7 +40,7 @@ jobs:
           - {
               name: "Ubuntu_GCC_11",
               os: ubuntu-latest,
-              artifact: "ubuntu_gcc11.7z",
+              artifact: "Linux-GCC-11.7z",
               build_type: "Release",
               cc: "gcc",
               cxx: "g++",
@@ -50,7 +50,7 @@ jobs:
           - {
               name: "macOS Latest Clang",
               os: macos-latest,
-              artifact: "macos_clang.7z",
+              artifact: "macOS.7z",
               build_type: "Release",
               cc: "clang",
               cxx: "clang++",
