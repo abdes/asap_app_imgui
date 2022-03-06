@@ -293,14 +293,6 @@
       "name": "dev-base",
       "hidden": true,
       "jobs": 4,
-      "targets": [
-        "all",
-        "ccov-all",
-        "ccov-clean",
-        "build-all-tests",
-        "dox",
-        "sphinx"
-      ],
       "verbose": false
     },
     {
@@ -308,12 +300,6 @@
       "configurePreset": "dev-windows",
       "inherits": [
         "dev-base"
-      ],
-      "targets": [
-        "all",
-        "build-all-tests",
-        "dox",
-        "sphinx"
       ]
     },
     {
@@ -321,18 +307,6 @@
       "configurePreset": "dev-clang",
       "inherits": [
         "dev-base"
-      ],
-      "targets": [
-        "all",
-        "ccov-all",
-        "ccov-clean",
-        "build-all-tests",
-        "dox",
-        "sphinx",
-        "clang-tidy-all",
-        "clang-tidy-diff",
-        "clang-format-all",
-        "clang-format-diff"
       ]
     },
     {
@@ -361,9 +335,6 @@
       "configurePreset": "dev-valgrind",
       "inherits": [
         "dev-base"
-      ],
-      "targets": [
-        "do-all-valgrind"
       ]
     },
     {
@@ -371,9 +342,6 @@
       "configurePreset": "dev-sanitizers",
       "inherits": [
         "dev-base"
-      ],
-      "targets": [
-        "do-all-tests"
       ]
     },
     {
@@ -381,20 +349,12 @@
       "configurePreset": "dev-sanitizers-thread",
       "inherits": [
         "dev-base"
-      ],
-      "targets": [
-        "do-all-tests"
       ]
     },
     {
       "name": "rel-base",
       "hidden": true,
       "jobs": 4,
-      "targets": [
-        "build-all-tests",
-        "dox",
-        "sphinx"
-      ],
       "cleanFirst": true,
       "verbose": true
     },

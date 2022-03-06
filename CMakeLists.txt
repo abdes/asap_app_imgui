@@ -161,8 +161,9 @@ set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
 if(ASAP_BUILD_TESTS)
   include(GoogleSanitizers)
   include(CodeCoverage)
-  asap_add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest*
-                                     /usr/*)
+  # Enable this target when the project has test cases
+  # asap_add_code_coverage_all_targets( EXCLUDE */test/* *googlemock*
+  # *googletest* /usr/*)
   include(Valgrind)
   include(FetchGoogleTest)
   include(GoogleTest)
@@ -237,9 +238,12 @@ add_subdirectory(third_party)
 if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
   include(ClangFormat)
   include(ClangTidy)
-  asap_setup_clang_format()
-  # Enable this target when the project has library with source files (.cpp)
-  asap_create_clang_tidy_targets()
+
+  # Enable this target when the project has header or source files (.h or .cpp)
+  # asap_setup_clang_format()
+
+  # Enable this target when the project has source files (.cpp)
+  # asap_create_clang_tidy_targets()
 endif()
 
 # ==============================================================================
