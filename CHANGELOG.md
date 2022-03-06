@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.5](http://github.com/abdes/asap/compare/v4.1.4...v4.1.5) (2022-03-06)
+
+chore: force shell to bash on all platforms
+
+## [4.1.4](http://github.com/abdes/asap/compare/v4.1.3...v4.1.4) (2022-03-06)
+
+chore: adjust command for windows powershell
+
+## [4.1.3](http://github.com/abdes/asap/compare/v4.1.2...v4.1.3) (2022-03-06)
+
+Update artifact names in build matrix for automatic release.
+
 ## [4.1.2](http://github.com/abdes/asap/compare/v4.1.1...v4.1.2) (2022-03-06)
 
 This is a refactoring release to trim down the template project to the minimum

@@ -335,10 +335,12 @@ jobs:
         with:
           name: upload_url
           path: ./
+
       - id: set_upload_url
         run: |
           upload_url=`cat ./upload_url`
           echo ::set-output name=upload_url::$upload_url
+        shell: bash
 
       - name: Upload to Release
         id: upload_to_release
