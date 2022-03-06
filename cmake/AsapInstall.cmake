@@ -106,4 +106,8 @@ if(${META_PROJECT_ID}_INSTALL)
         COMPONENT ${data})
     endif()
   endfunction()
+else()
+  function(asap_top_level_install)
+
+  endfunction()
 endif()
