@@ -47,6 +47,11 @@ if(SPHINX_FOUND)
 
   # The macro to add a submodule as a sphinx target.
   function(asap_with_sphinx TARGET_NAME)
+    # Nothing will be done unless the module is being built as a master project.
+    if(NOT ${META_PROJECT_ID}_IS_MASTER_PROJECT)
+      return()
+    endif()
+
     # Setup work directory for the target module
     set(SPHINX_TARGET_WORKDIR "${SPHINX_BUILD_DIR}/${TARGET_NAME}")
     if(NOT EXISTS "${SPHINX_TARGET_WORKDIR}")
