@@ -335,9 +335,14 @@ jobs:
         with:
           name: upload_url
           path: ./
+
       - id: set_upload_url
         run: |
-          upload_url=`cat ./upload_url`
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            $upload_url = Get-Content ./upload_url
+          else
+            upload_url=`cat ./upload_url`
+          fi
           echo ::set-output name=upload_url::$upload_url
 
       - name: Upload to Release
