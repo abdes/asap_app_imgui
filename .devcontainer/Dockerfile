@@ -14,14 +14,14 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 # Install latest cmake 3.22 so we have support for cmake presets and a better integration in IDEs
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.22.0/cmake-3.22.0-linux-x86_64.sh \
-      -q -O /tmp/cmake-install.sh \
-      && chmod u+x /tmp/cmake-install.sh \
-      && /tmp/cmake-install.sh --skip-license --prefix=/usr \
-      && rm /tmp/cmake-install.sh
+  -q -O /tmp/cmake-install.sh \
+  && chmod u+x /tmp/cmake-install.sh \
+  && /tmp/cmake-install.sh --skip-license --prefix=/usr \
+  && rm /tmp/cmake-install.sh
 
 # Install clang-14
 RUN wget -qO - https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-RUN add-apt-repository 'deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye main'
+RUN add-apt-repository 'deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullseye-14 main'
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get -y install clang-14 clangd-14 lldb-14 llvm-14 clang-format-14 clang-tidy-14
 
@@ -49,14 +49,12 @@ RUN if [ -f "/tmp/pip-tmp/requirements.txt" ]; then \
 # Install global node packages and enable husky.
 RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g husky standard-version @commitlint/cli @commitlint/config-conventional " 2>&1
 
-# Setup oh-my-zsh/p10k/plugins for user vscode
+# Setup oh-my-zsh and plugins for user vscode
 ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 COPY --chown=$USER_UID:$USER_GID .devcontainer/.zshrc /home/$USERNAME
 RUN chmod 644 /home/$USERNAME/.zshrc
-COPY --chown=$USER_UID:$USER_GID .devcontainer/.p10k.zsh /home/$USERNAME
-RUN chmod 644 /home/$USERNAME/.p10k.zsh
 # the user we're applying this too (otherwise it most likely install for root)
 USER $USERNAME
 RUN git clone https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
