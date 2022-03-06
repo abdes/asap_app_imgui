@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'@META_PROJECT_NAME@'
-copyright = u'2018, @META_AUTHOR_ORGANIZATION@'
+copyright = u'2022, @META_AUTHOR_ORGANIZATION@'
 
 # The short X.Y version
 version = u'@META_VERSION@'
