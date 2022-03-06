@@ -170,18 +170,6 @@ if(ASAP_BUILD_TESTS)
 endif()
 
 # ------------------------------------------------------------------------------
-# Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
-# ------------------------------------------------------------------------------
-
-if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
-  include(ClangFormat)
-  include(ClangTidy)
-  asap_setup_clang_format()
-  # Enable this target when the project has library with source files (.cpp)
-  # asap_create_clang_tidy_targets()
-endif()
-
-# ------------------------------------------------------------------------------
 # RPATH setup
 # ------------------------------------------------------------------------------
 
@@ -238,6 +226,21 @@ add_subdirectory(third_party)
 # ==============================================================================
 
 # Add project modules here
+
+# ==============================================================================
+# Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
+#
+# Call after sub-modules have been added so that source code files can be
+# properly collected for analysis.
+# ==============================================================================
+
+if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
+  include(ClangFormat)
+  include(ClangTidy)
+  asap_setup_clang_format()
+  # Enable this target when the project has library with source files (.cpp)
+  asap_create_clang_tidy_targets()
+endif()
 
 # ==============================================================================
 # Deployment (global project files)
