@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.6](http://github.com/abdes/asap/compare/v4.1.5...v4.1.6) (2022-03-06)
+
+
+### Bug Fixes
+
+* define asap_top_level_install as empty when project install should be skipped ([616deed](http://github.com/abdes/asap/commit/616deed7f2655cf6690135ed1914f7eec8053373))
+* use correct links for documentation ([486144c](http://github.com/abdes/asap/commit/486144c46222c22861b0a14f9dc002d148a31f24)), closes [#4](http://github.com/abdes/asap/issues/4)
+
 ## [4.1.5](http://github.com/abdes/asap/compare/v4.1.4...v4.1.5) (2022-03-06)
 
 chore: force shell to bash on all platforms
