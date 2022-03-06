@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.2](http://github.com/abdes/asap/compare/v4.1.1...v4.1.2) (2022-03-06)
+
+This is a refactoring release to trim down the template project to the minimum
+and streamline the generated targets.
+
+### Bug Fixes
+
+* always use top level build dir for output ([1b01db2](http://github.com/abdes/asap/commit/1b01db2402bc52944646bcde3cf525315a4e0e1b))
+* doxygen and sphinx target conflict with modules ([02375ff](http://github.com/abdes/asap/commit/02375ff4a33e34a8e0cb9307ef4eb6de3271e945))
+* generate doc only if project is master ([82190fa](http://github.com/abdes/asap/commit/82190fa6562f5e51dbbab660bcab8dc265e99a0b))
+* make doxygen targets sub-project friendly ([546fe73](http://github.com/abdes/asap/commit/546fe73ded53721dddbac311e9db41e4146b8ad2))
+* make gtest work again ([3ce658c](http://github.com/abdes/asap/commit/3ce658c5f1eb216a3286717e7f80827b96ff3b49))
+* make sphinx targets sub-project friendly ([024cc77](http://github.com/abdes/asap/commit/024cc77d17ed134ed5f3f4eea32226b07b05aad6))
+* only add clang-format/tidy targets if master project ([060f082](http://github.com/abdes/asap/commit/060f082714e039eb4c2c2e198b5caed74690e8af))
+* only install files if requested to install ([9caaf9b](http://github.com/abdes/asap/commit/9caaf9b47e138be3f9845d6d58ebc21ff8dfa83b))
+* reorganize third_party modules for use of FetchContent ([cc65bc2](http://github.com/abdes/asap/commit/cc65bc2219dbe38197107bae71252444994e118c))
+* use correct tagets for doc builds ([559558e](http://github.com/abdes/asap/commit/559558e8eac3043eef19986cc2ae6d6dfd937be8))
+* use correct url for logo image ([96d1e01](http://github.com/abdes/asap/commit/96d1e01d971bd2f33faaebfc060082023f3a5209))
+* use correct url for master index page ([a56c327](http://github.com/abdes/asap/commit/a56c327ff3d7ab14d7a499fc4997279efd2647fe))
+* use lower case META_PROJECT_ID ([311e433](http://github.com/abdes/asap/commit/311e433e8698ff6385c2cda256bff83982596ed0))
+* wrong variable used for target name ([829f351](http://github.com/abdes/asap/commit/829f351d22b384ddc060ae2df47ff9e801089dd2))
+
 ## [4.1.1](http://github.com/abdes/asap/compare/v4.1.0...v4.1.1) (2022-02-18)
 
 * docs: use submodule documentation deployment urls for inter-sphinx
