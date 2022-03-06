@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.5](http://github.com/abdes/asap/compare/v4.1.4...v4.1.5) (2022-03-06)
+
+chore: force shell to bash on all platforms
+
 ## [4.1.4](http://github.com/abdes/asap/compare/v4.1.3...v4.1.4) (2022-03-06)
 
 chore: adjust command for windows powershell
