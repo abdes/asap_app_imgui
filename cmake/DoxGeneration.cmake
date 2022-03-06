@@ -80,6 +80,11 @@ if(DOXYGEN_FOUND)
   endfunction()
 
   function(asap_with_doxygen)
+    # Nothing will be done unless the module is being built as a master project.
+    if(NOT ${META_PROJECT_ID}_IS_MASTER_PROJECT)
+      return()
+    endif()
+
     set(options)
     set(oneValueArgs MODULE_NAME VERSION TITLE BRIEF INPUT_PATH)
     set(multiValueArgs)
