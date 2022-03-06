@@ -161,8 +161,9 @@ set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
 if(ASAP_BUILD_TESTS)
   include(GoogleSanitizers)
   include(CodeCoverage)
-  asap_add_code_coverage_all_targets(EXCLUDE */test/* *googlemock* *googletest*
-                                     /usr/*)
+  # Enable this target when the project has test cases
+  # asap_add_code_coverage_all_targets( EXCLUDE */test/* *googlemock*
+  # *googletest* /usr/*)
   include(Valgrind)
   include(FetchGoogleTest)
   include(GoogleTest)
