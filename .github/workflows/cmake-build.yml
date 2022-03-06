@@ -338,12 +338,9 @@ jobs:
 
       - id: set_upload_url
         run: |
-          if [ "$RUNNER_OS" == "Windows" ]; then
-            $upload_url = Get-Content ./upload_url
-          else
-            upload_url=`cat ./upload_url`
-          fi
+          upload_url=`cat ./upload_url`
           echo ::set-output name=upload_url::$upload_url
+        shell: bash
 
       - name: Upload to Release
         id: upload_to_release
