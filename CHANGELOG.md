@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.8](http://github.com/abdes/asap/compare/v4.1.7...v4.1.8) (2022-03-15)
+
+- chore: use [CPM](https://github.com/cpm-cmake/CPM.cmake#adding-cpm) for
+  dependency management
+- chore: use ccache to speedup build
+
 ## [4.1.7](http://github.com/abdes/asap/compare/v4.1.6...v4.1.7) (2022-03-06)
 
 docs: add last-updated-on timestamp
