@@ -1,8 +1,8 @@
-# Starter project for C++ with cmake
+# Starter project for C++ with modern cmake
 
 ![Start Now!!](doc/_static/logo.png "ASAP Logo")
 
-[![Build Matrix](https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap/actions/workflows/cmake-build.yml)
+[![Build Matrix](https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=master)](https://github.com/abdes/asap/actions/workflows/cmake-build.yml)
 
 ## [Project Documentation](https://abdes.github.io/asap/asap_master/html/)
 
