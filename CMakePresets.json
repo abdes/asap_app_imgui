@@ -19,6 +19,7 @@
         "caexcludepath": "${sourceDir}/third_party;${sourceDir}/out"
       },
       "cacheVariables": {
+        "USE_CCACHE": "ON",
         "ASAP_BUILD_TESTS": "ON",
         "ASAP_BUILD_EXAMPLES": "ON"
       }
