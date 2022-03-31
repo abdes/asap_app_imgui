@@ -175,12 +175,8 @@ include(cmake/CPM.cmake)
 # excluded from the generated target lists for the various tools.
 set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
 
-# ---- Speedup build using ccache ----
-# see https://github.com/TheLartians/Ccache.cmake enables CCACHE support through
-# the USE_CCACHE flag possible values are: YES, NO or equivalent
-if(USE_CCACHE)
-  cpmaddpackage("gh:TheLartians/Ccache.cmake@1.2.3")
-endif()
+# ---- Speedup build using ccache (needs CPM) ----
+include(cmake/FasterBuild.cmake)
 
 # ------------------------------------------------------------------------------
 # Testing
