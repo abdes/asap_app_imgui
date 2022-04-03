@@ -2,7 +2,7 @@
 
 ![Start Now!!](doc/_static/logo.png "ASAP Logo")
 
-[![Build Matrix](https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap/actions/workflows/cmake-build.yml)
+[![Build Matrix](https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=master)](https://github.com/abdes/asap/actions/workflows/cmake-build.yml)
 
 ## [Project Documentation](https://abdes.github.io/asap/asap_master/html/)
 
@@ -36,16 +36,6 @@ NOTES:
 Make sure you have a C++ compiler with C++-17 capabilities at least. Gnu, Clang and MSVC all can do
 that with a recent version.
 
-## Enabling husky/commitlint/standard-version
-
-Only one time after the project is cloned, do the following:
-
-```bash
-npx husky install
-npm install -g @commitlint/cli @commitlint/config-conventional
-npm install -g standard-version
-```
-
 ## Building
 
 ```bash
@@ -67,4 +57,17 @@ option(ASAP_WITH_GOOGLE_ASAN    "Instrument code with address sanitizer"        
 option(ASAP_WITH_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitizer"      OFF)
 option(ASAP_WITH_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
 option(ASAP_WITH_VALGRIND       "Builds targets with valgrind profilers added"           OFF)
+```
+
+## Making changes to this project
+
+Read the [developer guides](https://abdes.github.io/asap/master/html/).
+If you're in a hurry, at least do the following:
+
+Only one time after the project is cloned, do the following:
+
+```bash
+npx husky install
+npm install -g @commitlint/cli @commitlint/config-conventional
+npm install -g standard-version
 ```
