@@ -15,10 +15,10 @@
       "installDir": "${sourceDir}/out/install/${presetName}",
       "environment": {
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "CPM_SOURCE_CACHE": "$env{HOME}/.cache/CPM",
         "caexcludepath": "${sourceDir}/third_party;${sourceDir}/out"
       },
       "cacheVariables": {
+        "CPM_SOURCE_CACHE": "~/.cache/CPM",
         "USE_CCACHE": "ON",
         "ASAP_BUILD_TESTS": "ON",
         "ASAP_BUILD_EXAMPLES": "ON"

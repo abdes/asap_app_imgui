@@ -80,8 +80,11 @@ endfunction()
 
 function(_module_pkgconfig_files)
   set(MODULE_PKGCONFIG_FILE ${MODULE_TARGET_NAME}.pc)
-  get_target_property(TARGET_DEBUG_POSTFIX ${MODULE_TARGET_NAME} DEBUG_POSTFIX)
-  set(MODULE_LINK_LIBS "-l${MODULE_TARGET_NAME}${TARGET_DEBUG_POSTFIX}")
+  if(NOT ${type} STREQUAL "INTERFACE_LIBRARY")
+    get_target_property(TARGET_DEBUG_POSTFIX ${MODULE_TARGET_NAME}
+                        DEBUG_POSTFIX)
+    set(MODULE_LINK_LIBS "-l${MODULE_TARGET_NAME}${TARGET_DEBUG_POSTFIX}")
+  endif()
   configure_file(config.pc.in
                  ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_PKGCONFIG_FILE} @ONLY)
   if(${META_PROJECT_ID}_INSTALL)
@@ -112,16 +115,16 @@ function(asap_add_library target)
     asap_set_compile_definitions(${target})
     # Generate export headers for the library
     asap_generate_export_headers(${target} ${META_MODULE_NAME})
-  endif()
 
-  set_target_properties(
-    ${target}
-    PROPERTIES FOLDER "Libraries"
-               VERSION ${META_MODULE_VERSION}
-               SOVERSION ${META_MODULE_VERSION_MAJOR}
-               DEBUG_POSTFIX "d"
-               CXX_VISIBILITY_PRESET hidden
-               VISIBILITY_INLINES_HIDDEN YES)
+    set_target_properties(
+      ${target}
+      PROPERTIES FOLDER "Libraries"
+                 VERSION ${META_MODULE_VERSION}
+                 SOVERSION ${META_MODULE_VERSION_MAJOR}
+                 DEBUG_POSTFIX "d"
+                 CXX_VISIBILITY_PRESET hidden
+                 VISIBILITY_INLINES_HIDDEN YES)
+  endif()
 endfunction()
 
 function(asap_add_executable target)
