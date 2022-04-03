@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.2.0](http://github.com/abdes/asap/compare/v4.1.8...v4.2.0) (2022-04-03)
+
+
+### Features
+
+* make ccache usable on all platforms ([412730f](http://github.com/abdes/asap/commit/412730f86679d7ccd350cadf5649b7a489376cae))
+
+
+### Bug Fixes
+
+* use only white-listed properties for interface library ([227de02](http://github.com/abdes/asap/commit/227de026878beb9dd9679d0cad12cf25bce16c4a))
+
 ## [4.1.8](http://github.com/abdes/asap/compare/v4.1.7...v4.1.8) (2022-03-15)
 
 - chore: use [CPM](https://github.com/cpm-cmake/CPM.cmake#adding-cpm) for
