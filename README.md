@@ -11,7 +11,18 @@
 
 <div align="center">
 
-[![Build status][build-status-badge]][build-matrix]
+-+- Build Status -+-
+
+_develop_
+
+[![Build status - develop][build-status-develop-badge]][build-matrix]
+
+_master_
+
+[![Build status - master][build-status-master-badge]][build-matrix]
+
+-+-
+
 [![Latest release][release-badge]][latest-release]
 [![Commits][last-commit-badge]][commits]
 [![Linux][linux-badge]][latest-release]
@@ -135,25 +146,28 @@ Read the [developer guides](https://abdes.github.io/asap/asap_master/html/).
   to get inspiration - credits in the source code or the documentation as
   appropriate
 
-[build-status-badge]: https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=develop
+[build-matrix]: https://github.com/abdes/asap/actions/workflows/cmake-build.yml?branch=develop
+[build-status-develop-badge]: https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=develop
+[build-status-master-badge]: https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=master
+[cleanup-thumb]: https://asciinema.org/a/JOXq0l9CLZMolNcGhOnc84tNO.svg
+[cleanup-video]: https://asciinema.org/a/JOXq0l9CLZMolNcGhOnc84tNO?autoplay=1
+[commits]: https://github.com/abdes/asap/commits
+[customize-thumb]: https://cdn.loom.com/sessions/thumbnails/bedff4e1532441a6af6497653e52cede-with-play.gif
+[customize-video]: https://www.loom.com/embed/bedff4e1532441a6af6497653e52cede
+[from-template-thumb]: https://cdn.loom.com/sessions/thumbnails/087f217b73454728900baa8b1487f358-with-play.gif
+[from-template-video]: https://www.loom.com/embed/087f217b73454728900baa8b1487f358
+[hello-world-thumb]: https://cdn.loom.com/sessions/thumbnails/ff20f1771a6d448c8fd7b6e53e117c93-with-play.gif
+[hello-world-video]: https://www.loom.com/embed/ff20f1771a6d448c8fd7b6e53e117c93
 [last-commit-badge]: https://img.shields.io/github/last-commit/abdes/asap
+[latest-release]: https://github.com/abdes/asap/releases/latest
 [license-badge]: https://img.shields.io/github/license/abdes/asap
+[license]: https://opensource.org/licenses/BSD-3-Clause
 [linux-badge]: https://img.shields.io/badge/OS-linux-blue
 [macos-badge]: https://img.shields.io/badge/OS-macOS-blue
-[release-badge]: https://img.shields.io/github/v/release/abdes/asap
-[windows-badge]: https://img.shields.io/badge/OS-windows-blue
-[build-matrix]: https://github.com/abdes/asap/actions/workflows/cmake-build.yml
-[commits]: https://github.com/abdes/asap/commits
-[latest-release]: https://github.com/abdes/asap/releases/latest
-[license]: https://opensource.org/licenses/BSD-3-Clause
+[openssf-badge]: https://bestpractices.coreinfrastructure.org/projects/5917/badge
+[openssf-project]: https://bestpractices.coreinfrastructure.org/projects/5917
 [project-docs-thumb]: https://cdn.loom.com/sessions/thumbnails/131bd53f1a004387b09bbeeb80a41f3e-with-play.gif
 [project-docs-video]: https://www.loom.com/embed/131bd53f1a004387b09bbeeb80a41f3e
 [project-docs]: https://abdes.github.io/asap/asap_master/html/index.html
-[from-template-thumb]: https://cdn.loom.com/sessions/thumbnails/087f217b73454728900baa8b1487f358-with-play.gif
-[from-template-video]: https://www.loom.com/embed/087f217b73454728900baa8b1487f358
-[cleanup-thumb]: https://asciinema.org/a/JOXq0l9CLZMolNcGhOnc84tNO.svg
-[cleanup-video]: https://asciinema.org/a/JOXq0l9CLZMolNcGhOnc84tNO?autoplay=1
-[customize-thumb]: https://cdn.loom.com/sessions/thumbnails/bedff4e1532441a6af6497653e52cede-with-play.gif
-[customize-video]: https://www.loom.com/embed/bedff4e1532441a6af6497653e52cede
-[hello-world-thumb]: https://cdn.loom.com/sessions/thumbnails/ff20f1771a6d448c8fd7b6e53e117c93-with-play.gif
-[hello-world-video]: https://www.loom.com/embed/ff20f1771a6d448c8fd7b6e53e117c93
+[release-badge]: https://img.shields.io/github/v/release/abdes/asap
+[windows-badge]: https://img.shields.io/badge/OS-windows-blue
