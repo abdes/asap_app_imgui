@@ -81,20 +81,32 @@ how to start from asap to make your own project.
 
 ## Contributing
 
-Read the [developer guides](https://abdes.github.io/asap/master/html/).
-If you're in a hurry, at least do the following:
+If you would like to contribute code you can do so through GitHub by forking the
+repository and sending a pull request. When submitting code, please make every
+effort to follow existing conventions and style in order to keep the code as
+readable as possible.
 
-Only one time after the project is cloned, do the following:
+By contributing your code, you agree to license your contribution under the
+terms of the BSD-3-Clause or a more permissive license. All files are released
+with the BSD-3-Clause license.
 
-```bash
-npx husky install
-npm install -g @commitlint/cli @commitlint/config-conventional
-npm install -g standard-version
-```
+Read the [developer guides](https://abdes.github.io/asap/asap_master/html/).
+
+### Submitting a PR
+
+- For every PR there should be an accompanying issue which the PR solves
+- The PR itself should only contain code which is the solution for the given
+  issue
+- If you are a first time contributor check if there is a suitable issue for you
 
 ## Credits
 
-TODO
+- Swift Navigation for their [cmake common
+  tools](https://github.com/swift-nav/cmake) project, an excellent starting
+  point for several of the features in this starter project,
+- The multitude of other open-source projects used to implement this project or
+  to get inspiration - credits in the source code or the documentation as
+  appropriate
 
 [license-badge]: https://img.shields.io/github/license/abdes/asap
 [build-status-badge]: https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=develop
