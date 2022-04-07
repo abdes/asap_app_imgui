@@ -108,17 +108,17 @@ Read the [developer guides](https://abdes.github.io/asap/asap_master/html/).
   to get inspiration - credits in the source code or the documentation as
   appropriate
 
-[license-badge]: https://img.shields.io/github/license/abdes/asap
 [build-status-badge]: https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=develop
-[release-badge]: https://img.shields.io/github/v/release/abdes/asap
-[linux-badge]: https://img.shields.io/badge/OS-linux-blue
-[windows-badge]: https://img.shields.io/badge/OS-windows-blue
-[macos-badge]: https://img.shields.io/badge/OS-macOS-blue
 [last-commit-badge]: https://img.shields.io/github/last-commit/abdes/asap
+[license-badge]: https://img.shields.io/github/license/abdes/asap
+[linux-badge]: https://img.shields.io/badge/OS-linux-blue
+[macos-badge]: https://img.shields.io/badge/OS-macOS-blue
+[release-badge]: https://img.shields.io/github/v/release/abdes/asap
+[windows-badge]: https://img.shields.io/badge/OS-windows-blue
 [build-matrix]: https://github.com/abdes/asap/actions/workflows/cmake-build.yml
-[license]: https://opensource.org/licenses/BSD-3-Clause
-[latest-release]: https://github.com/abdes/asap/releases/latest
 [commits]: https://github.com/abdes/asap/commits
+[latest-release]: https://github.com/abdes/asap/releases/latest
+[license]: https://opensource.org/licenses/BSD-3-Clause
+[project-docs-thumb]: https://cdn.loom.com/sessions/thumbnails/131bd53f1a004387b09bbeeb80a41f3e-with-play.gif
+[project-docs-video]: https://www.loom.com/embed/131bd53f1a004387b09bbeeb80a41f3e
 [project-docs]: https://abdes.github.io/asap/asap_master/html/index.html
-[project-docs-video]: https://www.loom.com/embed/3a1f6c2b49544ba7877a8266ef790a8d
-[project-docs-thumb]: https://cdn.loom.com/sessions/thumbnails/3a1f6c2b49544ba7877a8266ef790a8d-with-play.gif
