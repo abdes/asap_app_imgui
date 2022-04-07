@@ -49,14 +49,7 @@ We have detailed guides for setting up an efficient development environment, the
 development process, project structure, etc. Take a look at the project's github
 pages [here](https://abdes.github.io/asap/asap_master/html/).
 
-<div style="position: relative; padding-bottom: 69.39611054247696%; height: 0;">
-  <iframe
-    src="https://www.loom.com/embed/3a1f6c2b49544ba7877a8266ef790a8d"
-    frameborder="0"
-    webkitallowfullscreen mozallowfullscreen allowfullscreen
-    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
-  </iframe>
-</div>
+[![Project Documentation Demo][project-docs-thumb]][project-docs-video]
 
 ## Getting Started
 
@@ -98,4 +91,5 @@ TODO
 [latest-release]: https://github.com/abdes/asap/releases/latest
 [commits]: https://github.com/abdes/asap/commits
 [project-docs]: https://abdes.github.io/asap/asap_master/html/index.html
-[project-docs-video]: https://www.loom.com/share/3a1f6c2b49544ba7877a8266ef790a8d
+[project-docs-video]: https://www.loom.com/embed/3a1f6c2b49544ba7877a8266ef790a8d
+[project-docs-thumb]: https://cdn.loom.com/sessions/thumbnails/3a1f6c2b49544ba7877a8266ef790a8d-with-play.gif
