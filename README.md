@@ -31,17 +31,34 @@
 
 ## Key Features
 
+Have you ever found yourself spending countless hours trying to figure out how
+to start a professional C++ project with unit tests, a robust dev workflow,
+change logs, code coverage, linting, formatting...? The C++ ecosystem is getting
+better but is still very far away from other ecosystems such as JavaScript, or
+even Rust. It's certainly easy to use CMake, a compiler and vscode to start a
+hello world project, but as soon as you start having multiple modules, with
+third party dependencies, testing, coverage, and other development things that a
+professional quality project needs, you start wasting hours and hours
+troubleshooting and configuring until you make it work.
+
+Waste your time no more!
+
+This starter project solves most of your problems, using the best practices for
+C++ development and modern CMake and allows you to get started in minutes rather
+than days.
+
 - `CMake` as the build system with or without presets
 - cross-platform portability on Linux, OS X and Windows
 - multiple compilers: clang, g++ and MSVC
-- modular structure with each module self-contained in a subdirectory within the project
-- `CMake` build helpers to facilitate declaration of library, exe, test modules, for the
-  end-to-end lifecycle including doc generation, test, packaging etc...
-- common facilities (common module) for platform specifics, assertions support, logging
-- unit testing with Google Test
+- modular structure with each module self-contained in a subdirectory within the
+  project
+- `CMake` build helpers to facilitate declaration of library, exe, test modules,
+  for the end-to-end lifecycle including doc generation, test, packaging etc...
+- unit testing targets, with by default Google Test as the framework (other
+  frameworks are also possible)
 - code coverage with clang or g++
-- zero-touch valgrind, clang-tidy, clang-format, google sanitizers, etc.
-- development can be done locally or in a dev container with vscode.
+- zero-touch valgrind, clang-tidy, clang-format, google sanitizers, etc
+- development can be done locally or in a dev container with vscode
 
 ## Project Documentation
 
