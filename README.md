@@ -29,6 +29,7 @@ _master_
 [![Windows][windows-badge]][latest-release]
 [![Mac OS][macos-badge]][latest-release]
 [![License][license-badge]][license]
+[![CII Best Practices][openssf-badge]][openssf-project]
 
 </div>
 
