@@ -1,12 +1,35 @@
-# Starter project for C++ with cmake
+<div align="center">
 
-![Start Now!!](doc/_static/logo.png "ASAP Logo")
+# Don't waste your time!
 
-[![Build Matrix](https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=develop)](https://github.com/abdes/asap/actions/workflows/cmake-build.yml)
+![Start Now!!](doc/_static/asap-banner.png "ASAP banner")
 
-## [Project Documentation](https://abdes.github.io/asap/asap_master/html/)
+</div>
 
-## Overview
+<h4 align="center">A complete starter project for C++ projects built with
+<a href="https://cmake.org/" target="_blank">CMake</a>.</h4>
+
+<div align="center">
+
+[![Build status][build-status-badge]][build-matrix]
+[![Latest release][release-badge]][latest-release]
+[![Commits][last-commit-badge]][commits]
+[![Linux][linux-badge]][latest-release]
+[![Windows][windows-badge]][latest-release]
+[![Mac OS][macos-badge]][latest-release]
+[![License][license-badge]][license]
+
+</div>
+
+<p align="center">
+  <a href="#key-features">Key Features</a> •
+  <a href="#project-documentation">Project Documentation</a> •
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#Contributing">Contributing</a> •
+  <a href="#credits">Credits</a> •
+</p>
+
+## Key Features
 
 - `CMake` as the build system with or without presets
 - cross-platform portability on Linux, OS X and Windows
@@ -20,46 +43,33 @@
 - zero-touch valgrind, clang-tidy, clang-format, google sanitizers, etc.
 - development can be done locally or in a dev container with vscode.
 
-## Getting the code
+## Project Documentation
 
-```bash
-git clone --recurse-submodules -j4 https://github.com/abdes/asap.git
-```
+We have detailed guides for setting up an efficient development environment, the
+development process, project structure, etc. Take a look at the project's github
+pages [here](https://abdes.github.io/asap/asap_master/html/).
 
-NOTES:
+<div style="position: relative; padding-bottom: 69.39611054247696%; height: 0;">
+  <iframe
+    src="https://www.loom.com/embed/3a1f6c2b49544ba7877a8266ef790a8d"
+    frameborder="0"
+    webkitallowfullscreen mozallowfullscreen allowfullscreen
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
+  </iframe>
+</div>
 
-- -j4 requests git to parallelize cloning of repos. Needs a relatively recent version of git. If
-  that is not available, simply do not use this option.
+## Getting Started
 
-## Requirements
+It is strongly recommended that you take some time to browse the project
+documentation to familiarize yourself with its structure and development
+workflows.
 
-Make sure you have a C++ compiler with C++-17 capabilities at least. Gnu, Clang and MSVC all can do
-that with a recent version.
+For the impatient, or the already experts, below is a short tutorial video for
+how to start from asap to make your own project.
 
-## Building
+**--> Video is still TODO <--**
 
-```bash
-mkdir _build && cd _build && cmake .. && cmake --build .
-```
-
-or just use one of the predefined `CMake` presets. Detailed instructions and
-many useful commands are listed
-[here](https://abdes.github.io/asap/asap_master/html/getting-started/useful-commands.html).
-
-### CMake configurable build options
-
-```cmake
-# Project options
-option(BUILD_SHARED_LIBS        "Build shared instead of static libraries."              ON)
-option(ASAP_BUILD_TESTS         "Build tests."                                           OFF)
-option(ASAP_BUILD_EXAMPLES      "Build examples."                                        OFF)
-option(ASAP_WITH_GOOGLE_ASAN    "Instrument code with address sanitizer"                 OFF)
-option(ASAP_WITH_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitizer"      OFF)
-option(ASAP_WITH_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
-option(ASAP_WITH_VALGRIND       "Builds targets with valgrind profilers added"           OFF)
-```
-
-## Making changes to this project
+## Contributing
 
 Read the [developer guides](https://abdes.github.io/asap/master/html/).
 If you're in a hurry, at least do the following:
@@ -71,3 +81,21 @@ npx husky install
 npm install -g @commitlint/cli @commitlint/config-conventional
 npm install -g standard-version
 ```
+
+## Credits
+
+TODO
+
+[license-badge]: https://img.shields.io/github/license/abdes/asap
+[build-status-badge]: https://github.com/abdes/asap/actions/workflows/cmake-build.yml/badge.svg?branch=develop
+[release-badge]: https://img.shields.io/github/v/release/abdes/asap
+[linux-badge]: https://img.shields.io/badge/OS-linux-blue
+[windows-badge]: https://img.shields.io/badge/OS-windows-blue
+[macos-badge]: https://img.shields.io/badge/OS-macOS-blue
+[last-commit-badge]: https://img.shields.io/github/last-commit/abdes/asap
+[build-matrix]: https://github.com/abdes/asap/actions/workflows/cmake-build.yml
+[license]: https://opensource.org/licenses/BSD-3-Clause
+[latest-release]: https://github.com/abdes/asap/releases/latest
+[commits]: https://github.com/abdes/asap/commits
+[project-docs]: https://abdes.github.io/asap/asap_master/html/index.html
+[project-docs-video]: https://www.loom.com/share/3a1f6c2b49544ba7877a8266ef790a8d
