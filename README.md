@@ -66,7 +66,7 @@ We have detailed guides for setting up an efficient development environment, the
 development process, project structure, etc. Take a look at the project's github
 pages [here](https://abdes.github.io/asap/asap_master/html/).
 
-[![Project Documentation Demo][project-docs-thumb]][project-docs-video]
+[![Project Documentation demo][project-docs-thumb]][project-docs-video]
 
 ## Getting Started
 
@@ -77,7 +77,34 @@ workflows.
 For the impatient, or the already experts, below is a short tutorial video for
 how to start from asap to make your own project.
 
-**--> Video is still TODO <--**
+### 1. Create a new repo from the `asap` template
+
+[![New repo from template demo][from-template-thumb]][from-template-video]
+
+### 2. Make it your own - stage 1
+
+In this step, we'll clean up the freshly created repo and prepare it for being
+customized.
+
+[![Clean-up][cleanup-thumb]][cleanup-video]
+
+### 2. Make it your own - stage 2
+
+In this step, we'll go into Visual Studio Code to do some heavier customizations
+while tracking our changes in git.
+
+[![Customize][customize-thumb]][customize-video]
+
+### 3. Start coding
+
+For this final tutorial, we will ad an executable module to implement the famous
+"Hello World!". You can see how simple it is and how fast it is to hit the
+ground running with asap and start focusing on what matters the most: coding.
+
+[![Hello World][hello-world-thumb]][hello-world-video]
+
+Take some time to explore the different build targets in the project, and the
+documentation to add tests, documentation etc.
 
 ## Contributing
 
@@ -122,3 +149,11 @@ Read the [developer guides](https://abdes.github.io/asap/asap_master/html/).
 [project-docs-thumb]: https://cdn.loom.com/sessions/thumbnails/131bd53f1a004387b09bbeeb80a41f3e-with-play.gif
 [project-docs-video]: https://www.loom.com/embed/131bd53f1a004387b09bbeeb80a41f3e
 [project-docs]: https://abdes.github.io/asap/asap_master/html/index.html
+[from-template-thumb]: https://cdn.loom.com/sessions/thumbnails/087f217b73454728900baa8b1487f358-with-play.gif
+[from-template-video]: https://www.loom.com/embed/087f217b73454728900baa8b1487f358
+[cleanup-thumb]: https://asciinema.org/a/JOXq0l9CLZMolNcGhOnc84tNO.svg
+[cleanup-video]: https://asciinema.org/a/JOXq0l9CLZMolNcGhOnc84tNO?autoplay=1
+[customize-thumb]: https://cdn.loom.com/sessions/thumbnails/bedff4e1532441a6af6497653e52cede-with-play.gif
+[customize-video]: https://www.loom.com/embed/bedff4e1532441a6af6497653e52cede
+[hello-world-thumb]: https://cdn.loom.com/sessions/thumbnails/ff20f1771a6d448c8fd7b6e53e117c93-with-play.gif
+[hello-world-video]: https://www.loom.com/embed/ff20f1771a6d448c8fd7b6e53e117c93
