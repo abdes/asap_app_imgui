@@ -25,6 +25,10 @@ RUN add-apt-repository 'deb http://apt.llvm.org/bullseye/ llvm-toolchain-bullsey
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
   && apt-get -y install clang-14 clangd-14 lldb-14 llvm-14 clang-format-14 clang-tidy-14
 
+# Install ccache
+RUN apt-get -y install ccache
+
+# Clean-up
 RUN apt-get autoremove -y && apt-get clean -y && rm -rf /var/lib/apt/lists/*
 
 RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-14 100
