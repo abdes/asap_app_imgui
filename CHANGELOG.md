@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.3](http://github.com/abdes/asap/compare/v4.3.2...v4.3.3) (2022-08-04)
+
+### Bug Fixes
+
+* add aliases used by cmake common functions ([9c33906](http://github.com/abdes/asap/commit/9c339069acd9ab6355f8156f2e8eaf81c382342c))
+
 ## [4.3.2](http://github.com/abdes/asap/compare/v4.3.1...v4.3.2) (2022-08-04)
 
 ### Bug Fixes
