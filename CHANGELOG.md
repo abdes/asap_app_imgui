@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.4](http://github.com/abdes/asap/compare/v4.3.3...v4.3.4) (2022-08-04)
+
+### Bug Fixes
+
+* alias variable to enable/disable building tests ([3992b0f](http://github.com/abdes/asap/commit/3992b0f7d500e653532bd0f206489058d99ad2d0))
+* typo in variable name to enable/disable building tests ([9950fe2](http://github.com/abdes/asap/commit/9950fe2dcbe6c284e9ce32ce6a455e4a3a499ec4))
+
 ## [4.3.3](http://github.com/abdes/asap/compare/v4.3.2...v4.3.3) (2022-08-04)
 
 ### Bug Fixes
