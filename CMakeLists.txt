@@ -78,7 +78,7 @@ option(ASAP_WITH_VALGRIND       "Builds targets with valgrind profilers added"  
 # cmake-format: on
 
 # Define the following alias variables used by the common cmake functions
-set(${PROJECT_NAME}_BUILD_TEST ${ASAP_BUILD_TESTS})
+set(${PROJECT_NAME}_BUILD_TESTS ${ASAP_BUILD_TESTS})
 set(${PROJECT_NAME}_EXAMPLES ${ASAP_BUILD_EXAMPLES})
 
 # ------------------------------------------------------------------------------
