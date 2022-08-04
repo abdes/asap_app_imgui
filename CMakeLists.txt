@@ -77,10 +77,6 @@ option(ASAP_WITH_GOOGLE_TSAN    "Instrument code with thread sanitizer"         
 option(ASAP_WITH_VALGRIND       "Builds targets with valgrind profilers added"           OFF)
 # cmake-format: on
 
-# Define the following alias variables used by the common cmake functions
-set(${PROJECT_NAME}_BUILD_TEST ${ASAP_BUILD_TESTS})
-set(${PROJECT_NAME}_EXAMPLES ${ASAP_BUILD_EXAMPLES})
-
 # ------------------------------------------------------------------------------
 # Project Declaration
 # ------------------------------------------------------------------------------
@@ -101,6 +97,10 @@ project(
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# Define the following alias variables used by the common cmake functions
+set(${PROJECT_NAME}_BUILD_TESTS ${ASAP_BUILD_TESTS})
+set(${PROJECT_NAME}_BUILD_EXAMPLES ${ASAP_BUILD_EXAMPLES})
 
 # ------------------------------------------------------------------------------
 # Additional CMake modules
