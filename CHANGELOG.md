@@ -2,6 +2,55 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.3.5](http://github.com/abdes/asap/compare/v4.3.4...v4.3.5) (2022-08-11)
+
+
+### Bug Fixes
+
+* **#6:** properly setup install layout
+  ([71fd5d5](http://github.com/abdes/asap/commit/71fd5d5ee6f4694a8d7d6994e3a09d5b2f18ce24)),
+  closes [#6](http://github.com/abdes/asap/issues/6)
+
+  When the install prefix matches a system install directory (i.e. /usr or
+  /usr/local), the project will be installed according to the conventions of
+  [GnuInstallDirs](https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html),
+  otherwise, it will be installed using a simplified local layout as following:
+
+```
+    # Install into local directory
+    set(ASAP_INSTALL_ROOT      ".")                                           # ./
+    set(ASAP_INSTALL_LIB       "lib")                                         # ./lib
+    set(ASAP_INSTALL_SHARED    "${ASAP_INSTALL_LIB}")                         # ./lib
+    set(ASAP_INSTALL_CMAKE     "${ASAP_INSTALL_ROOT}/share/cmake/${META_PROJECT_NAME}") # ./share/cmake/<project>
+    set(ASAP_INSTALL_PKGCONFIG "${ASAP_INSTALL_ROOT}/share/pkgconfig")        # ./share/pkgconfig
+    set(ASAP_INSTALL_EXAMPLES  "${ASAP_INSTALL_ROOT}")                        # ./
+    set(ASAP_INSTALL_DATA      "${ASAP_INSTALL_ROOT}")                        # ./data
+    set(ASAP_INSTALL_BIN       "bin")                                         # ./bin
+    set(ASAP_INSTALL_INCLUDE   "include")                                     # ./include
+    set(ASAP_INSTALL_DOC       "doc")                                         # ./doc
+    set(ASAP_INSTALL_SHORTCUTS "misc")                                        # ./misc
+    set(ASAP_INSTALL_ICONS     "misc")                                        # ./misc
+    set(ASAP_INSTALL_INIT      "misc")                                        # ./misc
+```
+
+* **#7:** add `build` and `ops` commit types
+  ([0d9187e](http://github.com/abdes/asap/commit/0d9187e9d20788d3f0c5048bcb4deca4cf5280e3)),
+  closes [#7](http://github.com/abdes/asap/issues/7)
+
+  Added the following two commit types:
+  * `build` Commits, that affect build components like build tool, ci pipeline, dependencies, project version, ...
+  * `ops` Commits, that affect operational components like infrastructure, deployment, backup, recovery, ...
+
+* **#8:** add standard ccov excluded directories by default
+  ([a8aabb3](http://github.com/abdes/asap/commit/a8aabb31d3ea6b0c5a50e13bf366f092ca724537)),
+  closes [#8](http://github.com/abdes/asap/issues/8)
+
+  The standard exclusions are:
+  * anything matching `*/test/*` in its path, i.e. files used to write tests,
+  * anything located inside `*/.cache/CPM/*`, i.e. third party modules included
+    using CPM,
+  * anything under `/usr`, i.e. system files
+
 ## [4.3.4](http://github.com/abdes/asap/compare/v4.3.3...v4.3.4) (2022-08-04)
 
 ### Bug Fixes
