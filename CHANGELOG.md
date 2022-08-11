@@ -2,8 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [4.3.5](http://github.com/abdes/asap/compare/v4.3.4...v4.3.5) (2022-08-11)
+## [4.3.6](http://github.com/abdes/asap/compare/v4.3.5...v4.3.6) (2022-08-11)
 
+Minor update to directly use the `cmake/common` submodule from
+https://github.com/swift-nav/cmake now that all asap fixes have been merged over
+there.
+
+## [4.3.5](http://github.com/abdes/asap/compare/v4.3.4...v4.3.5) (2022-08-11)
 
 ### Bug Fixes
 
