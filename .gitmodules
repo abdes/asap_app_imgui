@@ -1,6 +1,6 @@
 [submodule "cmake/common"]
 	path = cmake/common
-	url = https://github.com/abdes/cmake
+	url = https://github.com/swift-nav/cmake
 [submodule "doxygen/doxygen-awesome-css"]
 	path = doxygen/doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
