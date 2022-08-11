@@ -31,6 +31,14 @@
     {
       "type": "test",
       "hidden": true
+    },
+    {
+      "type": "build",
+      "hidden": true
+    },
+    {
+      "type": "ops",
+      "hidden": true
     }
   ],
   "bumpFiles": [

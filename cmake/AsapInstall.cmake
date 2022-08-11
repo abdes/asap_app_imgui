@@ -7,21 +7,19 @@ if(NOT DEFINED ${META_PROJECT_ID}_INSTALL)
 endif()
 
 macro(_setup_install_dirs)
+  message("-- Using CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
   # Check for system dir install
   set(_system_dir_install FALSE)
   if("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr" OR "${CMAKE_INSTALL_PREFIX}"
                                                   STREQUAL "/usr/local")
     set(_system_dir_install TRUE)
-    set(ASAP_INSTALL_PREFIX_FULL_PATH ${CMAKE_INSTALL_PREFIX})
-  else()
-    set(ASAP_INSTALL_PREFIX_FULL_PATH
-        ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_PREFIX})
   endif()
 
-  # Installation paths
-  include(GNUInstallDirs)
   # cmake-format: off
   if(UNIX AND _system_dir_install)
+    # Installation paths
+    message("---- Will use GNUInstallDirs layout to install project files")
+    include(GNUInstallDirs)
     # Install into the system (/usr/bin or /usr/local/bin)
     set(ASAP_INSTALL_ROOT      "${CMAKE_INSTALL_DATAROOTDIR}/${META_PROJECT_NAME}")       # /usr/[local]/share/<project>
     set(ASAP_INSTALL_LIB       "${CMAKE_INSTALL_LIBDIR}")                       # /usr/[local]/lib
@@ -37,6 +35,7 @@ macro(_setup_install_dirs)
     set(ASAP_INSTALL_ICONS     "${CMAKE_INSTALL_DATAROOTDIR}/pixmaps")          # /usr/[local]/share/pixmaps
     set(ASAP_INSTALL_INIT      "/etc/init")                                     # /etc/init (upstart init scripts)
   else()
+    message("---- Will use local layout to install project files")
     # Install into local directory
     set(ASAP_INSTALL_ROOT      ".")                                           # ./
     set(ASAP_INSTALL_LIB       "lib")                                         # ./lib

@@ -16,7 +16,17 @@ if("${CMAKE_C_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang|GNU")
   endfunction()
 
   function(asap_add_code_coverage_all_targets)
-    add_code_coverage_all_targets(${ARGV})
+    # Add standard exclusion patterns for code coverage reports
+    if("${CMAKE_C_COMPILER_ID}" MATCHES "(Apple)?[Cc]lang")
+      # For clang we'll be using llvm-cov which expect regex as input for
+      # exclusions
+      set(STANDARD_EXCLUDES '.*/test/.*' '.*/\.cache/CPM/.*' '/usr/.*')
+    else()
+      # For GNU however, we'll be using lcov which expects file patterns as
+      # input for excludions
+      set(STANDARD_EXCLUDES */test/* */.cache/CPM/* /usr/*)
+    endif()
+    add_code_coverage_all_targets(EXCLUDE ${STANDARD_EXCLUDES} ${ARGV})
   endfunction()
 
 else()
