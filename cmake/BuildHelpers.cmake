@@ -8,29 +8,6 @@
 # Build Helpers to simplify target creation.
 # ------------------------------------------------------------------------------
 
-function(asap_compile_definitions target)
-  #
-  # Compile definitions
-  #
-  # ones we use for every single target
-  target_compile_definitions(
-    ${target}
-    PRIVATE $<$<STREQUAL:${OPTION_CONTRACT_MODE},DEFAULT>:
-            ASAP_CONTRACT_DEFAULT
-            >
-            $<$<STREQUAL:${OPTION_CONTRACT_MODE},XXX>:
-            ASAP_CONTRACT_OFF
-            >
-            $<$<STREQUAL:${OPTION_CONTRACT_MODE},AUDIT>:
-            ASAP_CONTRACT_AUDIT
-            >
-            $<$<CXX_COMPILER_ID:MSVC>:
-            NOMINMAX
-            WIN32_LEAN_AND_MEAN=1
-            _WIN32_WINNT=0x0600
-            >)
-endfunction()
-
 include(GenerateTemplateExportHeader)
 function(asap_generate_export_headers target include_dir)
   # Set API export file and macro
