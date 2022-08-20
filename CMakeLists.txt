@@ -110,7 +110,6 @@ set(${PROJECT_NAME}_BUILD_EXAMPLES ${ASAP_BUILD_EXAMPLES})
 include(AsapTargets)
 include(BuildHelpers)
 include(GenerateExportHeader)
-include(CompileOptions)
 
 # Override the ${META_PROJECT_ID}_INSTALL option to ON/OFF to respectively force
 # install/no-install behavior for this project. This is particularly useful when
