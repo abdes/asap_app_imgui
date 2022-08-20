@@ -11,8 +11,9 @@ Checks: >
     portability-*,
     readability-*,
     -cppcoreguidelines-macro-usage,
-    -hicpp-signed-bitwise,
-    -hicpp-exception-baseclass,
-    -readability-function-cognitive-complexity,
     -google-runtime-references
+    -hicpp-exception-baseclass,
+    -hicpp-signed-bitwise,
+    -readability-function-cognitive-complexity,
+    -used-but-marked-unused,
 HeaderFilterRegex: ".*/[common|logging]/.*"
