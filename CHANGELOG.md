@@ -21,7 +21,7 @@ there.
   [GnuInstallDirs](https://cmake.org/cmake/help/latest/module/GNUInstallDirs.html),
   otherwise, it will be installed using a simplified local layout as following:
 
-```
+```cmake
     # Install into local directory
     set(ASAP_INSTALL_ROOT      ".")                                           # ./
     set(ASAP_INSTALL_LIB       "lib")                                         # ./lib
