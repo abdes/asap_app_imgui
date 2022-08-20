@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file. See
 [standard-version](https://github.com/conventional-changelog/standard-version)
 for commit guidelines.
 
+## [4.4.0](http://github.com/abdes/asap/compare/v4.3.6...v4.4.0) (2022-08-20)
+
+
+### Bug Fixes
+
+* [#10](http://github.com/abdes/asap/issues/10) no more template export header
+  ([dd8ffd5](http://github.com/abdes/asap/commit/dd8ffd5a8f36340963349c7ebcb7c1713c2f880a)).
+
+  Simply include the `asap_<module>_export.h` which defines the
+  `ASAP_<MODULE>_API` macros for symbol visibility. As a general rule, do not
+  add explicit visibility for inline methods/functions and for template
+  classes/functions as they are included in each compilation unit.
+
+* [#11](http://github.com/abdes/asap/issues/11) refactor compiler options
+  management.
+  ([78ae493](http://github.com/abdes/asap/commit/78ae4933f2e263a55f6537e66347c6b11a24b961))
+
+  In general, asap target helpers, such as asap_add_library, will seamlessly
+  manage compiler options behind the scenes, relaying first to `cmake/common`
+  modules and then overriding/adding/removing options based on asap preferences.
+  Such options can further be customized by the calling module using the
+  `asap_set_compile_options()` function and passing `ADD`, `REMOVE` and relevant
+  options as appropriate.
+
+* [#9](http://github.com/abdes/asap/issues/9) remove no longer used function
+  ([5a7416f](http://github.com/abdes/asap/commit/5a7416f9563aae303d68ca2bb878fef97fbb7130))
+
 ## [4.3.6](http://github.com/abdes/asap/compare/v4.3.5...v4.3.6) (2022-08-11)
 
 Minor update to directly use the `cmake/common` submodule from
