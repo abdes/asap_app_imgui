@@ -8,7 +8,6 @@
 # Build Helpers to simplify target creation.
 # ------------------------------------------------------------------------------
 
-include(GenerateTemplateExportHeader)
 function(asap_generate_export_headers target include_dir)
   # Set API export file and macro
   string(MAKE_C_IDENTIFIER ${target} TEMPLATE_TARGET_ID)
@@ -21,6 +20,4 @@ function(asap_generate_export_headers target include_dir)
   # Create API export headers
   generate_export_header(${target} EXPORT_FILE_NAME ${export_file}
                          EXPORT_MACRO_NAME ${TEMPLATE_TARGET_ID}_API)
-  generate_template_export_header(${target} ${TEMPLATE_TARGET_ID}
-                                  ${template_export_file})
 endfunction()
