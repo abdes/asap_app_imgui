@@ -5,8 +5,10 @@
 # ===-----------------------------------------------------------------------===#
 
 include(CMakePackageConfigHelpers)
+include(common/CompileOptions)
 include(common/SwiftTargets)
 include(CompileDefinitions)
+include(CompileOptions)
 
 # ------------------------------------------------------------------------------
 # Meta information about the this module
@@ -113,6 +115,8 @@ function(asap_add_library target)
   if(NOT ${type} STREQUAL "INTERFACE_LIBRARY")
     # Set some common private compiler defines
     asap_set_compile_definitions(${target})
+    # Set some common compiler options
+    asap_set_compile_options(${target})
     # Generate export headers for the library
     asap_generate_export_headers(${target} ${META_MODULE_NAME})
 
@@ -129,33 +133,31 @@ endfunction()
 
 function(asap_add_executable target)
   swift_add_executable("${target}" ${ARGN})
+  # Set some common private compiler defines
   asap_set_compile_definitions(${target})
+  # Set some common compiler options
+  asap_set_compile_options(${target})
   set_target_properties(${target} PROPERTIES FOLDER "Executables")
 endfunction()
 
 function(asap_add_tool target)
   swift_add_tool("${target}" ${ARGN})
+  # Set some common private compiler defines
   asap_set_compile_definitions(${target})
+  # Set some common compiler options
+  asap_set_compile_options(${target})
   set_target_properties(${target} PROPERTIES FOLDER "Tools")
 endfunction()
 
 function(asap_add_tool_library target)
   swift_add_tool_library("${target}" ${ARGN})
+  # Set some common private compiler defines
   asap_set_compile_definitions(${target})
+  # Set some common compiler options
+  asap_set_compile_options(${target})
   set_target_properties(
     ${target}
     PROPERTIES FOLDER "Tool Libraries"
-               VERSION ${META_MODULE_VERSION}
-               SOVERSION ${META_MODULE_VERSION_MAJOR}
-               DEBUG_POSTFIX "d")
-endfunction()
-
-function(asap_add_test_library target)
-  swift_add_test_library("${target}" ${ARGN})
-  asap_set_compile_definitions(${target})
-  set_target_properties(
-    ${target}
-    PROPERTIES FOLDER "Test Libraries"
                VERSION ${META_MODULE_VERSION}
                SOVERSION ${META_MODULE_VERSION_MAJOR}
                DEBUG_POSTFIX "d")
