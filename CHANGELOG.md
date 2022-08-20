@@ -1,6 +1,8 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See
+[standard-version](https://github.com/conventional-changelog/standard-version)
+for commit guidelines.
 
 ## [4.3.6](http://github.com/abdes/asap/compare/v4.3.5...v4.3.6) (2022-08-11)
 
@@ -43,8 +45,10 @@ there.
   closes [#7](http://github.com/abdes/asap/issues/7)
 
   Added the following two commit types:
-  * `build` Commits, that affect build components like build tool, ci pipeline, dependencies, project version, ...
-  * `ops` Commits, that affect operational components like infrastructure, deployment, backup, recovery, ...
+  * `build` Commits, that affect build components like build tool, ci pipeline,
+    dependencies, project version, ...
+  * `ops` Commits, that affect operational components like infrastructure,
+    deployment, backup, recovery, ...
 
 * **#8:** add standard ccov excluded directories by default
   ([a8aabb3](http://github.com/abdes/asap/commit/a8aabb31d3ea6b0c5a50e13bf366f092ca724537)),
@@ -60,52 +64,70 @@ there.
 
 ### Bug Fixes
 
-* alias variable to enable/disable building tests ([3992b0f](http://github.com/abdes/asap/commit/3992b0f7d500e653532bd0f206489058d99ad2d0))
-* typo in variable name to enable/disable building tests ([9950fe2](http://github.com/abdes/asap/commit/9950fe2dcbe6c284e9ce32ce6a455e4a3a499ec4))
+* alias variable to enable/disable building tests
+  ([3992b0f](http://github.com/abdes/asap/commit/3992b0f7d500e653532bd0f206489058d99ad2d0))
+* typo in variable name to enable/disable building tests
+  ([9950fe2](http://github.com/abdes/asap/commit/9950fe2dcbe6c284e9ce32ce6a455e4a3a499ec4))
 
 ## [4.3.3](http://github.com/abdes/asap/compare/v4.3.2...v4.3.3) (2022-08-04)
 
 ### Bug Fixes
 
-* add aliases used by cmake common functions ([9c33906](http://github.com/abdes/asap/commit/9c339069acd9ab6355f8156f2e8eaf81c382342c))
+* add aliases used by cmake common functions
+  ([9c33906](http://github.com/abdes/asap/commit/9c339069acd9ab6355f8156f2e8eaf81c382342c))
 
 ## [4.3.2](http://github.com/abdes/asap/compare/v4.3.1...v4.3.2) (2022-08-04)
 
 ### Bug Fixes
 
-* [#5](http://github.com/abdes/asap/issues/5) update cmake/common to latest ([5034b22](http://github.com/abdes/asap/commit/5034b22d39e5cb54acd51baa0bf815dbdd82093b))
+* [#5](http://github.com/abdes/asap/issues/5) update cmake/common to latest
+  ([5034b22](http://github.com/abdes/asap/commit/5034b22d39e5cb54acd51baa0bf815dbdd82093b))
 
 ## [4.3.1](http://github.com/abdes/asap/compare/v4.3.0...v4.3.1) (2022-05-01)
 
 ### Features
 
-- add ccache support to dev container ([202c27a](http://github.com/abdes/asap/commit/202c27a628f7f35ae17f2df91c1d95f67360abea))
+- add ccache support to dev container
+  ([202c27a](http://github.com/abdes/asap/commit/202c27a628f7f35ae17f2df91c1d95f67360abea))
 
 ## [4.3.0](http://github.com/abdes/asap/compare/v4.2.0...v4.3.0) (2022-04-07)
 
 ### Documentation
 
-- add badge for OpenSSF best practices ([26c01c8](http://github.com/abdes/asap/commit/26c01c8bcf98c6b47e6622dea91a6c6e10bc978c))
-- add CPM as preferred way of managing third party deps ([5a33f70](http://github.com/abdes/asap/commit/5a33f70a15a64c84f0a13b4286460f9df20459a5))
-- add tutorial videos ([cb13248](http://github.com/abdes/asap/commit/cb13248244cddd0dc2c187893556fad7aa4f08b7))
-- fix thumbnail and links of project docs video ([1a6269e](http://github.com/abdes/asap/commit/1a6269eef8999504aba8105d4c446a93e41c988b))
-- how to report security vulnerabilities ([46426e9](http://github.com/abdes/asap/commit/46426e9d44f3c4e8ee0b3fdd98e2ee56d13f8890))
-- improve the key features section ([79119ba](http://github.com/abdes/asap/commit/79119ba52f578a28dfdeb1ce59bba67c3fbcd3c1))
-- include build status badges for all branches ([2b98ae1](http://github.com/abdes/asap/commit/2b98ae11ace8fa756c825686018a3a328ce27eca))
-- revamp the project README ([e72c4c3](http://github.com/abdes/asap/commit/e72c4c3288d565b34b137ab785abe90370052258))
-- rewrite the contributing section ([c7e39c4](http://github.com/abdes/asap/commit/c7e39c4cfa6033aac42befe5ed994089e601b6a0))
-- update instructions for repo from template scenario ([1cafdb5](http://github.com/abdes/asap/commit/1cafdb57f86a4b61a736b3411791ae96ca684f33))
-- update project docs video ([c7f79fc](http://github.com/abdes/asap/commit/c7f79fc64900cfa9ec3d2466300d1d32830b32f1))
+- add badge for OpenSSF best practices
+  ([26c01c8](http://github.com/abdes/asap/commit/26c01c8bcf98c6b47e6622dea91a6c6e10bc978c))
+- add CPM as preferred way of managing third party deps
+  ([5a33f70](http://github.com/abdes/asap/commit/5a33f70a15a64c84f0a13b4286460f9df20459a5))
+- add tutorial videos
+  ([cb13248](http://github.com/abdes/asap/commit/cb13248244cddd0dc2c187893556fad7aa4f08b7))
+- fix thumbnail and links of project docs video
+  ([1a6269e](http://github.com/abdes/asap/commit/1a6269eef8999504aba8105d4c446a93e41c988b))
+- how to report security vulnerabilities
+  ([46426e9](http://github.com/abdes/asap/commit/46426e9d44f3c4e8ee0b3fdd98e2ee56d13f8890))
+- improve the key features section
+  ([79119ba](http://github.com/abdes/asap/commit/79119ba52f578a28dfdeb1ce59bba67c3fbcd3c1))
+- include build status badges for all branches
+  ([2b98ae1](http://github.com/abdes/asap/commit/2b98ae11ace8fa756c825686018a3a328ce27eca))
+- revamp the project README
+  ([e72c4c3](http://github.com/abdes/asap/commit/e72c4c3288d565b34b137ab785abe90370052258))
+- rewrite the contributing section
+  ([c7e39c4](http://github.com/abdes/asap/commit/c7e39c4cfa6033aac42befe5ed994089e601b6a0))
+- update instructions for repo from template scenario
+  ([1cafdb5](http://github.com/abdes/asap/commit/1cafdb57f86a4b61a736b3411791ae96ca684f33))
+- update project docs video
+  ([c7f79fc](http://github.com/abdes/asap/commit/c7f79fc64900cfa9ec3d2466300d1d32830b32f1))
 
 ## [4.2.0](http://github.com/abdes/asap/compare/v4.1.8...v4.2.0) (2022-04-03)
 
 ### Features
 
-- make ccache usable on all platforms ([412730f](http://github.com/abdes/asap/commit/412730f86679d7ccd350cadf5649b7a489376cae))
+- make ccache usable on all platforms
+  ([412730f](http://github.com/abdes/asap/commit/412730f86679d7ccd350cadf5649b7a489376cae))
 
 ### Bug Fixes
 
-- use only white-listed properties for interface library ([227de02](http://github.com/abdes/asap/commit/227de026878beb9dd9679d0cad12cf25bce16c4a))
+- use only white-listed properties for interface library
+  ([227de02](http://github.com/abdes/asap/commit/227de026878beb9dd9679d0cad12cf25bce16c4a))
 
 ## [4.1.8](http://github.com/abdes/asap/compare/v4.1.7...v4.1.8) (2022-03-15)
 
@@ -121,8 +143,11 @@ docs: add last-updated-on timestamp
 
 ### Bug Fixes
 
-- define asap_top_level_install as empty when project install should be skipped ([616deed](http://github.com/abdes/asap/commit/616deed7f2655cf6690135ed1914f7eec8053373))
-- use correct links for documentation ([486144c](http://github.com/abdes/asap/commit/486144c46222c22861b0a14f9dc002d148a31f24)), closes [#4](http://github.com/abdes/asap/issues/4)
+- define asap_top_level_install as empty when project install should be skipped
+  ([616deed](http://github.com/abdes/asap/commit/616deed7f2655cf6690135ed1914f7eec8053373))
+- use correct links for documentation
+  ([486144c](http://github.com/abdes/asap/commit/486144c46222c22861b0a14f9dc002d148a31f24)),
+  closes [#4](http://github.com/abdes/asap/issues/4)
 
 ## [4.1.5](http://github.com/abdes/asap/compare/v4.1.4...v4.1.5) (2022-03-06)
 
@@ -143,20 +168,34 @@ and streamline the generated targets.
 
 ### Bug Fixes
 
-- always use top level build dir for output ([1b01db2](http://github.com/abdes/asap/commit/1b01db2402bc52944646bcde3cf525315a4e0e1b))
-- doxygen and sphinx target conflict with modules ([02375ff](http://github.com/abdes/asap/commit/02375ff4a33e34a8e0cb9307ef4eb6de3271e945))
-- generate doc only if project is master ([82190fa](http://github.com/abdes/asap/commit/82190fa6562f5e51dbbab660bcab8dc265e99a0b))
-- make doxygen targets sub-project friendly ([546fe73](http://github.com/abdes/asap/commit/546fe73ded53721dddbac311e9db41e4146b8ad2))
-- make gtest work again ([3ce658c](http://github.com/abdes/asap/commit/3ce658c5f1eb216a3286717e7f80827b96ff3b49))
-- make sphinx targets sub-project friendly ([024cc77](http://github.com/abdes/asap/commit/024cc77d17ed134ed5f3f4eea32226b07b05aad6))
-- only add clang-format/tidy targets if master project ([060f082](http://github.com/abdes/asap/commit/060f082714e039eb4c2c2e198b5caed74690e8af))
-- only install files if requested to install ([9caaf9b](http://github.com/abdes/asap/commit/9caaf9b47e138be3f9845d6d58ebc21ff8dfa83b))
-- reorganize third_party modules for use of FetchContent ([cc65bc2](http://github.com/abdes/asap/commit/cc65bc2219dbe38197107bae71252444994e118c))
-- use correct tagets for doc builds ([559558e](http://github.com/abdes/asap/commit/559558e8eac3043eef19986cc2ae6d6dfd937be8))
-- use correct url for logo image ([96d1e01](http://github.com/abdes/asap/commit/96d1e01d971bd2f33faaebfc060082023f3a5209))
-- use correct url for master index page ([a56c327](http://github.com/abdes/asap/commit/a56c327ff3d7ab14d7a499fc4997279efd2647fe))
-- use lower case META_PROJECT_ID ([311e433](http://github.com/abdes/asap/commit/311e433e8698ff6385c2cda256bff83982596ed0))
-- wrong variable used for target name ([829f351](http://github.com/abdes/asap/commit/829f351d22b384ddc060ae2df47ff9e801089dd2))
+- always use top level build dir for output
+  ([1b01db2](http://github.com/abdes/asap/commit/1b01db2402bc52944646bcde3cf525315a4e0e1b))
+- doxygen and sphinx target conflict with modules
+  ([02375ff](http://github.com/abdes/asap/commit/02375ff4a33e34a8e0cb9307ef4eb6de3271e945))
+- generate doc only if project is master
+  ([82190fa](http://github.com/abdes/asap/commit/82190fa6562f5e51dbbab660bcab8dc265e99a0b))
+- make doxygen targets sub-project friendly
+  ([546fe73](http://github.com/abdes/asap/commit/546fe73ded53721dddbac311e9db41e4146b8ad2))
+- make gtest work again
+  ([3ce658c](http://github.com/abdes/asap/commit/3ce658c5f1eb216a3286717e7f80827b96ff3b49))
+- make sphinx targets sub-project friendly
+  ([024cc77](http://github.com/abdes/asap/commit/024cc77d17ed134ed5f3f4eea32226b07b05aad6))
+- only add clang-format/tidy targets if master project
+  ([060f082](http://github.com/abdes/asap/commit/060f082714e039eb4c2c2e198b5caed74690e8af))
+- only install files if requested to install
+  ([9caaf9b](http://github.com/abdes/asap/commit/9caaf9b47e138be3f9845d6d58ebc21ff8dfa83b))
+- reorganize third_party modules for use of FetchContent
+  ([cc65bc2](http://github.com/abdes/asap/commit/cc65bc2219dbe38197107bae71252444994e118c))
+- use correct tagets for doc builds
+  ([559558e](http://github.com/abdes/asap/commit/559558e8eac3043eef19986cc2ae6d6dfd937be8))
+- use correct url for logo image
+  ([96d1e01](http://github.com/abdes/asap/commit/96d1e01d971bd2f33faaebfc060082023f3a5209))
+- use correct url for master index page
+  ([a56c327](http://github.com/abdes/asap/commit/a56c327ff3d7ab14d7a499fc4997279efd2647fe))
+- use lower case META_PROJECT_ID
+  ([311e433](http://github.com/abdes/asap/commit/311e433e8698ff6385c2cda256bff83982596ed0))
+- wrong variable used for target name
+  ([829f351](http://github.com/abdes/asap/commit/829f351d22b384ddc060ae2df47ff9e801089dd2))
 
 ## [4.1.1](http://github.com/abdes/asap/compare/v4.1.0...v4.1.1) (2022-02-18)
 
@@ -176,8 +215,10 @@ refactor the docs for easier maintenance and use in forked projects.
 
 ### Bug Fixes
 
-- contract api docs now in contract module ([d3366bd](http://github.com/abdes/asap/commit/d3366bd846d66486b2fcf98f36fd741452be8516))
-- keep `src` even when empty for doxygen not to complain ([be28f42](http://github.com/abdes/asap/commit/be28f429eddde8f258a08e84722e4fcaf975b384))
+- contract api docs now in contract module
+  ([d3366bd](http://github.com/abdes/asap/commit/d3366bd846d66486b2fcf98f36fd741452be8516))
+- keep `src` even when empty for doxygen not to complain
+  ([be28f42](http://github.com/abdes/asap/commit/be28f429eddde8f258a08e84722e4fcaf975b384))
 
 ## [4.0.1](http://github.com/abdes/asap/compare/v4.0.1...v4.0.0) (2022-02-17)
 
@@ -187,8 +228,10 @@ refactor the docs for easier maintenance and use in forked projects.
 
 ### Features
 
-- overload pattern for variant visitation on the fly ([53ea7cc](http://github.com/abdes/asap/commit/53ea7cc74e89913cbf59eda2e30bd36c356e6acd))
-- refactor: trim the project to the bare minimum([8d48a56](https://github.com/abdes/asap/commit/8d48a56ef0db2359aa80b5e5b2854802dc6a45f0))
+- overload pattern for variant visitation on the fly
+  ([53ea7cc](http://github.com/abdes/asap/commit/53ea7cc74e89913cbf59eda2e30bd36c356e6acd))
+- refactor: trim the project to the bare
+  minimum([8d48a56](https://github.com/abdes/asap/commit/8d48a56ef0db2359aa80b5e5b2854802dc6a45f0))
 
   The intention from the asap base project is to be a template starter repo that
   can be cloned and used for new projects. The bare minimum is the cmake build
@@ -201,19 +244,24 @@ refactor the docs for easier maintenance and use in forked projects.
 
 ### Bug Fixes
 
-- use separate sphinx cache dir for each module ([03f36fc](http://github.com/abdes/asap/commit/03f36fc96c78c51b441feb9a7b9c70d19a2125c7))
+- use separate sphinx cache dir for each module
+  ([03f36fc](http://github.com/abdes/asap/commit/03f36fc96c78c51b441feb9a7b9c70d19a2125c7))
 
 ## [3.1.2](http://github.com/abdes/asap/compare/v3.1.1...v3.1.2) (2021-12-19)
 
 ### Features
 
-- doxygen snippets from `test` or `examples` source directories ([85b8000](http://github.com/abdes/asap/commit/85b8000e91dd105c0f90a62b1824957b68ce9c03))
+- doxygen snippets from `test` or `examples` source directories
+  ([85b8000](http://github.com/abdes/asap/commit/85b8000e91dd105c0f90a62b1824957b68ce9c03))
 
 ### Bug Fixes
 
-- **doc:** wrong chapter title in logging module page ([5966912](http://github.com/abdes/asap/commit/59669122d3ea8565878667e6f09b124bc7da1b99))
-- doxygen doc generation uses wrong module info ([8833474](http://github.com/abdes/asap/commit/8833474402c523a3f2eda10b8927da46989f4bba))
-- need to hardcode `asap` when linking `common` ([e038a70](http://github.com/abdes/asap/commit/e038a702ce8727fa1a6c8b3a45cb4bb211281db5))
+- **doc:** wrong chapter title in logging module page
+  ([5966912](http://github.com/abdes/asap/commit/59669122d3ea8565878667e6f09b124bc7da1b99))
+- doxygen doc generation uses wrong module info
+  ([8833474](http://github.com/abdes/asap/commit/8833474402c523a3f2eda10b8927da46989f4bba))
+- need to hardcode `asap` when linking `common`
+  ([e038a70](http://github.com/abdes/asap/commit/e038a702ce8727fa1a6c8b3a45cb4bb211281db5))
 
 ## [3.1.1](http://github.com/abdes/asap/compare/v3.1.0...v3.1.1) (2021-12-19)
 
@@ -239,14 +287,20 @@ refactor the docs for easier maintenance and use in forked projects.
 
 ### Features
 
-- add support for .editorconfig ([5a7a689](http://github.com/abdes/asap/commit/5a7a6892f7c05798e79c6f81e9eef3b0a6256ca1))
-- provide a way to distinguish between debug and release builds via preprocessor define ([bbd84a2](http://github.com/abdes/asap/commit/bbd84a2c32c9833f79b442e202b647f93946b105))
+- add support for .editorconfig
+  ([5a7a689](http://github.com/abdes/asap/commit/5a7a6892f7c05798e79c6f81e9eef3b0a6256ca1))
+- provide a way to distinguish between debug and release builds via preprocessor
+  define
+  ([bbd84a2](http://github.com/abdes/asap/commit/bbd84a2c32c9833f79b442e202b647f93946b105))
 
 ### Bug Fixes
 
-- adjust doc target names to work in renamed projects ([60acc65](http://github.com/abdes/asap/commit/60acc65fcc8d529a69f3617d792376be3e54b6ce))
-- cmake option was placed in the wrong command ([b634b15](http://github.com/abdes/asap/commit/b634b153db975a8bc8715e82f7fafdc214504cfa))
-- clean the logging API implementation ([25535c7](http://github.com/abdes/asap/commit/25535c76c0586d53f7c6c55db250a251f0c5390b))
+- adjust doc target names to work in renamed projects
+  ([60acc65](http://github.com/abdes/asap/commit/60acc65fcc8d529a69f3617d792376be3e54b6ce))
+- cmake option was placed in the wrong command
+  ([b634b15](http://github.com/abdes/asap/commit/b634b153db975a8bc8715e82f7fafdc214504cfa))
+- clean the logging API implementation
+  ([25535c7](http://github.com/abdes/asap/commit/25535c76c0586d53f7c6c55db250a251f0c5390b))
 
 ## [3.0.0](http://github.com/abdes/asap/compare/v2.0.1...v3.0.0) (2021-12-08)
 
@@ -303,9 +357,12 @@ refactor the docs for easier maintenance and use in forked projects.
 
 ### Bug Fixes
 
-- "-Wreserved-identifier" only if not APPLE ([05fac12](http://github.com/abdes/asap/commit/05fac12d37978c6651c299e6ad1cc64dfed88fa0))
-- cmake require c++ 14 in all modules ([f05c9a6](http://github.com/abdes/asap/commit/f05c9a63e97dbcbef3e7d8188a04e719e2247d62))
-- use lower-case name for sphinx ([f3005b5](http://github.com/abdes/asap/commit/f3005b5bd4055b16a57cdcb3af70a2f32b1c5809))
+- "-Wreserved-identifier" only if not APPLE
+  ([05fac12](http://github.com/abdes/asap/commit/05fac12d37978c6651c299e6ad1cc64dfed88fa0))
+- cmake require c++ 14 in all modules
+  ([f05c9a6](http://github.com/abdes/asap/commit/f05c9a63e97dbcbef3e7d8188a04e719e2247d62))
+- use lower-case name for sphinx
+  ([f3005b5](http://github.com/abdes/asap/commit/f3005b5bd4055b16a57cdcb3af70a2f32b1c5809))
 
 ## [2.0.0](http://github.com/abdes/asap/compare/v1.0.0...v2.0.0) (2021-11-06)
 
@@ -327,16 +384,19 @@ refactor the docs for easier maintenance and use in forked projects.
 
 - logging is in a new module: asap::logging.
 
-Many modules would want to only get the basic common functionality
-without pulling extra 3rd party dependencies such as spdlog, fmt etc...
-For this reason, the logging functionality is taken out of the common
-submodule and moved to logging submodule.
+Many modules would want to only get the basic common functionality without
+pulling extra 3rd party dependencies such as spdlog, fmt etc... For this reason,
+the logging functionality is taken out of the common submodule and moved to
+logging submodule.
 
-- move logging functionality to separate module ([46f4dd9](http://github.com/abdes/asap/commit/46f4dd96edb1148e0772a1539b989fd80f3821e4))
+- move logging functionality to separate module
+  ([46f4dd9](http://github.com/abdes/asap/commit/46f4dd96edb1148e0772a1539b989fd80f3821e4))
 
 ## 1.0.0 (2021-11-03)
 
 ### Features
 
-- add support for Conventional Commits and auto Changelog ([7b827fa](http://github.com/abdes/asap/commit/7b827fab2ae28ba903c69ab5acdf249cb3e55d85))
-- replace cmake compiler detection with hedley ([8bf0a3d](http://github.com/abdes/asap/commit/8bf0a3d53fcdba65497491cbd63c1dcffcba8467))
+- add support for Conventional Commits and auto Changelog
+  ([7b827fa](http://github.com/abdes/asap/commit/7b827fab2ae28ba903c69ab5acdf249cb3e55d85))
+- replace cmake compiler detection with hedley
+  ([8bf0a3d](http://github.com/abdes/asap/commit/8bf0a3d53fcdba65497491cbd63c1dcffcba8467))
