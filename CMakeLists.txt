@@ -15,7 +15,7 @@ cmake_minimum_required(VERSION 3.14)
 # List of directories specifying a search path for CMake modules to be loaded by
 # the the include() or find_package() commands before checking the default
 # modules that come with CMake.
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # ------------------------------------------------------------------------------
 # Project description and (meta) information
