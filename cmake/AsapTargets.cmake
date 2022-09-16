@@ -82,6 +82,7 @@ endfunction()
 
 function(_module_pkgconfig_files)
   set(MODULE_PKGCONFIG_FILE ${MODULE_TARGET_NAME}.pc)
+  get_target_property(type ${target} TYPE)
   if(NOT ${type} STREQUAL "INTERFACE_LIBRARY")
     get_target_property(TARGET_DEBUG_POSTFIX ${MODULE_TARGET_NAME}
                         DEBUG_POSTFIX)
