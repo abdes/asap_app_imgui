@@ -14,8 +14,7 @@
       "binaryDir": "${sourceDir}/out/build/${presetName}",
       "installDir": "${sourceDir}/out/install/${presetName}",
       "environment": {
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "caexcludepath": "${sourceDir}/third_party;${sourceDir}/out"
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       },
       "cacheVariables": {
         "CPM_SOURCE_CACHE": "~/.cache/CPM",
@@ -112,7 +111,10 @@
         "base",
         "debug",
         "x64"
-      ]
+      ],
+      "environment": {
+        "caexcludepath": "${sourceDir}/third_party;${sourceDir}/out;$env{userprofile}/.cache/CPM"
+      }
     },
     {
       "name": "dev-linux",
