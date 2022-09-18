@@ -15,7 +15,13 @@ cmake_minimum_required(VERSION 3.14)
 # List of directories specifying a search path for CMake modules to be loaded by
 # the the include() or find_package() commands before checking the default
 # modules that come with CMake.
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+# But if this project is not the master project, prioritize the master project
+# cmake include dir if it exists.
+if(NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR
+   AND EXISTS "${CMAKE_SOURCE_DIR}/cmake")
+  list(PREPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+endif()
 
 # ------------------------------------------------------------------------------
 # Project description and (meta) information
@@ -101,6 +107,53 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(${PROJECT_NAME}_BUILD_TESTS ${ASAP_BUILD_TESTS})
 set(${PROJECT_NAME}_BUILD_EXAMPLES ${ASAP_BUILD_EXAMPLES})
 
+# ---- Add dependencies via CPM ----
+# see https://github.com/TheLartians/CPM.cmake for more info
+
+include(cmake/CPM.cmake)
+# We make sure that we have 'third_party' in the name so that the targets get
+# excluded from the generated target lists for the various tools.
+set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
+
+# ---- Speedup build using ccache (needs CPM) ----
+include(cmake/FasterBuild.cmake)
+
+# ------------------------------------------------------------------------------
+# Top level code generation
+# ------------------------------------------------------------------------------
+
+# Generate version-header
+configure_file(templates/version.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h)
+
+# Generate a clangd configuration file that points to the compilation database
+# in the cmake build directory. We need to do this as the build directory is
+# different for every preset and can be different as well when the user decides
+# to build somewhere else. Currently we cannot configure this properly in vscode
+# settings. See https://github.com/clangd/vscode-clangd/issues/48
+configure_file(.clangd.in ${CMAKE_SOURCE_DIR}/.clangd @ONLY)
+
+# ------------------------------------------------------------------------------
+# Documentation - doxygen, sphinx/breathe/exhale
+# ------------------------------------------------------------------------------
+
+# Doxygen
+set(DOXYGEN_BUILD_DIR "${CMAKE_BINARY_DIR}/dox")
+include(DoxGeneration)
+
+# Sphinx/breathe/exhale
+set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx")
+include(SphinxGeneration)
+
+# ------------------------------------------------------------------------------
+# Third party modules
+#
+# Call after documentation but before project modules and before adding common
+# cmake modules.
+# ------------------------------------------------------------------------------
+
+add_subdirectory(third_party)
+
 # ------------------------------------------------------------------------------
 # Additional CMake modules
 # ------------------------------------------------------------------------------
@@ -147,76 +200,6 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 if(NOT SYSTEM_DIR_INSTALL)
   set(CMAKE_INSTALL_RPATH "$ORIGIN/${ASAP_INSTALL_LIB}")
 endif()
-
-# ---- Add dependencies via CPM ----
-# see https://github.com/TheLartians/CPM.cmake for more info
-
-include(cmake/CPM.cmake)
-# We make sure that we have 'third_party' in the name so that the targets get
-# excluded from the generated target lists for the various tools.
-set(FETCHCONTENT_BASE_DIR ${CMAKE_BINARY_DIR}/third_party_deps)
-
-# ---- Speedup build using ccache (needs CPM) ----
-include(cmake/FasterBuild.cmake)
-
-# ------------------------------------------------------------------------------
-# Testing
-# ------------------------------------------------------------------------------
-
-if(ASAP_BUILD_TESTS)
-  include(GoogleSanitizers)
-  include(CodeCoverage)
-  # Enable this target when the project has test cases
-  # asap_add_code_coverage_all_targets()
-  include(Valgrind)
-
-  cpmaddpackage(
-    NAME
-    googletest
-    GIT_TAG
-    main
-    GITHUB_REPOSITORY
-    google/googletest
-    OPTIONS
-    "gtest_force_shared_crt ON"
-    "INSTALL_GTEST OFF")
-
-  include(GoogleTest)
-  include(CTest)
-endif()
-
-# ------------------------------------------------------------------------------
-# Top level code generation
-# ------------------------------------------------------------------------------
-
-# Generate version-header
-configure_file(templates/version.h.in
-               ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h)
-
-# Generate a clangd configuration file that points to the compilation database
-# in the cmake build directory. We need to do this as the build directory is
-# different for every preset and can be different as well when the user decides
-# to build somewhere else. Currently we cannot configure this properly in vscode
-# settings. See https://github.com/clangd/vscode-clangd/issues/48
-configure_file(.clangd.in ${CMAKE_SOURCE_DIR}/.clangd @ONLY)
-
-# ------------------------------------------------------------------------------
-# Documentation - doxygen, sphinx/breathe/exhale
-# ------------------------------------------------------------------------------
-
-# Doxygen
-set(DOXYGEN_BUILD_DIR "${CMAKE_BINARY_DIR}/dox")
-include(DoxGeneration)
-
-# Sphinx/breathe/exhale
-set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx")
-include(SphinxGeneration)
-
-# ==============================================================================
-# Third party modules
-# ==============================================================================
-
-add_subdirectory(third_party)
 
 # ==============================================================================
 # Project modules
