@@ -68,9 +68,6 @@ jobs:
           echo github.event.action: ${{ github.event.action }}
           echo github.event_name: ${{ github.event_name }}
 
-      - name: Refresh apt keys
-        run: sudo apt-key adv --keyserver keys.gnupg.net --refresh-keys
-
       - name: Download Ninja and CMake
         shell: cmake -P {0}
         run: |
