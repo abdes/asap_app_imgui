@@ -1,6 +1,23 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file.
+See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [4.4.3](http://github.com/abdes/asap/compare/v4.4.2...v4.4.3) (2022-09-18)
+
+### Bug Fixes
+
+* [#19](http://github.com/abdes/asap/issues/19) use generator expressions instead of CMAKE_BUILD_TYPE ([857d299](http://github.com/abdes/asap/commit/857d2997d4ec6c879036e10234b8baf907e91089))
+
+  Code that checks CMAKE_BUILD_TYPE to set specific compiler flags or defines is
+  problematic. Generator expressions should be used instead to handle
+  configuration-specific logic correctly, regardless of the generator used.
+
+* use cmake-format extension default behavior ([a5d5c5e](http://github.com/abdes/asap/commit/a5d5c5eae39e4d3d0094c00848cfe777d331a219))
+
+  No need to force the `cmake-format` config file location as the command is run
+  in the workspace root by default and it will look for and find the config file
+  named `cmake-format.yaml`.
 
 ## [4.4.2](http://github.com/abdes/asap/compare/v4.4.1...v4.4.2) (2022-09-16)
 
