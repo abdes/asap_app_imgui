@@ -21,35 +21,35 @@ macro(_setup_install_dirs)
     message("---- Will use GNUInstallDirs layout to install project files")
     include(GNUInstallDirs)
     # Install into the system (/usr/bin or /usr/local/bin)
-    set(ASAP_INSTALL_ROOT      "${CMAKE_INSTALL_DATAROOTDIR}/${META_PROJECT_NAME}")       # /usr/[local]/share/<project>
     set(ASAP_INSTALL_LIB       "${CMAKE_INSTALL_LIBDIR}")                       # /usr/[local]/lib
     set(ASAP_INSTALL_SHARED    "${ASAP_INSTALL_LIB}")                           # /usr/[local]/lib
     set(ASAP_INSTALL_CMAKE     "${CMAKE_INSTALL_DATAROOTDIR}/cmake/${META_PROJECT_NAME}") # /usr/[local]/share/cmake/<project>
     set(ASAP_INSTALL_PKGCONFIG "${CMAKE_INSTALL_DATAROOTDIR}/pkgconfig")        # /usr/[local]/share/pkgconfig
-    set(ASAP_INSTALL_EXAMPLES  "${ASAP_INSTALL_ROOT}")                          # /usr/[local]/share/<project>
-    set(ASAP_INSTALL_DATA      "${ASAP_INSTALL_ROOT}")                          # /usr/[local]/share/<project>/data
+    set(ASAP_INSTALL_EXAMPLES  "${CMAKE_INSTALL_DATAROOTDIR}/${META_PROJECT_NAME}/examples") # /usr/[local]/share/<project>/examples
+    set(ASAP_INSTALL_DATA      "${CMAKE_INSTALL_DATAROOTDIR}/${META_PROJECT_NAME}")     # /usr/[local]/share/<project>
     set(ASAP_INSTALL_BIN       "${CMAKE_INSTALL_BINDIR}")                       # /usr/[local]/bin
     set(ASAP_INSTALL_INCLUDE   "${CMAKE_INSTALL_INCLUDEDIR}")                   # /usr/[local]/include
     set(ASAP_INSTALL_DOC       "${CMAKE_INSTALL_DOCDIR}")                       # /usr/[local]/share/doc/<project>
     set(ASAP_INSTALL_SHORTCUTS "${CMAKE_INSTALL_DATAROOTDIR}/applications")     # /usr/[local]/share/applications
     set(ASAP_INSTALL_ICONS     "${CMAKE_INSTALL_DATAROOTDIR}/pixmaps")          # /usr/[local]/share/pixmaps
     set(ASAP_INSTALL_INIT      "/etc/init")                                     # /etc/init (upstart init scripts)
+    set(ASAP_INSTALL_MISC      "${CMAKE_INSTALL_DATAROOTDIR}/${META_PROJECT_NAME}")          # /etc/init (upstart init scripts)
   else()
     message("---- Will use local layout to install project files")
     # Install into local directory
-    set(ASAP_INSTALL_ROOT      ".")                                           # ./
-    set(ASAP_INSTALL_LIB       "lib")                                         # ./lib
-    set(ASAP_INSTALL_SHARED    "${ASAP_INSTALL_LIB}")                         # ./lib
-    set(ASAP_INSTALL_CMAKE     "${ASAP_INSTALL_ROOT}/share/cmake/${META_PROJECT_NAME}") # ./share/cmake/<project>
-    set(ASAP_INSTALL_PKGCONFIG "${ASAP_INSTALL_ROOT}/share/pkgconfig")        # ./share/pkgconfig
-    set(ASAP_INSTALL_EXAMPLES  "${ASAP_INSTALL_ROOT}")                        # ./
-    set(ASAP_INSTALL_DATA      "${ASAP_INSTALL_ROOT}")                        # ./data
-    set(ASAP_INSTALL_BIN       "bin")                                         # ./bin
-    set(ASAP_INSTALL_INCLUDE   "include")                                     # ./include
-    set(ASAP_INSTALL_DOC       "doc")                                         # ./doc
-    set(ASAP_INSTALL_SHORTCUTS "misc")                                        # ./misc
-    set(ASAP_INSTALL_ICONS     "misc")                                        # ./misc
-    set(ASAP_INSTALL_INIT      "misc")                                        # ./misc
+    set(ASAP_INSTALL_LIB       "${CMAKE_INSTALL_PREFIX}/lib")                    # ./lib
+    set(ASAP_INSTALL_SHARED    "${ASAP_INSTALL_LIB}")                            # ./lib
+    set(ASAP_INSTALL_CMAKE     "${CMAKE_INSTALL_PREFIX}/share/cmake/${META_PROJECT_NAME}") # ./share/cmake/<project>
+    set(ASAP_INSTALL_PKGCONFIG "${CMAKE_INSTALL_PREFIX}/share/pkgconfig")        # ./share/pkgconfig
+    set(ASAP_INSTALL_EXAMPLES  "${CMAKE_INSTALL_PREFIX}/examples")               # ./examples
+    set(ASAP_INSTALL_DATA      "${CMAKE_INSTALL_PREFIX}")                        # ./
+    set(ASAP_INSTALL_BIN       "${CMAKE_INSTALL_PREFIX}/bin")                    # ./bin
+    set(ASAP_INSTALL_INCLUDE   "${CMAKE_INSTALL_PREFIX}/include")                # ./include
+    set(ASAP_INSTALL_DOC       "${CMAKE_INSTALL_PREFIX}/doc")                    # ./doc
+    set(ASAP_INSTALL_SHORTCUTS "${CMAKE_INSTALL_PREFIX}/shortcuts")              # ./shortcuts
+    set(ASAP_INSTALL_ICONS     "${CMAKE_INSTALL_PREFIX}/icons")                  # ./icons
+    set(ASAP_INSTALL_INIT      "${CMAKE_INSTALL_PREFIX}/init")                   # ./init
+    set(ASAP_INSTALL_MISC      "${CMAKE_INSTALL_PREFIX}")                        # ./
   endif()
   # cmake-format: on
 endmacro()
@@ -75,15 +75,15 @@ if(${META_PROJECT_ID}_INSTALL)
     # Install the project meta files
     install(
       FILES AUTHORS
-      DESTINATION ${ASAP_INSTALL_ROOT}
+      DESTINATION ${ASAP_INSTALL_MISC}
       COMPONENT ${meta})
     install(
       FILES LICENSE
-      DESTINATION ${ASAP_INSTALL_ROOT}
+      DESTINATION ${ASAP_INSTALL_MISC}
       COMPONENT ${meta})
     install(
       FILES README.md
-      DESTINATION ${ASAP_INSTALL_ROOT}
+      DESTINATION ${ASAP_INSTALL_MISC}
       COMPONENT ${meta})
 
     # Install master docs
