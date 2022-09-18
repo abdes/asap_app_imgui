@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.4.8](http://github.com/abdes/asap/compare/v4.4.7...v4.4.8) (2022-09-18)
+
+### Bug Fixes
+
+* restore test setup deleted by mistake ([cec7b9d](http://github.com/abdes/asap/commit/cec7b9d92481d1480c54610892cbfd954b9e0068))
+
 ## [4.4.7](http://github.com/abdes/asap/compare/v4.4.6...v4.4.7) (2022-09-18)
 
 * Refactor cmake common modules and the master cmake script to better work with
