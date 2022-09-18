@@ -201,18 +201,44 @@ if(NOT SYSTEM_DIR_INSTALL)
   set(CMAKE_INSTALL_RPATH "$ORIGIN/${ASAP_INSTALL_LIB}")
 endif()
 
-# ==============================================================================
+# ------------------------------------------------------------------------------
+# Testing
+# ------------------------------------------------------------------------------
+
+if(ASAP_BUILD_TESTS)
+  include(GoogleSanitizers)
+  include(CodeCoverage)
+  # Enable this target when the project has test cases
+  # asap_add_code_coverage_all_targets()
+  include(Valgrind)
+
+  cpmaddpackage(
+    NAME
+    googletest
+    GIT_TAG
+    main
+    GITHUB_REPOSITORY
+    google/googletest
+    OPTIONS
+    "gtest_force_shared_crt ON"
+    "INSTALL_GTEST OFF")
+
+  include(GoogleTest)
+  include(CTest)
+endif()
+
+# ------------------------------------------------------------------------------
 # Project modules
-# ==============================================================================
+# ------------------------------------------------------------------------------
 
 # Add project modules here
 
-# ==============================================================================
+# ------------------------------------------------------------------------------
 # Code analyzers: clang-tidy, cppcheck, valgrind, sanitizers, etc...
 #
 # Call after sub-modules have been added so that source code files can be
 # properly collected for analysis.
-# ==============================================================================
+# ------------------------------------------------------------------------------
 
 if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
   include(ClangFormat)
