@@ -284,9 +284,6 @@
   "cSpell.enableFiletypes": [
     "rst"
   ],
-  "cmakeFormat.args": [
-    "--config-file=${workspaceFolder}/.cmake-format.yaml"
-  ],
   "rewrap.reformat": true,
   "search.exclude": {
     "**/.idea": true,
