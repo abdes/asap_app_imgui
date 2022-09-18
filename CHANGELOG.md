@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.4.6](http://github.com/abdes/asap/compare/v4.4.5...v4.4.6) (2022-09-18)
+
+### Bug Fixes
+
+* top level install not working properly ([4ac4a31](http://github.com/abdes/asap/commit/4ac4a31001a2ab73764e3d9fe3f279b1e7b25aee))
+
+  `CMAKE_MODULE_PATH` should be reset at the top level project to make sure that
+  every sub-project uses its own version of the `cmake` files. Additionally,
+  refactor the top-level install code to simplify it and remove the need to call
+  a function in the top-level project `cmake` script.
+
 ## [4.4.5](http://github.com/abdes/asap/compare/v4.4.4...v4.4.5) (2022-09-18)
 
 ### Bug Fixes
