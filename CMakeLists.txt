@@ -130,23 +130,6 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
                                                "MinSizeRel" "RelWithDebInfo")
 endif()
 
-# If no contract mode is specified, we set the contract mode based on the build
-# type.
-if(NOT OPTION_CONTRACT_MODE)
-  set(OPTION_CONTRACT_MODE
-      "OFF"
-      CACHE STRING "Contract mode for assertions (common module).")
-  set(OPTION_CONTRACT_MODE
-      $<$<CONFIG:Debug>:AUDIT>
-      CACHE STRING "Contract mode for assertions (common module).")
-  set(OPTION_CONTRACT_MODE
-      $<$<CONFIG:RelWithDebInfo>:DEFAULT>
-      CACHE STRING "Contract mode for assertions (common module).")
-endif()
-message(
-  "-- Building for ${CMAKE_BUILD_TYPE} with OPTION_CONTRACT_MODE : ${OPTION_CONTRACT_MODE}"
-)
-
 # ------------------------------------------------------------------------------
 # RPATH setup
 # ------------------------------------------------------------------------------
