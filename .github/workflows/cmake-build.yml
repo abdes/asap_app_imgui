@@ -180,6 +180,7 @@ jobs:
               -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
               -D ASAP_BUILD_TESTS=ON
               -D ASAP_BUILD_EXAMPLES=ON
+              -D CMAKE_INSTALL_PREFIX=install
             RESULT_VARIABLE result
           )
           if (NOT result EQUAL 0)
@@ -260,10 +261,10 @@ jobs:
           endif()
 
       - name: Install Strip
-        run: cmake --install build --prefix instdir --strip
+        run: cmake --install build --strip
 
       - name: Pack
-        working-directory: instdir
+        working-directory: install
         run: cmake -E tar cfv ../${{ matrix.config.artifact }} --format=7zip .
 
       - name: Upload
