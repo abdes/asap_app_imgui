@@ -61,52 +61,44 @@ if(${META_PROJECT_ID}_INSTALL)
 
   _setup_install_dirs()
 
-  function(asap_top_level_install)
-    if(NOT ${META_PROJECT_ID}_IS_MASTER_PROJECT)
-      return()
-    endif()
+  if(NOT ${META_PROJECT_ID}_IS_MASTER_PROJECT)
+    return()
+  endif()
 
-    set(runtime "${META_PROJECT_NAME}_runtime")
-    set(dev "${META_PROJECT_NAME}_dev")
-    set(meta "${META_PROJECT_NAME}_meta")
-    set(data "${META_PROJECT_NAME}_data")
-    set(docs "${META_PROJECT_NAME}_docs")
+  set(runtime "${META_PROJECT_NAME}_runtime")
+  set(dev "${META_PROJECT_NAME}_dev")
+  set(meta "${META_PROJECT_NAME}_meta")
+  set(data "${META_PROJECT_NAME}_data")
+  set(docs "${META_PROJECT_NAME}_docs")
 
-    # Install the project meta files
-    install(
-      FILES AUTHORS
-      DESTINATION ${ASAP_INSTALL_MISC}
-      COMPONENT ${meta})
-    install(
-      FILES LICENSE
-      DESTINATION ${ASAP_INSTALL_MISC}
-      COMPONENT ${meta})
-    install(
-      FILES README.md
-      DESTINATION ${ASAP_INSTALL_MISC}
-      COMPONENT ${meta})
+  # Install the project meta files
+  install(
+    FILES AUTHORS
+    DESTINATION ${ASAP_INSTALL_MISC}
+    COMPONENT ${meta})
+  install(
+    FILES LICENSE
+    DESTINATION ${ASAP_INSTALL_MISC}
+    COMPONENT ${meta})
+  install(
+    FILES README.md
+    DESTINATION ${ASAP_INSTALL_MISC}
+    COMPONENT ${meta})
 
-    # Install master docs
-    string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} project_id)
-    string(TOLOWER ${project_id} project_id)
-    set(master_sphinx_target ${project_id}_master)
-    if(EXISTS ${SPHINX_BUILD_DIR}/${master_sphinx_target})
-      install(
-        DIRECTORY ${SPHINX_BUILD_DIR}/${master_sphinx_target}
-        DESTINATION ${ASAP_INSTALL_DOC}
-        COMPONENT ${docs})
-    endif()
+  # Install master docs
+  string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} project_id)
+  string(TOLOWER ${project_id} project_id)
+  set(master_sphinx_target ${project_id}_master)
+  install(
+    DIRECTORY ${SPHINX_BUILD_DIR}/${master_sphinx_target}
+    DESTINATION ${ASAP_INSTALL_DOC}
+    COMPONENT ${docs}
+    OPTIONAL)
 
-    # Install data
-    if(EXISTS ${PROJECT_SOURCE_DIR}/data)
-      install(
-        DIRECTORY ${PROJECT_SOURCE_DIR}/data
-        DESTINATION ${ASAP_INSTALL_DATA}
-        COMPONENT ${data})
-    endif()
-  endfunction()
-else()
-  function(asap_top_level_install)
-
-  endfunction()
+  # Install data
+  install(
+    DIRECTORY ${PROJECT_SOURCE_DIR}/data
+    DESTINATION ${ASAP_INSTALL_DATA}
+    COMPONENT ${data}
+    OPTIONAL)
 endif()

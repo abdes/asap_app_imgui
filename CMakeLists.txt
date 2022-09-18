@@ -15,7 +15,7 @@ cmake_minimum_required(VERSION 3.14)
 # List of directories specifying a search path for CMake modules to be loaded by
 # the the include() or find_package() commands before checking the default
 # modules that come with CMake.
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 
 # ------------------------------------------------------------------------------
 # Project description and (meta) information
@@ -258,9 +258,3 @@ if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
   # Enable this target when the project has source files (.cpp)
   # asap_create_clang_tidy_targets()
 endif()
-
-# ==============================================================================
-# Deployment (global project files)
-# ==============================================================================
-
-asap_top_level_install()
