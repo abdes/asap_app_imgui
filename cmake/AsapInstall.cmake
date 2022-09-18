@@ -37,19 +37,19 @@ macro(_setup_install_dirs)
   else()
     message("---- Will use local layout to install project files")
     # Install into local directory
-    set(ASAP_INSTALL_ROOT      ".")                                           # ./
-    set(ASAP_INSTALL_LIB       "lib")                                         # ./lib
+    set(ASAP_INSTALL_ROOT      "${CMAKE_INSTALL_PREFIX}")                     # ./
+    set(ASAP_INSTALL_LIB       "${ASAP_INSTALL_ROOT}/lib")                    # ./lib
     set(ASAP_INSTALL_SHARED    "${ASAP_INSTALL_LIB}")                         # ./lib
     set(ASAP_INSTALL_CMAKE     "${ASAP_INSTALL_ROOT}/share/cmake/${META_PROJECT_NAME}") # ./share/cmake/<project>
     set(ASAP_INSTALL_PKGCONFIG "${ASAP_INSTALL_ROOT}/share/pkgconfig")        # ./share/pkgconfig
     set(ASAP_INSTALL_EXAMPLES  "${ASAP_INSTALL_ROOT}")                        # ./
     set(ASAP_INSTALL_DATA      "${ASAP_INSTALL_ROOT}")                        # ./data
-    set(ASAP_INSTALL_BIN       "bin")                                         # ./bin
-    set(ASAP_INSTALL_INCLUDE   "include")                                     # ./include
-    set(ASAP_INSTALL_DOC       "doc")                                         # ./doc
-    set(ASAP_INSTALL_SHORTCUTS "misc")                                        # ./misc
-    set(ASAP_INSTALL_ICONS     "misc")                                        # ./misc
-    set(ASAP_INSTALL_INIT      "misc")                                        # ./misc
+    set(ASAP_INSTALL_BIN       "${ASAP_INSTALL_ROOT}/bin")                    # ./bin
+    set(ASAP_INSTALL_INCLUDE   "${ASAP_INSTALL_ROOT}/include")                # ./include
+    set(ASAP_INSTALL_DOC       "${ASAP_INSTALL_ROOT}/doc")                    # ./doc
+    set(ASAP_INSTALL_SHORTCUTS "${ASAP_INSTALL_ROOT}/misc")                   # ./misc
+    set(ASAP_INSTALL_ICONS     "${ASAP_INSTALL_ROOT}/misc")                   # ./misc
+    set(ASAP_INSTALL_INIT      "${ASAP_INSTALL_ROOT}/misc")                   # ./misc
   endif()
   # cmake-format: on
 endmacro()
