@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.4.7](http://github.com/abdes/asap/compare/v4.4.6...v4.4.7) (2022-09-18)
+
+* Refactor cmake common modules and the master cmake script to better work with
+  sub-projects built with `asap`.
+* Reduce the verbosity of some actions and avoid re-running things when not
+  needed.
+
 ## [4.4.6](http://github.com/abdes/asap/compare/v4.4.5...v4.4.6) (2022-09-18)
 
 ### Bug Fixes
