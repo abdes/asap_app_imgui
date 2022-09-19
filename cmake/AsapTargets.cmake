@@ -55,9 +55,14 @@ macro(asap_declare_module)
   set(META_MODULE_VERSION             "${META_MODULE_VERSION_MAJOR}.${META_MODULE_VERSION_MINOR}.${META_MODULE_VERSION_PATCH}")
   set(META_MODULE_NAME_VERSION        "${META_MODULE_PROJECT_NAME} v${META_MODULE_VERSION}")
   # cmake-format: on
-  message(
-    "=> [module: ${META_PROJECT_NAME}/${META_MODULE_NAME} ${META_MODULE_VERSION}]"
-  )
+
+  # Check if the module has been pushed on top of the hierarchy stack
+  if(NOT ASAP_LOG_PROJECT_HIERARCHY MATCHES "(${META_MODULE_NAME})")
+    message(
+      AUTHOR_WARNING
+        "Can't find module `${META_MODULE_NAME}` on the hierarchy stack. "
+        "Please make sure it has been pushed with asap_push_module().")
+  endif()
 
 endmacro()
 

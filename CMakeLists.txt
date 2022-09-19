@@ -22,6 +22,9 @@ if(NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR
    AND EXISTS "${CMAKE_SOURCE_DIR}/cmake")
   list(PREPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 endif()
+# Include the log helpers module early so we can use early for logging the
+# project hierarchy
+include(LogHelpers)
 
 # ------------------------------------------------------------------------------
 # Project description and (meta) information
@@ -64,9 +67,9 @@ if(NOT DEFINED ${META_PROJECT_ID}_IS_MASTER_PROJECT)
   endif()
 endif()
 
-message(
-  "=> Project : ${META_NAME_VERSION} (IS_MASTER: ${${META_PROJECT_ID}_IS_MASTER_PROJECT})"
-)
+# Push the project on the hierarchy stack after we have determined if it is a
+# master or a sub-project.
+asap_push_project(${META_PROJECT_NAME})
 
 # ------------------------------------------------------------------------------
 # Project configuration options
@@ -254,3 +257,5 @@ if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
   # Enable this target when the project has source files (.cpp)
   # asap_create_clang_tidy_targets()
 endif()
+
+asap_pop_project(${META_PROJECT_NAME})
