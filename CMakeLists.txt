@@ -248,14 +248,11 @@ add_subdirectory(tools/version-info)
 # ------------------------------------------------------------------------------
 
 if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
-  include(ClangFormat)
   include(ClangTidy)
+  asap_create_clang_tidy_targets()
 
-  # Enable this target when the project has header or source files (.h or .cpp)
-  # asap_setup_clang_format()
-
-  # Enable this target when the project has source files (.cpp)
-  # asap_create_clang_tidy_targets()
+  include(Format)
+  asap_create_format_targets()
 endif()
 
 asap_pop_project(${META_PROJECT_NAME})

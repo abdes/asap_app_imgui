@@ -41,7 +41,8 @@ const major_rex = /set\(META_VERSION_MAJOR\s+\"(\d+)\"\)/;
 const minor_rex = /set\(META_VERSION_MINOR\s+\"(\d+)\"\)/;
 const patch_rex = /set\(META_VERSION_PATCH\s+\"(\d+)\"\)/;
 
-module.exports.readVersion = function (contents) {
+module.exports.readVersion =
+    function(contents) {
   var major = null, minor = null, patch = null;
 
   const lines = contents.split(/\r?\n/);
@@ -70,24 +71,29 @@ module.exports.readVersion = function (contents) {
   };
 
   if (major == null)
-    console.error("Your CmakeLists.txt is missing META_VERSION_MAJOR variable!");
+    console.error(
+        'Your CmakeLists.txt is missing META_VERSION_MAJOR variable!');
   if (minor == null)
-    console.error("Your CmakeLists.txt is missing META_VERSION_MINOR variable!");
+    console.error(
+        'Your CmakeLists.txt is missing META_VERSION_MINOR variable!');
   if (patch == null)
-    console.error("Your CmakeLists.txt is missing META_VERSION_PATCH variable!");
+    console.error(
+        'Your CmakeLists.txt is missing META_VERSION_PATCH variable!');
 
-  return major + "." + minor + "." + patch;
+  return major + '.' + minor + '.' + patch;
 }
 
-module.exports.writeVersion = function (contents, version) {
-  var [major, minor, patch] = version.split(".");
+    module.exports.writeVersion = function(contents, version) {
+  var [major, minor, patch] = version.split('.');
   var newContents = [];
 
   const lines = contents.split(/\r?\n/);
   lines.forEach(line => {
-    var newLine = line.replace(major_rex, "set(META_VERSION_MAJOR       \"" + major + "\")")
-      .replace(minor_rex, "set(META_VERSION_MINOR       \"" + minor + "\")")
-      .replace(patch_rex, "set(META_VERSION_PATCH       \"" + patch + "\")");
+    var newLine =
+        line.replace(major_rex, 'set(META_VERSION_MAJOR       "' + major + '")')
+            .replace(minor_rex, 'set(META_VERSION_MINOR       "' + minor + '")')
+            .replace(
+                patch_rex, 'set(META_VERSION_PATCH       "' + patch + '")');
     newContents.push(newLine);
   });
 
