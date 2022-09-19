@@ -7,7 +7,7 @@ if(NOT DEFINED ${META_PROJECT_ID}_INSTALL)
 endif()
 
 macro(_setup_install_dirs)
-  message("-- Using CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
+  message(STATUS "Using CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
   # Check for system dir install
   set(_system_dir_install FALSE)
   if("${CMAKE_INSTALL_PREFIX}" STREQUAL "/usr" OR "${CMAKE_INSTALL_PREFIX}"
@@ -18,7 +18,6 @@ macro(_setup_install_dirs)
   # cmake-format: off
   if(UNIX AND _system_dir_install)
     # Installation paths
-    message("---- Will use GNUInstallDirs layout to install project files")
     include(GNUInstallDirs)
     # Install into the system (/usr/bin or /usr/local/bin)
     set(ASAP_INSTALL_LIB       "${CMAKE_INSTALL_LIBDIR}")                       # /usr/[local]/lib
@@ -35,7 +34,6 @@ macro(_setup_install_dirs)
     set(ASAP_INSTALL_INIT      "/etc/init")                                     # /etc/init (upstart init scripts)
     set(ASAP_INSTALL_MISC      "${CMAKE_INSTALL_DATAROOTDIR}/${META_PROJECT_NAME}")          # /etc/init (upstart init scripts)
   else()
-    message("---- Will use local layout to install project files")
     # Install into local directory
     set(ASAP_INSTALL_LIB       "${CMAKE_INSTALL_PREFIX}/lib")                    # ./lib
     set(ASAP_INSTALL_SHARED    "${ASAP_INSTALL_LIB}")                            # ./lib
