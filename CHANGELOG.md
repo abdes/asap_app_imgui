@@ -2,6 +2,66 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.5.0](http://github.com/abdes/asap/compare/v4.4.8...v4.5.0) (2022-09-19)
+
+### Features
+
+1. **`version-info` tool**
+
+    Add the `version-info` tool to print the project info ([cb228e8](http://github.com/abdes/asap/commit/cb228e8af73fbf063371e4c597f757bf5e9a4b75))
+
+    This tool uses the generated `version.h` file in a small C++ program
+    to print the project's info, as defined in the project's master
+    `CMakeLists.txt`.
+
+    It also constitutes an example of how to use the `version.h` file and
+    a simple test to check that the `asap` infrastructure for defining and
+    building targets is working.
+
+2. **More visibility on project/module nesting**
+
+    Enhance configure logs with project/module nesting hierarchy
+    ([f6c13f2](http://github.com/abdes/asap/commit/f6c13f2a08c89cac57fb2f0dd857c8f382e50e7b))
+
+    Track the projects/modules nesting level with a hierarchy stack updated
+    when we enter/exit a project/module. Most of the management is done
+    automatically as helper functions get called to add modules or external
+    packages. Some of the boilerplate (minimal) is still manual:
+
+    * In the top-level `CMakeLists.txt`, the project needs to pushed at the
+    beginning and popped at the end.
+    * In each module `CMakeLists.txt`, the module needs to be pushed at
+    the start and popped at the end.
+
+    Use the `ASAP_LOG_PROJECT_HIERARCHY` to get a string that contains
+    the nesting hierarchy.
+
+3. **Formatting**
+
+    Implement robust project-wide formatting ([afcaebe](http://github.com/abdes/asap/commit/afcaebe544fc03684ae2f85d8507b1f4571d989b))
+
+    Now we can format cmake files with cmake-format and any of the file
+    types supported by clang-format (including C++, JavaScript and Json)
+    with clang-format.
+
+    The following additional targets are defined:
+    * format Shows which files are affected by clang-format
+    * check-format errors if files are affected by clang-format (for CI)
+    * fix-format Applies clang-format to all affected files
+
+    Dedicated targets for each of `cmake-format` and `clang-format`
+    are also added (e.g. cmake-format, clang-format, check-clang-format,...)
+
+### Bug Fixes
+
+* generated `version.h` should follow project naming ([329bcdf](http://github.com/abdes/asap/commit/329bcdfc8cb9ba4782d0cbf4b3f21ad677307644))
+* install master project generated header files ([3c5c162](http://github.com/abdes/asap/commit/3c5c1628b3c920e52200f7e14ecde2346b78a6f4))
+
+### Documentation
+
+* add example output from version-info tool ([3a5515e](http://github.com/abdes/asap/commit/3a5515e74b0b0e5c06ba7e4500f7572a3bc4450f))
+* update after new formatting system ([082e513](http://github.com/abdes/asap/commit/082e5134fd7d1cd03cc06218e10d5cf978b22409))
+
 ## [4.4.8](http://github.com/abdes/asap/compare/v4.4.7...v4.4.8) (2022-09-18)
 
 ### Bug Fixes
