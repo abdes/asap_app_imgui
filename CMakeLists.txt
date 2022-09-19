@@ -54,6 +54,7 @@ set(META_CMAKE_INIT_SHA      "${GIT_REV}")
 
 string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} META_PROJECT_ID)
 string(TOUPPER ${META_PROJECT_ID} META_PROJECT_ID)
+string(TOLOWER ${META_PROJECT_ID} META_PROJECT_ID_LOWER)
 
 # Determine if this is built as a subproject  or if it is the master project.
 if(NOT DEFINED ${META_PROJECT_ID}_IS_MASTER_PROJECT)
@@ -123,8 +124,9 @@ include(cmake/FasterBuild.cmake)
 # ------------------------------------------------------------------------------
 
 # Generate version-header
-configure_file(templates/version.h.in
-               ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h)
+configure_file(
+  templates/version.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_ID_LOWER}/version.h)
 
 # Generate a clangd configuration file that points to the compilation database
 # in the cmake build directory. We need to do this as the build directory is
