@@ -85,6 +85,12 @@ if(${META_PROJECT_ID}_INSTALL)
     DESTINATION ${ASAP_INSTALL_MISC}
     COMPONENT ${meta})
 
+  # Install generated header files
+  install(
+    DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_NAME}
+    DESTINATION ${ASAP_INSTALL_INCLUDE}
+    COMPONENT ${dev})
+
   # Install master docs
   string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} project_id)
   string(TOLOWER ${project_id} project_id)
