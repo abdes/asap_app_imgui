@@ -1,0 +1,24 @@
+//===----------------------------------------------------------------------===//
+// Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+// copy at https://opensource.org/licenses/BSD-3-Clause).
+// SPDX-License-Identifier: BSD-3-Clause
+//===----------------------------------------------------------------------===//
+
+#include <iostream>
+
+#include <@META_PROJECT_ID_LOWER@/version.h>
+
+// clang-format off
+using namespace @META_PROJECT_ID_LOWER@::info;
+// clang-format on
+
+auto main(int /*argc*/, char ** /*argv*/) -> int {
+  std::cout << cNameVersion << "\n"
+            << "By " << cAuthor << " @ " << cAuthorOrganization << " ("
+            << cAuthorDomain << ").\n"
+            << std::endl;
+
+  std::cout << cProjectDescription << "\n" << std::endl;
+
+  return 0;
+}

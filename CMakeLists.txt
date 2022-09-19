@@ -22,6 +22,9 @@ if(NOT CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR
    AND EXISTS "${CMAKE_SOURCE_DIR}/cmake")
   list(PREPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 endif()
+# Include the log helpers module early so we can use early for logging the
+# project hierarchy
+include(LogHelpers)
 
 # ------------------------------------------------------------------------------
 # Project description and (meta) information
@@ -54,6 +57,7 @@ set(META_CMAKE_INIT_SHA      "${GIT_REV}")
 
 string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} META_PROJECT_ID)
 string(TOUPPER ${META_PROJECT_ID} META_PROJECT_ID)
+string(TOLOWER ${META_PROJECT_ID} META_PROJECT_ID_LOWER)
 
 # Determine if this is built as a subproject  or if it is the master project.
 if(NOT DEFINED ${META_PROJECT_ID}_IS_MASTER_PROJECT)
@@ -63,9 +67,9 @@ if(NOT DEFINED ${META_PROJECT_ID}_IS_MASTER_PROJECT)
   endif()
 endif()
 
-message(
-  "=> Project : ${META_NAME_VERSION} (IS_MASTER: ${${META_PROJECT_ID}_IS_MASTER_PROJECT})"
-)
+# Push the project on the hierarchy stack after we have determined if it is a
+# master or a sub-project.
+asap_push_project(${META_PROJECT_NAME})
 
 # ------------------------------------------------------------------------------
 # Project configuration options
@@ -123,8 +127,9 @@ include(cmake/FasterBuild.cmake)
 # ------------------------------------------------------------------------------
 
 # Generate version-header
-configure_file(templates/version.h.in
-               ${CMAKE_CURRENT_BINARY_DIR}/include/asap/asap-version.h)
+configure_file(
+  templates/version.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/include/${META_PROJECT_ID_LOWER}/version.h)
 
 # Generate a clangd configuration file that points to the compilation database
 # in the cmake build directory. We need to do this as the build directory is
@@ -231,6 +236,8 @@ endif()
 # Project modules
 # ------------------------------------------------------------------------------
 
+add_subdirectory(tools/version-info)
+
 # Add project modules here
 
 # ------------------------------------------------------------------------------
@@ -241,12 +248,11 @@ endif()
 # ------------------------------------------------------------------------------
 
 if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
-  include(ClangFormat)
   include(ClangTidy)
+  asap_create_clang_tidy_targets()
 
-  # Enable this target when the project has header or source files (.h or .cpp)
-  # asap_setup_clang_format()
-
-  # Enable this target when the project has source files (.cpp)
-  # asap_create_clang_tidy_targets()
+  include(Format)
+  asap_create_format_targets()
 endif()
+
+asap_pop_project(${META_PROJECT_NAME})

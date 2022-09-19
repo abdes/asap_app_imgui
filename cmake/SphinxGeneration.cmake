@@ -29,8 +29,6 @@
 include(FindSphinx)
 
 if(SPHINX_FOUND)
-  message(STATUS "[sphinx] System has sphinx.")
-
   macro(_master_sphinx_target)
     string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} project_id)
     string(TOLOWER ${project_id} project_id)
@@ -119,7 +117,9 @@ if(SPHINX_FOUND)
   endif()
 
 else(SPHINX_FOUND)
-  message(STATUS "WARNING: sphinx is not available on this system!")
+  message(WARNING "`sphinx` is not available on this system! "
+                  "Restructured text documentation generation targets "
+                  "will not be added.")
 
   function(asap_with_sphinx TARGET_NAME)
 

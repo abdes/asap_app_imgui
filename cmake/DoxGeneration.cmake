@@ -29,8 +29,6 @@
 include(FindDoxygen)
 
 if(DOXYGEN_FOUND)
-  message(STATUS "Doxygen package was found.")
-
   function(_configure_doxyfile MODULE_NAME VERSION TITLE BRIEF INPUT_PATH)
     if(EXISTS "${CMAKE_SOURCE_DIR}/doxygen/Doxyfile.in")
       set(DOXY_OUTPUT_DIR "${MODULE_NAME}")
@@ -160,7 +158,8 @@ if(DOXYGEN_FOUND)
   endif()
 
 else()
-  message(STATUS "WARNING: Doxygen package is not available on this system!")
+  message(WARNING "`doxygen` is not available on this system! "
+                  "API documentation generation targets will not be added.")
 
   function(asap_with_doxygen)
 

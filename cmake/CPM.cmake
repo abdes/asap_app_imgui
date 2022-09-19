@@ -33,3 +33,26 @@ if(NOT CURRENT_CPM_VERSION VERSION_EQUAL 0.35.6)
   endif()
   include(${CPM_DOWNLOAD_LOCATION})
 endif()
+
+# This is a wrapper function around CPM `cpmaddpackage` to automatically
+# push/pop the package on the hierarchy stack for logging. Use it instead of
+# calling CPM.
+function(asap_add_package)
+  set(options)
+  set(oneValueArgs NAME)
+  set(multiValueArgs)
+
+  cmake_parse_arguments(x "${options}" "${oneValueArgs}" "${multiValueArgs}"
+                        ${ARGN})
+
+  if(NOT DEFINED x_NAME)
+    message(
+      FATAL_ERROR
+        "Package name is required. Refer to CPM docs for the full usage.")
+    return()
+  endif()
+  asap_push_module(${x_NAME})
+  cpmaddpackage(NAME ${x_NAME} ${ARGN})
+  asap_pop_module(${x_NAME})
+
+endfunction()

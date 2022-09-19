@@ -1,6 +1,7 @@
 ---
+---
 Language: Cpp
-# BasedOnStyle:  LLVM
+BasedOnStyle: LLVM
 AccessModifierOffset: -2
 AlignAfterOpenBracket: DontAlign
 AlignConsecutiveMacros: false
@@ -134,4 +135,9 @@ TabWidth: 8
 UseCRLF: false
 UseTab: Never
 ---
-
+Language: JavaScript
+BasedOnStyle: Google
+ColumnLimit: 80
+---
+Language: Json
+ColumnLimit: 80
