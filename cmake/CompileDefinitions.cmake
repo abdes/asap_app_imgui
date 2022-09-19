@@ -11,7 +11,7 @@ include_guard(GLOBAL)
 # ------------------------------------------------------------------------------
 
 function(asap_set_compile_definitions target)
-  set(argOption)
+  set(argOption "NO_CONTRACT")
   set(argSingle "")
   set(argMulti "ADD" "REMOVE")
 
@@ -53,7 +53,9 @@ function(asap_set_compile_definitions target)
   # If linking against asap_contract, set the contract mode based on the build
   # type. Use generator expressions only, do not check for CMAKE_BUILD_TYPE
   # which is not friendly with multi-config generators.
-  if(TARGET asap_contract)
+  #
+  # Do not add this definition if we are testing asap-_contract
+  if(TARGET asap_contract AND NOT ASAP_CONTRACT_TESTING)
     if(NOT DEFINED OPTION_CONTRACT_MODE)
       target_compile_definitions(
         ${target}

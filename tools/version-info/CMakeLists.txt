@@ -48,10 +48,12 @@ asap_add_executable(${MODULE_TARGET_NAME} WARNING SOURCES "src/main.cpp")
 
 target_compile_features(${MODULE_TARGET_NAME} PUBLIC cxx_constexpr)
 
+target_compile_features(${MODULE_TARGET_NAME} PUBLIC cxx_constexpr)
+cmake_path(SET version_include_dir ${CMAKE_CURRENT_BINARY_DIR}/../../include
+           NORMALIZE)
 target_include_directories(
   ${MODULE_TARGET_NAME}
-  PUBLIC $<INSTALL_INTERFACE:include>
-         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
+  PUBLIC $<INSTALL_INTERFACE:include> $<BUILD_INTERFACE:${version_include_dir}>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 # ------------------------------------------------------------------------------
