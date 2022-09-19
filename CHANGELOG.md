@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.5.1](http://github.com/abdes/asap/compare/v4.5.0...v4.5.1) (2022-09-19)
+
+### Bug Fixes
+
+* contract mode definition should only be added when not testing asap_contract ([c6d5e34](http://github.com/abdes/asap/commit/c6d5e342e7a74236bb1b006be1e0d6bfe956a51a))
+* use correct path for the version include file ([7997b68](http://github.com/abdes/asap/commit/7997b68eeef236e6940b0ba168c79dbdd21b34ad))
+
 ## [4.5.0](http://github.com/abdes/asap/compare/v4.4.8...v4.5.0) (2022-09-19)
 
 ### Features
