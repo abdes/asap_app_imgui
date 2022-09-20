@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.5.2](http://github.com/abdes/asap/compare/v4.5.1...v4.5.2) (2022-09-20)
+
+### Bug Fixes
+
+* sub-projects with tests fail due to coverage all target not being setup early enough ([400b2cc](http://github.com/abdes/asap/commit/400b2ccc120bd4f2c4d70f48fd3f94ce7a3f6de0))
+
 ## [4.5.1](http://github.com/abdes/asap/compare/v4.5.0...v4.5.1) (2022-09-19)
 
 ### Bug Fixes
@@ -27,8 +33,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 2. **More visibility on project/module nesting**
 
-    Enhance configure logs with project/module nesting hierarchy
-    ([f6c13f2](http://github.com/abdes/asap/commit/f6c13f2a08c89cac57fb2f0dd857c8f382e50e7b))
+    Enhance configure logs with project/module nesting hierarchy ([f6c13f2](http://github.com/abdes/asap/commit/f6c13f2a08c89cac57fb2f0dd857c8f382e50e7b))
 
     Track the projects/modules nesting level with a hierarchy stack updated
     when we enter/exit a project/module. Most of the management is done
