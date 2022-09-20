@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.6.1](http://github.com/abdes/asap/compare/v4.6.0...v4.6.1) (2022-09-20)
+
+### Bug Fixes
+
+* always add code coverage 'all' targets ([d7309a0](http://github.com/abdes/asap/commit/d7309a0806e11a46c73b700f12bccb424c62839b))
+* version-info test was added even when ASAP_BUILD_TESTS is OFF ([b566e7b](http://github.com/abdes/asap/commit/b566e7b555ffb40f8ab1eea43d9a965c5724ccf1))
+
 ## [4.6.0](http://github.com/abdes/asap/compare/v4.5.2...v4.6.0) (2022-09-20)
 
 ### Features
