@@ -8,13 +8,16 @@
 #   https://opensource.org/licenses/BSD-3-Clause)
 # ~~~
 
+set(my_name "main")
+asap_push_module("${my_name}")
+
 # --------------------------------------------------------------------------------------------------
 # Meta information about the this module
 # --------------------------------------------------------------------------------------------------
 
 asap_declare_module(
   MODULE_NAME
-  "main"
+  "${my_name}"
   DESCRIPTION
   "Main module for the application program"
   GITHUB_REPO
@@ -50,8 +53,7 @@ asap_add_executable(
   src/ui/fonts/material_design_icons.h
   src/ui/log/sink.h
   src/ui/style/theme.h
-  # Sources
-  #FONTS
+  # Sources FONTS
   src/ui/fonts/fonts.h
   src/ui/fonts/Inconsolata-Bold.cpp
   src/ui/fonts/Inconsolata-Regular.cpp
@@ -82,66 +84,87 @@ asap_add_executable(
   src/application_base.cpp
   src/example_application.h
   src/example_application.cpp
-  src/main.cpp
-  )
+  src/main.cpp)
 
 target_link_libraries(
   ${MODULE_TARGET_NAME}
-  PRIVATE
-  GSL
-  asap::common
-  asap::logging
-  cxxopts
-  glm
-  ${META_PROJECT_NAME}::imgui
-  cpptoml
-  date_interface
-)
+  PRIVATE GSL
+          asap::common
+          asap::contract
+          asap::logging
+          cxxopts
+          glm
+          ${META_PROJECT_NAME}::imgui
+          cpptoml
+          date::date)
 
-target_include_directories(${MODULE_TARGET_NAME} PRIVATE ${CMAKE_BINARY_DIR}/include)
-target_include_directories(${MODULE_TARGET_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_include_directories(${MODULE_TARGET_NAME}
+                           PRIVATE ${CMAKE_BINARY_DIR}/include)
+target_include_directories(${MODULE_TARGET_NAME}
+                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-# Hacking the include directories when building th executable simply because of 
-# Imgui backend files including "imgui.h" literally like that. We add the imgui 
+# Hacking the include directories when building th executable simply because of
+# Imgui backend files including "imgui.h" literally like that. We add the imgui
 # directory to the includes so that it will work.
 #
 # In other files, such as the ones we provide, we don't do that shit like that.
 # Instead, we include files from Imgui library as <imgui/xxxxx>
-target_include_directories(${MODULE_TARGET_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/imgui/imgui)
+target_include_directories(${MODULE_TARGET_NAME}
+                           PRIVATE ${CMAKE_SOURCE_DIR}/imgui/imgui)
 
 target_compile_features(${MODULE_TARGET_NAME} PUBLIC cxx_std_17)
-
-asap_add_sanitizers(${MODULE_TARGET_NAME})
 
 # ------------------------------------------------------------------------------
 # Tests
 # ------------------------------------------------------------------------------
-
-#if (OPTION_BUILD_TESTS)
-#  add_subdirectory(test)
-#endif()
-
+# ~~~
+# if(ASAP_BUILD_TESTS)
+#   asap_add_sanitizers(${MODULE_TARGET_NAME})
+#   add_subdirectory(test)
+# endif()
+# ~~~
 
 # --------------------------------------------------------------------------------------------------
 # API Documentation
 # --------------------------------------------------------------------------------------------------
-
 asap_with_doxygen(
-  ${META_PROJECT_NAME}_${META_MODULE_NAME} "\"Main Module\""
+  MODULE_NAME
+  ${MODULE_TARGET_NAME}
+  VERSION
+  ${META_MODULE_VERSION}
+  TITLE
+  "\"Main Module\""
+  BRIEF
   "\"The main module for the application program.\""
+  INPUT_PATH
   "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-# asap_with_sphinx(${META_PROJECT_NAME}_${META_MODULE_NAME})
+# asap_with_sphinx(${MODULE_TARGET_NAME})
 
 # ==================================================================================================
 # Deployment instructions
 # ==================================================================================================
+if(${META_PROJECT_ID}_INSTALL)
+  set(TARGETS_EXPORT_NAME "${MODULE_TARGET_NAME}Targets")
+  set(runtime "${MODULE_TARGET_NAME}_runtime")
+  set(dev "${MODULE_TARGET_NAME}_dev")
 
-#
-# Deployment
-#
-# Executable
-install(
-  TARGETS ${MODULE_TARGET_NAME}
-  RUNTIME DESTINATION ${INSTALL_BIN} COMPONENT programs
-  BUNDLE DESTINATION ${INSTALL_BIN} COMPONENT programs)
+  # Binaries
+  install(
+    TARGETS ${MODULE_TARGET_NAME}
+    EXPORT "${TARGETS_EXPORT_NAME}"
+    COMPONENT dev
+    RUNTIME DESTINATION ${ASAP_INSTALL_BIN} COMPONENT ${runtime}
+    LIBRARY DESTINATION ${ASAP_INSTALL_SHARED} COMPONENT ${runtime}
+    ARCHIVE DESTINATION ${ASAP_INSTALL_LIB} COMPONENT ${dev})
+
+  # Docs
+  if(EXISTS ${SPHINX_BUILD_DIR}/${MODULE_TARGET_NAME})
+    install(
+      DIRECTORY ${SPHINX_BUILD_DIR}/${MODULE_TARGET_NAME}
+      DESTINATION ${ASAP_INSTALL_DOC}
+      COMPONENT ${MODULE_TARGET_NAME}_docs)
+  endif()
+endif()
+
+asap_pop_module("${my_name}")

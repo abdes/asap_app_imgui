@@ -57,5 +57,6 @@ private:
   bool show_imgui_demos_{false};
 
   std::shared_ptr<asap::ui::ImGuiLogSink> sink_;
-  asap::app::ImGuiRunner *runner_ = nullptr; // TODO(Abdessattar): convert to weak_ptr?
+  asap::app::ImGuiRunner *runner_ =
+      nullptr; // TODO(Abdessattar): convert to weak_ptr?
 };

@@ -10,8 +10,8 @@
 
 #include <GLFW/glfw3.h>
 #include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
-#include <glm/mat4x4.hpp>               // glm::mat4
-#include <glm/vec3.hpp>                 // glm::vec3
+#include <glm/mat4x4.hpp> // glm::mat4
+#include <glm/vec3.hpp>   // glm::vec3
 #include <imgui/imgui.h>
 
 #include <cstdint> // for unitptr_t
@@ -80,7 +80,8 @@ auto ExampleApplication::Draw() -> bool {
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(wsize.x),
           static_cast<GLsizei>(wsize.y), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
       glBindTexture(GL_TEXTURE_2D, 0);
-      glViewport(0, 0, static_cast<GLsizei>(wsize.x), static_cast<GLsizei>(wsize.y));
+      glViewport(
+          0, 0, static_cast<GLsizei>(wsize.x), static_cast<GLsizei>(wsize.y));
 
       // now that we actually created the framebuffer and added all attachments
       // we want to check if it is actually complete now
@@ -92,11 +93,16 @@ auto ExampleApplication::Draw() -> bool {
       glClearColor(0.2F, 0.2F, 0.3F, 1.0F);
       glClear(GL_COLOR_BUFFER_BIT); // we're not using the stencil buffer now
 
-      glm::mat4 Projection = glm::perspective(glm::radians(45.0F), 4.0F / 3.0F, 0.1F, 100.F);
-      glm::mat4 View = glm::translate(glm::mat4(1.0F), glm::vec3(0.0F, 0.0F, -1.0F));
-      View = glm::rotate(View, static_cast<float>(glfwGetTime()), glm::vec3(-1.0F, 0.0F, 0.0F));
-      View = glm::rotate(View, static_cast<float>(glfwGetTime()), glm::vec3(0.0F, 1.0F, 0.0F));
-      View = glm::rotate(View, static_cast<float>(glfwGetTime()), glm::vec3(0.0F, 0.0F, 1.0F));
+      glm::mat4 Projection =
+          glm::perspective(glm::radians(45.0F), 4.0F / 3.0F, 0.1F, 100.F);
+      glm::mat4 View =
+          glm::translate(glm::mat4(1.0F), glm::vec3(0.0F, 0.0F, -1.0F));
+      View = glm::rotate(View, static_cast<float>(glfwGetTime()),
+          glm::vec3(-1.0F, 0.0F, 0.0F));
+      View = glm::rotate(
+          View, static_cast<float>(glfwGetTime()), glm::vec3(0.0F, 1.0F, 0.0F));
+      View = glm::rotate(
+          View, static_cast<float>(glfwGetTime()), glm::vec3(0.0F, 0.0F, 1.0F));
       glm::mat4 Model = glm::scale(glm::mat4(1.0F), glm::vec3(0.5F));
       glm::mat4 mvp = Projection * View * Model;
 
@@ -109,8 +115,10 @@ auto ExampleApplication::Draw() -> bool {
       glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
 
       ImVec2 pos = ImGui::GetCursorScreenPos();
-      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast, performance-no-int-to-ptr)
-      ImGui::GetWindowDrawList()->AddImage(reinterpret_cast<ImTextureID>(texColorBuffer_), pos,
+      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast,
+      // performance-no-int-to-ptr)
+      ImGui::GetWindowDrawList()->AddImage(
+          reinterpret_cast<ImTextureID>(texColorBuffer_), pos,
           ImVec2(pos.x + wsize.x, pos.y + wsize.y), ImVec2(0, 1), ImVec2(1, 0));
     }
     ImGui::End();
@@ -126,8 +134,8 @@ void ExampleApplication::AfterInit() {
 
   glGenBuffers(1, &VBO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
-  glBufferData(
-      GL_ARRAY_BUFFER, sizeof(VERTICES), static_cast<const void *>(VERTICES), GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(VERTICES),
+      static_cast<const void *>(VERTICES), GL_STATIC_DRAW);
 
   auto vertex_shader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertex_shader, 1, &VERTEX_SHADER_TEXT, nullptr);
@@ -192,10 +200,13 @@ void ExampleApplication::AfterInit() {
   vcol_location = glGetAttribLocation(program, "vCol");
 
   glEnableVertexAttribArray(vpos_location);
-  glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]), nullptr);
+  glVertexAttribPointer(
+      vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]), nullptr);
   glEnableVertexAttribArray(vcol_location);
-  glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(VERTICES[0]),
-      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast, performance-no-int-to-ptr)
+  glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
+      sizeof(VERTICES[0]),
+      // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast,
+      // performance-no-int-to-ptr)
       reinterpret_cast<const void *>(sizeof(float) * 2));
 
   // You can unbind the VAO afterwards so other VAO calls won't accidentally
@@ -219,7 +230,8 @@ void ExampleApplication::AfterInit() {
   glBindTexture(GL_TEXTURE_2D, 0);
 
   // attach it to currently bound framebuffer object
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer_, 0);
+  glFramebufferTexture2D(
+      GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer_, 0);
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

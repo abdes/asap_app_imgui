@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = u'@META_PROJECT_NAME@'
-copyright = u'2018, @META_AUTHOR_ORGANIZATION@'
+copyright = u'2022, @META_AUTHOR_ORGANIZATION@'
 
 # The short X.Y version
 version = u'@META_VERSION@'
@@ -31,15 +31,6 @@ rst_epilog = """
 .. |version| replace:: {0}
 .. |release| replace:: {1}
 """.format(version, release)
-
-intersphinx_mapping = {
-    'common': (
-        '@SPHINX_BUILD_DIR@/@META_PROJECT_NAME@_common/html',
-        '@SPHINX_BUILD_DIR@/@META_PROJECT_NAME@_common/html/objects.inv'),
-    'logging': (
-        '@SPHINX_BUILD_DIR@/@META_PROJECT_NAME@_logging/html',
-        '@SPHINX_BUILD_DIR@/@META_PROJECT_NAME@_logging/html/objects.inv')
-}
 
 # -- General configuration ---------------------------------------------------
 
@@ -116,10 +107,10 @@ html_favicon = "_static/favicon.ico"
 html_last_updated_fmt = None
 
 html_theme_options = {
-    "repository_url": 'https://github.com/@META_GITHUB_USER@/@META_GITHUB_REPO@',
+    "repository_url": '@META_GITHUB_REPO@',
     "use_repository_button": True,
     "use_issues_button": True,
-    "use_edit_page_button": True,
+    "use_edit_page_button": False,
     "use_download_button": True,
     "use_fullscreen_button": True,
     # We don't want the default navigation bar footer to be displayed on every
@@ -131,8 +122,15 @@ html_theme_options = {
 
 # -- Options for intersphinx extension ---------------------------------------
 
-# Example configuration for intersphinx: refer to the Python standard library.
-#intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {
+    # Add intersphinx config for submodules and third party libs
+    # 'common': (
+    #     'https://abdes.github.io/asap/asap_common/html',
+    #     '@SPHINX_BUILD_DIR@/asap_common/html/objects.inv'),
+    # 'contract': (
+    #     'https://abdes.github.io/asap/asap_contract/html',
+    #     '@SPHINX_BUILD_DIR@/asap_contract/html/objects.inv'),
+}
 
 # -- Options for todo extension ----------------------------------------------
 

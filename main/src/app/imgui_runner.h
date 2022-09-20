@@ -42,7 +42,8 @@ public:
 
   void Windowed(int width, int height, const std::string &title);
   void FullScreenWindowed(const std::string &title, int monitor);
-  void FullScreen(int width, int height, const std::string &title, int monitor, int refresh_rate);
+  void FullScreen(int width, int height, const std::string &title, int monitor,
+      int refresh_rate);
 
   void EnableVsync(bool state = true);
   void MultiSample(int samples);

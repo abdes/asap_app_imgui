@@ -8,7 +8,7 @@
   "configurePresets": [
     {
       "name": "base",
-      "description": "Using compilers: C = /usr/bin/clang-14, CXX = /usr/bin/clang++-14",
+      "description": "Base preset",
       "hidden": true,
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/out/build/${presetName}",
@@ -17,6 +17,8 @@
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       },
       "cacheVariables": {
+        "CPM_SOURCE_CACHE": "~/.cache/CPM",
+        "USE_CCACHE": "ON",
         "ASAP_BUILD_TESTS": "ON",
         "ASAP_BUILD_EXAMPLES": "ON"
       }
@@ -109,7 +111,10 @@
         "base",
         "debug",
         "x64"
-      ]
+      ],
+      "environment": {
+        "caexcludepath": "${sourceDir}/third_party;${sourceDir}/out;$env{userprofile}/.cache/CPM"
+      }
     },
     {
       "name": "dev-linux",
@@ -119,7 +124,12 @@
         "debug",
         "compiler-clang",
         "code-coverage"
-      ]
+      ],
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
+      }
     },
     {
       "name": "dev-mac",
@@ -144,7 +154,12 @@
         "debug",
         "compiler-clang",
         "code-coverage"
-      ]
+      ],
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
+      }
     },
     {
       "name": "dev-gcc",
@@ -154,7 +169,12 @@
         "debug",
         "compiler-gcc",
         "code-coverage"
-      ]
+      ],
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
+      }
     },
     {
       "name": "dev-valgrind",
@@ -175,6 +195,11 @@
           "Linux",
           "Darwin"
         ]
+      },
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
       }
     },
     {
@@ -197,6 +222,11 @@
           "Linux",
           "Darwin"
         ]
+      },
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
       }
     },
     {
@@ -217,6 +247,11 @@
           "Linux",
           "Darwin"
         ]
+      },
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
       }
     },
     {
@@ -235,7 +270,12 @@
         "base",
         "release",
         "compiler-clang"
-      ]
+      ],
+      "vendor": {
+        "jetbrains.com/clion": {
+          "toolchain": "LinuxWSL"
+        }
+      }
     },
     {
       "name": "rel-mac",
@@ -257,27 +297,13 @@
       "name": "dev-base",
       "hidden": true,
       "jobs": 4,
-      "targets": [
-        "all",
-        "ccov-all",
-        "ccov-clean",
-        "build-all-tests",
-        "dox",
-        "sphinx"
-      ],
-      "verbose": true
+      "verbose": false
     },
     {
       "name": "dev-windows",
       "configurePreset": "dev-windows",
       "inherits": [
         "dev-base"
-      ],
-      "targets": [
-        "all",
-        "build-all-tests",
-        "dox",
-        "sphinx"
       ]
     },
     {
@@ -285,18 +311,6 @@
       "configurePreset": "dev-clang",
       "inherits": [
         "dev-base"
-      ],
-      "targets": [
-        "all",
-        "ccov-all",
-        "ccov-clean",
-        "build-all-tests",
-        "dox",
-        "sphinx",
-        "clang-tidy-all",
-        "clang-tidy-diff",
-        "clang-format-all",
-        "clang-format-diff"
       ]
     },
     {
@@ -325,9 +339,6 @@
       "configurePreset": "dev-valgrind",
       "inherits": [
         "dev-base"
-      ],
-      "targets": [
-        "do-all-valgrind"
       ]
     },
     {
@@ -335,9 +346,6 @@
       "configurePreset": "dev-sanitizers",
       "inherits": [
         "dev-base"
-      ],
-      "targets": [
-        "do-all-tests"
       ]
     },
     {
@@ -345,20 +353,12 @@
       "configurePreset": "dev-sanitizers-thread",
       "inherits": [
         "dev-base"
-      ],
-      "targets": [
-        "do-all-tests"
       ]
     },
     {
       "name": "rel-base",
       "hidden": true,
       "jobs": 4,
-      "targets": [
-        "build-all-tests",
-        "dox",
-        "sphinx"
-      ],
       "cleanFirst": true,
       "verbose": true
     },

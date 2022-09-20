@@ -14,7 +14,7 @@
     },
     {
       "type": "docs",
-      "hidden": true
+      "section": "Documentation"
     },
     {
       "type": "style",
@@ -30,6 +30,14 @@
     },
     {
       "type": "test",
+      "hidden": true
+    },
+    {
+      "type": "build",
+      "hidden": true
+    },
+    {
+      "type": "ops",
       "hidden": true
     }
   ],

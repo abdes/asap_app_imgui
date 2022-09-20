@@ -27,8 +27,9 @@ ASAP_DIAGNOSTIC_POP
 #include <fstream>
 #include <sstream> // for log record formatting
 
-// spdlog puts template definitions in separate files from the .h files. We ned to declare the
-// template explicit instantiation present in the implementation files to avoid compiler warnings.
+// spdlog puts template definitions in separate files from the .h files. We ned
+// to declare the template explicit instantiation present in the implementation
+// files to avoid compiler warnings.
 extern template class spdlog::sinks::base_sink<std::mutex>;
 
 namespace asap::ui {
@@ -49,10 +50,13 @@ void ImGuiLogSink::ShowLogLevelsPopup() {
   std::vector<int> levels;
   for (auto &a_logger : asap::logging::Registry::Loggers()) {
     levels.push_back(a_logger.second.GetLevel());
-    auto format = std::string("%u (")
-                      .append(spdlog::level::to_string_view(a_logger.second.GetLevel()).data())
-                      .append(")");
-    if (ImGui::SliderInt(a_logger.second.Name().c_str(), &levels.back(), 0, 6, format.c_str())) {
+    auto format =
+        std::string("%u (")
+            .append(spdlog::level::to_string_view(a_logger.second.GetLevel())
+                        .data())
+            .append(")");
+    if (ImGui::SliderInt(a_logger.second.Name().c_str(), &levels.back(), 0, 6,
+            format.c_str())) {
       a_logger.second.SetLevel(spdlog::level::level_enum(levels.back()));
     }
   }
@@ -136,7 +140,8 @@ void ImGuiLogSink::Draw(const char *title, bool *open) {
     if (wrap_) {
       // Highlight the button
       ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.0F);
-      ImGui::PushStyleColor(ImGuiCol_Border, ImGui::GetStyleColorVec4(ImGuiCol_TextSelectedBg));
+      ImGui::PushStyleColor(
+          ImGuiCol_Border, ImGui::GetStyleColorVec4(ImGuiCol_TextSelectedBg));
       need_pop_style_var = true;
     }
     if (ImGui::Button(ICON_MDI_WRAP)) {
@@ -155,7 +160,8 @@ void ImGuiLogSink::Draw(const char *title, bool *open) {
     if (scroll_lock_) {
       // Highlight the button
       ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 2.0F);
-      ImGui::PushStyleColor(ImGuiCol_Border, ImGui::GetStyleColorVec4(ImGuiCol_TextSelectedBg));
+      ImGui::PushStyleColor(
+          ImGuiCol_Border, ImGui::GetStyleColorVec4(ImGuiCol_TextSelectedBg));
       need_pop_style_var = true;
     }
     if (ImGui::Button(ICON_MDI_LOCK)) {
@@ -180,7 +186,8 @@ void ImGuiLogSink::Draw(const char *title, bool *open) {
   // -------------------------------------------------------------------------
 
   ImGui::Separator();
-  ImGui::BeginChild("scrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+  ImGui::BeginChild(
+      "scrolling", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
 
   {
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1));
@@ -191,12 +198,12 @@ void ImGuiLogSink::Draw(const char *title, bool *open) {
     std::shared_lock<std::shared_timed_mutex> lock(records_mutex_);
     for (auto const &record : records_) {
       if (!display_filter_.IsActive() ||
-          display_filter_.PassFilter(
-              record.properties_.c_str(), record.properties_.c_str() + record.properties_.size()) ||
-          display_filter_.PassFilter(
-              record.source_.c_str(), record.source_.c_str() + record.source_.size()) ||
-          display_filter_.PassFilter(
-              record.message_.c_str(), record.message_.c_str() + record.message_.size())) {
+          display_filter_.PassFilter(record.properties_.c_str(),
+              record.properties_.c_str() + record.properties_.size()) ||
+          display_filter_.PassFilter(record.source_.c_str(),
+              record.source_.c_str() + record.source_.size()) ||
+          display_filter_.PassFilter(record.message_.c_str(),
+              record.message_.c_str() + record.message_.size())) {
         ImGui::BeginGroup();
         if (record.emphasis_) {
           font.Bold();
@@ -208,12 +215,13 @@ void ImGuiLogSink::Draw(const char *title, bool *open) {
         if (record.color_range_start_ > 0) {
           auto props_len = record.properties_.size();
 
-          std::string part = record.properties_.substr(0, record.color_range_start_);
+          std::string part =
+              record.properties_.substr(0, record.color_range_start_);
           ImGui::TextUnformatted(part.c_str());
           ImGui::SameLine();
 
-          part = record.properties_.substr(
-              record.color_range_start_, record.color_range_end_ - record.color_range_start_);
+          part = record.properties_.substr(record.color_range_start_,
+              record.color_range_end_ - record.color_range_start_);
           ImGui::TextColored(record.color_, "%s", part.c_str());
 
           part = record.properties_.substr(
@@ -250,8 +258,9 @@ void ImGuiLogSink::Draw(const char *title, bool *open) {
         }
         ImGui::EndGroup();
 #ifndef NDEBUG
-        // We only show the tooltip with the source location if in debug build. The source
-        // location information is not produced in the logs in non-debug builds.
+        // We only show the tooltip with the source location if in debug build.
+        // The source location information is not produced in the logs in
+        // non-debug builds.
         if (ImGui::IsItemHovered()) {
           ImGui::SetTooltip("%s", record.source_.c_str());
         }
@@ -294,7 +303,9 @@ void ImGuiLogSink::sink_it_(const spdlog::details::log_msg &msg) {
     color_range_end = static_cast<std::size_t>(ostr.tellp());
   }
   if (show_logger_) {
-    ostr.put('[').write(msg.logger_name.data(), msg.logger_name.size()).write("] ", 2);
+    ostr.put('[')
+        .write(msg.logger_name.data(), msg.logger_name.size())
+        .write("] ", 2);
   }
   auto properties = ostr.str();
 
@@ -325,7 +336,8 @@ void ImGuiLogSink::sink_it_(const spdlog::details::log_msg &msg) {
 #ifndef NDEBUG
   // Ignore the '[' and ']'
   ASAP_ASSERT((skip_to - msg_str.begin() - 3) >= 0);
-  auto source = msg_str.substr(1, static_cast<std::size_t>(skip_to - msg_str.begin() - 3));
+  auto source = msg_str.substr(
+      1, static_cast<std::size_t>(skip_to - msg_str.begin() - 3));
 #else
   auto source = std::string();
 #endif // NDEBUG
@@ -375,8 +387,9 @@ void ImGuiLogSink::sink_it_(const spdlog::details::log_msg &msg) {
       ;
   }
 
-  auto record = LogRecord{properties, source, msg_str.substr(skip_to - msg_str.begin()),
-      color_range_start, color_range_end, *color, emphasis};
+  auto record =
+      LogRecord{properties, source, msg_str.substr(skip_to - msg_str.begin()),
+          color_range_start, color_range_end, *color, emphasis};
   {
     std::unique_lock<std::shared_timed_mutex> lock(records_mutex_);
     records_.push_back(std::move(record));
@@ -424,7 +437,8 @@ void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
 
 void ImGuiLogSink::LoadSettings() {
   std::shared_ptr<cpptoml::table> config;
-  auto log_settings = asap::config::GetPathFor(asap::config::Location::F_LOG_SETTINGS);
+  auto log_settings =
+      asap::config::GetPathFor(asap::config::Location::F_LOG_SETTINGS);
   auto has_config = false;
   if (std::filesystem::exists(log_settings)) {
     try {
@@ -432,7 +446,8 @@ void ImGuiLogSink::LoadSettings() {
       ASLOG(info, "settings loaded from {}", log_settings.string());
       has_config = true;
     } catch (std::exception const &ex) {
-      ASLOG(error, "error () while loading settings from {}", ex.what(), log_settings.string());
+      ASLOG(error, "error () while loading settings from {}", ex.what(),
+          log_settings.string());
     }
   } else {
     ASLOG(info, "file {} does not exist", log_settings.string());
@@ -447,10 +462,10 @@ void ImGuiLogSink::LoadSettings() {
         ASLOG(debug, "logger '{}' will have level '{}'",
             *(logger_settings->get_as<std::string>("name")),
             *(logger_settings->get_as<int>("level")));
-        auto &logger =
-            asap::logging::Registry::GetLogger(*(logger_settings->get_as<std::string>("name")));
-        logger.set_level(
-            static_cast<spdlog::level::level_enum>(*(logger_settings->get_as<int>("level"))));
+        auto &logger = asap::logging::Registry::GetLogger(
+            *(logger_settings->get_as<std::string>("name")));
+        logger.set_level(static_cast<spdlog::level::level_enum>(
+            *(logger_settings->get_as<int>("level"))));
       }
     }
 
@@ -487,9 +502,10 @@ void ImGuiLogSink::SaveSettings() {
   for (auto &log : logging::Registry::Loggers()) {
     auto logcfg = cpptoml::make_table();
     logcfg->insert("name", log.second.Name());
-    logcfg->insert(
-        "level", static_cast<typename std::underlying_type<spdlog::level::level_enum>::type>(
-                     log.second.GetLevel()));
+    logcfg->insert("level",
+        static_cast<
+            typename std::underlying_type<spdlog::level::level_enum>::type>(
+            log.second.GetLevel()));
     loggers->push_back(logcfg);
   }
 
@@ -505,7 +521,8 @@ void ImGuiLogSink::SaveSettings() {
   root->insert("scroll-lock", scroll_lock_);
   root->insert("soft-wrap", wrap_);
 
-  auto settings_path = asap::config::GetPathFor(asap::config::Location::F_LOG_SETTINGS);
+  auto settings_path =
+      asap::config::GetPathFor(asap::config::Location::F_LOG_SETTINGS);
   auto ofs = std::ofstream();
   ofs.open(settings_path.string());
   ofs << "# Logging configuration (toml 0.5.1)" << std::endl;

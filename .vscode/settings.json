@@ -1,10 +1,10 @@
 {
   "esbonio.sphinx.confDir": "doc",
   "editor.rulers": [
-    100,
-    130
+    80,
+    100
   ],
-  "rewrap.wrappingColumn": 100,
+  "rewrap.wrappingColumn": 80,
   "rewrap.autoWrap.enabled": true,
   "files.associations": {
     "xtr1common": "cpp",
@@ -98,7 +98,7 @@
   // Format file when pasting
   "editor.formatOnPaste": false,
   // Format file on save
-  "editor.formatOnSave": false,
+  "editor.formatOnSave": true,
   // Automatically display inline suggestions in the editor
   "editor.inlineSuggest.enabled": true,
   // Whether to display a small panel with parameter document and type information when entering
@@ -284,7 +284,12 @@
   "cSpell.enableFiletypes": [
     "rst"
   ],
-  "cmakeFormat.args": [
-    "--config-file=${workspaceFolder}/.cmake-format.yaml"
-  ],
+  "rewrap.reformat": true,
+  "search.exclude": {
+    "**/.idea": true,
+    "**/out": true
+  },
+  "files.exclude": {
+    "**/.sphinx": true
+  },
 }
