@@ -124,9 +124,10 @@ jobs:
         shell: cmake -P {0}
         run: |
           if("${{ runner.os }}" STREQUAL "Windows")
-            execute_process(COMMAND "choco install ccache")
+            # If ccache behaves badly on windows, skip this step
+            execute_process(COMMAND choco install ccache)
           elseif("${{ runner.os }}" STREQUAL "macOS")
-            execute_process(COMMAND "brew install ccache")
+            execute_process(COMMAND brew install ccache)
           elseif("${{ runner.os }}" STREQUAL "Linux")
             set(ccache_version "4.6.3")
             set(ccache_dist "ccache-${ccache_version}-linux-x86_64")
@@ -142,7 +143,8 @@ jobs:
           endif()
 
       - name: Setup ccache
-        if: runner.os != 'Windows'
+        # If ccache behaves badly on windows, skip this step
+        # if: runner.os != 'Windows'
         uses: Chocobo1/setup-ccache-action@v1
         with:
           install_ccache: false
@@ -175,18 +177,26 @@ jobs:
           endif()
           set(ENV{PATH} "$ENV{GITHUB_WORKSPACE}${path_separator}$ENV{PATH}")
 
+          # If ccache shows some strange behavior on windows, you can easily
+          # disable it here by setting the variable to "OFF"
+          if (NOT "${{ runner.os }}" STREQUAL "Windows")
+            set(enable_ccache "ON")
+          else()
+            set(enable_ccache "ON")
+          endif()
+
           execute_process(
             COMMAND cmake
               -S .
               -B build
               -D CMAKE_BUILD_TYPE=$ENV{BUILD_TYPE}
               -G Ninja
+              -D USE_CCACHE=${enable_ccache}
               -D CMAKE_MAKE_PROGRAM=ninja
-              -D CMAKE_C_COMPILER_LAUNCHER=ccache
-              -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
               -D ASAP_BUILD_TESTS=ON
               -D ASAP_BUILD_EXAMPLES=ON
               -D CMAKE_INSTALL_PREFIX=install
+              -D CMAKE_VERBOSE_MAKEFILE=ON
             RESULT_VARIABLE result
           )
           if (NOT result EQUAL 0)
@@ -207,19 +217,6 @@ jobs:
             endforeach()
           endif()
 
-          file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
-          set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
-          set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
-          set(ENV{CCACHE_COMPRESS} "true")
-          set(ENV{CCACHE_COMPRESSLEVEL} "6")
-          set(ENV{CCACHE_MAXSIZE} "400M")
-          if ("${{ matrix.config.cxx }}" STREQUAL "cl")
-            set(ENV{CCACHE_MAXSIZE} "600M")
-          endif()
-
-          execute_process(COMMAND ccache -p)
-          execute_process(COMMAND ccache -z)
-
           execute_process(
             COMMAND cmake --build build --target all
             RESULT_VARIABLE result
@@ -233,15 +230,6 @@ jobs:
             message("::error::${error_message}")
             message(FATAL_ERROR "Build failed")
           endif()
-
-      - name: ccache statistics
-        shell: cmake -P {0}
-        run: |
-          file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
-          set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
-          set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
-
-          execute_process(COMMAND ccache -s)
 
       - name: Run tests
         shell: cmake -P {0}
