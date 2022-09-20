@@ -158,7 +158,7 @@ if(ASAP_BUILD_TESTS)
   include(GoogleSanitizers)
   include(CodeCoverage)
   # Enable this target when the project has test cases
-  # asap_add_code_coverage_all_targets()
+  asap_add_code_coverage_all_targets()
   include(Valgrind)
 
   cpmaddpackage(
