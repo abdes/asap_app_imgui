@@ -192,6 +192,7 @@ jobs:
               -D ASAP_BUILD_TESTS=ON
               -D ASAP_BUILD_EXAMPLES=ON
               -D CMAKE_INSTALL_PREFIX=install
+              -D CMAKE_VERBOSE_MAKEFILE=ON
             RESULT_VARIABLE result
           )
           if (NOT result EQUAL 0)
