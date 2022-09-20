@@ -11,12 +11,16 @@
 
 #include <cxxopts.hpp>
 
-#include <asap/asap-version.h>
+#include <asap_app_imgui/version.h>
 #include <logging/logging.h>
 
 #include <iostream>
 
 using asap::app::ImGuiRunner;
+
+using asap_app_imgui::info::cNameVersion;
+using asap_app_imgui::info::cProjectDescription;
+using asap_app_imgui::info::cProjectName;
 
 auto main(int argc, char **argv) -> int {
   auto &logger = asap::logging::Registry::GetLogger("main");
@@ -27,7 +31,7 @@ auto main(int argc, char **argv) -> int {
     //
     // Handle program options
     //
-    cxxopts::Options options(ASAP_PROJECT_NAME, ASAP_PROJECT_DESCRIPTION);
+    cxxopts::Options options(cProjectName, cProjectDescription);
     options.add_options()
         // clang-format off
       ("v,version", "Show version")
@@ -43,7 +47,7 @@ auto main(int argc, char **argv) -> int {
     }
 
     if (result.count("version") != 0U) {
-      std::cout << ASAP_NAME_VERSION << std::endl;
+      std::cout << cNameVersion << std::endl;
       exit(0);
     }
 
