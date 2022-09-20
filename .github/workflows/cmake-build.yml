@@ -113,7 +113,8 @@ jobs:
           endif()
 
       - name: Install X11 dependencies
-        if: runner.os == "Linux"
+        if: runner.os == 'Linux'
+        shell: bash
         run: |
           sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev
 
