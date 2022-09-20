@@ -112,11 +112,15 @@ jobs:
             )
           endif()
 
+      - name: Install X11 dependencies
+        if: runner.os == "Linux"
+        run: |
+          sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev
+
       - name: Install gcc-11
         shell: bash
         if: endsWith(matrix.config.name, 'GCC_11')
         run: |
-          sudo apt-get update
           sudo apt-get install gcc-11 g++-11
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
 
