@@ -52,7 +52,6 @@ set(META_VERSION_PATCH       "0")
 set(META_VERSION_REVISION    "${GIT_REV}")
 set(META_VERSION             "${META_VERSION_MAJOR}.${META_VERSION_MINOR}.${META_VERSION_PATCH}")
 set(META_NAME_VERSION        "${META_PROJECT_NAME} v${META_VERSION} (${META_VERSION_REVISION})")
-set(META_CMAKE_INIT_SHA      "${GIT_REV}")
 # cmake-format: on
 
 string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} META_PROJECT_ID)
@@ -159,7 +158,7 @@ if(ASAP_BUILD_TESTS)
   include(GoogleSanitizers)
   include(CodeCoverage)
   # Enable this target when the project has test cases
-  # asap_add_code_coverage_all_targets()
+  asap_add_code_coverage_all_targets()
   include(Valgrind)
 
   cpmaddpackage(
