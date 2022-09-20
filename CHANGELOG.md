@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.6.0](http://github.com/abdes/asap/compare/v4.5.2...v4.6.0) (2022-09-20)
+
+### Features
+
+* option to control the use of ccache, default is OFF ([49a17a9](http://github.com/abdes/asap/commit/49a17a99026ae7e59d14297d01ed2f8d10c78762))
+
+  More robust implementation of fatser builds with `ccache`. Caching is enabled in
+  GitHub CI builds and can be enabled in development environments by simply
+  setting the cmake variable `USE_CCACHE` to 'ON'/'TRUE' or equivalent.
+
+  A precondition for the environment is of course to have `ccache` installed,
+  which gets done automatically in GitHub workflows, but needs to be done in
+  development environments. It is recommended to use brew/choco for MacOS/Windows,
+  but to install from the pre-built binaries for Linux as the version that comes
+  with most distros is quite old.
+
+  It is to be noted that `ccache` with MSVC on Windows may have some issues and if
+  that is the case, simply do not use it.
+
 ### [4.5.2](http://github.com/abdes/asap/compare/v4.5.1...v4.5.2) (2022-09-20)
 
 ### Bug Fixes
