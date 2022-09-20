@@ -1,6 +1,6 @@
 <div align="center">
 
-# Don't waste your time!
+# Don't waste your time
 
 ![Start Now!!](doc/_static/asap-banner.png "ASAP banner")
 
@@ -71,6 +71,8 @@ than days.
 - code coverage with clang or g++
 - zero-touch valgrind, clang-tidy, clang-format, google sanitizers, etc
 - development can be done locally or in a dev container with vscode
+- faster rebuilds with [`ccache`](https://ccache.dev) empowered caching
+- `CMake` package management with [`CPM`](https://github.com/cpm-cmake/CPM.cmake)
 
 ## Project Documentation
 
@@ -169,6 +171,5 @@ Read the [developer guides](https://abdes.github.io/asap/asap_master/html/).
 [openssf-project]: https://bestpractices.coreinfrastructure.org/projects/5917
 [project-docs-thumb]: https://cdn.loom.com/sessions/thumbnails/131bd53f1a004387b09bbeeb80a41f3e-with-play.gif
 [project-docs-video]: https://www.loom.com/embed/131bd53f1a004387b09bbeeb80a41f3e
-[project-docs]: https://abdes.github.io/asap/asap_master/html/index.html
 [release-badge]: https://img.shields.io/github/v/release/abdes/asap
 [windows-badge]: https://img.shields.io/badge/OS-windows-blue
