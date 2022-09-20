@@ -84,6 +84,7 @@ option(ASAP_WITH_GOOGLE_ASAN    "Instrument code with address sanitizer"        
 option(ASAP_WITH_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitizer"      OFF)
 option(ASAP_WITH_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
 option(ASAP_WITH_VALGRIND       "Builds targets with valgrind profilers added"           OFF)
+option(USE_CCACHE               "Enable caching of compiled artifacts using ccache"      OFF)
 # cmake-format: on
 
 # ------------------------------------------------------------------------------
