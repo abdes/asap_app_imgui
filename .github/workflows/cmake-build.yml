@@ -124,9 +124,9 @@ jobs:
         shell: cmake -P {0}
         run: |
           if("${{ runner.os }}" STREQUAL "Windows")
-            execute_process(COMMAND "choco install ccache")
+            execute_process(COMMAND choco install ccache)
           elseif("${{ runner.os }}" STREQUAL "macOS")
-            execute_process(COMMAND "brew install ccache")
+            execute_process(COMMAND brew install ccache)
           elseif("${{ runner.os }}" STREQUAL "Linux")
             set(ccache_version "4.6.3")
             set(ccache_dist "ccache-${ccache_version}-linux-x86_64")
