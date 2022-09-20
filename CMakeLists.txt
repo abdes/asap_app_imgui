@@ -151,6 +151,32 @@ set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx")
 include(SphinxGeneration)
 
 # ------------------------------------------------------------------------------
+# Testing
+# ------------------------------------------------------------------------------
+
+if(ASAP_BUILD_TESTS)
+  include(GoogleSanitizers)
+  include(CodeCoverage)
+  # Enable this target when the project has test cases
+  # asap_add_code_coverage_all_targets()
+  include(Valgrind)
+
+  cpmaddpackage(
+    NAME
+    googletest
+    GIT_TAG
+    main
+    GITHUB_REPOSITORY
+    google/googletest
+    OPTIONS
+    "gtest_force_shared_crt ON"
+    "INSTALL_GTEST OFF")
+
+  include(GoogleTest)
+  include(CTest)
+endif()
+
+# ------------------------------------------------------------------------------
 # Third party modules
 #
 # Call after documentation but before project modules and before adding common
@@ -204,32 +230,6 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH FALSE)
 
 if(NOT SYSTEM_DIR_INSTALL)
   set(CMAKE_INSTALL_RPATH "$ORIGIN/${ASAP_INSTALL_LIB}")
-endif()
-
-# ------------------------------------------------------------------------------
-# Testing
-# ------------------------------------------------------------------------------
-
-if(ASAP_BUILD_TESTS)
-  include(GoogleSanitizers)
-  include(CodeCoverage)
-  # Enable this target when the project has test cases
-  # asap_add_code_coverage_all_targets()
-  include(Valgrind)
-
-  cpmaddpackage(
-    NAME
-    googletest
-    GIT_TAG
-    main
-    GITHUB_REPOSITORY
-    google/googletest
-    OPTIONS
-    "gtest_force_shared_crt ON"
-    "INSTALL_GTEST OFF")
-
-  include(GoogleTest)
-  include(CTest)
 endif()
 
 # ------------------------------------------------------------------------------
