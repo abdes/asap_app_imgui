@@ -121,28 +121,12 @@ jobs:
           sudo apt-get install gcc-11 g++-11
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 110 --slave /usr/bin/g++ g++ /usr/bin/g++-11 --slave /usr/bin/gcov gcov /usr/bin/gcov-11
 
-      - name: Download ccache
-        id: ccache
-        shell: cmake -P {0}
-        run: |
-          set(ccache_url "https://github.com/cristianadam/ccache/releases/download/v$ENV{CCACHE_VERSION}/${{ runner.os }}.tar.xz")
-          file(DOWNLOAD "${ccache_url}" ./ccache.tar.xz SHOW_PROGRESS)
-          execute_process(COMMAND ${CMAKE_COMMAND} -E tar xvf ./ccache.tar.xz)
-
-      - name: Prepare ccache timestamp
-        id: ccache_cache_timestamp
-        shell: cmake -P {0}
-        run: |
-          string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
-          message("::set-output name=timestamp::${current_date}")
-
-      - name: ccache cache files
-        uses: actions/cache@v1.1.0
+      - name: Setup ccache
+        if: runner.os != 'Windows'
+        uses: Chocobo1/setup-ccache-action@v1
         with:
-          path: .ccache
-          key: ${{ matrix.config.name }}-ccache-${{ steps.ccache_cache_timestamp.outputs.timestamp }}
-          restore-keys: |
-            ${{ matrix.config.name }}-ccache-
+          prepend_symlinks_to_path: false
+          windows_compile_environment: msvc # this field is required
 
       - name: Configure
         shell: cmake -P {0}
@@ -169,15 +153,20 @@ jobs:
           endif()
           set(ENV{PATH} "$ENV{GITHUB_WORKSPACE}${path_separator}$ENV{PATH}")
 
+          if (NOT "${{ runner.os }}" STREQUAL "Windows")
+            set(enable_ccache "ON")
+          else()
+            set(enable_ccache "OFF")
+          endif()
+
           execute_process(
             COMMAND cmake
               -S .
               -B build
               -D CMAKE_BUILD_TYPE=$ENV{BUILD_TYPE}
               -G Ninja
+              -D USE_CCACHE=${enable_ccache}
               -D CMAKE_MAKE_PROGRAM=ninja
-              -D CMAKE_C_COMPILER_LAUNCHER=ccache
-              -D CMAKE_CXX_COMPILER_LAUNCHER=ccache
               -D ASAP_BUILD_TESTS=ON
               -D ASAP_BUILD_EXAMPLES=ON
               -D CMAKE_INSTALL_PREFIX=install
@@ -227,15 +216,6 @@ jobs:
             message("::error::${error_message}")
             message(FATAL_ERROR "Build failed")
           endif()
-
-      - name: ccache statistics
-        shell: cmake -P {0}
-        run: |
-          file(TO_CMAKE_PATH "$ENV{GITHUB_WORKSPACE}" ccache_basedir)
-          set(ENV{CCACHE_BASEDIR} "${ccache_basedir}")
-          set(ENV{CCACHE_DIR} "${ccache_basedir}/.ccache")
-
-          execute_process(COMMAND ccache -s)
 
       - name: Run tests
         shell: cmake -P {0}
