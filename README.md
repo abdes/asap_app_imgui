@@ -20,7 +20,9 @@
 - imgui with docking
 - persistence of imgui and docks configuration
 
-## Getting the code
+We have detailed guides for setting up an efficient development environment, the
+development process, project structure, etc. Take a look at the project's github
+pages [here](https://abdes.github.io/asap/asap_master/html/).
 
 ```shell
 # Use the one you prefer :-)
@@ -34,7 +36,7 @@ git checkout develop
 git submodule update --recursive
 ```
 
-NOTES:
+## Getting Started
 
 - most of the cutting edge stuff will be in the 'develop' branch. The master branch
   carries the stable releases only. As many changes are currently being made to ImGui
@@ -43,27 +45,30 @@ NOTES:
 - -j4 requests git to parallelize cloning of repos. Needs a relatively recent version
   of git. If that is not available, simply do not use this option.
 
-## Requirements
+For the impatient, or the already experts, below is a short tutorial video for
+how to start from asap to make your own project.
 
 Make sure you have a C++ compiler with C++-14 capabilities at least. Gnu, Clang and MSVC
 all can do that with a recent version.
 
-## Building
+[![Clean-up][cleanup-thumb]][cleanup-video]
 
 ```shell
 mkdir _build && cd _build && cmake .. && cmake --build .
 ```
 
-You can also use any of the cmake options, generators, etc...
+In this step, we'll go into Visual Studio Code to do some heavier customizations
+while tracking our changes in git.
 
-By default the build will create shared libraries. If you want static libraries, pass
--DBUILD_SHARED_LIBS=OFF to cmake during configuration:
+[![Customize][customize-thumb]][customize-video]
 
 ```shell
 cmake -DBUILD_SHARED_LIBS=OFF ..
 ```
 
-You can also use any of the cmake options, generators, etc...
+For this final tutorial, we will ad an executable module to implement the famous
+"Hello World!". You can see how simple it is and how fast it is to hit the
+ground running with asap and start focusing on what matters the most: coding.
 
 By default the build will create shared libraries. If you want static libraries, pass
 -DBUILD_SHARED_LIBS=OFF to cmake during configuration:

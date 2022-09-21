@@ -26,6 +26,10 @@ endif()
 # project hierarchy
 include(LogHelpers)
 
+# Setup our override file, in which we may cleanup cmake's default compiler
+# options, based on what we are doing.
+set(CMAKE_USER_MAKE_RULES_OVERRIDE "ResetInitialCompilerOptions")
+
 # ------------------------------------------------------------------------------
 # Project description and (meta) information
 # ------------------------------------------------------------------------------

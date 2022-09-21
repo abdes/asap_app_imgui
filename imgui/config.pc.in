@@ -6,6 +6,7 @@ Name: @MODULE_TARGET_NAME@
 URL: @META_MODULE_GITHUB_REPO@
 Description: @META_MODULE_DESCRIPTION@
 Version: @META_MODULE_VERSION@
-Requires: Microsoft.GSL
+Requires.private: asap::codec cryptopp-static Boost::endian
+Requires: asap::common
 Cflags: -I${includedir}
 Libs: -L${libdir} @MODULE_LINK_LIBS@
