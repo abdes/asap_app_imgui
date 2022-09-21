@@ -1,44 +1,154 @@
-#        Copyright The Authors 2018.
-#    Distributed under the 3-Clause BSD License.
-#    (See accompanying file LICENSE or copy at
-#   https://opensource.org/licenses/BSD-3-Clause)
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
+# SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
-message("=> [third-party modules]")
+message(STATUS "${ASAP_LOG_PROJECT_HIERARCHY} >> third-party modules")
 
-# Catch2
-# EXCLUDE_FROM_ALL to not have it install its files during install
-add_subdirectory(catch2 EXCLUDE_FROM_ALL)
+# Call `asap_add_package` to add third party packages using CPM, while
+# automatically adding/removing them to the project hierarchy stack.
+#
+# Refer to https://github.com/cpm-cmake/CPM.cmake for the full usage.
+#
+# Example:
+# ~~~
+# asap_add_package(
+#   NAME
+#   magic_enum
+#   GIT_TAG
+#   master
+#   GITHUB_REPOSITORY
+#   abdes/magic_enum
+#   OPTIONS
+#   "MAGIC_ENUM_OPT_INSTALL ON")
+# ~~~
 
-# spdlog
-SET(SPDLOG_BUILD_TESTING OFF CACHE BOOL "Build spdlog tests")
-SET(SPDLOG_INSTALL ON CACHE BOOL "Generate the spdlog install target")
-if(NOT (WIN32 OR MINGW))
-  SET(SPDLOG_BUILD_SHARED ${BUILD_SHARED_LIBS} CACHE BOOL "Build spdlog as a shared library")
-endif()
-add_subdirectory(spdlog)
+# ------------------------------------------------------------------------------
+# GSL
+# ------------------------------------------------------------------------------
 
+asap_add_package(NAME gsl GIT_TAG main GITHUB_REPOSITORY microsoft/GSL)
+
+# ------------------------------------------------------------------------------
+# fmt::fmt-header-only
+# ------------------------------------------------------------------------------
+
+asap_add_package(
+  NAME
+  fmtlib
+  GIT_TAG
+  9.0.0
+  GITHUB_REPOSITORY
+  fmtlib/fmt
+  OPTIONS
+  "FMT_INSTALL ON")
+
+# ------------------------------------------------------------------------------
+# asap::common
+# ------------------------------------------------------------------------------
+
+asap_add_package(
+  NAME
+  asap_common
+  GIT_TAG
+  master
+  GITHUB_REPOSITORY
+  asap-projects/asap-common
+  OPTIONS
+  "ASAP_COMMON_INSTALL ON"
+  "ASAP_BUILD_TESTS OFF"
+  "ASAP_BUILD_EXAMPLES OFF")
+
+# ------------------------------------------------------------------------------
+# asap::contract
+# ------------------------------------------------------------------------------
+
+asap_add_package(
+  NAME
+  asap_contract
+  GIT_TAG
+  master
+  GITHUB_REPOSITORY
+  asap-projects/asap-contract
+  OPTIONS
+  "ASAP_CONTRACT_INSTALL ON"
+  "ASAP_BUILD_TESTS OFF"
+  "ASAP_BUILD_EXAMPLES OFF")
+
+# ------------------------------------------------------------------------------
+# asap::logging
+# ------------------------------------------------------------------------------
+
+asap_add_package(
+  NAME
+  asap_logging
+  GIT_TAG
+  master
+  GITHUB_REPOSITORY
+  asap-projects/asap-logging
+  OPTIONS
+  "ASAP_LOGGING_INSTALL ON"
+  "ASAP_BUILD_TESTS OFF"
+  "ASAP_BUILD_EXAMPLES OFF")
+
+# --------------------------------------------------------------------------------------------------
 # GLFW
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "Build the GLFW example programs")
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "Build the GLFW test programs")
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "Build the GLFW documentation")
-add_subdirectory(glfw)
+# --------------------------------------------------------------------------------------------------
 
+asap_add_package(
+  NAME
+  glfw
+  GIT_TAG
+  master
+  GITHUB_REPOSITORY
+  glfw/glfw
+  OPTIONS
+  "GLFW_BUILD_EXAMPLES OFF"
+  "GLFW_BUILD_TESTS OFF"
+  "GLFW_BUILD_DOCS OFF")
+
+# --------------------------------------------------------------------------------------------------
 # GLM
-set(GLM_TEST_ENABLE OFF CACHE BOOL "Build GLM tests")
-add_subdirectory(glm)
+# --------------------------------------------------------------------------------------------------
 
-# cxxopts - used to parse command line arguments
-SET(CXXOPTS_BUILD_EXAMPLES OFF CACHE BOOL "Build cxxopts examples")
-add_subdirectory(cxxopts)
+asap_add_package(
+  NAME
+  glm
+  GIT_TAG
+  master
+  GITHUB_REPOSITORY
+  g-truc/glm
+  OPTIONS
+  "GLM_TEST_ENABLE OFF")
 
+# --------------------------------------------------------------------------------------------------
 # date - used for time formatting in the logging widget
-SET(USE_SYSTEM_TZ_DB ON CACHE BOOL "Use system TZ db for date library" FORCE)
-SET(ENABLE_DATE_TESTING OFF CACHE BOOL "Build tests for the date library" FORCE)
-set(CMAKE_CXX_STANDARD 14 CACHE STRING "The C++ standard whose features are requested.")
-add_subdirectory(date)
+# --------------------------------------------------------------------------------------------------
 
+asap_add_package(
+  NAME
+  date
+  GIT_TAG
+  master
+  GITHUB_REPOSITORY
+  HowardHinnant/date
+  OPTIONS
+  "USE_SYSTEM_TZ_DB ON"
+  "ENABLE_DATE_TESTING OFF"
+  "CMAKE_CXX_STANDARD 14")
+
+# --------------------------------------------------------------------------------------------------
 # cpptoml - used to save/load the configuration files
-set(CPPTOML_BUILD_EXAMPLES OFF CACHE BOOL "Build examples" FORCE)
-set(ENABLE_LIBCXX OFF CACHE BOOL "Use libc++ for the C++ standard library" FORCE)
-add_subdirectory(cpptoml)
+# --------------------------------------------------------------------------------------------------
 
+asap_add_package(
+  NAME
+  cpptoml
+  GIT_TAG
+  master
+  GITHUB_REPOSITORY
+  skystrife/cpptoml
+  OPTIONS
+  "CPPTOML_BUILD_EXAMPLES OFF"
+  "ENABLE_LIBCXX OFF")

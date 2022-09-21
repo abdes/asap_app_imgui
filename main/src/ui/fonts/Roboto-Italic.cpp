@@ -1,4 +1,11 @@
-// File: 'Roboto-Italic.ttf' (173932 bytes)
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
+//    Distributed under the 3-Clause BSD License.
+//    (See accompanying file LICENSE or copy at
+//   https://opensource.org/licenses/BSD-3-Clause)
+
+// File:  'Robotto-Italic.ttf' (173932 bytes)
 // Exported using binary_to_compressed_c.cpp
 
 // Designed by: Christian Robertson
@@ -8,10 +15,9 @@
 
 #include "fonts.h"
 
-namespace asap {
-namespace debug {
-namespace ui {
+namespace asap::ui {
 
+// clang-format off
 const unsigned int Fonts::ROBOTO_ITALIC_COMPRESSED_DATA[126292 / 4] = {
     0x0000bc57, 0x00000000, 0x6ca70200, 0x00000400, 0x00010025, 0x82120000,
     0x043e0804, 0x44472000, 0x42b44645, 0x020082b0, 0x0000ac31, 0x50476202,
@@ -5277,7 +5283,6 @@ const unsigned int Fonts::ROBOTO_ITALIC_COMPRESSED_DATA[126292 / 4] = {
     0x0240023f, 0x02420241, 0x00440243, 0x00010002, 0x001d0014, 0xa7fa0500,
     0x00276877,
 };
+// clang-format on
 
-}  // namespace ui
-}  // namespace debug
-}  // namespace asap
+} // namespace asap::ui

@@ -1,21 +1,28 @@
-//        Copyright The Authors 2018.
-//    Distributed under the 3-Clause BSD License.
-//    (See accompanying file LICENSE or copy at
-//   https://opensource.org/licenses/BSD-3-Clause)
+//===----------------------------------------------------------------------===//
+// Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+// copy at https://opensource.org/licenses/BSD-3-Clause).
+// SPDX-License-Identifier: BSD-3-Clause
+//===----------------------------------------------------------------------===//
 
 #pragma once
 
-#define ${META_PROJECT_ID}_PROJECT_NAME        "@META_PROJECT_NAME@"
-#define ${META_PROJECT_ID}_PROJECT_DESCRIPTION "@META_PROJECT_DESCRIPTION@"
+namespace @META_PROJECT_ID_LOWER@ {
+  namespace info {
 
-#define ${META_PROJECT_ID}_AUTHOR_ORGANIZATION "@META_AUTHOR_ORGANIZATION@"
-#define ${META_PROJECT_ID}_AUTHOR_DOMAIN       "@META_AUTHOR_DOMAIN@"
-#define ${META_PROJECT_ID}_AUTHOR_MAINTAINER   "@META_AUTHOR_MAINTAINER@"
+    constexpr auto cProjectName = "@META_PROJECT_NAME@";
+    constexpr auto cProjectDescription = "@META_PROJECT_DESCRIPTION@";
 
-#define ${META_PROJECT_ID}_VERSION_MAJOR       "@META_VERSION_MAJOR@"
-#define ${META_PROJECT_ID}_VERSION_MINOR       "@META_VERSION_MINOR@"
-#define ${META_PROJECT_ID}_VERSION_PATCH       "@META_VERSION_PATCH@"
-#define ${META_PROJECT_ID}_VERSION_REVISION    "@META_VERSION_REVISION@"
+    constexpr auto cAuthorOrganization = "@META_AUTHOR_ORGANIZATION@";
+    constexpr auto cAuthorDomain = "@META_AUTHOR_DOMAIN@";
+    constexpr auto cAuthor = "@META_AUTHOR_MAINTAINER@";
 
-#define ${META_PROJECT_ID}_VERSION             "@META_VERSION@"
-#define ${META_PROJECT_ID}_NAME_VERSION        "@META_NAME_VERSION@"
+    constexpr auto cVersionMajor = "@META_VERSION_MAJOR@";
+    constexpr auto cVersionMinor = "@META_VERSION_MINOR@";
+    constexpr auto cVersionPatch = "@META_VERSION_PATCH@";
+    constexpr auto cVersionRevision = "@META_VERSION_REVISION@";
+
+    constexpr auto cVersion = "@META_VERSION@";
+    constexpr auto cNameVersion = "@META_NAME_VERSION@";
+
+  } // namespace info
+} // Namespace @META_PROJECT_ID_LOWER@

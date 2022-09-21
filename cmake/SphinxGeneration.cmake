@@ -1,6 +1,11 @@
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
+# SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
 # ------------------------------------------------------------------------------
-# API Documentation with Sphinx/Breathe/Exhale
+# Documentation with Sphinx/Breathe/Exhale
 # ------------------------------------------------------------------------------
 
 # To avoid indiscriminately generating documentation for all modules in the
@@ -12,73 +17,111 @@
 # Doxygen is run separately NOT by exhale. Sphinx targets must be run after
 # doxygen.
 #
-# To use in a specific CmakeLists.txt add the following:
+# To use in a submodule or in the master module add the following:
 #
-# 1. Call configure_sphinx_files(...)
-#      configure_sphinx_files(
-#        ${target}
-#        "\"<Title>\""
-#        "\"<Desscription>\""
-#        "<List of directories to include>")
-#
-# 2. Call add_sphinx_target(...) to add this module under the 'sphinx' target
-#      add_sphinx_target(${target})
-#
-# 3. Add install instructions
-#      install(
-#        DIRECTORY ${dox_root}/${target}
-#        DESTINATION ${INSTALL_DOC}
-#        COMPONENT docs
-#      )
+# ~~~
+#      asap_with_sphinx(${target})
+# ~~~
 #
 # Use 'make sphinx' to generate documentation. (not done by default)
 #
 
+include(FindSphinx)
 
-if (SPHINX_FOUND)
-  message(STATUS "System has sphinx.")
+if(SPHINX_FOUND)
+  macro(_master_sphinx_target)
+    string(MAKE_C_IDENTIFIER ${META_PROJECT_NAME} project_id)
+    string(TOLOWER ${project_id} project_id)
+    set(master_sphinx_target ${project_id}_master)
+  endmacro()
 
-  # Copy the master conf with @ substitutions to the sphinx build dir
-  #  configure_file("${CMAKE_SOURCE_DIR}/doc/master_conf.py.in"
-  #    "${SPHINX_BUILD_DIR}/conf.py" @ONLY)
-  # Copy all reST documents from doc dir to the sphinx build dir
-  #  file(GLOB_RECURSE master_documentation_pages "${CMAKE_SOURCE_DIR}/doc/*.rst")
-  #  file(COPY ${master_documentation_pages} DESTINATION
-  #    "${SPHINX_BUILD_DIR}")
-  # Add a master sphinx target to collect all submodules
-  add_custom_target(sphinx)
-  #  add_custom_target(sphinx
-  #    ${SPHINX_EXECUTABLE} -q -b html -c "${SPHINX_BUILD_DIR}" -d
-  #    "${SPHINX_CACHE_DIR}" "${SPHINX_BUILD_DIR}" "${SPHINX_HTML_DIR}"
-  #    WORKING_DIRECTORY "${SPHINX_BUILD_DIR}" VERBATIM)
+  function(_add_dependecy_to_master module_sphinx_target)
+    if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
+      _master_sphinx_target()
+      add_dependencies(${master_sphinx_target}_sphinx
+                       ${module_sphinx_target}_sphinx)
+    endif()
+  endfunction()
 
   # The macro to add a submodule as a sphinx target.
-  macro(add_sphinx_target TARGET_NAME)
+  function(asap_with_sphinx TARGET_NAME)
+    # Nothing will be done unless the module is being built as a master project.
+    if(NOT ${META_PROJECT_ID}_IS_MASTER_PROJECT)
+      return()
+    endif()
+
     # Setup work directory for the target module
     set(SPHINX_TARGET_WORKDIR "${SPHINX_BUILD_DIR}/${TARGET_NAME}")
-    if (NOT EXISTS "${SPHINX_TARGET_WORKDIR}")
+    if(NOT EXISTS "${SPHINX_TARGET_WORKDIR}")
       file(MAKE_DIRECTORY "${SPHINX_TARGET_WORKDIR}")
-    endif ()
+    endif()
     # Do @ substitutions in the sphinx config file for the module
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/doc/conf.py.in"
-      "${CMAKE_CURRENT_SOURCE_DIR}/doc/conf.py" @ONLY)
+                   "${CMAKE_CURRENT_SOURCE_DIR}/doc/conf.py" @ONLY)
 
     # Add a target for building the sphinx documentation of the module
-    add_custom_target(${TARGET_NAME}_sphinx
-      ${SPHINX_EXECUTABLE} -b html -c "${EXHALE_TARGET_WORKDIR}" -d
-      "${SPHINX_CACHE_DIR}" "${CMAKE_CURRENT_SOURCE_DIR}/doc" "${SPHINX_TARGET_WORKDIR}/html"
-      WORKING_DIRECTORY "${SPHINX_TARGET_WORKDIR}" VERBATIM)
-    set_target_properties(${TARGET_NAME}_sphinx PROPERTIES EXCLUDE_FROM_ALL TRUE)
+    message(
+      STATUS "[sphinx] Adding module sphinx target: ${TARGET_NAME}_sphinx")
+    add_custom_target(
+      ${TARGET_NAME}_sphinx
+      COMMAND
+        ${SPHINX_EXECUTABLE} -q -b html -c "${EXHALE_TARGET_WORKDIR}" -d
+        "${SPHINX_TARGET_WORKDIR}/_doctrees" "${CMAKE_CURRENT_SOURCE_DIR}/doc"
+        "${SPHINX_TARGET_WORKDIR}/html"
+      WORKING_DIRECTORY "${SPHINX_TARGET_WORKDIR}"
+      VERBATIM
+      COMMENT "Generating `sphinx` documentation for `${TARGET_NAME}`")
+    set_target_properties(${TARGET_NAME}_sphinx PROPERTIES EXCLUDE_FROM_ALL
+                                                           TRUE)
     # Finally add the module sphinx target as a dependency for the overall
     # sphinx target
-    add_dependencies(sphinx ${TARGET_NAME}_sphinx)
-  endmacro()
-  # We only build documentation through explicit invocation of the sphinx target
-  # as it is pretty heavy and requires doxygen to be run before it is invoked.
-  set_target_properties(sphinx PROPERTIES EXCLUDE_FROM_ALL TRUE)
+    if(${META_PROJECT_ID}_IS_MASTER_PROJECT)
+      _add_dependecy_to_master(${TARGET_NAME})
+    endif()
+  endfunction()
 
-else (SPHINX_FOUND)
-  message(STATUS "WARNING: sphinx is not available on this system!")
-  macro(add_sphinx_target TARGET_NAME)
-  endmacro()
-endif (SPHINX_FOUND)
+  if(NOT TARGET sphinx)
+    # Add a top-level sphinx target to collect all submodules, but only if this
+    # is the top-level project and not a sub-project
+    message(STATUS "[sphinx] Adding top-level sphinx target: sphinx")
+    add_custom_target(sphinx)
+    # We only build documentation through explicit invocation of the sphinx
+    # target as it is pretty heavy and requires doxygen to be run before it is
+    # invoked.
+    set_target_properties(sphinx PROPERTIES EXCLUDE_FROM_ALL TRUE)
+
+    # Add a target for copying the index.html from the doc dir to the sphinx
+    # build dir. A dependency on this target will be added to the master sphinx
+    # target.
+    add_custom_command(
+      OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
+      COMMAND
+        ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html
+        ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
+      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html)
+    add_custom_target(copy_doc_index ALL
+                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
+
+    # Setup sphinx doc master target and add other submodules as dependencies
+    function(_add_master_sphinx_target)
+      _master_sphinx_target()
+      asap_with_sphinx(${master_sphinx_target})
+      add_dependencies(
+        ${master_sphinx_target}_sphinx copy_doc_index
+        # Add more submodule documentation targets after this, using variables
+        # in the target names consistently with the module's CMakeLists.txt.
+      )
+      add_dependencies(sphinx ${master_sphinx_target}_sphinx)
+    endfunction()
+    _add_master_sphinx_target()
+  endif()
+
+else(SPHINX_FOUND)
+  message(WARNING "`sphinx` is not available on this system! "
+                  "Restructured text documentation generation targets "
+                  "will not be added.")
+
+  function(asap_with_sphinx TARGET_NAME)
+
+  endfunction()
+endif(SPHINX_FOUND)

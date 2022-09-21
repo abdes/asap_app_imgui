@@ -1,55 +1,64 @@
+# ~~~
+# SPDX-License-Identifier: BSD-3-Clause
+
+# ~~~
 #        Copyright The Authors 2018.
 #    Distributed under the 3-Clause BSD License.
 #    (See accompanying file LICENSE or copy at
 #   https://opensource.org/licenses/BSD-3-Clause)
+# ~~~
 
-# ------------------------------------------------------------------------------
-# Configuration
-# ------------------------------------------------------------------------------
+set(my_name "main")
+asap_push_module("${my_name}")
 
-set(IDE_FOLDER "Main")
+# --------------------------------------------------------------------------------------------------
+# Meta information about the this module
+# --------------------------------------------------------------------------------------------------
 
-# ------------------------------------------------------------------------------
-# External dependencies
-# ------------------------------------------------------------------------------
-
-# find_package(THIRDPARTY REQUIRED)
-
+asap_declare_module(
+  MODULE_NAME
+  "${my_name}"
+  DESCRIPTION
+  "Main module for the application program"
+  GITHUB_REPO
+  "https://github.com/asap/asap_app_imgui"
+  AUTHOR_MAINTAINER
+  "Abdessattar Sassi"
+  VERSION_MAJOR
+  "1"
+  VERSION_MINOR
+  "0"
+  VERSION_PATCH
+  "0")
 
 # ==============================================================================
 # Build instructions
 # ==============================================================================
 
-# Target name
-set(target asap_app)
+# --------------------------------------------------------------------------------------------------
+# Main module target
+# --------------------------------------------------------------------------------------------------
 
-# Exit here if required dependencies are not met
-message(STATUS "Program ${target}")
+set(MODULE_TARGET_NAME "${META_PROJECT_NAME}")
 
-
-# ------------------------------------------------------------------------------
-# Sources
-# ------------------------------------------------------------------------------
-
-set(include_path "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(source_path "${CMAKE_CURRENT_SOURCE_DIR}/src")
-
-list(APPEND headers
+asap_add_executable(
+  ${MODULE_TARGET_NAME}
+  WARNING
+  SOURCES
+  # Headers
+  src/app/application.h
+  src/app/imgui_runner.h
+  src/config/config.h
   src/ui/fonts/fonts.h
   src/ui/fonts/material_design_icons.h
-  src/ui/style/theme.h
   src/ui/log/sink.h
-  src/ui/application_base.h
-  src/runner_base.h
-  src/imgui_runner.h
-  src/application.h
-  src/config.h
-  src/shader.h
-  )
-
-set(sources
-  #FONTS
+  src/ui/style/theme.h
+  # Sources FONTS
   src/ui/fonts/fonts.h
+  src/ui/fonts/Inconsolata-Bold.cpp
+  src/ui/fonts/Inconsolata-Regular.cpp
+  src/ui/fonts/material_design_icons.cpp
+  src/ui/fonts/material_design_icons.h
   src/ui/fonts/Roboto-Black.cpp
   src/ui/fonts/Roboto-BlackItalic.cpp
   src/ui/fonts/Roboto-Bold.cpp
@@ -62,118 +71,99 @@ set(sources
   src/ui/fonts/Roboto-Regular.cpp
   src/ui/fonts/Roboto-Thin.cpp
   src/ui/fonts/Roboto-ThinItalic.cpp
-  src/ui/fonts/Inconsolata-Regular.cpp
-  src/ui/fonts/Inconsolata-Bold.cpp
-  src/ui/fonts/material_design_icons.cpp
-  src/ui/fonts/material_design_icons.h
+  #
+  src/config/config.cpp
   #
   src/ui/log/sink.cpp
-  #
-  src/runner_base.cpp
-  src/imgui_runner.cpp
-  src/application.cpp
-  src/config.cpp
-  src/ui/application_base.cpp
   src/ui/style/theme.cpp
   #
-  src/main.cpp
-  ${headers}
-  )
+  src/app/imgui_runner.cpp
+  #
+  src/application_base.h
+  src/application_base.h
+  src/application_base.cpp
+  src/example_application.h
+  src/example_application.cpp
+  src/main.cpp)
 
-# Group source files
-set(header_group "Header Files")
-set(source_group "Source Files")
-source_group_by_path(${include_path} "\\\\.h$|\\\\.hpp$"
-  ${header_group} ${headers})
-source_group_by_path(${source_path} "\\\\.cpp$|\\\\.c$|\\\\.h$|\\\\.hpp$"
-  ${source_group} ${sources})
+target_link_libraries(
+  ${MODULE_TARGET_NAME}
+  PRIVATE GSL
+          asap::common
+          asap::contract
+          asap::logging
+          glm
+          ${META_PROJECT_NAME}::imgui
+          cpptoml
+          date::date)
 
+target_include_directories(${MODULE_TARGET_NAME}
+                           PRIVATE ${CMAKE_BINARY_DIR}/include)
+target_include_directories(${MODULE_TARGET_NAME}
+                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-# ------------------------------------------------------------------------------
-# Include dirs
-# ------------------------------------------------------------------------------
-
-set(include_dirs ${include_path})
-
-# ------------------------------------------------------------------------------
-# Compile definitions / options
-# ------------------------------------------------------------------------------
-
-set(compile_definitions)
-set(compile_options)
-
-# ------------------------------------------------------------------------------
-# Libraries
-# ------------------------------------------------------------------------------
-
-set(libraries
-  asap::common
-  asap::filesystem
-  cxxopts
-  glm
-  asap::imgui
-  cpptoml
-  date_interface
-  )
-
-
-# ------------------------------------------------------------------------------
-# Create targets
-# ------------------------------------------------------------------------------
-
-asap_executable(
-  TARGET
-  ${target}
-  SOURCES
-  ${sources}
-  INCLUDE_DIRS
-  ${include_dirs}
-  LIBRARIES
-  ${libraries}
-  COMPILE_DEFINITIONS
-  ${compile_definitions}
-  COMPILE_OPTIONS
-  ${compile_options}
-)
-
-# Hacking the include directories when building th executable simply because of 
-# Imgui backend files including "imgui.h" literally like that. We add the imgui 
+# Hacking the include directories when building th executable simply because of
+# Imgui backend files including "imgui.h" literally like that. We add the imgui
 # directory to the includes so that it will work.
 #
 # In other files, such as the ones we provide, we don't do that shit like that.
 # Instead, we include files from Imgui library as <imgui/xxxxx>
-target_include_directories(${target} PRIVATE ${CMAKE_SOURCE_DIR}/imgui/imgui)
+target_include_directories(${MODULE_TARGET_NAME}
+                           PRIVATE ${CMAKE_SOURCE_DIR}/imgui/imgui)
+
+target_compile_features(${MODULE_TARGET_NAME} PUBLIC cxx_std_17)
 
 # ------------------------------------------------------------------------------
 # Tests
 # ------------------------------------------------------------------------------
+# ~~~
+# if(ASAP_BUILD_TESTS)
+#   asap_add_sanitizers(${MODULE_TARGET_NAME})
+#   add_subdirectory(test)
+# endif()
+# ~~~
 
-#if (OPTION_BUILD_TESTS)
-#  add_subdirectory(test)
-#endif()
-
-
-# ------------------------------------------------------------------------------
-# Code analysis
-# ------------------------------------------------------------------------------
-
-enable_cppcheck()
-tidy_target(${target})
-
-
-# ------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
 # API Documentation
-# ------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------
+asap_with_doxygen(
+  MODULE_NAME
+  ${MODULE_TARGET_NAME}
+  VERSION
+  ${META_MODULE_VERSION}
+  TITLE
+  "\"Main Module\""
+  BRIEF
+  "\"The main module for the application program.\""
+  INPUT_PATH
+  "${CMAKE_CURRENT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR}/include")
 
-configure_doxyfile(${target}
-  "\"Main\""
-  "\"The application main entry point.\""
-  "${source_path}")
+# asap_with_sphinx(${MODULE_TARGET_NAME})
 
-add_doxygen_target(${target})
+# ==================================================================================================
+# Deployment instructions
+# ==================================================================================================
+if(${META_PROJECT_ID}_INSTALL)
+  set(TARGETS_EXPORT_NAME "${MODULE_TARGET_NAME}Targets")
+  set(runtime "${MODULE_TARGET_NAME}_runtime")
+  set(dev "${MODULE_TARGET_NAME}_dev")
 
-install(
-  DIRECTORY ${DOXYGEN_BUILD_DIR}/${target}
-  DESTINATION ${INSTALL_DOC}
-  COMPONENT docs
-)
+  # Binaries
+  install(
+    TARGETS ${MODULE_TARGET_NAME}
+    EXPORT "${TARGETS_EXPORT_NAME}"
+    COMPONENT dev
+    RUNTIME DESTINATION ${ASAP_INSTALL_BIN} COMPONENT ${runtime}
+    LIBRARY DESTINATION ${ASAP_INSTALL_SHARED} COMPONENT ${runtime}
+    ARCHIVE DESTINATION ${ASAP_INSTALL_LIB} COMPONENT ${dev})
+
+  # Docs
+  if(EXISTS ${SPHINX_BUILD_DIR}/${MODULE_TARGET_NAME})
+    install(
+      DIRECTORY ${SPHINX_BUILD_DIR}/${MODULE_TARGET_NAME}
+      DESTINATION ${ASAP_INSTALL_DOC}
+      COMPONENT ${MODULE_TARGET_NAME}_docs)
+  endif()
+endif()
+
+asap_pop_module("${my_name}")

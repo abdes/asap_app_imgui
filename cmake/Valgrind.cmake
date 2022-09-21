@@ -1,12 +1,10 @@
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
+# SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
-# ------------------------------------------------------------------------------
-# Valgrind
-# ------------------------------------------------------------------------------
+mark_as_advanced(${PROJECT_NAME}_ENABLE_PROFILING)
+set(${PROJECT_NAME}_ENABLE_PROFILING ${ASAP_WITH_VALGRIND})
 
-# run tests with: ctest -T memcheck --output-on-failure
-
-find_program( MEMORYCHECK_COMMAND valgrind )
-set(MEMORYCHECK_COMMAND_OPTIONS "${MEMORYCHECK_COMMAND_OPTIONS} --leak-check=full")
-set(MEMORYCHECK_COMMAND_OPTIONS "${MEMORYCHECK_COMMAND_OPTIONS} --track-fds=yes")
-set(MEMORYCHECK_COMMAND_OPTIONS "${MEMORYCHECK_COMMAND_OPTIONS} --trace-children=yes")
-set(MEMORYCHECK_COMMAND_OPTIONS "${MEMORYCHECK_COMMAND_OPTIONS} --error-exitcode=1")
+include(common/Valgrind)

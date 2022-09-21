@@ -1,4 +1,11 @@
-// File: 'Roboto-Regular.ttf' (171676 bytes)
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
+//    Distributed under the 3-Clause BSD License.
+//    (See accompanying file LICENSE or copy at
+//   https://opensource.org/licenses/BSD-3-Clause)
+
+// File:  'Robotto-Regular.ttf' (171676 bytes)
 // Exported using binary_to_compressed_c.cpp
 
 // Designed by: Christian Robertson
@@ -8,10 +15,9 @@
 
 #include "fonts.h"
 
-namespace asap {
-namespace debug {
-namespace ui {
+namespace asap::ui {
 
+// clang-format off
 const unsigned int Fonts::ROBOTO_REGULAR_COMPRESSED_DATA[119876 / 4] = {
     0x0000bc57, 0x00000000, 0x9c9e0200, 0x00000400, 0x00010025, 0x82120000,
     0x043d0804, 0x44472000, 0x42b44645, 0x020082b0, 0x0000dc28, 0x50476202,
@@ -5009,7 +5015,6 @@ const unsigned int Fonts::ROBOTO_REGULAR_COMPRESSED_DATA[119876 / 4] = {
     0x2008c389, 0x020a001a, 0x007a003e, 0x02740073, 0x0240023f, 0x02420241,
     0x00440243, 0x00010002, 0x001d0014, 0x59fa0500, 0x00e26e7b,
 };
+// clang-format on
 
-}  // namespace ui
-}  // namespace debug
-}  // namespace asap
+} // namespace asap::ui

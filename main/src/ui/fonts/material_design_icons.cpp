@@ -1,3 +1,10 @@
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
+//    Distributed under the 3-Clause BSD License.
+//    (See accompanying file LICENSE or copy at
+//   https://opensource.org/licenses/BSD-3-Clause)
+
 // File: 'materialdesignicons-webfont.ttf' (358456 bytes)
 // Exported using binary_to_compressed_c.cpp
 
@@ -13,10 +20,9 @@
 
 #include "fonts.h"
 
-namespace asap {
-namespace debug {
-namespace ui {
+namespace asap::ui {
 
+// clang-format off
 const unsigned int Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_DATA[248964 / 4] = {
     0x0000bc57, 0x00000000, 0x38780500, 0x00000400, 0x00010036, 0x000a0000,
     0x00030080, 0x2f534f20, 0x53bc3f32, 0x01000028, 0x002d0382, 0x616d6356,
@@ -10393,7 +10399,6 @@ const unsigned int Fonts::MATERIAL_DESIGN_ICONS_COMPRESSED_DATA[248964 / 4] = {
     0x6c616279, 0x85770c6c, 0x702d3205, 0x646e756f, 0x69687707, 0x656c7473,
     0x00000000, 0x02fa0500, 0x00a21397,
 };
+// clang-format on
 
-}  // namespace ui
-}  // namespace debug
-}  // namespace asap
+} // namespace asap::ui

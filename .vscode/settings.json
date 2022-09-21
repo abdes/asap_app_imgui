@@ -1,0 +1,295 @@
+{
+  "esbonio.sphinx.confDir": "doc",
+  "editor.rulers": [
+    80,
+    100
+  ],
+  "rewrap.wrappingColumn": 80,
+  "rewrap.autoWrap.enabled": true,
+  "files.associations": {
+    "xtr1common": "cpp",
+    "memory": "cpp",
+    "system_error": "cpp",
+    "chrono": "cpp",
+    "iterator": "cpp",
+    "stdexcept": "cpp",
+    "algorithm": "cpp",
+    "any": "cpp",
+    "array": "cpp",
+    "atomic": "cpp",
+    "bit": "cpp",
+    "cctype": "cpp",
+    "charconv": "cpp",
+    "cinttypes": "cpp",
+    "clocale": "cpp",
+    "cmath": "cpp",
+    "compare": "cpp",
+    "complex": "cpp",
+    "concepts": "cpp",
+    "condition_variable": "cpp",
+    "csignal": "cpp",
+    "cstdarg": "cpp",
+    "cstddef": "cpp",
+    "cstdint": "cpp",
+    "cstdio": "cpp",
+    "cstdlib": "cpp",
+    "cstring": "cpp",
+    "ctime": "cpp",
+    "cwchar": "cpp",
+    "deque": "cpp",
+    "exception": "cpp",
+    "format": "cpp",
+    "forward_list": "cpp",
+    "fstream": "cpp",
+    "functional": "cpp",
+    "future": "cpp",
+    "initializer_list": "cpp",
+    "iomanip": "cpp",
+    "ios": "cpp",
+    "iosfwd": "cpp",
+    "iostream": "cpp",
+    "istream": "cpp",
+    "limits": "cpp",
+    "list": "cpp",
+    "locale": "cpp",
+    "map": "cpp",
+    "mutex": "cpp",
+    "new": "cpp",
+    "numeric": "cpp",
+    "optional": "cpp",
+    "ostream": "cpp",
+    "random": "cpp",
+    "ratio": "cpp",
+    "regex": "cpp",
+    "set": "cpp",
+    "sstream": "cpp",
+    "stack": "cpp",
+    "stop_token": "cpp",
+    "streambuf": "cpp",
+    "string": "cpp",
+    "thread": "cpp",
+    "tuple": "cpp",
+    "type_traits": "cpp",
+    "typeindex": "cpp",
+    "typeinfo": "cpp",
+    "unordered_map": "cpp",
+    "utility": "cpp",
+    "variant": "cpp",
+    "vector": "cpp",
+    "xfacet": "cpp",
+    "xhash": "cpp",
+    "xiosbase": "cpp",
+    "xlocale": "cpp",
+    "xlocbuf": "cpp",
+    "xlocinfo": "cpp",
+    "xlocmes": "cpp",
+    "xlocmon": "cpp",
+    "xlocnum": "cpp",
+    "xloctime": "cpp",
+    "xmemory": "cpp",
+    "xstddef": "cpp",
+    "xstring": "cpp",
+    "xtree": "cpp",
+    "xutility": "cpp"
+  },
+  // Disable automatic detection of file indent mode and indent size, that is, automatically change
+  // the file to the indent format configured by VSCode after opening the file
+  "editor.detectIndentation": false,
+  // Format file when pasting
+  "editor.formatOnPaste": false,
+  // Format file on save
+  "editor.formatOnSave": true,
+  // Automatically display inline suggestions in the editor
+  "editor.inlineSuggest.enabled": true,
+  // Whether to display a small panel with parameter document and type information when entering
+  "editor.parameterHints.enabled": true,
+  // Controls whether suggestions are automatically displayed as you type code
+  "editor.quickSuggestions": {
+    // Not allowed when typing comments
+    "comments": false,
+    // Not allowed when typing string
+    "strings": false,
+    // Allow when typing other
+    "other": true
+  },
+  // Controls the wait time (in milliseconds) before quick suggestions are displayed
+  "editor.quickSuggestionsDelay": 0,
+  // Controls how the editor displays symbols on white space characters
+  "editor.renderWhitespace": "none",
+  // Code snippets are recommended over other suggestions
+  "editor.snippetSuggestions": "top",
+  // Simulate the behavior of tabs when using space indentation to facilitate alignment
+  "editor.stickyTabStops": true,
+  // Controls whether words close to the cursor are prioritized when sorting
+  "editor.suggest.localityBonus": true,
+  "editor.suggest.shareSuggestSelections": true,
+  // Controls whether suggestions are automatically displayed after the trigger character is typed
+  "editor.suggestOnTriggerCharacters": true,
+  // One tab = 2 spaces
+  "editor.tabSize": 2,
+  // Controls whether a list of suggestions is provided based on the text in the document
+  "editor.wordBasedSuggestions": true,
+  // There is no need to confirm when deleting files
+  "explorer.confirmDelete": false,
+  // No confirmation is required when moving files
+  "explorer.confirmDragAndDrop": false,
+  // Rename method when pasting a file with the same name
+  // smart: intelligently add / increment numbers at the end of duplicate names
+  "explorer.incrementalNaming": "smart",
+  // Ignore notification of extension suggestions
+  "extensions.ignoreRecommendations": true,
+  // Auto save unsaved editor: after waiting time
+  "files.autoSave": "afterDelay",
+  // Wait time for auto save (MS)
+  "files.autoSaveDelay": 10000,
+  // Displays the line number of the search results
+  "search.showLineNumbers": true,
+  // When the search term is lowercase, the search is case insensitive
+  // Otherwise, it is case sensitive
+  "search.smartCase": true,
+  // The integrated terminal defaults to PowerShell
+  "terminal.integrated.defaultProfile.windows": "PowerShell",
+  // Enable visual ringing tone for integrated terminal
+  "terminal.integrated.enableBell": true,
+  // Integrated terminal code: zh_CN.UTF-8
+  "terminal.integrated.env.windows": {
+    "LC_ALL": "en_US.UTF-8"
+  },
+  // The integrated terminal uses GPU acceleration
+  "terminal.integrated.gpuAcceleration": "on",
+  // When the integration terminal right clicks, select the word below the cursor and open the context menu
+  "terminal.integrated.rightClickBehavior": "selectWord",
+  // Window zoom level: 1 (original level is 0)
+  "window.zoomLevel": 0,
+  // Do not open the editor at startup without recovering information from the previous session
+  "workbench.startupEditor": "none",
+  // Displays the action items for the view header
+  "workbench.view.alwaysShowHeaderActions": true,
+  // Clangd operation parameters (enter clangd -- help list hidden on the terminal / command line to view more)
+  "clangd.arguments": [
+    // Let Clangd generate more detailed logs
+    "--log=verbose",
+    // The output JSON file is more beautiful
+    "--pretty",
+    // Global completion (the pop-up suggestions during input will provide possible symbols in all files configured in CMakeLists.txt, and the header file will be automatically supplemented)
+    "--all-scopes-completion",
+    // More detailed completion
+    "--completion-style=detailed",
+    // Allow supplementary header files
+    "--header-insertion=iwyu",
+    // In input suggestions, items that contain header files are distinguished by dots from items that do not yet contain header files
+    "--header-insertion-decorators",
+    // Automatically analyze files in the background (based on complie)_ Commands, which we generate with CMake)
+    "--background-index",
+    // Enable clang tidy to provide static checking
+    "--clang-tidy",
+    // Default formatting style: Google open source project code Guide
+    "--fallback-style=Google",
+    // Number of tasks opened at the same time
+    "-j=12",
+    // pch optimized location (memory or disk, selecting memory will increase memory overhead, but will improve performance)
+    "--pch-storage=memory",
+    // After adding this item, placeholders will be provided for the parameters when completing the function. After typing, press Tab to switch to the next placeholder or even the end of the function
+    "--function-arg-placeholders"
+  ],
+  // Automatically detect Cland updates
+  "clangd.checkUpdates": true,
+  // Cland's snippets have many jump points. Without this, Intellisense must be triggered manually
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  // When you save the contents of cmake.sourceDirectory or CMakeLists.txt, the CMake project directory is not automatically configured
+  "cmake.configureOnEdit": false,
+  // Automatically configure the CMake project directory when it is opened
+  "cmake.configureOnOpen": true,
+  "cmake.preferredGenerators": [
+    "Ninja"
+  ],
+  "cmake.allowCommentsInPresetsFile": true,
+  // Automatically extract submissions from the default remote library of the current Git repository
+  "git.autofetch": true,
+  // Confirm before synchronizing Git repository
+  "git.confirmSync": false,
+  // When there are no pending changes, commit all changes directly
+  "git.enableSmartCommit": true,
+  // Controls whether brackets are shaded
+  "editor.bracketPairColorization.enabled": true,
+  // I got used to the blue brackets in the Bracket Pair Colorizer 2, so I changed the color of the blue brackets in VSCode
+  "workbench.colorCustomizations": {
+    "[Default Dark+]": {
+      "editorBracketHighlight.foreground3": "#9CDCFE"
+    }
+  },
+  // Semantic highlighting
+  "editor.semanticHighlighting.enabled": true,
+  // Semantic highlight customization
+  "editor.semanticTokenColorCustomizations": {
+    "enabled": true,
+    "rules": {
+      // Static quantity (static variable, static function)
+      "*.static": {
+        "fontStyle": "italic"
+      },
+      // macro
+      "macro": {
+        "foreground": "#8f5daf"
+      },
+      // Member function
+      "method": {
+        "fontStyle": "underline"
+      },
+      // Namespace
+      "namespace": {
+        "foreground": "#00d780"
+      },
+      // Function parameters
+      "parameter": {
+        "foreground": "#C8ECFF"
+      },
+      // Member variables seem to need more than cland12
+      "property": {
+        "fontStyle": "underline",
+        "foreground": "#C8ECFF"
+      },
+      // Type parameter
+      "typeParameter": {
+        "foreground": "#31A567"
+      },
+      // Read only quantities are equivalent to macros
+      "variable.readonly": {
+        "foreground": "#8f5daf"
+      }
+    }
+  },
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": "googletest.failed",
+        "settings": {
+          "foreground": "#f00"
+        }
+      },
+      {
+        "scope": "googletest.passed",
+        "settings": {
+          "foreground": "#0f0"
+        }
+      },
+      {
+        "scope": "googletest.run",
+        "settings": {
+          "foreground": "#0f0"
+        }
+      }
+    ]
+  },
+  "cSpell.enableFiletypes": [
+    "rst"
+  ],
+  "rewrap.reformat": true,
+  "search.exclude": {
+    "**/.idea": true,
+    "**/out": true
+  },
+  "files.exclude": {
+    "**/.sphinx": true
+  },
+}

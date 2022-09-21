@@ -1,0 +1,19 @@
+UseColor: true
+
+Checks: >
+    bugprone-*,
+    clang-analyzer-*,
+    cppcoreguidelines-*,
+    google-*,
+    hicpp-*,
+    modernize-*,
+    performance-*,
+    portability-*,
+    readability-*,
+    -cppcoreguidelines-macro-usage,
+    -google-runtime-references
+    -hicpp-exception-baseclass,
+    -hicpp-signed-bitwise,
+    -readability-function-cognitive-complexity,
+    -used-but-marked-unused,
+HeaderFilterRegex: ".*/[common|logging]/.*"

@@ -1,60 +1,33 @@
-//    Copyright The Authors 2018.
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
 //    Distributed under the 3-Clause BSD License.
 //    (See accompanying file LICENSE or copy at
 //   https://opensource.org/licenses/BSD-3-Clause)
 
+#include "app/imgui_runner.h"
+#include "config/config.h"
+#include "example_application.h"
+
+#include <asap_app_imgui/version.h>
+#include <logging/logging.h>
+
 #include <iostream>
 
-#include <cxxopts.hpp>
+using asap::app::ImGuiRunner;
 
-#include <asap/asap-version.h>
-#include <common/logging.h>
-#include <imgui_runner.h>
-#include <config.h>
-#include <application.h>
+using asap_app_imgui::info::cNameVersion;
+using asap_app_imgui::info::cProjectDescription;
+using asap_app_imgui::info::cProjectName;
 
-
-using asap::ImGuiRunner;
-
-
-int main(int argc, char **argv) {
+auto main(int argc, char **argv) -> int {
   auto &logger = asap::logging::Registry::GetLogger("main");
 
-  asap::fs::CreateDirectories();
+  asap::config::CreateDirectories();
 
   try {
-    //
-    // Handle program options
-    //
-    // TODO: UTF-8 to be tested on Windows
-    cxxopts::Options options(ASAP_PROJECT_NAME, ASAP_PROJECT_DESCRIPTION);
-    options.add_options()
-      ("v,version", "Show version")
-      ("h,help", "Show usage information")
-      ("t,test", "Test option with value", cxxopts::value<std::string>())
-      ("c,chinese", "中文帮助文本", cxxopts::value<std::string>())
-      ;
-    auto result = options.parse(argc, argv);
-
-    if (result.count("help")) {
-      std::cout << options.help({}) << std::endl;
-      exit(0);
-    }
-
-    if (result.count("version")) {
-      std::cout << ASAP_NAME_VERSION << std::endl;
-      exit(0);
-    }
-
-    // Test code for the option with value
-    if (result.count("test")) {
-      std::cout << "test = " << result["test"].as<std::string>() << std::endl;
-    }
-    // End Test code
-
-
     ASLOG_TO_LOGGER(logger, info, "starting ImGui application...");
-    asap::Application app;
+    ExampleApplication app;
     //
     // Start the ImGui runner
     //

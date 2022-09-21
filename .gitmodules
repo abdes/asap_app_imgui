@@ -1,30 +1,9 @@
-[submodule "third_party/spdlog"]
-  path = third_party/spdlog
-  url = https://github.com/gabime/spdlog.git
-[submodule "third_party/catch2"]
-  path = third_party/catch2
-  url = https://github.com/catchorg/Catch2.git
-[submodule "common"]
-  path = common
-  url = https://gitlab.com/absassi/asap_common.git
-[submodule "filesystem"]
-	path = filesystem
-	url = https://gitlab.com/absassi/asap_filesystem.git
-[submodule "imgui"]
-	path = imgui
-	url = https://gitlab.com/absassi/asap_imgui.git
-[submodule "third_party/glfw"]
-	path = third_party/glfw
-	url = https://github.com/glfw/glfw.git
-[submodule "third_party/date"]
-	path = third_party/date
-	url = https://github.com/HowardHinnant/date.git
-[submodule "third_party/glm"]
-	path = third_party/glm
-	url = https://github.com/g-truc/glm.git
-[submodule "third_party/cxxopts"]
-	path = third_party/cxxopts
-	url = https://github.com/jarro2783/cxxopts.git
-[submodule "third_party/cpptoml"]
-	path = third_party/cpptoml
-	url = https://github.com/skystrife/cpptoml
+[submodule "cmake/common"]
+	path = cmake/common
+	url = https://github.com/swift-nav/cmake
+[submodule "doxygen/doxygen-awesome-css"]
+	path = doxygen/doxygen-awesome-css
+	url = https://github.com/jothepro/doxygen-awesome-css.git
+[submodule "imgui/imgui"]
+	path = imgui/imgui
+	url = https://github.com/ocornut/imgui.git

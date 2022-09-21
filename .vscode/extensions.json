@@ -1,0 +1,22 @@
+{
+  "recommendations": [
+    "swyddfa.esbonio",
+    "stkb.rewrap",
+    "donjayamanne.githistory",
+    "eamodio.gitlens",
+    "kevinkyang.auto-comment-blocks",
+    "matepek.vscode-catch2-test-adapter",
+    "ms-python.python",
+    "ms-vscode.cmake-tools",
+    "hbenl.vscode-test-explorer",
+    "ms-vscode.test-adapter-converter",
+    "jeff-hykin.better-cpp-syntax",
+    "ms-vscode.cpptools",
+    "llvm-vs-code-extensions.vscode-clangd",
+    "vadimcn.vscode-lldb",
+    "guyutongxue.cpp-reference",
+    "cschlosser.doxdocgen",
+    "cheshirekow.cmake-format",
+    "editorconfig.editorconfig"
+  ]
+}

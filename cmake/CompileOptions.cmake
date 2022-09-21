@@ -1,158 +1,75 @@
+# ===-----------------------------------------------------------------------===#
+# Distributed under the 3-Clause BSD License. See accompanying file LICENSE or
+# copy at https://opensource.org/licenses/BSD-3-Clause).
+# SPDX-License-Identifier: BSD-3-Clause
+# ===-----------------------------------------------------------------------===#
 
 # ------------------------------------------------------------------------------
-# Common/Default compiler options and flags, applied to all modules.
+# Set additional common compiler options and warning flags
 # ------------------------------------------------------------------------------
-
-
 #
-# Platform and architecture setup
+# Refer to swift_set_compile_options() for additional detailed information on
+# accepted options for this function, which forwards all options.
 #
+# In addition to relaying the call, this function adds common compiler options
+# and overrides the default behavior of swift with regard to exceptions and
+# RTTI. By default, both are enabled.
 
-# Get upper case system name
-string(TOUPPER ${CMAKE_SYSTEM_NAME} SYSTEM_NAME_UPPER)
+function(asap_set_compile_options)
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # using Clang
+    swift_set_compile_options(
+      ADD
+      -Weverything
+      -Wno-c++98-compat
+      -Wno-c++98-compat-pedantic
+      -Wno-c++98-c++11-compat-pedantic
+      -Wno-padded
+      -Wno-documentation-unknown-command)
+    # -Wno-switch-enum -Wno-unused-macros -Wno-disabled-macro-expansion)
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    # using GCC
+    swift_set_compile_options(
+      ADD
+      -Wctor-dtor-privacy
+      -Winit-self
+      -Wmissing-declarations
+      -Wold-style-cast
+      -Woverloaded-virtual
+      -Wsign-conversion
+      -Wsign-promo
+      -Wundef)
+    if(NOT DEFINED CMAKE_CXX_CLANG_TIDY)
+      swift_set_compile_options(ADD -Wlogical-op -Wstrict-null-sentinel)
+    endif()
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    # using Visual Studio C++
+    set(argOption "WARNING")
+    set(argSingle "")
+    set(argMulti "")
 
-# Determine architecture (32/64 bit)
-set(X64 OFF)
-if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(X64 ON)
-endif ()
+    cmake_parse_arguments(x "${argOption}" "${argSingle}" "${argMulti}" ${ARGN})
 
+    set(targets ${x_UNPARSED_ARGUMENTS})
 
-#
-# Project options
-#
-
-set(DEFAULT_PROJECT_OPTIONS
-  DEBUG_POSTFIX "d"
-  CXX_STANDARD 14
-  LINKER_LANGUAGE "CXX"
-  CXX_EXTENSIONS Off
-  )
-
-if (BUILD_SHARED_LIBS)
-  list(APPEND DEFAULT_PROJECT_OPTIONS
-    POSITION_INDEPENDENT_CODE ON
-    CXX_VISIBILITY_PRESET "hidden"
-    )
-endif ()
-
-#
-# Include directories
-#
-
-set(DEFAULT_INCLUDE_DIRECTORIES)
-
-
-#
-# Libraries
-#
-
-set(DEFAULT_LIBRARIES)
-
-
-#
-# Compile definitions
-#
-
-set(DEFAULT_COMPILE_DEFINITIONS
-  SYSTEM_${SYSTEM_NAME_UPPER}
-  )
-
-# MSVC compiler options
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-  set(DEFAULT_COMPILE_DEFINITIONS ${DEFAULT_COMPILE_DEFINITIONS}
-    #_SCL_SECURE_NO_WARNINGS  # Calling any one of the potentially unsafe methods in the Standard C++ Library
-    #_CRT_SECURE_NO_WARNINGS  # Calling any one of the potentially unsafe methods in the CRT Library
-    NOMINMAX
-    WIN32_LEAN_AND_MEAN=1
-    _WIN32_WINNT=0x0600
-    )
-endif ()
-
-
-#
-# Compile options
-#
-
-set(DEFAULT_COMPILE_OPTIONS)
-
-# MSVC compiler options
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-  set(DEFAULT_COMPILE_OPTIONS ${DEFAULT_COMPILE_OPTIONS}
-    /MP           # -> build with multiple processes
-    /W4           # -> warning level 4
-    # /WX         # -> treat warnings as errors
-
-    /wd4251       # -> disable warning: 'identifier': class 'type' needs to have dll-interface to be used by clients of class 'type2'
-    /wd4592       # -> disable warning: 'identifier': symbol will be dynamically initialized (implementation limitation)
-    # /wd4201     # -> disable warning: nonstandard extension used: nameless struct/union (caused by GLM)
-    # /wd4127     # -> disable warning: conditional expression is constant (caused by Qt)
-
-    #$<$<CONFIG:Debug>:
-    #/RTCc         # -> value is assigned to a smaller data type and results in a data loss
-    #>
-
-    $<$<CONFIG:Release>:
-    /Gw           # -> whole program global optimization
-    /GS-          # -> buffer security check: no
-    /GL           # -> whole program optimization: enable link-time code generation (disables Zi)
-    /GF           # -> enable string pooling
-    >
-    )
-endif ()
-
-# GCC and Clang compiler options
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-  set(DEFAULT_COMPILE_OPTIONS ${DEFAULT_COMPILE_OPTIONS}
-    -Wall
-    -Wextra
-    -Wunused
-
-    -Wreorder
-    -Wignored-qualifiers
-    -Wmissing-braces
-    -Wreturn-type
-    -Wswitch
-    -Wuninitialized
-    -Wmissing-field-initializers
-
-    $<$<CXX_COMPILER_ID:GNU>:
-    -Wmaybe-uninitialized
-
-    $<$<VERSION_GREATER:$<CXX_COMPILER_VERSION>,4.8>:
-    -Wpedantic
-
-    -Wreturn-local-addr
-    >
-    >
-
-    $<$<CXX_COMPILER_ID:Clang>:
-    -Wpedantic
-
-    # -Wreturn-stack-address # gives false positives
-    >
-
-    $<$<PLATFORM_ID:Darwin>:
-    -pthread
-    >
-    )
-endif ()
-
-
-#
-# Linker options
-#
-
-set(DEFAULT_LINKER_OPTIONS)
-
-# MSVC compiler options
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
-  if(CMAKE_BUILD_TYPE MATCHES "Release")
-    list(APPEND DEFAULT_LINKER_OPTIONS /LTCG)
+    foreach(target ${targets})
+      target_compile_options(${target} PRIVATE /EHsc /MP /W4)
+      if(NOT x_WARNING)
+        target_compile_options(${target} PRIVATE /WX)
+      endif()
+    endforeach()
   endif()
-endif()
 
-# Use pthreads on mingw and linux
-if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU" OR "${CMAKE_SYSTEM_NAME}" MATCHES "Linux")
-  list(APPEND DEFAULT_LINKER_OPTIONS -pthread)
-endif ()
+endfunction()
+
+# ------------------------------------------------------------------------------
+# Clean compiler settings and options
+# ------------------------------------------------------------------------------
+
+if("${CMAKE_CXX_COMPILER_ID}" MATCHES "MSVC")
+  # remove default warning level from CMAKE_CXX_FLAGS_INIT CMake adds compiler
+  # warning levels by default and for MSVC, it uses /W3 which we want to
+  # override with /W4. The override does make MSVC complain though, so we just
+  # strip any argument already added by cmake before we set ours.
+  string(REGEX REPLACE "/W[0-4]" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+endif()

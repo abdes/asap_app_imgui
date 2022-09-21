@@ -1,4 +1,11 @@
-// File: 'Roboto-BoldItalic.ttf' (174952 bytes)
+/*     SPDX-License-Identifier: BSD-3-Clause     */
+
+//        Copyright The Authors 2021.
+//    Distributed under the 3-Clause BSD License.
+//    (See accompanying file LICENSE or copy at
+//   https://opensource.org/licenses/BSD-3-Clause)
+
+// File:  'Robotto-BoldItalic.ttf' (174952 bytes)
 // Exported using binary_to_compressed_c.cpp
 
 // Designed by: Christian Robertson
@@ -8,10 +15,9 @@
 
 #include "fonts.h"
 
-namespace asap {
-namespace debug {
-namespace ui {
+namespace asap::ui {
 
+// clang-format off
 const unsigned int Fonts::ROBOTO_BOLDITALIC_COMPRESSED_DATA[127464 / 4] = {
     0x0000bc57, 0x00000000, 0x68ab0200, 0x00000400, 0x00010025, 0x82120000,
     0x043d0804, 0x44472000, 0x42b44645, 0x020082b0, 0x0000442e, 0x50476202,
@@ -5325,7 +5331,6 @@ const unsigned int Fonts::ROBOTO_BOLDITALIC_COMPRESSED_DATA[127464 / 4] = {
     0x82240223, 0x08c38923, 0x0a001a20, 0x7a003e02, 0x74007300, 0x40023f02,
     0x42024102, 0x44024302, 0x01000200, 0x1d001400, 0xfa050000, 0x46ae9811,
 };
+// clang-format on
 
-}  // namespace ui
-}  // namespace debug
-}  // namespace asap
+} // namespace asap::ui
