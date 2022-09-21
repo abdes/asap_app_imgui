@@ -111,7 +111,13 @@ endfunction()
 # ------------------------------------------------------------------------------
 
 function(asap_add_library target)
-  swift_add_library("${target}" ${ARGN})
+  set(argOption "")
+  set(argSingle "CONTRACTS")
+  set(argMulti "")
+  unset(x_CONTRACTS)
+  cmake_parse_arguments(x "${argOption}" "${argSingle}" "${argMulti}" ${ARGN})
+
+  swift_add_library("${target}" ${x_UNPARSED_ARGUMENTS})
 
   # We can refer to this target either with its standalone target name or with a
   # project scoped name (<project>::<module>) which we will alias to the target
@@ -120,7 +126,7 @@ function(asap_add_library target)
   get_target_property(type ${target} TYPE)
   if(NOT ${type} STREQUAL "INTERFACE_LIBRARY")
     # Set some common private compiler defines
-    asap_set_compile_definitions(${target})
+    asap_set_compile_definitions(${target} CONTRACTS ${x_CONTRACTS})
     # Set some common compiler options
     asap_set_compile_options(${target})
     # Generate export headers for the library
@@ -138,27 +144,45 @@ function(asap_add_library target)
 endfunction()
 
 function(asap_add_executable target)
-  swift_add_executable("${target}" ${ARGN})
+  set(argOption "")
+  set(argSingle "CONTRACTS")
+  set(argMulti "")
+  unset(x_CONTRACTS)
+  cmake_parse_arguments(x "${argOption}" "${argSingle}" "${argMulti}" ${ARGN})
+
+  swift_add_executable("${target}" ${x_UNPARSED_ARGUMENTS})
   # Set some common private compiler defines
-  asap_set_compile_definitions(${target})
+  asap_set_compile_definitions(${target} CONTRACTS ${x_CONTRACTS})
   # Set some common compiler options
   asap_set_compile_options(${target})
   set_target_properties(${target} PROPERTIES FOLDER "Executables")
 endfunction()
 
 function(asap_add_tool target)
-  swift_add_tool("${target}" ${ARGN})
+  set(argOption "")
+  set(argSingle "CONTRACTS")
+  set(argMulti "")
+  unset(x_CONTRACTS)
+  cmake_parse_arguments(x "${argOption}" "${argSingle}" "${argMulti}" ${ARGN})
+
+  swift_add_tool("${target}" ${x_UNPARSED_ARGUMENTS})
   # Set some common private compiler defines
-  asap_set_compile_definitions(${target})
+  asap_set_compile_definitions(${target} CONTRACTS ${x_CONTRACTS})
   # Set some common compiler options
   asap_set_compile_options(${target})
   set_target_properties(${target} PROPERTIES FOLDER "Tools")
 endfunction()
 
 function(asap_add_tool_library target)
-  swift_add_tool_library("${target}" ${ARGN})
+  set(argOption "")
+  set(argSingle "CONTRACTS")
+  set(argMulti "")
+  unset(x_CONTRACTS)
+  cmake_parse_arguments(x "${argOption}" "${argSingle}" "${argMulti}" ${ARGN})
+
+  swift_add_tool_library("${target}" ${x_UNPARSED_ARGUMENTS})
   # Set some common private compiler defines
-  asap_set_compile_definitions(${target})
+  asap_set_compile_definitions(${target} CONTRACTS ${x_CONTRACTS})
   # Set some common compiler options
   asap_set_compile_options(${target})
   set_target_properties(

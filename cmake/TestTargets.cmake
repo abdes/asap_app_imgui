@@ -7,9 +7,15 @@
 include(common/TestTargets)
 
 macro(asap_add_test target)
-  swift_add_test("${target}" ${ARGN})
+  set(argOption "")
+  set(argSingle "CONTRACTS")
+  set(argMulti "")
+  unset(x_CONTRACTS)
+  cmake_parse_arguments(x "${argOption}" "${argSingle}" "${argMulti}" ${ARGN})
+
+  swift_add_test("${target}" ${x_UNPARSED_ARGUMENTS})
   # Set some common private compiler defines
-  asap_set_compile_definitions(${target})
+  asap_set_compile_definitions(${target} CONTRACTS ${x_CONTRACTS})
   # Set some common compiler options
   asap_set_compile_options(${target})
   if(TARGET gtest AND BUILD_SHARED_LIBS)
@@ -31,9 +37,15 @@ macro(asap_add_test_runner target)
 endmacro()
 
 function(asap_add_test_library target)
-  swift_add_test_library("${target}" ${ARGN})
+  set(argOption "")
+  set(argSingle "CONTRACTS")
+  set(argMulti "")
+  unset(x_CONTRACTS)
+  cmake_parse_arguments(x "${argOption}" "${argSingle}" "${argMulti}" ${ARGN})
+
+  swift_add_test_library("${target}" ${x_UNPARSED_ARGUMENTS})
   # Set some common private compiler defines
-  asap_set_compile_definitions(${target})
+  asap_set_compile_definitions(${target} CONTRACTS ${x_CONTRACTS})
   # Set some common compiler options
   asap_set_compile_options(${target})
   set_target_properties(
