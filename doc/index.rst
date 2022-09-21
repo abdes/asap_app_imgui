@@ -6,9 +6,9 @@
      ^ for sub-subsections
      " for paragraphs
 
-###################
-ASAP documentation!
-###################
+#########################################
+ASAP ImGui Starter Project documentation!
+#########################################
 
 .. |date| date::
 
@@ -25,7 +25,7 @@ Last Updated on |date|
    version
 
 Welcome! This is the documentation for the
-`asap-contract <https://github.com/abdes/asap_app_imgui>`_ |version|
+`asap_app_imgui <https://github.com/abdes/asap_app_imgui>`_ |version|
 project.
 
 This is a CMake build container for ImGui and the application using it. It
@@ -42,10 +42,10 @@ Parts of the documentation
 
 :doc:`Project Tools <tools/index>`
 ----------------------------------
-*get an introduction to the programs and scripts under the `tools` folder,
-specifically made for the `asap` project. These can simplify recurring tasks and
-provide additional insights into the project, and sometimes examples of how to
-use the project artifacts.*
+  *get an introduction to the programs and scripts under the `tools` folder,
+  specifically made for the `asap` project. These can simplify recurring tasks and
+  provide additional insights into the project, and sometimes examples of how to
+  use the project artifacts.*
 
 Acknowledgements
 ================
