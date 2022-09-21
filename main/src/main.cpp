@@ -9,8 +9,6 @@
 #include "config/config.h"
 #include "example_application.h"
 
-#include <cxxopts.hpp>
-
 #include <asap_app_imgui/version.h>
 #include <logging/logging.h>
 
@@ -28,35 +26,6 @@ auto main(int argc, char **argv) -> int {
   asap::config::CreateDirectories();
 
   try {
-    //
-    // Handle program options
-    //
-    cxxopts::Options options(cProjectName, cProjectDescription);
-    options.add_options()
-        // clang-format off
-      ("v,version", "Show version")
-      ("h,help", "Show usage information")
-      ("t,test", "Test option with value", cxxopts::value<std::string>())
-        // clang-format on
-        ;
-    auto result = options.parse(argc, argv);
-
-    if (result.count("help") != 0U) {
-      std::cout << options.help({}) << std::endl;
-      exit(0);
-    }
-
-    if (result.count("version") != 0U) {
-      std::cout << cNameVersion << std::endl;
-      exit(0);
-    }
-
-    // Test code for the option with value
-    if (result.count("test") != 0U) {
-      std::cout << "test = " << result["test"].as<std::string>() << std::endl;
-    }
-    // End Test code
-
     ASLOG_TO_LOGGER(logger, info, "starting ImGui application...");
     ExampleApplication app;
     //

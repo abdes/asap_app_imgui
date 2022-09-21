@@ -123,20 +123,6 @@ asap_add_package(
   "GLM_TEST_ENABLE OFF")
 
 # --------------------------------------------------------------------------------------------------
-# cxxopts - used to parse command line arguments
-# --------------------------------------------------------------------------------------------------
-
-asap_add_package(
-  NAME
-  cxxopts
-  GIT_TAG
-  v3.0.0
-  GITHUB_REPOSITORY
-  jarro2783/cxxopts
-  OPTIONS
-  "CXXOPTS_BUILD_EXAMPLES OFF")
-
-# --------------------------------------------------------------------------------------------------
 # date - used for time formatting in the logging widget
 # --------------------------------------------------------------------------------------------------
 

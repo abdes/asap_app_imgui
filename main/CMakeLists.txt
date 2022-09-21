@@ -92,7 +92,6 @@ target_link_libraries(
           asap::common
           asap::contract
           asap::logging
-          cxxopts
           glm
           ${META_PROJECT_NAME}::imgui
           cpptoml
