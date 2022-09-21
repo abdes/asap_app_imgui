@@ -7,16 +7,17 @@
 include(common/TestTargets)
 
 macro(asap_add_test target)
-  set(argOption "")
-  set(argSingle "CONTRACTS")
-  set(argMulti "")
-  unset(x_CONTRACTS)
+  set(argOption)
+  set(argSingle CONTRACTS)
+  set(argMulti)
+
   cmake_parse_arguments(x "${argOption}" "${argSingle}" "${argMulti}" ${ARGN})
 
-  swift_add_test("${target}" ${x_UNPARSED_ARGUMENTS})
+  # Contrarily to swift default, we enable exceptions and RTTI for all targets
+  swift_add_test("${target}" ${warning_flag} ${x_UNPARSED_ARGUMENTS})
   # Set some common private compiler defines
   asap_set_compile_definitions(${target} CONTRACTS ${x_CONTRACTS})
-  # Set some common compiler options
+  # Set common compiler options
   asap_set_compile_options(${target})
   if(TARGET gtest AND BUILD_SHARED_LIBS)
     target_compile_definitions(${target} PRIVATE GTEST_LINKED_AS_SHARED_LIBRARY)
@@ -37,12 +38,13 @@ macro(asap_add_test_runner target)
 endmacro()
 
 function(asap_add_test_library target)
-  set(argOption "")
-  set(argSingle "CONTRACTS")
-  set(argMulti "")
-  unset(x_CONTRACTS)
+  set(argOption)
+  set(argSingle CONTRACTS)
+  set(argMulti)
+
   cmake_parse_arguments(x "${argOption}" "${argSingle}" "${argMulti}" ${ARGN})
 
+  # Contrarily to swift default, we enable exceptions and RTTI for all targets
   swift_add_test_library("${target}" ${x_UNPARSED_ARGUMENTS})
   # Set some common private compiler defines
   asap_set_compile_definitions(${target} CONTRACTS ${x_CONTRACTS})

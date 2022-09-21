@@ -16,8 +16,6 @@
 # RTTI. By default, both are enabled.
 
 function(asap_set_compile_options)
-  swift_set_compile_options(EXCEPTIONS RTTI ${ARGV})
-
   if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     # using Clang
     swift_set_compile_options(
@@ -46,13 +44,19 @@ function(asap_set_compile_options)
     endif()
   elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # using Visual Studio C++
-    set(argOption "WARNING" "NO_EXCEPTIONS" "EXCEPTIONS" "NO_RTTI" "RTTI")
+    set(argOption "WARNING")
     set(argSingle "")
-    set(argMulti "ADD" "REMOVE" "EXTRA_FLAGS")
+    set(argMulti "")
+
     cmake_parse_arguments(x "${argOption}" "${argSingle}" "${argMulti}" ${ARGN})
+
     set(targets ${x_UNPARSED_ARGUMENTS})
+
     foreach(target ${targets})
       target_compile_options(${target} PRIVATE /EHsc /MP /W4)
+      if(NOT x_WARNING)
+        target_compile_options(${target} PRIVATE /WX)
+      endif()
     endforeach()
   endif()
 
