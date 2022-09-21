@@ -57,12 +57,12 @@ based on the [asap](https://github.com/abdes/asap) template.
   get started immediately
 - persistence of ImGui and docks configuration
 
-> *If you miss the old version of this starter project (you can't move to cxx-17 or
+> _If you miss the old version of this starter project (you can't move to cxx-17 or
 you just can't bother), it is still in the
 [old_cxx](https://github.com/abdes/asap_app_imgui/tree/old_cxx) branch of this
-repo.*
+repo._
 >
-> *It is no longer updated though.*
+> _It is no longer updated though._
 
 ## Project Documentation
 
@@ -72,7 +72,7 @@ development process, project structure, etc. Take a look at the available guides
 
 In addition to that, specific documentation for this project, its application
 modules, its usage and APIs, are provided in the project GitHub Pages site
-[here](https://abdes.github.io/asap_app_imgui_/asap_app_imgui_master/html/).
+[here](https://abdes.github.io/asap_app_imgui/asap_app_imgui_master/html/index.html).
 
 ## Getting Started
 
