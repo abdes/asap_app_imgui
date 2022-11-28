@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.6.2](http://github.com/abdes/asap/compare/v4.6.1...v4.6.2) (2022-11-28)
+
+### Features
+
+* increase ccache hit rate ([a22a912](http://github.com/abdes/asap/commit/a22a91226060851fe9fc7e5bc0e51973df94d95c))
+* more robust handling of contract checking mode ([304e9ae](http://github.com/abdes/asap/commit/304e9aee1e8fb265be78163578c45ae22569e52b))
+
+  When linking against the contract checking and enforcement library
+  `asap-contract` (https://github.com/asap-projects/asap-contract), it is
+  possible to control the contract checking mode by passing a value for the
+  `CONTRACTS` option when adding any type of target with `asap_add_xxx`
+  API (e.g. asap_add_library. asap_add_test, etc):
+
+  * CONTRACTS OFF     : set contract checking mode to OFF
+  * CONTRACTS AUDIT   : set contract checking mode to AUDIT
+  * CONTRACTS DEFAULT : set contract checking mode to DEFAULT
+
+  * CONTRACTS AUTO    : set contract checking mode using as a first priority the
+    value passed in the cmake option `OPTION_CONTRACT_MODE`. If none is present,
+    automatically set the mode based on the build configuration. For Debug ->
+    AUDIT, For Release and RelMinSize -> OFF, and for RelWithDebInfo -> DEFAULT.
+
+  * CONTRACTS TESTING : indicates that contracts are being testing and the
+    target needs to have full control on the contract checking mode. Nothing
+    will be done here.
+
+  The default setting is AUTO.
+
+### Bug Fixes
+
+* **build:** [#21](http://github.com/abdes/asap/issues/21) target option `WARNING` not propagated properly ([432cdaf](http://github.com/abdes/asap/commit/432cdaff1e5c8775d0d5c533dd0abe5eac229bd7))
+
+  By default, for every target we build, a compiler option will be added
+  to treat warnings as errors, unless the target is added with `WARNING` as
+  an option.
+
+  When that option is used, we now properly propagate it to set the
+  corresponding compiler option to **NOT** treat warnings as errors.
+
+  This is useful when 3rd party dependencies have include files that
+  generate warnings.
+
 ## [4.6.1](http://github.com/abdes/asap/compare/v4.6.0...v4.6.1) (2022-09-20)
 
 ### Bug Fixes
