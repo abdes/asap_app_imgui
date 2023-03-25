@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.6.3](http://github.com/abdes/asap/compare/v4.6.2...v4.6.3) (2023-03-25)
+
+### Enhancements
+
+* Simplify `devcontainer` setup by using features and additional container
+  lifecycle commands.
+
+### Bug Fixes
+
+* enable profiling for test coverage for MSVC ([7348d0a](http://github.com/abdes/asap/commit/7348d0a36b05b2f2e9c517e5b981f2c218bd511e)), closes [#22](http://github.com/abdes/asap/issues/22)
+
 ## [4.6.2](http://github.com/abdes/asap/compare/v4.6.1...v4.6.2) (2022-11-28)
 
 ### Features
