@@ -7,8 +7,8 @@
 # Do this only once for the project by checking if we already have loaded CPM
 # which will define the CURRENT_CPM_VERSION, and if that version is what we want
 # to have here.
-if(NOT CURRENT_CPM_VERSION VERSION_EQUAL 0.35.6)
-  set(CPM_DOWNLOAD_VERSION 0.35.6)
+if(NOT CURRENT_CPM_VERSION VERSION_EQUAL 0.38.1)
+  set(CPM_DOWNLOAD_VERSION 0.38.1)
 
   if(CPM_SOURCE_CACHE)
     # Expand relative path. This is important if the provided path contains a
