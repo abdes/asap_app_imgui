@@ -50,7 +50,7 @@ Parts of the documentation
 Acknowledgements
 ================
 
-.. figure:: https://executablebooks.org/en/latest/_static/logo-wide.png
+.. figure:: https://executablebooks.org/en/latest/_static/logo-wide.svg
   :figclass: margin
   :alt: Executable Books Project
   :name: executable_book_logo

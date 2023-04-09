@@ -9,9 +9,21 @@
       // Update 'VARIANT' to pick a Python version: 3, 3.10, 3.9, 3.8, 3.7, 3.6
       // Append -bullseye or -buster to pin to an OS version.
       // Use -bullseye variants on local on arm64/Apple Silicon.
-      "VARIANT": "3.10-bullseye",
-      // Options
-      "NODE_VERSION": "16"
+      "VARIANT": "debian-11"
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:1": {
+      "configureZshAsDefaultShell": true,
+      "userName": "vscode",
+      "uid": "1000",
+      "gid": "1000"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "16"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "os-provided"
     }
   },
   // Set *default* container specific settings.json values on container create.
@@ -28,10 +40,7 @@
     "python.linting.pycodestylePath": "/usr/local/py-utils/bin/pycodestyle",
     "python.linting.pydocstylePath": "/usr/local/py-utils/bin/pydocstyle",
     "python.linting.pylintPath": "/usr/local/py-utils/bin/pylint",
-    "python.experiments.optInto": [
-      "pythonDeprecatePythonPath"
-    ],
-    "clangd.path": "/usr/bin/clangd-14",
+    "clangd.path": "/usr/bin/clangd-14"
   },
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
@@ -52,8 +61,12 @@
   ],
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
-  // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "npx husky install < /dev/null",
   // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-  "remoteUser": "vscode"
+  "remoteUser": "vscode",
+  "postCreateCommand": {
+    "git_dubious_fix": "git config --global --add safe.directory ${containerWorkspaceFolder}",
+    "commit_tools": "npm install -g husky standard-version @commitlint/cli @commitlint/config-conventional",
+    "enable_husky": "npx husky install < /dev/null",
+    "update_python_modules": "pip --disable-pip-version-check --no-cache-dir install -r requirements.txt"
+  }
 }

@@ -115,7 +115,7 @@ html_theme_options = {
     "use_fullscreen_button": True,
     # We don't want the default navigation bar footer to be displayed on every
     # page. Mention of the book theme will be added in the home page.
-    "extra_navbar": ""
+    "extra_footer": ""
 }
 
 # -- Extension configuration -------------------------------------------------
