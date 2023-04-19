@@ -125,11 +125,8 @@ html_theme_options = {
 intersphinx_mapping = {
     # Add intersphinx config for submodules and third party libs
     # 'common': (
-    #     'https://abdes.github.io/asap/asap_common/html',
-    #     '@SPHINX_BUILD_DIR@/asap_common/html/objects.inv'),
-    # 'contract': (
-    #     'https://abdes.github.io/asap/asap_contract/html',
-    #     '@SPHINX_BUILD_DIR@/asap_contract/html/objects.inv'),
+    #     'https://asap-projects.github.io/asap-common/asap_common/html',
+    #     'https://asap-projects.github.io/asap-common/asap_common/html/objects.inv'),
 }
 
 # -- Options for todo extension ----------------------------------------------
