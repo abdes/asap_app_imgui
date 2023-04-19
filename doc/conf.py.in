@@ -48,8 +48,15 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx-prompt',
     'sphinx_copybutton',
-    'myst_parser'
+    'myst_parser',
+    'breathe'
 ]
+
+# Setup the breathe extension
+# breathe_projects = {
+#     "xxxxxx": "@DOXYGEN_BUILD_DIR@/asap_xxxxxx/xml"
+# }
+# breathe_default_project = "xxxxxx"
 
 # Tell sphinx what the primary language being documented is.
 primary_domain = 'cpp'
