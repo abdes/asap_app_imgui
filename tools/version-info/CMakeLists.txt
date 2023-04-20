@@ -62,7 +62,7 @@ target_include_directories(
 
 if(ASAP_BUILD_TESTS)
   add_test(
-    NAME version-info
+    NAME "Misc:version-info"
     COMMAND ${MODULE_TARGET_NAME}
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 endif()
