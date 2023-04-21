@@ -158,6 +158,8 @@ include(SphinxGeneration)
 # Testing
 # ------------------------------------------------------------------------------
 
+include(CTest)
+
 if(ASAP_BUILD_TESTS)
   include(GoogleSanitizers)
   include(CodeCoverage)
@@ -177,7 +179,6 @@ if(ASAP_BUILD_TESTS)
     "INSTALL_GTEST OFF")
 
   include(GoogleTest)
-  include(CTest)
 endif()
 
 # ------------------------------------------------------------------------------
