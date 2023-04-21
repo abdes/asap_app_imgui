@@ -60,12 +60,11 @@ target_include_directories(
 # Run executable test
 # ------------------------------------------------------------------------------
 
-if(ASAP_BUILD_TESTS)
-  add_test(
-    NAME "Misc:version-info"
-    COMMAND ${MODULE_TARGET_NAME}
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
-endif()
+# Always run the version-info as part of ctest suite
+add_test(
+  NAME "Misc: version-info"
+  COMMAND ${MODULE_TARGET_NAME}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 # ==============================================================================
 # Deployment instructions
