@@ -1,6 +1,6 @@
 name: macos-builds
 
-on: [push, pull_request]
+on: workflow_call
 
 env:
   CMAKE_VERSION: 3.21.1

@@ -1,0 +1,11 @@
+name: Matrix Development Builds
+
+on: [push, pull_request]
+
+jobs:
+  Linux:
+    uses: ./.github/workflows/ubuntu-builds.yml
+  Windows:
+    uses: ./.github/workflows/windows-builds.yml
+  MacOS:
+    uses: ./.github/workflows/macos-builds.yml
