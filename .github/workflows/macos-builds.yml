@@ -1,4 +1,4 @@
-name: windows-builds
+name: macos-builds
 
 on: workflow_call
 
@@ -6,13 +6,15 @@ env:
   CMAKE_VERSION: 3.21.1
   NINJA_VERSION: 1.11.1
   CCACHE_VERSION: 4.8
+  CC: clang
+  CXX: clang++
 
 jobs:
   dev-build:
-    runs-on: windows-latest
+    runs-on: macos-latest
     strategy:
       matrix:
-        generator: ['Ninja', 'NMake Makefiles', 'Visual Studio 17 2022']
+        generator: ['Unix Makefiles', Xcode]
         build_type: [Debug, Release]
         include:
           - build_type: Debug
@@ -23,12 +25,6 @@ jobs:
             tests: OFF # the template asap has no unit tests
 
     steps:
-      - name: Setup ninja (only if the generator is 'Ninja')
-        if: matrix.generator == 'Ninja'
-        uses: abdes/gha-setup-ninja@master
-        with:
-          version: ${{ env.NINJA_VERSION }}
-
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v1
         with:
@@ -40,19 +36,19 @@ jobs:
           install_ccache: true
           update_packager_index: false
           prepend_symlinks_to_path: false
-          windows_compile_environment: msvc # this field is required
 
-      - name: Set MSVC environment
-        uses: ilammy/msvc-dev-cmd@v1
+      - name: Setup XCode
+        if: matrix.generator == 'Xcode'
+        uses: mobiledevops/xcode-select-version-action@v1
+        with:
+          xcode-select-version: 13.1
 
       - name: Log environment properties
         run: |
-          echo "Build Type    : ${{matrix.build_type}}"
-          echo "Generator     : ${{matrix.generator}}"
-          if ('${{matrix.generator}}' -eq 'Ninja') {
-            ninja --version
-          }
+          echo "Build Type   : ${{matrix.build_type}}"
+          echo "Generator    : ${{matrix.generator}}"
           cmake --version
+          clang --version
           ccache --version
 
       - uses: actions/checkout@v3
@@ -62,16 +58,15 @@ jobs:
       - name: Configure build
         working-directory: ${{runner.workspace}}
         run: |
-          cmake -B build -S asap `
-            -D CMAKE_BUILD_TYPE=${{matrix.build_type}} `
-            -G "${{ matrix.generator }}" `
-            -D USE_CCACHE=ON `
-            -D ASAP_BUILD_TESTS=${{matrix.tests}} `
-            -D ASAP_BUILD_EXAMPLES=${{matrix.examples}} `
-            -D ASAP_BUILD_DOCS=OFF `
-            -D CMAKE_INSTALL_PREFIX=install `
+          cmake -B build -S $GITHUB_WORKSPACE \
+            -D CMAKE_BUILD_TYPE=${{matrix.build_type}} \
+            -G "${{ matrix.generator }}" \
+            -D USE_CCACHE=ON \
+            -D ASAP_BUILD_TESTS=${{matrix.tests}} \
+            -D ASAP_BUILD_EXAMPLES=${{matrix.examples}} \
+            -D ASAP_BUILD_DOCS=OFF \
+            -D CMAKE_INSTALL_PREFIX=install \
             -D CMAKE_VERBOSE_MAKEFILE=ON
-          dir build
 
       - name: Build main targets
         working-directory: ${{runner.workspace}}
@@ -80,7 +75,7 @@ jobs:
 
       - name: Build test targets
         working-directory: ${{runner.workspace}}
-        if: matrix.tests == true
+        if: ${{ matrix.tests == true }}
         run: |
           cmake --build build --config ${{matrix.build_type}} --target build-all-tests
 
