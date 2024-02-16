@@ -79,7 +79,7 @@ target_link_libraries(
           asap::logging
           glm::glm
           ${META_PROJECT_NAME}::imgui
-          cpptoml
+          tomlplusplus::tomlplusplus
           date::date)
 
 target_include_directories(${MODULE_TARGET_NAME}

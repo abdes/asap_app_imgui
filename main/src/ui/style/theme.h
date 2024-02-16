@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <logging/logging.h>
+
 #include <map>
 #include <string>
 
@@ -14,8 +16,10 @@ struct ImFont;
 
 namespace asap::ui {
 
-class Theme {
+class Theme : public asap::logging::Loggable<Theme> {
 public:
+  static const char *const LOGGER_NAME;
+
   static void Init();
 
   static void SaveStyle();

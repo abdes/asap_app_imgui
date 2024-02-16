@@ -1,22 +1,21 @@
 # Logging configuration (toml 0.5.1)
-soft-wrap = false
 scroll-lock = false
-[format]
-	show-logger = true
-	show-level = true
-	show-thread = true
-	show-time = true
-[loggers]
-	[loggers."main    "]
-		level = 0
-		id = 3
-	[loggers."common  "]
-		level = 0
-		id = 2
-	[loggers."testing "]
-		level = 0
-		id = 1
-	[loggers."misc    "]
-		level = 0
-		id = 0
+soft-wrap = false
 
+[format]
+show-level = true
+show-logger = true
+show-thread = true
+show-time = true
+
+[[loggers]]
+level = 2
+name = 'misc'
+
+[[loggers]]
+level = 4
+name = 'testing'
+
+[[loggers]]
+level = 1
+name = 'main'

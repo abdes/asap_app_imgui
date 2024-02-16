@@ -10,9 +10,9 @@
 #include "ui/fonts/fonts.h"
 #include "ui/fonts/material_design_icons.h"
 
-#include <cpptoml.h>
 #include <imgui/imgui.h>
 #include <logging/logging.h>
+#include <toml++/toml.hpp>
 
 #include <array>
 #include <cstring>
@@ -21,6 +21,8 @@
 #include <mutex> // for call_once()
 
 namespace asap::ui {
+
+const char *const Theme::LOGGER_NAME = "main";
 
 namespace {
 
@@ -126,330 +128,296 @@ void Theme::LoadDefaultStyle() {
 // Settings load/save
 // -------------------------------------------------------------------------
 
-namespace {
-void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
-  auto &logger = asap::logging::Registry::GetLogger("main");
-
-  auto theme = config->get_table("theme");
-  if (!theme) {
-    ASLOG_TO_LOGGER(logger, warn, "missing 'theme' in config");
-  }
-
-  if (!theme->contains("style")) {
-    ASLOG_TO_LOGGER(logger, warn, "missing 'theme/style' in config");
-  }
-
-  if (!theme->contains("colors")) {
-    ASLOG_TO_LOGGER(logger, warn, "missing 'theme/colors' in config");
-  }
-}
-
-} // namespace
-
 #define EMIT_TOML_STYLE_IMVEC2(FIELD)                                          \
   {                                                                            \
-    auto float_array = cpptoml::make_array();                                  \
-    float_array->push_back(style.FIELD.x);                                     \
-    float_array->push_back(style.FIELD.y);                                     \
-    style_settings->insert(#FIELD, float_array);                               \
+    #FIELD, toml::array {                                                      \
+      style.FIELD.x, style.FIELD.y                                             \
+    }                                                                          \
   }
 
 #define EMIT_TOML_COLOR(COLOR_ID)                                              \
   {                                                                            \
-    auto float_array = cpptoml::make_array();                                  \
-    auto &color = colors[COLOR_ID];                                            \
-    float_array->push_back(color.x);                                           \
-    float_array->push_back(color.y);                                           \
-    float_array->push_back(color.z);                                           \
-    float_array->push_back(color.w);                                           \
-    colors_settings->insert(#COLOR_ID, float_array);                           \
+    #COLOR_ID, toml::array {                                                   \
+      colors[COLOR_ID].x, colors[COLOR_ID].y, colors[COLOR_ID].z,              \
+          colors[COLOR_ID].w                                                   \
+    }                                                                          \
   }
 
 void Theme::SaveStyle() {
-  std::shared_ptr<cpptoml::table> root = cpptoml::make_table();
 
-  // [theme]
-  {
-    auto theme_settings = cpptoml::make_table();
-    auto &style = ImGui::GetStyle();
+  auto &style = ImGui::GetStyle();
+  auto &colors = style.Colors;
 
-    // [style]
-    {
-      auto style_settings = cpptoml::make_table();
-      style_settings->insert("Alpha", style.Alpha);
-      EMIT_TOML_STYLE_IMVEC2(WindowPadding);
-      style_settings->insert("WindowRounding", style.WindowRounding);
-      style_settings->insert("WindowBorderSize", style.WindowBorderSize);
-      EMIT_TOML_STYLE_IMVEC2(WindowMinSize);
-      EMIT_TOML_STYLE_IMVEC2(WindowTitleAlign);
-      style_settings->insert("ChildRounding", style.ChildRounding);
-      style_settings->insert("ChildBorderSize", style.ChildBorderSize);
-      style_settings->insert("PopupRounding", style.PopupRounding);
-      style_settings->insert("PopupBorderSize", style.PopupBorderSize);
-      EMIT_TOML_STYLE_IMVEC2(FramePadding);
-      style_settings->insert("FrameRounding", style.FrameRounding);
-      style_settings->insert("FrameBorderSize", style.FrameBorderSize);
-      EMIT_TOML_STYLE_IMVEC2(ItemSpacing);
-      EMIT_TOML_STYLE_IMVEC2(ItemInnerSpacing);
-      EMIT_TOML_STYLE_IMVEC2(TouchExtraPadding);
-      style_settings->insert("IndentSpacing", style.IndentSpacing);
-      style_settings->insert("ColumnsMinSpacing", style.ColumnsMinSpacing);
-      style_settings->insert("ScrollbarSize", style.ScrollbarSize);
-      style_settings->insert("ScrollbarRounding", style.ScrollbarRounding);
-      style_settings->insert("GrabMinSize", style.GrabMinSize);
-      style_settings->insert("GrabRounding", style.GrabRounding);
-      EMIT_TOML_STYLE_IMVEC2(ButtonTextAlign);
-      EMIT_TOML_STYLE_IMVEC2(DisplayWindowPadding);
-      EMIT_TOML_STYLE_IMVEC2(DisplaySafeAreaPadding);
-      style_settings->insert("MouseCursorScale", style.MouseCursorScale);
-      style_settings->insert("AntiAliasedLines", style.AntiAliasedLines);
-      style_settings->insert("AntiAliasedFill", style.AntiAliasedFill);
-      style_settings->insert(
-          "CurveTessellationTol", style.CurveTessellationTol);
-
-      theme_settings->insert("style", style_settings);
+  // clang-format off
+  auto root = toml::table{
+    {"theme", toml::table {
+        {"Key", "test"},
+        {"style", toml::table{
+          {"Alpha", style.Alpha},
+          EMIT_TOML_STYLE_IMVEC2(WindowPadding),
+          {"WindowRounding", style.WindowRounding},
+          {"WindowBorderSize", style.WindowBorderSize},
+          EMIT_TOML_STYLE_IMVEC2(WindowMinSize),
+          EMIT_TOML_STYLE_IMVEC2(WindowTitleAlign),
+          {"ChildRounding", style.ChildRounding},
+          {"ChildBorderSize", style.ChildBorderSize},
+          {"PopupRounding", style.PopupRounding},
+          {"PopupBorderSize", style.PopupBorderSize},
+          EMIT_TOML_STYLE_IMVEC2(FramePadding),
+          {"FrameRounding", style.FrameRounding},
+          {"FrameBorderSize", style.FrameBorderSize},
+          EMIT_TOML_STYLE_IMVEC2(ItemSpacing),
+          EMIT_TOML_STYLE_IMVEC2(ItemInnerSpacing),
+          EMIT_TOML_STYLE_IMVEC2(TouchExtraPadding),
+          {"IndentSpacing", style.IndentSpacing},
+          {"ColumnsMinSpacing", style.ColumnsMinSpacing},
+          {"ScrollbarSize", style.ScrollbarSize},
+          {"ScrollbarRounding", style.ScrollbarRounding},
+          {"GrabMinSize", style.GrabMinSize},
+          {"GrabRounding", style.GrabRounding},
+          EMIT_TOML_STYLE_IMVEC2(ButtonTextAlign),
+          EMIT_TOML_STYLE_IMVEC2(DisplayWindowPadding),
+          EMIT_TOML_STYLE_IMVEC2(DisplaySafeAreaPadding),
+          {"MouseCursorScale", style.MouseCursorScale},
+          {"AntiAliasedLines", style.AntiAliasedLines},
+          {"AntiAliasedFill", style.AntiAliasedFill},
+          {"CurveTessellationTol", style.CurveTessellationTol},
+        }},
+        {"colors", toml::table{
+          EMIT_TOML_COLOR(ImGuiCol_Text),
+          EMIT_TOML_COLOR(ImGuiCol_TextDisabled),
+          EMIT_TOML_COLOR(ImGuiCol_WindowBg),
+          EMIT_TOML_COLOR(ImGuiCol_ChildBg),
+          EMIT_TOML_COLOR(ImGuiCol_PopupBg),
+          EMIT_TOML_COLOR(ImGuiCol_Border),
+          EMIT_TOML_COLOR(ImGuiCol_BorderShadow),
+          EMIT_TOML_COLOR(ImGuiCol_FrameBg),
+          EMIT_TOML_COLOR(ImGuiCol_FrameBgHovered),
+          EMIT_TOML_COLOR(ImGuiCol_FrameBgActive),
+          EMIT_TOML_COLOR(ImGuiCol_TitleBg),
+          EMIT_TOML_COLOR(ImGuiCol_TitleBgActive),
+          EMIT_TOML_COLOR(ImGuiCol_TitleBgCollapsed),
+          EMIT_TOML_COLOR(ImGuiCol_MenuBarBg),
+          EMIT_TOML_COLOR(ImGuiCol_ScrollbarBg),
+          EMIT_TOML_COLOR(ImGuiCol_ScrollbarGrab),
+          EMIT_TOML_COLOR(ImGuiCol_ScrollbarGrabHovered),
+          EMIT_TOML_COLOR(ImGuiCol_ScrollbarGrabActive),
+          EMIT_TOML_COLOR(ImGuiCol_CheckMark),
+          EMIT_TOML_COLOR(ImGuiCol_SliderGrab),
+          EMIT_TOML_COLOR(ImGuiCol_SliderGrabActive),
+          EMIT_TOML_COLOR(ImGuiCol_Button),
+          EMIT_TOML_COLOR(ImGuiCol_ButtonHovered),
+          EMIT_TOML_COLOR(ImGuiCol_ButtonActive),
+          EMIT_TOML_COLOR(ImGuiCol_Header),
+          EMIT_TOML_COLOR(ImGuiCol_HeaderHovered),
+          EMIT_TOML_COLOR(ImGuiCol_HeaderActive),
+          EMIT_TOML_COLOR(ImGuiCol_Separator),
+          EMIT_TOML_COLOR(ImGuiCol_SeparatorHovered),
+          EMIT_TOML_COLOR(ImGuiCol_SeparatorActive),
+          EMIT_TOML_COLOR(ImGuiCol_ResizeGrip),
+          EMIT_TOML_COLOR(ImGuiCol_ResizeGripHovered),
+          EMIT_TOML_COLOR(ImGuiCol_ResizeGripActive),
+          EMIT_TOML_COLOR(ImGuiCol_PlotLines),
+          EMIT_TOML_COLOR(ImGuiCol_PlotLinesHovered),
+          EMIT_TOML_COLOR(ImGuiCol_PlotHistogram),
+          EMIT_TOML_COLOR(ImGuiCol_PlotHistogramHovered),
+          EMIT_TOML_COLOR(ImGuiCol_TextSelectedBg),
+          EMIT_TOML_COLOR(ImGuiCol_DragDropTarget),
+          EMIT_TOML_COLOR(ImGuiCol_NavHighlight),
+          EMIT_TOML_COLOR(ImGuiCol_NavWindowingHighlight),
+          EMIT_TOML_COLOR(ImGuiCol_NavWindowingDimBg),
+          EMIT_TOML_COLOR(ImGuiCol_ModalWindowDimBg),
+        }}
+      }
     }
-
-    // [colors]
-    {
-      auto colors_settings = cpptoml::make_table();
-      auto &colors = style.Colors;
-
-      EMIT_TOML_COLOR(ImGuiCol_Text);
-      EMIT_TOML_COLOR(ImGuiCol_TextDisabled);
-      EMIT_TOML_COLOR(ImGuiCol_WindowBg);
-      EMIT_TOML_COLOR(ImGuiCol_ChildBg);
-      EMIT_TOML_COLOR(ImGuiCol_PopupBg);
-      EMIT_TOML_COLOR(ImGuiCol_Border);
-      EMIT_TOML_COLOR(ImGuiCol_BorderShadow);
-      EMIT_TOML_COLOR(ImGuiCol_FrameBg);
-      EMIT_TOML_COLOR(ImGuiCol_FrameBgHovered);
-      EMIT_TOML_COLOR(ImGuiCol_FrameBgActive);
-      EMIT_TOML_COLOR(ImGuiCol_TitleBg);
-      EMIT_TOML_COLOR(ImGuiCol_TitleBgActive);
-      EMIT_TOML_COLOR(ImGuiCol_TitleBgCollapsed);
-      EMIT_TOML_COLOR(ImGuiCol_MenuBarBg);
-      EMIT_TOML_COLOR(ImGuiCol_ScrollbarBg);
-      EMIT_TOML_COLOR(ImGuiCol_ScrollbarGrab);
-      EMIT_TOML_COLOR(ImGuiCol_ScrollbarGrabHovered);
-      EMIT_TOML_COLOR(ImGuiCol_ScrollbarGrabActive);
-      EMIT_TOML_COLOR(ImGuiCol_CheckMark);
-      EMIT_TOML_COLOR(ImGuiCol_SliderGrab);
-      EMIT_TOML_COLOR(ImGuiCol_SliderGrabActive);
-      EMIT_TOML_COLOR(ImGuiCol_Button);
-      EMIT_TOML_COLOR(ImGuiCol_ButtonHovered);
-      EMIT_TOML_COLOR(ImGuiCol_ButtonActive);
-      EMIT_TOML_COLOR(ImGuiCol_Header);
-      EMIT_TOML_COLOR(ImGuiCol_HeaderHovered);
-      EMIT_TOML_COLOR(ImGuiCol_HeaderActive);
-      EMIT_TOML_COLOR(ImGuiCol_Separator);
-      EMIT_TOML_COLOR(ImGuiCol_SeparatorHovered);
-      EMIT_TOML_COLOR(ImGuiCol_SeparatorActive);
-      EMIT_TOML_COLOR(ImGuiCol_ResizeGrip);
-      EMIT_TOML_COLOR(ImGuiCol_ResizeGripHovered);
-      EMIT_TOML_COLOR(ImGuiCol_ResizeGripActive);
-      EMIT_TOML_COLOR(ImGuiCol_PlotLines);
-      EMIT_TOML_COLOR(ImGuiCol_PlotLinesHovered);
-      EMIT_TOML_COLOR(ImGuiCol_PlotHistogram);
-      EMIT_TOML_COLOR(ImGuiCol_PlotHistogramHovered);
-      EMIT_TOML_COLOR(ImGuiCol_TextSelectedBg);
-      EMIT_TOML_COLOR(ImGuiCol_DragDropTarget);
-      EMIT_TOML_COLOR(ImGuiCol_NavHighlight);
-      EMIT_TOML_COLOR(ImGuiCol_NavWindowingHighlight);
-      EMIT_TOML_COLOR(ImGuiCol_NavWindowingDimBg);
-      EMIT_TOML_COLOR(ImGuiCol_ModalWindowDimBg);
-
-      theme_settings->insert("colors", colors_settings);
-    }
-    root->insert("theme", theme_settings);
-  }
+  };
+  // clang-format on
 
   auto settings_path =
       asap::config::GetPathFor(asap::config::Location::F_THEME_SETTINGS);
   auto ofs = std::ofstream();
   ofs.open(settings_path.string());
-  ofs << (*root) << std::endl;
+  ofs << root << std::endl;
   ofs.close();
 }
 
 #define SET_COLOR_FROM_TOML(id)                                                \
-  if (colors_settings->contains(#id)) {                                        \
-    auto color = colors_settings->get_array_of<double>(#id);                   \
-    colors[id] = {static_cast<float>(color->at(0)),                            \
-        static_cast<float>(color->at(1)), static_cast<float>(color->at(2)),    \
-        static_cast<float>(color->at(3))};                                     \
+  if (colors_settings[#id]) {                                                  \
+    auto color = colors_settings[#id];                                         \
+    colors[id] = {static_cast<float>(color[0].value<double>().value()),        \
+        static_cast<float>(color[1].value<double>().value()),                  \
+        static_cast<float>(color[2].value<double>().value()),                  \
+        static_cast<float>(color[3].value<double>().value())};                 \
   }
 
 void Theme::LoadStyle() {
-  auto &logger = asap::logging::Registry::GetLogger("main");
-
-  std::shared_ptr<cpptoml::table> config;
   auto theme_settings =
       asap::config::GetPathFor(asap::config::Location::F_THEME_SETTINGS);
   auto has_config = false;
-  if (std::filesystem::exists(theme_settings)) {
-    try {
-      config = cpptoml::parse_file(theme_settings.string());
-      ASLOG_TO_LOGGER(logger, info, "theme settings loaded from {}",
-          theme_settings.string());
-      has_config = true;
-    } catch (std::exception const &ex) {
-      ASLOG_TO_LOGGER(logger, error,
-          "error () while loading theme settings from {}", ex.what(),
-          theme_settings.string());
-    }
-  } else {
-    ASLOG_TO_LOGGER(
-        logger, info, "file {} does not exist", theme_settings.string());
+  if (!std::filesystem::exists(theme_settings)) {
+    ASLOG(info, "file {} does not exist", theme_settings.string());
+    LoadDefaultStyle();
+    return;
   }
 
-  if (has_config) {
-    ConfigSanityChecks(config);
+  try {
+    auto config = toml::parse_file(theme_settings.string());
+    ASLOG(info, "theme settings loaded from {}", theme_settings.string());
 
-    if (config->contains("theme")) {
-      auto theme = config->get_table("theme");
-      if (theme->contains("style")) {
-        auto style = theme->get_table("style");
+    if (config["theme"]) {
+      auto theme = config["theme"];
+      if (theme["style"]) {
+        auto style = theme["style"];
 
-        if (style->contains("Alpha")) {
+        if (style["Alpha"]) {
           ImGui::GetStyle().Alpha =
-              static_cast<float>(*(style->get_as<double>("Alpha")));
+              static_cast<float>(style["Alpha"].value<double>().value());
         }
-        if (style->contains("WindowPadding")) {
-          auto vec2 = style->get_array_of<double>("WindowPadding");
+        if (style["WindowPadding"]) {
+          auto vec2 = style["WindowPadding"];
           ImGui::GetStyle().WindowPadding = {
-              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
+              static_cast<float>(vec2[0].value<double>().value()),
+              static_cast<float>(vec2[1].value<double>().value())};
         }
 
-        if (style->contains("WindowRounding")) {
-          ImGui::GetStyle().WindowRounding =
-              static_cast<float>(*(style->get_as<double>("WindowRounding")));
+        if (style["WindowRounding"]) {
+          ImGui::GetStyle().WindowRounding = static_cast<float>(
+              style["WindowRounding"].value<double>().value());
         }
-        if (style->contains("WindowBorderSize")) {
-          ImGui::GetStyle().WindowBorderSize =
-              static_cast<float>(*(style->get_as<double>("WindowBorderSize")));
+        if (style["WindowBorderSize"]) {
+          ImGui::GetStyle().WindowBorderSize = static_cast<float>(
+              style["WindowBorderSize"].value<double>().value());
         }
-        if (style->contains("WindowMinSize")) {
-          auto vec2 = style->get_array_of<double>("WindowMinSize");
+        if (style["WindowMinSize"]) {
+          auto vec2 = style["WindowMinSize"];
           ImGui::GetStyle().WindowMinSize = {
-              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
+              static_cast<float>(vec2[0].value<double>().value()),
+              static_cast<float>(vec2[1].value<double>().value())};
         }
-        if (style->contains("WindowTitleAlign")) {
-          auto vec2 = style->get_array_of<double>("WindowTitleAlign");
+        if (style["WindowTitleAlign"]) {
+          auto vec2 = style["WindowTitleAlign"];
           ImGui::GetStyle().WindowTitleAlign = {
-              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
+              static_cast<float>(vec2[0].value<double>().value()),
+              static_cast<float>(vec2[1].value<double>().value())};
         }
 
-        if (style->contains("ChildRounding")) {
-          ImGui::GetStyle().ChildRounding =
-              static_cast<float>(*(style->get_as<double>("ChildRounding")));
+        if (style["ChildRounding"]) {
+          ImGui::GetStyle().ChildRounding = static_cast<float>(
+              style["ChildRounding"].value<double>().value());
         }
-        if (style->contains("ChildBorderSize")) {
-          ImGui::GetStyle().ChildBorderSize =
-              static_cast<float>(*(style->get_as<double>("ChildBorderSize")));
+        if (style["ChildBorderSize"]) {
+          ImGui::GetStyle().ChildBorderSize = static_cast<float>(
+              style["ChildBorderSize"].value<double>().value());
         }
-        if (style->contains("PopupRounding")) {
-          ImGui::GetStyle().PopupRounding =
-              static_cast<float>(*(style->get_as<double>("PopupRounding")));
+        if (style["PopupRounding"]) {
+          ImGui::GetStyle().PopupRounding = static_cast<float>(
+              style["PopupRounding"].value<double>().value());
         }
-        if (style->contains("PopupBorderSize")) {
-          ImGui::GetStyle().PopupBorderSize =
-              static_cast<float>(*(style->get_as<double>("PopupBorderSize")));
+        if (style["PopupBorderSize"]) {
+          ImGui::GetStyle().PopupBorderSize = static_cast<float>(
+              style["PopupBorderSize"].value<double>().value());
         }
-        if (style->contains("FramePadding")) {
-          auto vec2 = style->get_array_of<double>("FramePadding");
+        if (style["FramePadding"]) {
+          auto vec2 = style["FramePadding"];
           ImGui::GetStyle().FramePadding = {
-              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
+              static_cast<float>(vec2[0].value<double>().value()),
+              static_cast<float>(vec2[1].value<double>().value())};
         }
 
-        if (style->contains("FrameRounding")) {
-          ImGui::GetStyle().FrameRounding =
-              static_cast<float>(*(style->get_as<double>("FrameRounding")));
+        if (style["FrameRounding"]) {
+          ImGui::GetStyle().FrameRounding = static_cast<float>(
+              style["FrameRounding"].value<double>().value());
         }
-        if (style->contains("FrameBorderSize")) {
-          ImGui::GetStyle().FrameBorderSize =
-              static_cast<float>(*(style->get_as<double>("FrameBorderSize")));
+        if (style["FrameBorderSize"]) {
+          ImGui::GetStyle().FrameBorderSize = static_cast<float>(
+              style["FrameBorderSize"].value<double>().value());
         }
-        if (style->contains("ItemSpacing")) {
-          auto vec2 = style->get_array_of<double>("ItemSpacing");
+        if (style["ItemSpacing"]) {
+          auto vec2 = style["ItemSpacing"];
           ImGui::GetStyle().ItemSpacing = {
-              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
+              static_cast<float>(vec2[0].value<double>().value()),
+              static_cast<float>(vec2[1].value<double>().value())};
         }
 
-        if (style->contains("ItemInnerSpacing")) {
-          auto vec2 = style->get_array_of<double>("ItemInnerSpacing");
+        if (style["ItemInnerSpacing"]) {
+          auto vec2 = style["ItemInnerSpacing"];
           ImGui::GetStyle().ItemInnerSpacing = {
-              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
+              static_cast<float>(vec2[0].value<double>().value()),
+              static_cast<float>(vec2[1].value<double>().value())};
         }
 
-        if (style->contains("TouchExtraPadding")) {
-          auto vec2 = style->get_array_of<double>("TouchExtraPadding");
+        if (style["TouchExtraPadding"]) {
+          auto vec2 = style["TouchExtraPadding"];
           ImGui::GetStyle().TouchExtraPadding = {
-              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
+              static_cast<float>(vec2[0].value<double>().value()),
+              static_cast<float>(vec2[1].value<double>().value())};
         }
 
-        if (style->contains("IndentSpacing")) {
-          ImGui::GetStyle().IndentSpacing =
-              static_cast<float>(*(style->get_as<double>("IndentSpacing")));
+        if (style["IndentSpacing"]) {
+          ImGui::GetStyle().IndentSpacing = static_cast<float>(
+              style["IndentSpacing"].value<double>().value());
         }
-        if (style->contains("ColumnsMinSpacing")) {
-          ImGui::GetStyle().ColumnsMinSpacing =
-              static_cast<float>(*(style->get_as<double>("ColumnsMinSpacing")));
+        if (style["ColumnsMinSpacing"]) {
+          ImGui::GetStyle().ColumnsMinSpacing = static_cast<float>(
+              style["ColumnsMinSpacing"].value<double>().value());
         }
-        if (style->contains("ScrollbarSize")) {
-          ImGui::GetStyle().ScrollbarSize =
-              static_cast<float>(*(style->get_as<double>("ScrollbarSize")));
+        if (style["ScrollbarSize"]) {
+          ImGui::GetStyle().ScrollbarSize = static_cast<float>(
+              style["ScrollbarSize"].value<double>().value());
         }
-        if (style->contains("ScrollbarRounding")) {
-          ImGui::GetStyle().ScrollbarRounding =
-              static_cast<float>(*(style->get_as<double>("ScrollbarRounding")));
+        if (style["ScrollbarRounding"]) {
+          ImGui::GetStyle().ScrollbarRounding = static_cast<float>(
+              style["ScrollbarRounding"].value<double>().value());
         }
-        if (style->contains("GrabMinSize")) {
+        if (style["GrabMinSize"]) {
           ImGui::GetStyle().GrabMinSize =
-              static_cast<float>(*(style->get_as<double>("GrabMinSize")));
+              static_cast<float>(style["GrabMinSize"].value<double>().value());
         }
-        if (style->contains("GrabRounding")) {
+        if (style["GrabRounding"]) {
           ImGui::GetStyle().GrabRounding =
-              static_cast<float>(*(style->get_as<double>("GrabRounding")));
+              static_cast<float>(style["GrabRounding"].value<double>().value());
         }
-        if (style->contains("ButtonTextAlign")) {
-          auto vec2 = style->get_array_of<double>("ButtonTextAlign");
+        if (style["ButtonTextAlign"]) {
+          auto vec2 = style["ButtonTextAlign"];
           ImGui::GetStyle().ButtonTextAlign = {
-              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
+              static_cast<float>(vec2[0].value<double>().value()),
+              static_cast<float>(vec2[1].value<double>().value())};
         }
 
-        if (style->contains("DisplayWindowPadding")) {
-          auto vec2 = style->get_array_of<double>("DisplayWindowPadding");
+        if (style["DisplayWindowPadding"]) {
+          auto vec2 = style["DisplayWindowPadding"];
           ImGui::GetStyle().DisplayWindowPadding = {
-              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
+              static_cast<float>(vec2[0].value<double>().value()),
+              static_cast<float>(vec2[1].value<double>().value())};
         }
 
-        if (style->contains("DisplaySafeAreaPadding")) {
-          auto vec2 = style->get_array_of<double>("DisplaySafeAreaPadding");
+        if (style["DisplaySafeAreaPadding"]) {
+          auto vec2 = style["DisplaySafeAreaPadding"];
           ImGui::GetStyle().DisplaySafeAreaPadding = {
-              static_cast<float>(vec2->at(0)), static_cast<float>(vec2->at(1))};
+              static_cast<float>(vec2[0].value<double>().value()),
+              static_cast<float>(vec2[1].value<double>().value())};
         }
 
-        if (style->contains("MouseCursorScale")) {
-          ImGui::GetStyle().MouseCursorScale =
-              static_cast<float>(*(style->get_as<double>("MouseCursorScale")));
+        if (style["MouseCursorScale"]) {
+          ImGui::GetStyle().MouseCursorScale = static_cast<float>(
+              style["MouseCursorScale"].value<double>().value());
         }
-        if (style->contains("AntiAliasedLines")) {
+        if (style["AntiAliasedLines"]) {
           ImGui::GetStyle().AntiAliasedLines =
-              *(style->get_as<bool>("AntiAliasedLines"));
+              style["AntiAliasedLines"].as<bool>();
         }
-        if (style->contains("AntiAliasedFill")) {
+        if (style["AntiAliasedFill"]) {
           ImGui::GetStyle().AntiAliasedFill =
-              *(style->get_as<bool>("AntiAliasedFill"));
+              style["AntiAliasedFill"].as<bool>();
         }
-        if (style->contains("CurveTessellationTol")) {
+        if (style["CurveTessellationTol"]) {
           ImGui::GetStyle().CurveTessellationTol = static_cast<float>(
-              *(style->get_as<double>("CurveTessellationTol")));
+              style["CurveTessellationTol"].value<double>().value());
         }
       }
-      if (theme->contains("colors")) {
+      if (theme["colors"]) {
         auto &colors = ImGui::GetStyle().Colors;
-        auto colors_settings = theme->get_table("colors");
+        auto colors_settings = theme["colors"];
 
         SET_COLOR_FROM_TOML(ImGuiCol_Text);
         SET_COLOR_FROM_TOML(ImGuiCol_TextDisabled);
@@ -498,7 +466,9 @@ void Theme::LoadStyle() {
         SET_COLOR_FROM_TOML(ImGuiCol_ModalWindowDimBg);
       }
     }
-  } else {
+  } catch (std::exception const &ex) {
+    ASLOG(error, "error {} while loading theme settings from {}", ex.what(),
+        theme_settings.string());
     LoadDefaultStyle();
   }
 }
