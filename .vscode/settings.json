@@ -129,7 +129,7 @@
   // One tab = 2 spaces
   "editor.tabSize": 2,
   // Controls whether a list of suggestions is provided based on the text in the document
-  "editor.wordBasedSuggestions": true,
+  "editor.wordBasedSuggestions": "matchingDocuments",
   // There is no need to confirm when deleting files
   "explorer.confirmDelete": false,
   // No confirmation is required when moving files

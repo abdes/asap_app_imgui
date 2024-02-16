@@ -1,0 +1,86 @@
+name: macos-builds
+
+on: workflow_call
+
+env:
+  CMAKE_VERSION: 3.21.1
+  NINJA_VERSION: 1.11.1
+  CCACHE_VERSION: 4.8
+  CC: clang
+  CXX: clang++
+
+jobs:
+  dev-build:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        generator: ['Unix Makefiles', Xcode]
+        build_type: [Debug, Release]
+        include:
+          - build_type: Debug
+            examples: ON
+            tests: OFF # the template asap has no unit tests
+          - build_type: Release
+            examples: ON
+            tests: OFF # the template asap has no unit tests
+
+    steps:
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1
+        with:
+          cmake-version: ${{ env.CMAKE_VERSION }}
+
+      - name: Setup ccache
+        uses: Chocobo1/setup-ccache-action@v1
+        with:
+          install_ccache: true
+          update_packager_index: false
+          prepend_symlinks_to_path: false
+
+      - name: Setup XCode
+        if: matrix.generator == 'Xcode'
+        uses: mobiledevops/xcode-select-version-action@v1
+        with:
+          xcode-select-version: 13.1
+
+      - name: Log environment properties
+        run: |
+          echo "Build Type   : ${{matrix.build_type}}"
+          echo "Generator    : ${{matrix.generator}}"
+          cmake --version
+          clang --version
+          ccache --version
+
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Configure build
+        working-directory: ${{runner.workspace}}
+        run: |
+          cmake -B build -S $GITHUB_WORKSPACE \
+            -D CMAKE_BUILD_TYPE=${{matrix.build_type}} \
+            -G "${{ matrix.generator }}" \
+            -D USE_CCACHE=ON \
+            -D ASAP_BUILD_TESTS=${{matrix.tests}} \
+            -D ASAP_BUILD_EXAMPLES=${{matrix.examples}} \
+            -D ASAP_BUILD_DOCS=OFF \
+            -D CMAKE_INSTALL_PREFIX=install \
+            -D CMAKE_VERBOSE_MAKEFILE=ON
+
+      - name: Build main targets
+        working-directory: ${{runner.workspace}}
+        run: |
+          cmake --build build --config ${{matrix.build_type}}
+
+      - name: Build test targets
+        working-directory: ${{runner.workspace}}
+        if: ${{ matrix.tests == true }}
+        run: |
+          cmake --build build --config ${{matrix.build_type}} --target build-all-tests
+
+      - name: Run tests with ctest
+        working-directory: ${{runner.workspace}}
+        # Hardcode 2 cores we know are there
+        run: |
+          ctest --test-dir build -C ${{matrix.build_type}} -j 2 --output-on-failure
