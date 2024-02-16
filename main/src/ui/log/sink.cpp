@@ -192,9 +192,6 @@ void ImGuiLogSink::Draw(const char *title, bool *open) {
   {
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 1));
 
-    Font font("Inconsolata");
-    font.MediumSize();
-
     std::shared_lock<std::shared_timed_mutex> lock(records_mutex_);
     for (auto const &record : records_) {
       if (!display_filter_.IsActive() ||
@@ -205,12 +202,6 @@ void ImGuiLogSink::Draw(const char *title, bool *open) {
           display_filter_.PassFilter(record.message_.c_str(),
               record.message_.c_str() + record.message_.size())) {
         ImGui::BeginGroup();
-        if (record.emphasis_) {
-          font.Bold();
-        } else {
-          font.Regular();
-        }
-        ImGui::PushFont(font.ImGuiFont());
 
         if (record.color_range_start_ > 0) {
           auto props_len = record.properties_.size();
@@ -265,8 +256,6 @@ void ImGuiLogSink::Draw(const char *title, bool *open) {
           ImGui::SetTooltip("%s", record.source_.c_str());
         }
 #endif // NDEBUG
-
-        ImGui::PopFont();
       }
     }
   }
@@ -335,7 +324,8 @@ void ImGuiLogSink::sink_it_(const spdlog::details::log_msg &msg) {
   // Source location will be found only in non-debug builds.
 #ifndef NDEBUG
   // Ignore the '[' and ']'
-  ASAP_ASSERT((skip_to - msg_str.begin() - 3) >= 0);
+  auto check = (skip_to - msg_str.begin() - 3) >= 0;
+  ASAP_ASSERT(check);
   auto source = msg_str.substr(
       1, static_cast<std::size_t>(skip_to - msg_str.begin() - 3));
 #else

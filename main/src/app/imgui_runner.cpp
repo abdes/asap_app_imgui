@@ -391,19 +391,20 @@ void ImGuiRunner::SetWindowTitle(const std::string &title) {
 }
 auto ImGuiRunner::GetMonitor() const -> GLFWmonitor * {
   ASAP_ASSERT(
-      window_ && "don't call GetMonitor() before the window is created");
+      window_, "don't call GetMonitor() before the window is created", nullptr);
   return glfwGetWindowMonitor(window_);
 }
 auto ImGuiRunner::GetWindowSize() const -> std::pair<int, int> {
-  ASAP_ASSERT(
-      window_ && "don't call GetWindowSize() before the window is created");
+  ASAP_ASSERT(window_,
+      "don't call GetWindowSize() before the window is created",
+      std::make_pair(-1, -1));
   auto size = std::make_pair(-1, -1);
   glfwGetWindowSize(window_, &size.first, &size.second);
   return size;
 }
 auto ImGuiRunner::GetWindowPosition() const -> std::pair<int, int> {
-  ASAP_ASSERT(
-      window_ && "don't call GetMonitor() before the window is created");
+  ASAP_ASSERT(window_, "don't call GetMonitor() before the window is created",
+      std::make_pair(-1, -1));
   auto position = std::make_pair(-1, -1);
   glfwGetWindowPos(window_, &position.first, &position.second);
   return position;

@@ -8,6 +8,7 @@
   "rewrap.wrappingColumn": 80,
   "rewrap.autoWrap.enabled": true,
   "files.associations": {
+    "*.in": "plaintext",
     "xtr1common": "cpp",
     "memory": "cpp",
     "system_error": "cpp",
@@ -91,7 +92,15 @@
     "xstddef": "cpp",
     "xstring": "cpp",
     "xtree": "cpp",
-    "xutility": "cpp"
+    "xutility": "cpp",
+    "pointers": "cpp",
+    "span": "cpp",
+    "codecvt": "cpp",
+    "csetjmp": "cpp",
+    "unordered_set": "cpp",
+    "filesystem": "cpp",
+    "ranges": "cpp",
+    "shared_mutex": "cpp"
   },
   // Disable automatic detection of file indent mode and indent size, that is, automatically change
   // the file to the indent format configured by VSCode after opening the file

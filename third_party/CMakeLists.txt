@@ -120,7 +120,8 @@ asap_add_package(
   GITHUB_REPOSITORY
   g-truc/glm
   OPTIONS
-  "GLM_TEST_ENABLE OFF")
+  "GLM_ENABLE_CXX_17 ON"
+  "GLM_BUILD_LIBRARY OFF")
 
 # --------------------------------------------------------------------------------------------------
 # date - used for time formatting in the logging widget
