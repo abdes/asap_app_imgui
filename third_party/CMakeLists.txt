@@ -38,7 +38,7 @@ asap_add_package(
   NAME
   fmtlib
   GIT_TAG
-  9.0.0
+  10.2.1
   GITHUB_REPOSITORY
   fmtlib/fmt
   OPTIONS
@@ -120,7 +120,8 @@ asap_add_package(
   GITHUB_REPOSITORY
   g-truc/glm
   OPTIONS
-  "GLM_TEST_ENABLE OFF")
+  "GLM_ENABLE_CXX_17 ON"
+  "GLM_BUILD_LIBRARY OFF")
 
 # --------------------------------------------------------------------------------------------------
 # date - used for time formatting in the logging widget
@@ -144,11 +145,11 @@ asap_add_package(
 
 asap_add_package(
   NAME
-  cpptoml
+  tomlplusplus
   GIT_TAG
-  master
+  v3.4.0
   GITHUB_REPOSITORY
-  skystrife/cpptoml
+  marzer/tomlplusplus
   OPTIONS
-  "CPPTOML_BUILD_EXAMPLES OFF"
-  "ENABLE_LIBCXX OFF")
+  "PROJECT_IS_TOP_LEVEL ON")
+find_package(tomlplusplus REQUIRED)

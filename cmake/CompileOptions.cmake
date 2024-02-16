@@ -57,8 +57,8 @@ function(asap_set_compile_options)
       if(NOT x_WARNING)
         target_compile_options(${target} PRIVATE /WX)
       endif()
-      # Enable coverage profiling in Debug builds
-      # (see https://github.com/abdes/asap/issues/22)
+      # Enable coverage profiling in Debug builds (see
+      # https://github.com/abdes/asap/issues/22)
       target_link_options(${target} PRIVATE $<$<CONFIG:Debug>:/PROFILE>)
     endforeach()
   endif()

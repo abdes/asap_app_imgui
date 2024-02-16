@@ -90,27 +90,26 @@ if(SPHINX_FOUND)
     # invoked.
     set_target_properties(sphinx PROPERTIES EXCLUDE_FROM_ALL TRUE)
 
-    # Add a target for copying the index.html from the doc dir to the sphinx
-    # build dir. A dependency on this target will be added to the master sphinx
-    # target.
-    add_custom_command(
-      OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
-      COMMAND
-        ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html
-        ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html
-      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html)
-    add_custom_target(copy_doc_index ALL
-                      DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html)
-
     # Setup sphinx doc master target and add other submodules as dependencies
     function(_add_master_sphinx_target)
       _master_sphinx_target()
       asap_with_sphinx(${master_sphinx_target})
-      add_dependencies(
-        ${master_sphinx_target}_sphinx copy_doc_index
-        # Add more submodule documentation targets after this, using variables
-        # in the target names consistently with the module's CMakeLists.txt.
-      )
+
+      set(index_file_src "${CMAKE_CURRENT_SOURCE_DIR}/doc/index.html")
+      set(index_file_out "${CMAKE_CURRENT_BINARY_DIR}/sphinx/index.html")
+      if(EXISTS ${index_file_src})
+        message(
+          STATUS "Will use project custom doc index file: ${index_file_src}")
+        # Add a target for copying the index.html from the doc dir to the sphinx
+        # build dir. A dependency on this target will be added to the master
+        # sphinx target.
+        add_custom_command(
+          OUTPUT ${index_file_out}
+          COMMAND ${CMAKE_COMMAND} -E copy ${index_file_src} ${index_file_out}
+          DEPENDS ${index_file_src})
+        add_custom_target(copy_doc_index ALL DEPENDS ${index_file_out})
+        add_dependencies(${master_sphinx_target}_sphinx copy_doc_index)
+      endif()
       add_dependencies(sphinx ${master_sphinx_target}_sphinx)
     endfunction()
     _add_master_sphinx_target()

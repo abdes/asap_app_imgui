@@ -37,7 +37,7 @@ auto GetPathFor(Location id) -> std::filesystem::path {
     return p;
   }
   }
-  // Worakround only for MSVC complaining
+  // Workaround only for MSVC complaining
   return std::filesystem::current_path().append("__unreachable__");
 }
 

@@ -19,14 +19,13 @@
 #include <imgui/backends/imgui_impl_opengl3.h>
 // clang-format on
 
+#include <chrono> // for sleep timeout
 #include <contract/contract.h>
-#include <cpptoml.h>
-#include <gsl/span>
-
-#include <chrono>  // for sleep timeout
 #include <csignal> // for signal handling
 #include <fstream>
+#include <gsl/span>
 #include <thread> // for access to this thread
+#include <toml++/toml.hpp>
 #include <utility>
 
 namespace {
@@ -391,19 +390,20 @@ void ImGuiRunner::SetWindowTitle(const std::string &title) {
 }
 auto ImGuiRunner::GetMonitor() const -> GLFWmonitor * {
   ASAP_ASSERT(
-      window_ && "don't call GetMonitor() before the window is created");
+      window_, "don't call GetMonitor() before the window is created", nullptr);
   return glfwGetWindowMonitor(window_);
 }
 auto ImGuiRunner::GetWindowSize() const -> std::pair<int, int> {
-  ASAP_ASSERT(
-      window_ && "don't call GetWindowSize() before the window is created");
+  ASAP_ASSERT(window_,
+      "don't call GetWindowSize() before the window is created",
+      std::make_pair(-1, -1));
   auto size = std::make_pair(-1, -1);
   glfwGetWindowSize(window_, &size.first, &size.second);
   return size;
 }
 auto ImGuiRunner::GetWindowPosition() const -> std::pair<int, int> {
-  ASAP_ASSERT(
-      window_ && "don't call GetMonitor() before the window is created");
+  ASAP_ASSERT(window_, "don't call GetMonitor() before the window is created",
+      std::make_pair(-1, -1));
   auto position = std::make_pair(-1, -1);
   glfwGetWindowPos(window_, &position.first, &position.second);
   return position;
@@ -428,93 +428,18 @@ auto ImGuiRunner::GetMonitorId() const -> int {
 // Settings load/save
 // -------------------------------------------------------------------------
 
-namespace {
-void ConfigSanityChecks(std::shared_ptr<cpptoml::table> &config) {
-  auto &logger = asap::logging::Registry::GetLogger("main");
-
-  auto display = config->get_table("display");
-  if (!display) {
-    ASLOG_TO_LOGGER(logger, warn, "missing 'display' in config");
-  }
-
-  if (!display->contains("mode")) {
-    ASLOG_TO_LOGGER(logger, warn, "missing 'display/mode' in config");
-  } else {
-    auto mode = *(display->get_as<std::string>("mode"));
-    if (mode == "Full Screen") {
-      if (!display->contains("size")) {
-        ASLOG_TO_LOGGER(logger, warn, "missing 'display/size' in config");
-      } else {
-        auto size = display->get_table("size");
-        if (!size->contains("width")) {
-          ASLOG_TO_LOGGER(
-              logger, warn, "missing 'display/size/width' in config");
-        }
-        if (!size->contains("height")) {
-          ASLOG_TO_LOGGER(
-              logger, warn, "missing 'display/size/height' in config");
-        }
-      }
-      if (!display->contains("title")) {
-        ASLOG_TO_LOGGER(logger, warn, "missing 'display/title' in config");
-      }
-      if (!display->contains("monitor")) {
-        ASLOG_TO_LOGGER(logger, warn, "missing 'display/monitor' in config");
-      }
-      if (!display->contains("refresh-rate")) {
-        ASLOG_TO_LOGGER(
-            logger, warn, "missing 'display/refresh-rate' in config");
-      }
-    } else if (mode == "Full Screen Windowed") {
-      if (!display->contains("title")) {
-        ASLOG_TO_LOGGER(logger, warn, "missing 'display/title' in config");
-      }
-      if (!display->contains("monitor")) {
-        ASLOG_TO_LOGGER(logger, warn, "missing 'display/monitor' in config");
-      }
-    } else if (mode == "Windowed") {
-      if (!display->contains("size")) {
-        ASLOG_TO_LOGGER(logger, warn, "missing 'display/size' in config");
-      } else {
-        auto size = display->get_table("size");
-        if (!size->contains("width")) {
-          ASLOG_TO_LOGGER(
-              logger, warn, "missing 'display/size/width' in config");
-        }
-        if (!size->contains("height")) {
-          ASLOG_TO_LOGGER(
-              logger, warn, "missing 'display/size/height' in config");
-        }
-      }
-      if (!display->contains("title")) {
-        ASLOG_TO_LOGGER(logger, warn, "missing 'display/title' in config");
-      }
-    } else {
-      ASLOG_TO_LOGGER(logger, error, "invalid 'display/mode' ({})", mode);
-    }
-  }
-
-  if (!display->contains("multi-sampling")) {
-    ASLOG_TO_LOGGER(logger, warn, "missing 'display/multi-sampling' in config");
-  }
-  if (!display->contains("vsync")) {
-    ASLOG_TO_LOGGER(logger, warn, "missing 'display/vsync' in config");
-  }
-}
-} // namespace
-
 void ImGuiRunner::LoadSetting() {
-  std::shared_ptr<cpptoml::table> config;
+  toml::parse_result config;
   auto display_settings =
       asap::config::GetPathFor(asap::config::Location::F_DISPLAY_SETTINGS);
   auto has_config = false;
   if (std::filesystem::exists(display_settings)) {
     try {
-      config = cpptoml::parse_file(display_settings.string());
+      config = toml::parse_file(display_settings.string());
       ASLOG(info, "display settings loaded from {}", display_settings.string());
       has_config = true;
     } catch (std::exception const &ex) {
-      ASLOG(error, "error () while loading settings from {}", ex.what(),
+      ASLOG(error, "error {} while loading settings from {}", ex.what(),
           display_settings.string());
     }
   } else {
@@ -527,98 +452,89 @@ void ImGuiRunner::LoadSetting() {
   int width = DEFAULT_WINDOW_WIDTH;
   int height = DEFAULT_WINDOW_HEIGHT;
   if (has_config) {
-    ConfigSanityChecks(config);
-
-    auto display = config->get_table("display");
-    if (display->contains("multi-sampling")) {
-      MultiSample(*(display->get_as<int>("multi-sampling")));
+    auto display = config["display"];
+    auto multiSampling = display["multi-sampling"];
+    if (multiSampling) {
+      MultiSample(multiSampling.value_or<int>(1));
     }
-    auto mode =
-        display->get_as<std::string>("mode").value_or("Full Screen Windowed");
+    auto mode = display["mode"].value_or<std::string>("Full Screen Windowed");
     if (mode == "Full Screen") {
-      auto size = display->get_table("size");
+      auto size = display["size"];
       if (size) {
-        if (size->contains("width")) {
-          width = *(size->get_as<int>("width"));
+        if (size["width"]) {
+          width = *(size[width].value<int>());
         }
-        if (size->contains("height")) {
-          height = *(size->get_as<int>("height"));
+        if (size["height"]) {
+          height = *(size[height].value<int>());
         }
       }
-      FullScreen(width, height,
-          display->get_as<std::string>("title").value_or("ASAP Application"),
-          display->get_as<int>("monitor").value_or(0),
-          display->get_as<int>("refresh-rate").value_or(0));
+      FullScreen(width, height, display["title"].value_or("ASAP Application"),
+          display["monitor"].value_or(0), display["refresh-rate"].value_or(0));
     } else if (mode == "Full Screen Windowed") {
-      FullScreenWindowed(
-          display->get_as<std::string>("title").value_or("ASAP Application"),
-          display->get_as<int>("monitor").value_or(0));
+      FullScreenWindowed(display["title"].value_or("ASAP Application"),
+          display["monitor"].value_or(0));
     } else if (mode == "Windowed") {
-      auto size = display->get_table("size");
+      auto size = display["size"];
       if (size) {
-        if (size->contains("width")) {
-          width = *(size->get_as<int>("width"));
+        if (size["width"]) {
+          width = *(size["width"].value<int>());
         }
-        if (size->contains("height")) {
-          height = *(size->get_as<int>("height"));
+        if (size["height"]) {
+          height = *(size["height"].value<int>());
         }
       }
-      Windowed(width, height,
-          display->get_as<std::string>("title").value_or("ASAP Application"));
+      Windowed(width, height, display["title"].value_or("ASAP Application"));
     } else {
       Windowed(width, height, "ASAP Application");
     }
-    if (display->contains("vsync")) {
-      EnableVsync(*(display->get_as<bool>("vsync")));
-    }
+    EnableVsync(display["vsync"].value_or(0));
   } else {
     Windowed(width, height, "ASAP Application");
   }
 }
 
 void ImGuiRunner::SaveSetting() const {
-  std::shared_ptr<cpptoml::table> root = cpptoml::make_table();
-
-  auto display_settings = cpptoml::make_table();
-  display_settings->insert("title", GetWindowTitle());
+  toml::table display_settings;
+  display_settings.insert("title", GetWindowTitle());
   if (IsFullScreen()) {
     if (IsWindowed()) {
-      display_settings->insert("mode", "Full Screen Windowed");
-      display_settings->insert("monitor", GetMonitorId());
+      display_settings.insert("mode", "Full Screen Windowed");
+      display_settings.insert("monitor", GetMonitorId());
     } else {
-      display_settings->insert("mode", "Full Screen");
+      display_settings.insert("mode", "Full Screen");
       // size
       {
-        auto size_settings = cpptoml::make_table();
+        toml::table size_settings;
         auto size = GetWindowSize();
-        size_settings->insert("width", size.first);
-        size_settings->insert("height", size.second);
-        display_settings->insert("size", size_settings);
+        size_settings.insert("width", size.first);
+        size_settings.insert("height", size.second);
+        display_settings.insert("size", size_settings);
       }
-      display_settings->insert("monitor", GetMonitorId());
-      display_settings->insert("refresh-rate", RefreshRate());
+      display_settings.insert("monitor", GetMonitorId());
+      display_settings.insert("refresh-rate", RefreshRate());
     }
   } else {
-    display_settings->insert("mode", "Windowed");
+    display_settings.insert("mode", "Windowed");
     // size
     {
-      auto size_settings = cpptoml::make_table();
+      toml::table size_settings;
       auto size = GetWindowSize();
-      size_settings->insert("width", size.first);
-      size_settings->insert("height", size.second);
-      display_settings->insert("size", size_settings);
+      size_settings.insert("width", size.first);
+      size_settings.insert("height", size.second);
+      display_settings.insert("size", size_settings);
     }
   }
-  display_settings->insert("multi-sampling", MultiSample());
-  display_settings->insert("vsync", Vsync());
+  display_settings.insert("multi-sampling", MultiSample());
+  display_settings.insert("vsync", Vsync());
 
-  root->insert("display", display_settings);
+  toml::table root;
+  root.insert("display", display_settings);
 
   auto settings_path =
       asap::config::GetPathFor(asap::config::Location::F_DISPLAY_SETTINGS);
   auto ofs = std::ofstream();
   ofs.open(settings_path.string());
-  ofs << (*root) << std::endl;
+  ofs << root << std::endl;
   ofs.close();
 }
 

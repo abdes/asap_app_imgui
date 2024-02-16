@@ -22,7 +22,6 @@
 
 using asap::app::Application;
 using asap::app::ImGuiRunner;
-using asap::ui::Font;
 using asap::ui::Theme;
 
 static ImGuiDockNodeFlags opt_flags = ImGuiDockNodeFlags_None;
@@ -231,11 +230,7 @@ void ApplicationBase::DrawStatusBar(
 
   // Draw the common stuff
   ImGui::SameLine(width - STATUS_BAR_FPS_WIDTH);
-  Font font(Font::FAMILY_PROPORTIONAL);
-  font.Normal().Regular().SmallSize();
-  ImGui::PushFont(font.ImGuiFont());
   ImGui::Text("FPS: %ld", std::lround(ImGui::GetIO().Framerate));
-  ImGui::PopFont();
   ImGui::End();
 }
 
@@ -406,9 +401,6 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
       ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar |
           ImGuiWindowFlags_NoScrollWithMouse);
 
-  Font font(Font::FAMILY_PROPORTIONAL);
-  font.Italic().Light().LargeSize();
-  ImGui::PushFont(font.ImGuiFont());
   ImGui::TextUnformatted(pending_changes ? "Changed..." : "Active");
 
   if (pending_changes) {
@@ -452,7 +444,6 @@ void ShowDisplaySettings(ImGuiRunner *runner) {
     ImGui::PopStyleColor();
   }
 
-  ImGui::PopFont();
   ImGui::EndChild();
 
   ImGui::PopStyleColor();
@@ -521,13 +512,9 @@ void ShowStyleSettings() {
         float right_align_pos = ImGui::GetContentRegionAvail().x;
         right_align_pos -= ICON_WIDTH;
         ImGui::SameLine(right_align_pos);
-        Font font(Font::FAMILY_PROPORTIONAL);
-        font.Italic().Light().LargeSize();
-        ImGui::PushFont(font.ImGuiFont());
         if (ImGui::Button(ICON_MDI_RESTORE, {ICON_WIDTH, ICON_HEIGHT})) {
           reset_to_current = true;
         }
-        ImGui::PopFont();
 
         ImGui::PopStyleColor();
         ImGui::PopStyleVar();

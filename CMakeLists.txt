@@ -81,8 +81,9 @@ asap_push_project(${META_PROJECT_NAME})
 # Project options
 # cmake-format: off
 option(BUILD_SHARED_LIBS        "Build shared instead of static libraries."              ON)
-option(ASAP_BUILD_TESTS         "Build tests."                                           OFF)
-option(ASAP_BUILD_EXAMPLES      "Build examples."                                        OFF)
+option(ASAP_BUILD_TESTS         "Setup target to build and run tests."                   OFF)
+option(ASAP_BUILD_EXAMPLES      "Setup target to build the examples."                    OFF)
+option(ASAP_BUILD_DOCS          "Setup target to build the doxygen and sphinx docs."     ON)
 option(ASAP_WITH_GOOGLE_ASAN    "Instrument code with address sanitizer"                 OFF)
 option(ASAP_WITH_GOOGLE_UBSAN   "Instrument code with undefined behavior sanitizer"      OFF)
 option(ASAP_WITH_GOOGLE_TSAN    "Instrument code with thread sanitizer"                  OFF)
@@ -146,17 +147,21 @@ configure_file(.clangd.in ${CMAKE_SOURCE_DIR}/.clangd @ONLY)
 # Documentation - doxygen, sphinx/breathe/exhale
 # ------------------------------------------------------------------------------
 
-# Doxygen
-set(DOXYGEN_BUILD_DIR "${CMAKE_BINARY_DIR}/dox")
-include(DoxGeneration)
+if (ASAP_BUILD_DOCS)
+  # Doxygen
+  set(DOXYGEN_BUILD_DIR "${CMAKE_BINARY_DIR}/dox")
+  include(DoxGeneration)
 
-# Sphinx/breathe/exhale
-set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx")
-include(SphinxGeneration)
+  # Sphinx/breathe/exhale
+  set(SPHINX_BUILD_DIR "${CMAKE_BINARY_DIR}/sphinx")
+  include(SphinxGeneration)
+endif()
 
 # ------------------------------------------------------------------------------
 # Testing
 # ------------------------------------------------------------------------------
+
+include(CTest)
 
 if(ASAP_BUILD_TESTS)
   include(GoogleSanitizers)
@@ -177,7 +182,6 @@ if(ASAP_BUILD_TESTS)
     "INSTALL_GTEST OFF")
 
   include(GoogleTest)
-  include(CTest)
 endif()
 
 # ------------------------------------------------------------------------------
