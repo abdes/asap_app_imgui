@@ -38,7 +38,7 @@ asap_add_package(
   NAME
   fmtlib
   GIT_TAG
-  9.0.0
+  10.2.1
   GITHUB_REPOSITORY
   fmtlib/fmt
   OPTIONS
