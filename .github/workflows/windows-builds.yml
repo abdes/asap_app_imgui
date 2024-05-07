@@ -62,7 +62,7 @@ jobs:
       - name: Configure build
         working-directory: ${{runner.workspace}}
         run: |
-          cmake -B build -S $GITHUB_WORKSPACE `
+          cmake -B build `
             -D CMAKE_BUILD_TYPE=${{matrix.build_type}} `
             -G "${{ matrix.generator }}" `
             -D USE_CCACHE=ON `
