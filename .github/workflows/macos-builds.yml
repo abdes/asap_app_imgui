@@ -39,9 +39,9 @@ jobs:
 
       - name: Setup XCode
         if: matrix.generator == 'Xcode'
-        uses: mobiledevops/xcode-select-version-action@v1
+        uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-select-version: latest-stable
+          xcode-version: latest-stable
 
       - name: Log environment properties
         run: |
