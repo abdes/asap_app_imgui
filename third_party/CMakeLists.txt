@@ -28,7 +28,7 @@ message(STATUS "${ASAP_LOG_PROJECT_HIERARCHY} >> third-party modules")
 # GSL
 # ------------------------------------------------------------------------------
 
-asap_add_package(NAME gsl GIT_TAG main GITHUB_REPOSITORY microsoft/GSL)
+asap_add_package(NAME gsl GIT_TAG v4.0.0 GITHUB_REPOSITORY microsoft/GSL)
 
 # ------------------------------------------------------------------------------
 # fmt::fmt-header-only
