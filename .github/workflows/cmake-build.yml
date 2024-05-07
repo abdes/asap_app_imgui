@@ -116,7 +116,7 @@ jobs:
         if: runner.os == 'Linux'
         shell: bash
         run: |
-          sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev
+          sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev libwayland-dev libxkbcommon-dev
 
       - name: Install gcc-11
         shell: bash
