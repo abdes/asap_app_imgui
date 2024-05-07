@@ -41,7 +41,7 @@ jobs:
         if: matrix.generator == 'Xcode'
         uses: mobiledevops/xcode-select-version-action@v1
         with:
-          xcode-select-version: 13.1
+          xcode-select-version: latest-stable
 
       - name: Log environment properties
         run: |
