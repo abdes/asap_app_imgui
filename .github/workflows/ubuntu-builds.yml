@@ -60,7 +60,7 @@ jobs:
 
       - name: Install X11 dependencies
         run: |
-          sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev
+          sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev libglu1-mesa-dev libwayland-dev libxkbcommon-dev
 
       - name: Install GCC (always runs)
         run: |
@@ -92,7 +92,7 @@ jobs:
             clang-tools-${{steps.split.outputs.clang_version}} \
             clang-tidy-${{steps.split.outputs.clang_version}}
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -129,7 +129,7 @@ jobs:
       - name: Setup cmake
         # Do not use cmake from the distro repos as it is not the version we
         # want
-        uses: jwlawson/actions-setup-cmake@v1
+        uses: jwlawson/actions-setup-cmake@v2
         with:
           cmake-version: ${{ env.CMAKE_VERSION }}
 
@@ -169,7 +169,7 @@ jobs:
       - name: Configure build
         working-directory: ${{runner.workspace}}
         run: |
-          cmake -B build -S $GITHUB_WORKSPACE \
+          cmake -B build -S asap_app_imgui \
             -D CMAKE_BUILD_TYPE=${{matrix.build_type}} \
             -G Ninja \
             -D CMAKE_MAKE_PROGRAM=ninja \

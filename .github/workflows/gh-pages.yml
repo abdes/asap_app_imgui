@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
@@ -47,7 +47,7 @@ jobs:
       - name: Install X11 dependencies
         shell: bash
         run: |
-          sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev
+          sudo apt-get install -y -qq xorg-dev libglu1-mesa-dev libwayland-dev libxkbcommon-dev
 
       - name: Configure CMake
         run: cmake -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}

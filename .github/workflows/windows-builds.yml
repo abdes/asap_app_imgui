@@ -30,7 +30,7 @@ jobs:
           version: ${{ env.NINJA_VERSION }}
 
       - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v1
+        uses: jwlawson/actions-setup-cmake@v2
         with:
           cmake-version: ${{ env.CMAKE_VERSION }}
 
@@ -62,7 +62,7 @@ jobs:
       - name: Configure build
         working-directory: ${{runner.workspace}}
         run: |
-          cmake -B build -S asap `
+          cmake -B build -S asap_app_imgui `
             -D CMAKE_BUILD_TYPE=${{matrix.build_type}} `
             -G "${{ matrix.generator }}" `
             -D USE_CCACHE=ON `

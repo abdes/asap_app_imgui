@@ -14,7 +14,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        generator: ['Unix Makefiles', Xcode]
+        generator: ['Unix Makefiles']
         build_type: [Debug, Release]
         include:
           - build_type: Debug
@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v1
+        uses: jwlawson/actions-setup-cmake@v2
         with:
           cmake-version: ${{ env.CMAKE_VERSION }}
 
@@ -39,9 +39,9 @@ jobs:
 
       - name: Setup XCode
         if: matrix.generator == 'Xcode'
-        uses: mobiledevops/xcode-select-version-action@v1
+        uses: maxim-lobanov/setup-xcode@v1
         with:
-          xcode-select-version: 13.1
+          xcode-version: latest-stable
 
       - name: Log environment properties
         run: |
@@ -51,14 +51,14 @@ jobs:
           clang --version
           ccache --version
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
 
       - name: Configure build
         working-directory: ${{runner.workspace}}
         run: |
-          cmake -B build -S $GITHUB_WORKSPACE \
+          cmake -B build -S asap_app_imgui \
             -D CMAKE_BUILD_TYPE=${{matrix.build_type}} \
             -G "${{ matrix.generator }}" \
             -D USE_CCACHE=ON \
