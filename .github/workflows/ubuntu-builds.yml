@@ -169,7 +169,7 @@ jobs:
       - name: Configure build
         working-directory: ${{runner.workspace}}
         run: |
-          cmake -B build \
+          cmake -B build -S asap_app_imgui \
             -D CMAKE_BUILD_TYPE=${{matrix.build_type}} \
             -G Ninja \
             -D CMAKE_MAKE_PROGRAM=ninja \
